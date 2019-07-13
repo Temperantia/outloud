@@ -3,7 +3,7 @@
 android {
   defaultConfig {  
     generatedDensities = []
-    applicationId = "org.nativescript.playvue"
+    applicationId = "__PACKAGE__"
   }
   aaptOptions {  
     additionalParameters "--no-version-vectors"  

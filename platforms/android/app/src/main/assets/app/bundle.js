@@ -17,10 +17,18 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
+  methods: {
+    OnGetButtonTap() {
+      alert('Hello !!');
+    },
+
+    onLogButtonTap() {
+      alert('Loggin');
+    }
+
+  },
+
   data() {
     return {};
   }
@@ -32,12 +40,12 @@ __webpack_require__.r(__webpack_exports__);
 /***/ "../node_modules/nativescript-dev-webpack/style-hot-loader.js!../node_modules/nativescript-dev-webpack/apply-css-loader.js!../node_modules/css-loader/index.js?!../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../node_modules/vue-loader/lib/index.js?!./components/HelloWorld.vue?vue&type=style&index=0&id=763db97b&scoped=true&lang=css&":
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__("../node_modules/css-loader/lib/css-base.js")(false);
+/* WEBPACK VAR INJECTION */(function(global) {exports = module.exports = __webpack_require__("../node_modules/css-loader/lib/css-base.js")(false);
 // imports
 
 
 // module
-exports.push([module.i, "\n.home-panel[data-v-763db97b] {\n    vertical-align: center;\n    font-size: 20;\n    margin: 15;\n}\n.description-label[data-v-763db97b] {\n    margin-bottom: 15;\n}\n", ""]);
+exports.push([module.i, "\n.page[data-v-763db97b] {\n    background-color: #f9f5f5;\n}\n.home-panel[data-v-763db97b] {\n    vertical-align: center;\n    font-size: 20;\n    margin: 15;\n}\n.description-label[data-v-763db97b] {\n    margin-bottom: 15;\n}\n.buttonLandingPage[data-v-763db97b] {\n    font-size: 12;\n    background-color: #ff8d00;\n    color: white;\n    width: 40%;\n    height: 10%;\n    margin: 10;\n}\n", ""]);
 
 // exports
 
@@ -51,8 +59,14 @@ exports.push([module.i, "\n.home-panel[data-v-763db97b] {\n    vertical-align: c
         }
     });
     ;
-    if (false) {}
+    if (true) {
+        module.hot.accept();
+        module.hot.dispose(() => {
+            global.hmrRefresh({ type: 'style', path: './components/HelloWorld.vue' });
+        })
+    }
 
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__("../node_modules/nativescript-dev-webpack/node_modules/webpack/buildin/global.js")))
 
 /***/ }),
 
@@ -79,25 +93,15 @@ var render = function() {
             "StackLayout",
             { staticClass: "home-panel" },
             [
-              _c("Label", {
-                staticClass: "h2 description-label",
-                attrs: { textWrap: "true", text: "Play with NativeScript!" }
+              _c("Button", {
+                staticClass: "buttonLandingPage",
+                attrs: { text: "Log Me In" },
+                on: { tap: _vm.onLogButtonTap }
               }),
-              _c("Label", {
-                staticClass: "h2 description-label",
-                attrs: {
-                  textWrap: "true",
-                  text:
-                    "Writpkpokokoe xxxxxxxxxxxxxkkkkkkkkkkkkpppppcodkokokdqsde in the editorkokop or drag and drop components to build a NativeScript mobile application."
-                }
-              }),
-              _c("Label", {
-                staticClass: "h2 description-label",
-                attrs: {
-                  textWrap: "true",
-                  text:
-                    "Scan the QR cdqsdsqdode with your mobile device and watch the changes sync live while you play with the code."
-                }
+              _c("Button", {
+                staticClass: "buttonLandingPage",
+                attrs: { text: "Get Me In" },
+                on: { tap: _vm.OnGetButtonTap }
               })
             ],
             1
@@ -163,7 +167,7 @@ webpackEmptyContext.id = "./ sync recursive (root|page)\\.(xml|css|js|ts|scss)$"
 /***/ "./app.css":
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__("../node_modules/css-loader/lib/css-base.js")(false);
+/* WEBPACK VAR INJECTION */(function(global) {exports = module.exports = __webpack_require__("../node_modules/css-loader/lib/css-base.js")(false);
 // imports
 exports.i(__webpack_require__("../node_modules/css-loader/index.js?!../node_modules/nativescript-theme-core/css/core.light.css"), "");
 
@@ -182,8 +186,14 @@ exports.push([module.i, "/*\nIn NativeScript, the app.css file is where you plac
         }
     });
     ;
-    if (false) {}
+    if (true) {
+        module.hot.accept();
+        module.hot.dispose(() => {
+            global.hmrRefresh({ type: 'style', path: './app.css' });
+        })
+    }
 
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__("../node_modules/nativescript-dev-webpack/node_modules/webpack/buildin/global.js")))
 
 /***/ }),
 
@@ -206,7 +216,29 @@ __webpack_require__("tns-core-modules/ui/frame/activity");
             __webpack_require__("../node_modules/nativescript-dev-webpack/load-application-css-regular.js")();
             
             
-        if (false) {}
+        if (true) {
+            const hmrUpdate = __webpack_require__("../node_modules/nativescript-dev-webpack/hmr/index.js").hmrUpdate;
+            global.__initialHmrUpdate = true;
+            global.__hmrSyncBackup = global.__onLiveSync;
+
+            global.__onLiveSync = function () {
+                hmrUpdate();
+            };
+
+            global.hmrRefresh = function({ type, path } = {}) {
+                if (global.__initialHmrUpdate) {
+                    return;
+                }
+
+                setTimeout(() => {
+                    global.__hmrSyncBackup({ type, path });
+                });
+            };
+
+            hmrUpdate().then(() => {
+                global.__initialHmrUpdate = false;
+            })
+        }
         
             const context = __webpack_require__("./ sync recursive (root|page)\\.(xml|css|js|ts|scss)$");
             global.registerWebpackModules(context);
@@ -259,7 +291,25 @@ var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_
 )
 
 /* hot reload */
-if (false) { var api; }
+if (true) {
+  var api = __webpack_require__("../node_modules/vue-hot-reload-api/dist/index.js")
+  api.install(__webpack_require__("../node_modules/nativescript-vue/dist/index.js"))
+  if (api.compatible) {
+    module.hot.accept()
+    if (!module.hot.data) {
+      api.createRecord('763db97b', component.options)
+    } else {
+      api.reload('763db97b', component.options)
+    }
+    module.hot.accept("./components/HelloWorld.vue?vue&type=template&id=763db97b&scoped=true&", function(__WEBPACK_OUTDATED_DEPENDENCIES__) { /* harmony import */ _HelloWorld_vue_vue_type_template_id_763db97b_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./components/HelloWorld.vue?vue&type=template&id=763db97b&scoped=true&");
+(function () {
+      api.rerender('763db97b', {
+        render: _HelloWorld_vue_vue_type_template_id_763db97b_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"],
+        staticRenderFns: _HelloWorld_vue_vue_type_template_id_763db97b_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]
+      })
+    })(__WEBPACK_OUTDATED_DEPENDENCIES__); }.bind(this))
+  }
+}
 component.options.__file = "components/HelloWorld.vue"
 /* harmony default export */ __webpack_exports__["default"] = (component.exports);
 
@@ -322,6 +372,83 @@ module.exports = require("tns-core-modules/bundle-entry-points");
 
 /***/ }),
 
+/***/ "tns-core-modules/file-system":
+/***/ (function(module, exports) {
+
+module.exports = require("tns-core-modules/file-system");
+
+/***/ }),
+
+/***/ "tns-core-modules/platform":
+/***/ (function(module, exports) {
+
+module.exports = require("tns-core-modules/platform");
+
+/***/ }),
+
+/***/ "tns-core-modules/text/formatted-string":
+/***/ (function(module, exports) {
+
+module.exports = require("tns-core-modules/text/formatted-string");
+
+/***/ }),
+
+/***/ "tns-core-modules/text/span":
+/***/ (function(module, exports) {
+
+module.exports = require("tns-core-modules/text/span");
+
+/***/ }),
+
+/***/ "tns-core-modules/ui/action-bar":
+/***/ (function(module, exports) {
+
+module.exports = require("tns-core-modules/ui/action-bar");
+
+/***/ }),
+
+/***/ "tns-core-modules/ui/activity-indicator":
+/***/ (function(module, exports) {
+
+module.exports = require("tns-core-modules/ui/activity-indicator");
+
+/***/ }),
+
+/***/ "tns-core-modules/ui/border":
+/***/ (function(module, exports) {
+
+module.exports = require("tns-core-modules/ui/border");
+
+/***/ }),
+
+/***/ "tns-core-modules/ui/button":
+/***/ (function(module, exports) {
+
+module.exports = require("tns-core-modules/ui/button");
+
+/***/ }),
+
+/***/ "tns-core-modules/ui/content-view":
+/***/ (function(module, exports) {
+
+module.exports = require("tns-core-modules/ui/content-view");
+
+/***/ }),
+
+/***/ "tns-core-modules/ui/core/view":
+/***/ (function(module, exports) {
+
+module.exports = require("tns-core-modules/ui/core/view");
+
+/***/ }),
+
+/***/ "tns-core-modules/ui/date-picker":
+/***/ (function(module, exports) {
+
+module.exports = require("tns-core-modules/ui/date-picker");
+
+/***/ }),
+
 /***/ "tns-core-modules/ui/frame":
 /***/ (function(module, exports) {
 
@@ -336,10 +463,220 @@ module.exports = require("tns-core-modules/ui/frame/activity");
 
 /***/ }),
 
+/***/ "tns-core-modules/ui/frame/fragment.transitions":
+/***/ (function(module, exports) {
+
+module.exports = require("tns-core-modules/ui/frame/fragment.transitions");
+
+/***/ }),
+
+/***/ "tns-core-modules/ui/html-view":
+/***/ (function(module, exports) {
+
+module.exports = require("tns-core-modules/ui/html-view");
+
+/***/ }),
+
+/***/ "tns-core-modules/ui/image":
+/***/ (function(module, exports) {
+
+module.exports = require("tns-core-modules/ui/image");
+
+/***/ }),
+
+/***/ "tns-core-modules/ui/label":
+/***/ (function(module, exports) {
+
+module.exports = require("tns-core-modules/ui/label");
+
+/***/ }),
+
+/***/ "tns-core-modules/ui/layouts/absolute-layout":
+/***/ (function(module, exports) {
+
+module.exports = require("tns-core-modules/ui/layouts/absolute-layout");
+
+/***/ }),
+
+/***/ "tns-core-modules/ui/layouts/dock-layout":
+/***/ (function(module, exports) {
+
+module.exports = require("tns-core-modules/ui/layouts/dock-layout");
+
+/***/ }),
+
+/***/ "tns-core-modules/ui/layouts/flexbox-layout":
+/***/ (function(module, exports) {
+
+module.exports = require("tns-core-modules/ui/layouts/flexbox-layout");
+
+/***/ }),
+
+/***/ "tns-core-modules/ui/layouts/grid-layout":
+/***/ (function(module, exports) {
+
+module.exports = require("tns-core-modules/ui/layouts/grid-layout");
+
+/***/ }),
+
+/***/ "tns-core-modules/ui/layouts/layout-base":
+/***/ (function(module, exports) {
+
+module.exports = require("tns-core-modules/ui/layouts/layout-base");
+
+/***/ }),
+
+/***/ "tns-core-modules/ui/layouts/stack-layout":
+/***/ (function(module, exports) {
+
+module.exports = require("tns-core-modules/ui/layouts/stack-layout");
+
+/***/ }),
+
+/***/ "tns-core-modules/ui/layouts/wrap-layout":
+/***/ (function(module, exports) {
+
+module.exports = require("tns-core-modules/ui/layouts/wrap-layout");
+
+/***/ }),
+
+/***/ "tns-core-modules/ui/list-picker":
+/***/ (function(module, exports) {
+
+module.exports = require("tns-core-modules/ui/list-picker");
+
+/***/ }),
+
+/***/ "tns-core-modules/ui/list-view":
+/***/ (function(module, exports) {
+
+module.exports = require("tns-core-modules/ui/list-view");
+
+/***/ }),
+
+/***/ "tns-core-modules/ui/page":
+/***/ (function(module, exports) {
+
+module.exports = require("tns-core-modules/ui/page");
+
+/***/ }),
+
+/***/ "tns-core-modules/ui/placeholder":
+/***/ (function(module, exports) {
+
+module.exports = require("tns-core-modules/ui/placeholder");
+
+/***/ }),
+
+/***/ "tns-core-modules/ui/progress":
+/***/ (function(module, exports) {
+
+module.exports = require("tns-core-modules/ui/progress");
+
+/***/ }),
+
+/***/ "tns-core-modules/ui/proxy-view-container":
+/***/ (function(module, exports) {
+
+module.exports = require("tns-core-modules/ui/proxy-view-container");
+
+/***/ }),
+
+/***/ "tns-core-modules/ui/scroll-view":
+/***/ (function(module, exports) {
+
+module.exports = require("tns-core-modules/ui/scroll-view");
+
+/***/ }),
+
+/***/ "tns-core-modules/ui/search-bar":
+/***/ (function(module, exports) {
+
+module.exports = require("tns-core-modules/ui/search-bar");
+
+/***/ }),
+
+/***/ "tns-core-modules/ui/segmented-bar":
+/***/ (function(module, exports) {
+
+module.exports = require("tns-core-modules/ui/segmented-bar");
+
+/***/ }),
+
+/***/ "tns-core-modules/ui/slider":
+/***/ (function(module, exports) {
+
+module.exports = require("tns-core-modules/ui/slider");
+
+/***/ }),
+
 /***/ "tns-core-modules/ui/styling/style-scope":
 /***/ (function(module, exports) {
 
 module.exports = require("tns-core-modules/ui/styling/style-scope");
+
+/***/ }),
+
+/***/ "tns-core-modules/ui/switch":
+/***/ (function(module, exports) {
+
+module.exports = require("tns-core-modules/ui/switch");
+
+/***/ }),
+
+/***/ "tns-core-modules/ui/tab-view":
+/***/ (function(module, exports) {
+
+module.exports = require("tns-core-modules/ui/tab-view");
+
+/***/ }),
+
+/***/ "tns-core-modules/ui/text-field":
+/***/ (function(module, exports) {
+
+module.exports = require("tns-core-modules/ui/text-field");
+
+/***/ }),
+
+/***/ "tns-core-modules/ui/text-view":
+/***/ (function(module, exports) {
+
+module.exports = require("tns-core-modules/ui/text-view");
+
+/***/ }),
+
+/***/ "tns-core-modules/ui/time-picker":
+/***/ (function(module, exports) {
+
+module.exports = require("tns-core-modules/ui/time-picker");
+
+/***/ }),
+
+/***/ "tns-core-modules/ui/web-view":
+/***/ (function(module, exports) {
+
+module.exports = require("tns-core-modules/ui/web-view");
+
+/***/ }),
+
+/***/ "tns-core-modules/utils/types":
+/***/ (function(module, exports) {
+
+module.exports = require("tns-core-modules/utils/types");
+
+/***/ }),
+
+/***/ "tns-core-modules/utils/utils":
+/***/ (function(module, exports) {
+
+module.exports = require("tns-core-modules/utils/utils");
+
+/***/ }),
+
+/***/ "tns-core-modules/xml":
+/***/ (function(module, exports) {
+
+module.exports = require("tns-core-modules/xml");
 
 /***/ })
 
