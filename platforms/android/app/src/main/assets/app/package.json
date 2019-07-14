@@ -1,3 +1,8 @@
 {
-    "main": "starter"
+    "android": {
+        "v8Flags": "--expose_gc"
+    },
+    "main": "starter",
+    "name": "inclusive",
+    "version": "1.0.0"
 }
