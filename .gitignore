@@ -86,3 +86,9 @@ typings/
 
 # DynamoDB Local files
 .dynamodb/
+
+# JetBrains project files
+.idea
+# NativeScript application
+hooks
+platforms
