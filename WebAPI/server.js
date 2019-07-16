@@ -11,36 +11,35 @@
 import express from 'express';
 const app = express()
 import models, { sequelize } from './src/';
-console.debug(models);
 
 app.get('/', (req, res) => {
     return res.send('Received a GET HTTP method');
   });
-  
-  app.post('/users/register', async  (req, res) => {
-      console.log(req)
-    await models.User.create(
+
+app.post('/users/register', async  (req, res) => {
+  await models.User.create(
+    {
+      username: 'firstGay',
+      messages: [
         {
-          username: 'firstGay',
-          messages: [
-            {
-              text: 'faker hhh',
-            },
-          ],
+          text: 'faker hhh',
         },
-        {
-          include: [models.Message],
-        },
-      );
-    return res.send('user created');
-  });
-  app.put('/', (req, res) => {
-    return res.send('Received a PUT HTTP method');
-  });
-  
-  app.delete('/', (req, res) => {
-    return res.send('Received a DELETE HTTP method');
-  });
+      ],
+    },
+    {
+      include: [models.Message],
+    },
+  );
+
+  return res.send('user created');
+});
+app.put('/', (req, res) => {
+  return res.send('Received a PUT HTTP method');
+});
+
+app.delete('/', (req, res) => {
+  return res.send('Received a DELETE HTTP method');
+});
 
 const eraseDatabaseOnSync = true;
 

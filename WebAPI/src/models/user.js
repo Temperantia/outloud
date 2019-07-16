@@ -7,31 +7,38 @@
  * Copyright (c) 2019 Inclusive
  */
 const user = (sequelize, DataTypes) => {
-    const User = sequelize.define('user', {
-      username: {
-        type: DataTypes.STRING,
-        unique: false,
-      },
-      email: DataTypes.STRING,
-      password: DataTypes.STRING,
-    });
-    User.associate = models => {
-        User.hasMany(models.Message, { onDelete: 'CASCADE' });
-      };
-    User.findByLogin = async (login) => {
-        let user = await User.findOne({
-            where: { username: login },
-        });
-    
-        if (!user) {
-          user = await User.findOne({
-            where: { email: login },
-          });
-        }
-        return user;
-      };
-      return User;
+  const User = sequelize.define('user', {
+    name: DataTypes.STRING,
+    description: DataTypes.STRING,
+    image: DataTypes.STRING,
+    location: DataTypes.STRING,
+    email: {
+      type: DataTypes.STRING,
+      //unique,
+    },
+    birthDate: DataTypes.DATE,
+    password: DataTypes.STRING,
+  });
+  User.associate = models => {
+    User.hasMany(models.Message, { onDelete: 'CASCADE' });
+    // User.hasMany(models.Rooms);
+    // User.hasMany(models.User);
+    // User.hasMany(models.Interest);
   };
-  export { user };
+  User.findByLogin = async (login) => {
+    let user = await User.findOne({
+      where: { username: login },
+    });
 
-  export default user;
+    if (!user) {
+      user = await User.findOne({
+        where: { email: login },
+      });
+    }
+    return user;
+  };
+  return User;
+};
+export { user };
+
+export default user;
