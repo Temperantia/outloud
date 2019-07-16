@@ -1,0 +1,20 @@
+/*
+ * Filename: c:\Users\50448\Source\Repos\inclusive\WebAPI\.babelrc
+ * Path: c:\Users\50448\Source\Repos\inclusive\WebAPI
+ * Created Date: Monday, July 15th 2019, 12:45:40 am
+ * Author: 50448
+ * 
+ * Copyright (c) 2019 Inclusive
+ */
+
+{
+    "presets": ["@babel/preset-env"] ,
+    "plugins": [
+        ["@babel/plugin-transform-runtime",
+          {
+            "regenerator": true
+          }
+        ]
+      ]
+    
+}
