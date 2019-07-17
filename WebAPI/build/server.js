@@ -16,4 +16,4 @@ app.get('/', function (req, res) {
 });
 
 app.listen(3000);
-console.log('app running on port ', 3000);
+debug.log('app running on port ', 3000);

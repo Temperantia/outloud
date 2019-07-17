@@ -44,44 +44,6 @@ app.delete('/', (req, res) => {
 const eraseDatabaseOnSync = true;
 
 sequelize.sync({ force: eraseDatabaseOnSync }).then(async () => {
-    if (eraseDatabaseOnSync) {
-  //      createUsersWithMessages();
-      }
     app.listen(3000, () => {
-      console.log(`Example app listening!`);
     })
 });
-/*
-const createUsersWithMessages = async () => {
-    await models.User.create(
-      {
-        username: 'rwieruch',
-        messages: [
-          {
-            text: 'Published the Road to learn React',
-          },
-        ],
-      },
-      {
-        include: [models.Message],
-      },
-    );
-  
-    await models.User.create(
-      {
-        username: 'ddavids',
-        messages: [
-          {
-            text: 'Happy to release ...',
-          },
-          {
-            text: 'Published a complete ...',
-          },
-        ],
-      },
-      {
-        include: [models.Message],
-      },
-    );
-  };
-*/
