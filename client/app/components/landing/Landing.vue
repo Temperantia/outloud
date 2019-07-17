@@ -1,7 +1,20 @@
 <template>
-  <Page actionBarHidden="true">
-    <FlexboxLayout flexDirection="column">
-      <Image src="~/assets/images/logo_transparent.png" stretch="none"/>
+  <Page
+  class="landing"
+  actionBarHidden="true">
+    <FlexboxLayout
+    class="container"
+    flexDirection="column"
+    justifyContent="space-between">
+      <StackLayout>
+        <StackLayout class="logo-container">
+          <Image class="logo" src="~/assets/images/logo.png" stretch="aspectFit" />
+          <Label
+          class="motto"
+          text="Let's include today !">
+          </Label>
+        </StackLayout>
+      </StackLayout>
       <StackLayout class="buttons">
         <Button
         class="btn btn-landing"
@@ -18,14 +31,14 @@
 
 <script lang="ts">
 import Login from './Login.vue';
-import Register from './Register.vue';
+import Register1 from './Register1.vue';
 export default {
   methods: {
     onLoginTap() {
       this.$navigateTo(Login);
     },
     onRegisterTap() {
-      this.$navigateTo(Register);
+      this.$navigateTo(Register1);
     },
   },
 };
@@ -34,14 +47,35 @@ export default {
 <style lang="scss" scoped>
 @import '~/_app-variables';
 
-.buttons {
-  vertical-align: center;
-}
+.landing {
+  background-image: url('~/assets/images/2.jpg');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
 
-.btn-landing {
-  width: 50%;
-  height: 20%;
-  padding: 5px;
-  margin: 20px;
+  .logo-container {
+    width: 50%;
+    background-color: $red;
+    border-radius: 5px;
+
+    .logo {
+    }
+
+    .motto {
+      color: $white;
+      margin: 10px;
+      text-align: center;
+    }
+  }
+
+  .buttons {
+    vertical-align: center;
+  }
+
+  .btn-landing {
+    width: 50%;
+    height: 50vw;
+    margin: 50px 0;
+  }
 }
 </style>

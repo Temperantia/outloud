@@ -1,20 +1,23 @@
 <template>
   <Page
-  class="login"
+  class="register"
   actionBarHidden="true">
     <FlexboxLayout
     flexDirection="column"
-    justifyContent="space-between">
-      <StackLayout>
-        <StackLayout class="logo-container">
-          <Image class="logo" src="~/assets/images/logo.png" stretch="aspectFit" />
-          <Label
-          class="motto"
-          text="Let's include today !">
-          </Label>
-        </StackLayout>
-      </StackLayout>
+    justifyContent="center">
       <StackLayout class="form">
+        <StackLayout
+        class="input-container"
+        orientation="horizontal">
+          <StackLayout class="text">
+            <Label text="NAME"></Label>
+          </StackLayout>
+          <TextField
+          class="input"
+          hint="Jo•hn•ane Doe"
+          v-model="name">
+          </TextField>
+        </StackLayout>
         <StackLayout
         class="input-container"
         orientation="horizontal">
@@ -28,37 +31,35 @@
           v-model="email">
           </TextField>
         </StackLayout>
-        <StackLayout
-        class="input-container"
-        orientation="horizontal">
-          <StackLayout class="text">
-            <Label text="PASSWORD"></Label>
-          </StackLayout>
-          <TextField
-          class="input"
-          hint="••••••••"
-          secure="true"
-          v-model="password">
-          </TextField>
-        </StackLayout>
+        <Label
+        class="error"
+        :text="errorEmail"></Label>
         <Button
-        class="btn btn-login"
-        text="LOG ME IN"
-        @tap="onLoginTap" />
+        class="btn btn-register"
+        text="NEXT"
+        @tap="onNextTap" />
       </StackLayout>
     </FlexboxLayout>
   </Page>
 </template>
 
 <script lang="ts">
+import Register2 from './Register2.vue';
 export default {
   data: () => ({
     email: '',
-    password: '',
+    emailRegex: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+    errorEmail: '',
+    name: '',
   }),
   methods: {
-    onLoginTap() {
-
+    onNextTap() {
+      if (!this.emailRegex.test(this.email.toString().toLowerCase())) {
+        this.errorEmail = 'Please enter a valid email';
+      } else {
+        this.$store.dispatch('userRegister1', {name: this.name, email: this.email});
+        this.$navigateTo(Register2);
+      }
     },
   },
 };
@@ -67,34 +68,16 @@ export default {
 <style lang="scss" scoped>
 @import '~/_app-variables';
 
-.login {
+.register {
   background-image: url('~/assets/images/2.jpg');
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
 
-  .logo-container {
-    width: 50%;
-    background-color: $red;
-    border-radius: 5px;
-
-    .logo {
-    }
-
-    .motto {
-      color: $white;
-      margin: 10px;
-      text-align: center;
-    }
-  }
-
   .form {
     .input-container {
       height: 50vw;
-    }
-
-    .input-container {
-      margin: 0 50px 50px 50px;
+      margin: 0 50px 10px 50px;
 
       .text {
         width: 25%;
@@ -119,10 +102,14 @@ export default {
       }
     }
 
-    .btn-login {
+    .error {
+      color: $red;
+      margin-left: 50px;
+    }
+
+    .btn-register {
       width: 50%;
       height: 50vw;
-      margin-top: 50px;
     }
   }
 }

@@ -1,33 +1,11 @@
 <template>
   <Page
-  class="login"
+  class="register"
   actionBarHidden="true">
     <FlexboxLayout
     flexDirection="column"
-    justifyContent="space-between">
-      <StackLayout>
-        <StackLayout class="logo-container">
-          <Image class="logo" src="~/assets/images/logo.png" stretch="aspectFit" />
-          <Label
-          class="motto"
-          text="Let's include today !">
-          </Label>
-        </StackLayout>
-      </StackLayout>
+    justifyContent="center">
       <StackLayout class="form">
-        <StackLayout
-        class="input-container"
-        orientation="horizontal">
-          <StackLayout class="text">
-            <Label text="EMAIL"></Label>
-          </StackLayout>
-          <TextField
-          class="input"
-          hint="jo•hn•ane.doe@gmail.com"
-          keyboardType="email"
-          v-model="email">
-          </TextField>
-        </StackLayout>
         <StackLayout
         class="input-container"
         orientation="horizontal">
@@ -41,24 +19,54 @@
           v-model="password">
           </TextField>
         </StackLayout>
+        <Label
+        class="error"
+        :text="errorPassword"></Label>
+        <StackLayout
+        class="input-container"
+        orientation="horizontal">
+          <StackLayout class="text">
+            <Label text="CONFIRM PASSWORD"></Label>
+          </StackLayout>
+          <TextField
+          class="input"
+          hint="••••••••"
+          secure="true"
+          v-model="confirmPassword">
+          </TextField>
+        </StackLayout>
+        <Label
+        class="error"
+        :text="errorConfirmPassword"></Label>
         <Button
-        class="btn btn-login"
-        text="LOG ME IN"
-        @tap="onLoginTap" />
+        class="btn btn-register"
+        text="GET ME IN"
+        @tap="onRegisterTap" />
       </StackLayout>
     </FlexboxLayout>
   </Page>
 </template>
 
 <script lang="ts">
+import App from '../App.vue';
 export default {
   data: () => ({
-    email: '',
+    confirmPassword: '',
+    errorConfirmPassword: '',
+    errorPassword: '',
     password: '',
   }),
   methods: {
-    onLoginTap() {
-
+    onRegisterTap() {
+      this.errorPassword = '';
+      if (this.password.length < 8) {
+        this.errorPassword = 'Password has to contain at least 8 characters';
+      } else if (this.confirmPassword !== this.password) {
+        this.errorConfirmPassword = 'Passwords must match';
+      } else {
+        // API call and maybe add info to state from response
+        this.$navigateTo(App);
+      }
     },
   },
 };
@@ -67,34 +75,16 @@ export default {
 <style lang="scss" scoped>
 @import '~/_app-variables';
 
-.login {
+.register {
   background-image: url('~/assets/images/2.jpg');
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
 
-  .logo-container {
-    width: 50%;
-    background-color: $red;
-    border-radius: 5px;
-
-    .logo {
-    }
-
-    .motto {
-      color: $white;
-      margin: 10px;
-      text-align: center;
-    }
-  }
-
   .form {
     .input-container {
       height: 50vw;
-    }
-
-    .input-container {
-      margin: 0 50px 50px 50px;
+      margin: 0 50px 10px 50px;
 
       .text {
         width: 25%;
@@ -119,10 +109,14 @@ export default {
       }
     }
 
-    .btn-login {
+    .error {
+      color: $red;
+      margin-left: 50px;
+    }
+
+    .btn-register {
       width: 50%;
       height: 50vw;
-      margin-top: 50px;
     }
   }
 }
