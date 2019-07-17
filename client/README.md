@@ -1,6 +1,6 @@
-# NativeScript-Vue Application
+# Inclusive
 
-> A native application built with NativeScript-Vue
+> 
 
 ## Usage
 
