@@ -1,7 +1,7 @@
 <template>
   <Page
-  class="landing"
   actionBarHidden="true">
+    
     <FlexboxLayout
     class="container"
     flexDirection="column"
@@ -26,6 +26,7 @@
         @tap="onRegisterTap"/>
       </StackLayout>
     </FlexboxLayout>
+    
   </Page>
 </template>
 
@@ -47,22 +48,15 @@ export default {
 <style lang="scss" scoped>
 @import '~/_app-variables';
 
-.landing {
-  background-image: url('~/assets/images/2.jpg');
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: cover;
-
   .logo-container {
     width: 50%;
-    background-color: $red;
     border-radius: 5px;
 
     .logo {
     }
 
     .motto {
-      color: $white;
+      color: $primary;
       margin: 10px;
       text-align: center;
     }
@@ -77,5 +71,10 @@ export default {
     height: 50vw;
     margin: 50px 0;
   }
+.background {
+}
+.container {
+  background: linear-gradient(135deg, rgba(253, 97, 0, 0.3) 0%,rgba(0, 87, 146, 0.3) 99%);
+
 }
 </style>

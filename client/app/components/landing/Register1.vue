@@ -53,7 +53,8 @@ export default {
     name: '',
   }),
   methods: {
-    onNextTap() {
+    onNextTap() { // TODO check name is not empty
+    // TODO display steps
       if (!this.emailRegex.test(this.email.toString().toLowerCase())) {
         this.errorEmail = 'Please enter a valid email';
       } else {
@@ -83,7 +84,7 @@ export default {
         width: 25%;
         height: 100%;
         color: $white;
-        background-color: $orange;
+        background-color: $primary;
         font-family: 'Roboto-Bold';
         border-top-left-radius: 5px;
         border-bottom-left-radius: 5px;
@@ -96,14 +97,14 @@ export default {
         height: 100%;
         color: $black;
         background-color: $white;
-        border: 1px solid $orange;
+        border: 1px solid $primary;
         border-top-right-radius: 5px;
         border-bottom-right-radius: 5px;
       }
     }
 
     .error {
-      color: $red;
+      color: $secondary;
       margin-left: 50px;
     }
 

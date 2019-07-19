@@ -4,16 +4,7 @@
   actionBarHidden="true">
     <FlexboxLayout
     flexDirection="column"
-    justifyContent="space-between">
-      <StackLayout>
-        <StackLayout class="logo-container">
-          <Image class="logo" src="~/assets/images/logo.png" stretch="aspectFit" />
-          <Label
-          class="motto"
-          text="Let's include today !">
-          </Label>
-        </StackLayout>
-      </StackLayout>
+    justifyContent="center">
       <StackLayout class="form">
         <StackLayout
         class="input-container"
@@ -73,21 +64,6 @@ export default {
   background-position: center;
   background-size: cover;
 
-  .logo-container {
-    width: 50%;
-    background-color: $red;
-    border-radius: 5px;
-
-    .logo {
-    }
-
-    .motto {
-      color: $white;
-      margin: 10px;
-      text-align: center;
-    }
-  }
-
   .form {
     .input-container {
       height: 50vw;
@@ -100,7 +76,7 @@ export default {
         width: 25%;
         height: 100%;
         color: $white;
-        background-color: $orange;
+        background-color: $primary;
         font-family: 'Roboto-Bold';
         border-top-left-radius: 5px;
         border-bottom-left-radius: 5px;
@@ -113,7 +89,7 @@ export default {
         height: 100%;
         color: $black;
         background-color: $white;
-        border: 1px solid $orange;
+        border: 1px solid $primary;
         border-top-right-radius: 5px;
         border-bottom-right-radius: 5px;
       }
