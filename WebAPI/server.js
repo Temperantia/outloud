@@ -3,85 +3,28 @@
  * Path: c:\Users\50448\Source\Repos\inclusive\WebAPI
  * Created Date: Monday, July 15th 2019, 12:45:28 am
  * Author: 50448
- * 
+ *
  * Copyright (c) 2019 Inclusive
  */
 
-// server.js
 import express from 'express';
-const app = express()
-import models, { sequelize } from './src/';
+import bearerToken from 'express-bearer-token';
+import bodyParser from 'body-parser';
+const app = express();
 
-app.get('/', (req, res) => {
-    return res.send('Received a GET HTTP method');
+app.use(bearerToken());
+app.use(bodyParser.json());
+
+import './env';
+import { sequelize } from './models';
+import { userRouter } from './routes';
+
+app.use('/user', userRouter);
+
+sequelize
+  .sync({
+    // force: true
+  })
+  .then(() => {
+    app.listen(3000);
   });
-
-app.post('/users/register', async  (req, res) => {
-  await models.User.create(
-    {
-      username: 'firstGay',
-      messages: [
-        {
-          text: 'faker hhh',
-        },
-      ],
-    },
-    {
-      include: [models.Message],
-    },
-  );
-
-  return res.send('user created');
-});
-app.put('/', (req, res) => {
-  return res.send('Received a PUT HTTP method');
-});
-
-app.delete('/', (req, res) => {
-  return res.send('Received a DELETE HTTP method');
-});
-
-const eraseDatabaseOnSync = true;
-
-sequelize.sync({ force: eraseDatabaseOnSync }).then(async () => {
-    if (eraseDatabaseOnSync) {
-  //      createUsersWithMessages();
-      }
-    app.listen(3000, () => {
-      console.log(`Example app listening!`);
-    })
-});
-/*
-const createUsersWithMessages = async () => {
-    await models.User.create(
-      {
-        username: 'rwieruch',
-        messages: [
-          {
-            text: 'Published the Road to learn React',
-          },
-        ],
-      },
-      {
-        include: [models.Message],
-      },
-    );
-  
-    await models.User.create(
-      {
-        username: 'ddavids',
-        messages: [
-          {
-            text: 'Happy to release ...',
-          },
-          {
-            text: 'Published a complete ...',
-          },
-        ],
-      },
-      {
-        include: [models.Message],
-      },
-    );
-  };
-*/
