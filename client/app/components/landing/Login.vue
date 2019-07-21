@@ -14,7 +14,7 @@
           </StackLayout>
           <TextField
           class="input"
-          hint="jo•hn•ane.doe@gmail.com"
+          hint="someone@gmail.com"
           keyboardType="email"
           v-model="email">
           </TextField>
@@ -42,14 +42,25 @@
 </template>
 
 <script lang="ts">
+import App from '../App.vue';
 export default {
   data: () => ({
     email: '',
     password: '',
   }),
   methods: {
-    onLoginTap() {
-
+    async onLoginTap() {
+      try {
+        const result = await this.$http.post(
+          `${process.env.URL_API}/user/login`, {
+            email: this.email,
+            password: this.password,
+          }
+        );
+        this.$navigateTo(App);
+      } catch (error) {
+        console.error(error);
+      }
     },
   },
 };

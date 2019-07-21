@@ -20,7 +20,7 @@ const user = (sequelize, DataTypes) => {
     password: DataTypes.STRING
   });
 
-  User.associate = models => {
+  User.associate = (models) => {
     User.hasMany(models.Message);
     // User.hasMany(models.Rooms);
     // User.hasMany(models.User);

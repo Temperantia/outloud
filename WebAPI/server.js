@@ -10,21 +10,20 @@
 import express from 'express';
 import bearerToken from 'express-bearer-token';
 import bodyParser from 'body-parser';
+import './env';
+
 const app = express();
 
-app.use(bearerToken());
 app.use(bodyParser.json());
+app.use(bearerToken());
 
-import './env';
 import { sequelize } from './models';
 import { userRouter } from './routes';
 
 app.use('/user', userRouter);
 
 sequelize
-  .sync({
-    // force: true
-  })
+  .sync()
   .then(() => {
     app.listen(3000);
   });

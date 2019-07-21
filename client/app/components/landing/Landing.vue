@@ -1,7 +1,7 @@
 <template>
   <Page
   actionBarHidden="true">
-    
+
     <FlexboxLayout
     class="container"
     flexDirection="column"
@@ -26,7 +26,7 @@
         @tap="onRegisterTap"/>
       </StackLayout>
     </FlexboxLayout>
-    
+
   </Page>
 </template>
 

@@ -30,15 +30,19 @@ export const userRouter = Router()
       return res.sendStatus(500);
     }
   })
+
   .post('/login', async (req, res) => {
+    const email = req.body.email || '';
+    const password = req.body.password || '';
+
     try {
       const user = await models.User.findOne({
         where: {
-          email: req.body.email,
+          email,
         },
       });
 
-      if (!user || !compareSync(req.body.password, user.password)) {
+      if (!user || !compareSync(password, user.password)) {
         return res.sendStatus(403);
       }
 
@@ -50,6 +54,7 @@ export const userRouter = Router()
       return res.sendStatus(500);
     }
   })
+
   .use((req, res, next) => {
     if (!req.token) {
       return res.sendStatus(403);
@@ -68,6 +73,7 @@ export const userRouter = Router()
       return res.sendStatus(500);
     }
   })
+
   .get('/', async (req, res) => {
     return res.send(await models.User.findAll({
       attributes: {
@@ -75,6 +81,7 @@ export const userRouter = Router()
       },
     }));
   })
+
   .put('/:userId', async (req, res) => {
     try {
       const user = await models.User.findOne({
@@ -94,6 +101,7 @@ export const userRouter = Router()
     }
     return res.send();
   })
+
   .delete('/:userId', async (req, res) => {
     try {
       const user = await models.User.findOne({

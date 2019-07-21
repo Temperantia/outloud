@@ -65,6 +65,7 @@ export default {
         this.errorConfirmPassword = 'Passwords must match';
       } else {
         // API call and maybe add info to state from response
+
         this.$navigateTo(App);
       }
     },
