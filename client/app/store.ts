@@ -6,14 +6,14 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     user: {
-      birth: '',
+      birthDate: '',
       email: '',
       name: '',
     },
   },
   mutations: {
-    userChangeBirth(state, birth) {
-      state.user.birth = birth;
+    userChangeBirth(state, birthDate) {
+      state.user.birthDate = birthDate;
     },
     userChangeEmail(state, email) {
       state.user.email = email;
@@ -28,7 +28,7 @@ export default new Vuex.Store({
       context.commit('userChangeEmail', user.email);
     },
     userRegister2(context, user) {
-      context.commit('userChangeBirth', user.birth);
+      context.commit('userChangeBirth', user.birthDate);
     },
   }
 });

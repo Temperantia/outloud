@@ -19,9 +19,8 @@ export const userRouter = Router()
         birthDate: req.body.birthDate,
         email: req.body.email,
         name: req.body.name,
-        password: await hashSync(req.body.password, Math.random() * (20 - 10) + 10),
+        password: await hashSync(req.body.password, 10), // TODO variable env
       });
-
       return res.send({
         token: generateToken(user),
       });

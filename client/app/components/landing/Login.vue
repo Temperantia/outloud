@@ -36,6 +36,9 @@
         class="btn btn-login"
         text="LOG ME IN"
         @tap="onLoginTap" />
+        <Label
+        class="error"
+        :text="errorLogin"></Label>
       </StackLayout>
     </FlexboxLayout>
   </Page>
@@ -46,19 +49,23 @@ import App from '../App.vue';
 export default {
   data: () => ({
     email: '',
+    errorLogin: '',
     password: '',
   }),
   methods: {
     async onLoginTap() {
+      this.errorLogin = '';
       try {
-        const result = await this.$http.post(
+        const response = await this.$http.post(
           `${process.env.URL_API}/user/login`, {
             email: this.email,
             password: this.password,
           }
         );
+        this.$http.defaults.headers.common.Authorization = response.data.token;
         this.$navigateTo(App);
       } catch (error) {
+        this.errorLogin = 'Incorrect credentials';
         console.error(error);
       }
     },
@@ -110,6 +117,12 @@ export default {
       width: 50%;
       height: 50vw;
       margin-top: 50px;
+    }
+
+    .error {
+      color: $secondary;
+      margin-left: 50px;
+      text-align: center;
     }
   }
 }

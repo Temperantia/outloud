@@ -26,7 +26,7 @@
           </StackLayout>
           <TextField
           class="input"
-          hint="jo•hn•ane.doe@gmail.com"
+          hint="someone@gmail.com"
           keyboardType="email"
           v-model="email">
           </TextField>

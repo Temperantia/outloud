@@ -5,7 +5,6 @@
   "main": "index.js",
   "scripts": {
     "start": "babel-watch server.js",
-    "test": "echo \"Error: no test specified\" && exit 1",
     "build": "babel server.js --out-dir build"
   },
   "repository": {

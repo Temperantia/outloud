@@ -42,6 +42,9 @@
         class="btn btn-register"
         text="GET ME IN"
         @tap="onRegisterTap" />
+        <Label
+        class="error"
+        :text="errorRegister"></Label>
       </StackLayout>
     </FlexboxLayout>
   </Page>
@@ -54,19 +57,35 @@ export default {
     confirmPassword: '',
     errorConfirmPassword: '',
     errorPassword: '',
+    errorRegister: '',
     password: '',
   }),
   methods: {
-    onRegisterTap() {
+    async onRegisterTap() {
       this.errorPassword = '';
+      this.errorConfirmPassword = '';
+      this.errorRegister = '';
       if (this.password.length < 8) {
         this.errorPassword = 'Password has to contain at least 8 characters';
       } else if (this.confirmPassword !== this.password) {
         this.errorConfirmPassword = 'Passwords must match';
       } else {
-        // API call and maybe add info to state from response
-
-        this.$navigateTo(App);
+        try {
+          const user = this.$store.state.user;
+          const response = await this.$http.post(
+            `${process.env.URL_API}/user`, {
+              birthDate: user.birthDate,
+              email: user.email,
+              name: user.name,
+              password: this.password,
+            }
+          );
+          this.$http.defaults.headers.common.Authorization = response.data.token;
+          this.$navigateTo(App);
+        } catch (error) {
+          console.error(error);
+          this.errorRegister = 'Something turned wrong. Please try again later.'
+        }
       }
     },
   },

@@ -15,7 +15,7 @@
           <DatePicker
           class="input"
           :maxDate="maxDate"
-          v-model="birth" />
+          v-model="birthDate" />
         </StackLayout>
         <Label
         class="error"
@@ -33,7 +33,7 @@
 import Register3 from './Register3.vue';
 export default {
   data: () => ({
-    birth: '',
+    birthDate: '',
     errorBirth: '',
     confirmPassword: '',
     maxDate: new Date(),
@@ -41,17 +41,17 @@ export default {
   }),
   methods: {
     onNextTap() {
-      const birth: Date = new Date(this.birth);
+      const birthDate: Date = new Date(this.birthDate);
       const today: Date = new Date();
-      let age: number = today.getFullYear() - birth.getFullYear();
-      const m: number = today.getMonth() - birth.getMonth();
-      if (m < 0 || (m === 0 && today.getDate() < birth.getDate())) {
+      let age: number = today.getFullYear() - birthDate.getFullYear();
+      const m: number = today.getMonth() - birthDate.getMonth();
+      if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
           age = age - 1;
       }
       if (age < 16) {
         this.errorBirth = 'You need to be 16+ to join Inc•lusive'
       } else {
-        this.$store.dispatch('userRegister1', {birth});
+        this.$store.dispatch('userRegister2', {birthDate});
         this.$navigateTo(Register3);
       }
     },
