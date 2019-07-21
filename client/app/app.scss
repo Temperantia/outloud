@@ -1,0 +1,15 @@
+// Global SCSS styling
+// @see https://docs.nativescript.org/ui/styling
+
+@import '~/_app-variables';
+
+* {
+  font-family: 'Roboto-Regular';
+}
+
+.btn {
+  border-radius: 5px;
+  color: $white;
+  background-color: $primary;
+  font-family: 'Roboto-Bold';
+}
