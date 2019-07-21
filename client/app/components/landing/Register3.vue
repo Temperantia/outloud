@@ -5,47 +5,10 @@
     <FlexboxLayout
     flexDirection="column"
     justifyContent="center">
-      <StackLayout class="form">
-        <StackLayout
-        class="input-container"
-        orientation="horizontal">
-          <StackLayout class="text">
-            <Label text="PASSWORD"></Label>
-          </StackLayout>
-          <TextField
-          class="input"
-          hint="••••••••"
-          secure="true"
-          v-model="password">
-          </TextField>
-        </StackLayout>
-        <Label
-        class="error"
-        :text="errorPassword"></Label>
-        <StackLayout
-        class="input-container"
-        orientation="horizontal">
-          <StackLayout class="text">
-            <Label text="CONFIRM PASSWORD"></Label>
-          </StackLayout>
-          <TextField
-          class="input"
-          hint="••••••••"
-          secure="true"
-          v-model="confirmPassword">
-          </TextField>
-        </StackLayout>
-        <Label
-        class="error"
-        :text="errorConfirmPassword"></Label>
-        <Button
-        class="btn btn-register"
-        text="GET ME IN"
-        @tap="onRegisterTap" />
-        <Label
-        class="error"
-        :text="errorRegister"></Label>
-      </StackLayout>
+    <StackLayout
+    orientation="horizontal">
+
+    </StackLayout>
     </FlexboxLayout>
   </Page>
 </template>

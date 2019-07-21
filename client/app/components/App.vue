@@ -1,27 +1,47 @@
 <template>
-    <Page>
-        <ActionBar title="Welcome to NativeScript-Vue!" android:flat="true"/>
-        <TabView android:tabBackgroundColor="#53ba82"
-                 android:tabTextColor="#c4ffdf"
-                 android:selectedTabTextColor="#ffffff"
-                 androidSelectedTabHighlightColor="#ffffff">
-            <TabViewItem title="Tab 1">
-                <GridLayout columns="*" rows="*">
-                    <Label class="message" :text="msg" col="0" row="0"/>
-                </GridLayout>
-            </TabViewItem>
-            <TabViewItem title="Tab 2">
-                <GridLayout columns="*" rows="*">
-                    <Label class="message" text="Tab 2 Content" col="0" row="0"/>
-                </GridLayout>
-            </TabViewItem>
-            <TabViewItem title="Tab 3">
-                <GridLayout columns="*" rows="*">
-                    <Label class="message" text="Tab 3 Content" col="0" row="0"/>
-                </GridLayout>
-            </TabViewItem>
-        </TabView>
-    </Page>
+ <Page
+  class="app"
+  actionBarHidden="true">
+    <FlexboxLayout
+    flexDirection="column"
+    justifyContent="center">
+      <StackLayout class="form">
+        <StackLayout
+        class="input-container"
+        orientation="horizontal">
+          <StackLayout class="text">
+            <Label text="EMAIL"></Label>
+          </StackLayout>
+          <TextField
+          class="input"
+          hint="someone@gmail.com"
+          keyboardType="email"
+          v-model="email">
+          </TextField>
+        </StackLayout>
+        <StackLayout
+        class="input-container"
+        orientation="horizontal">
+          <StackLayout class="text">
+            <Label text="PASSWORD"></Label>
+          </StackLayout>
+          <TextField
+          class="input"
+          hint="••••••••"
+          secure="true"
+          v-model="password">
+          </TextField>
+        </StackLayout>
+        <Button
+        class="btn btn-login"
+        text="LOG ME IN"
+        @tap="onLoginTap" />
+        <Label
+        class="error"
+        :text="errorLogin"></Label>
+      </StackLayout>
+    </FlexboxLayout>
+  </Page>
 </template>
 
 <script lang="ts">
