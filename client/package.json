@@ -5,7 +5,7 @@
   "author": "Temperance <adulorier@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "build": "tns install && tns build android --env.envtype=\"prod\"",
+    "build": "tns build android --env.envtype=\"prod\"",
     "start": "tns run android --env.envtype=\"dev\" --env.URL_API=\"http://10.0.2.2:3000\""
   },
   "nativescript": {
