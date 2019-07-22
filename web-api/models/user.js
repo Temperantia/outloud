@@ -11,13 +11,19 @@ const user = (sequelize, DataTypes) => {
     birthDate: DataTypes.DATE,
     description: DataTypes.STRING,
     email: {
+      allowNull: false,
       type: DataTypes.STRING,
       unique: true,
     },
     image: DataTypes.STRING,
     location: DataTypes.STRING,
     name: DataTypes.STRING,
-    password: DataTypes.STRING
+    password: DataTypes.STRING,
+    username: {
+      allowNull: false,
+      type: DataTypes.STRING,
+      unique: true,
+    },
   });
 
   User.associate = (models) => {

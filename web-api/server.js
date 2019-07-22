@@ -11,19 +11,25 @@ import express from 'express';
 import bearerToken from 'express-bearer-token';
 import bodyParser from 'body-parser';
 import './env';
+import { sequelize } from './models';
+import { userRouter } from './routes';
 
 const app = express();
 
 app.use(bodyParser.json());
 app.use(bearerToken());
 
-import { sequelize } from './models';
-import { userRouter } from './routes';
-
 app.use('/user', userRouter);
 
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.sendStatus(500);
+});
+
 sequelize
-  .sync()
+  .sync({
+    force: true,
+  })
   .then(() => {
-    app.listen(3000);
+    app.listen(process.env.PORT);
   });

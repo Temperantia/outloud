@@ -129,6 +129,7 @@ module.exports = env => {
             "__dirname": false,
         },
         devtool: hiddenSourceMap ? "hidden-source-map" : (sourceMap ? "inline-source-map" : "none"),
+        /*
         optimization: {
             runtimeChunk: "single",
             splitChunks: {
@@ -168,6 +169,7 @@ module.exports = env => {
                 }),
             ],
         },
+        */
         module: {
             rules: [{
                 test: nsWebpack.getEntryPathRegExp(appFullPath, entryPath + ".(js|ts)"),
@@ -240,10 +242,8 @@ module.exports = env => {
             new webpack.DefinePlugin({
                 "global.TNS_WEBPACK": "true",
                 "TNS_ENV": JSON.stringify(mode),
-                "process": "global.process",
-                "process.env": {
-                  'URL_API': JSON.stringify(env && env.URL_API ? env.URL_API : ""),
-                }
+                "process": "global.process"
+
             }),
             // Remove all files from the out dir.
             new CleanWebpackPlugin(),

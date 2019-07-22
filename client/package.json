@@ -6,7 +6,7 @@
   "license": "MIT",
   "scripts": {
     "build": "tns build android --env.envtype=\"prod\"",
-    "start": "tns run android --hmr --env.envtype=\"dev\" --env.URL_API=\"http://10.0.2.2:3000\""
+    "start": "tns run android --env.envtype=\"dev\" --env.URL_API=\"http://10.0.2.2:3000\""
   },
   "nativescript": {
     "id": "inclusive.com",

@@ -44,23 +44,66 @@
 </template>
 
 <script lang="ts">
+import { email, required } from 'vuelidate/lib/validators';
+
 import Register2 from './Register2.vue';
+
 export default {
+  computed: {
+    errorEmail: function() {
+      if (this.$v.email.pending) {
+        return '';
+      }
+      if (!this.$v.email.email) {
+        return 'Please enter a valid email';
+      } else if (!this.$v.email.isUnique) {
+        return 'Email is already used';
+      }
+      return '';
+    },
+  },
   data: () => ({
     email: '',
-    emailRegex: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-    errorEmail: '',
     name: '',
   }),
   methods: {
-    onNextTap() { // TODO check name is not empty
+    onNextTap() {
     // TODO display steps
-      if (!this.emailRegex.test(this.email.toString().toLowerCase())) {
-        this.errorEmail = 'Please enter a valid email';
-      } else {
-        this.$store.dispatch('userRegister1', {name: this.name, email: this.email});
+    this.$v.$touch();
+    if (!this.$v.$invalid) {
+        this.$store.dispatch('userRegister1', {
+          name: this.name,
+          email: this.email,
+        });
         this.$navigateTo(Register2);
       }
+    },
+  },
+  validations: {
+    email: {
+      email,
+      async isUnique(value) {
+        if (value === '') {
+          return true;
+        }
+
+        const response = await this.$http.get(
+          `${process.env.URL_API}/user/exist/email/${value}`
+        );
+        return !response.data.exist;
+      },
+    },
+    username: {
+      async isUnique(value) {
+        if (value === '') {
+          return true;
+        }
+
+        const response = await this.$http.get(
+          `${process.env.URL_API}/user/exist/username/${value}`
+        );
+        return !response.data.exist;
+      },
     },
   },
 };
@@ -85,7 +128,6 @@ export default {
         height: 100%;
         color: $white;
         background-color: $primary;
-        font-family: 'Roboto-Bold';
         border-top-left-radius: 5px;
         border-bottom-left-radius: 5px;
         text-align: center;

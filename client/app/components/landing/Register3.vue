@@ -74,7 +74,6 @@ export default {
         height: 100%;
         color: $white;
         background-color: $primary;
-        font-family: 'Roboto-Bold';
         border-top-left-radius: 5px;
         border-bottom-left-radius: 5px;
         text-align: center;
