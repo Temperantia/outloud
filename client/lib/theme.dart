@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 Color orange = const Color(0xFFFF8D00);
+Color orangeLight = const Color(0x66FF8D00);
 Color white = const Color(0xFFF9F5F5);
 
 ThemeData theme = new ThemeData(

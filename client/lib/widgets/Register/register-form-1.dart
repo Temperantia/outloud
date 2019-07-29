@@ -1,5 +1,6 @@
 // Define a custom Form widget.
 import 'package:flutter/material.dart';
+import 'package:inclusive/widgets/input.dart';
 
 class RegisterForm1 extends StatefulWidget {
   @override
@@ -26,14 +27,9 @@ class RegisterForm1State extends State<RegisterForm1> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          TextFormField(
-            validator: (value) {
-              if (value.isEmpty) {
-                return 'Enter some text';
-              }
-              return null;
-            },
-          ),
+          Container(
+              padding: EdgeInsets.all(10),
+              child: TextInput(name: 'Username', hint: 'J•hn•an•nie')),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 16.0),
             child: RaisedButton(
