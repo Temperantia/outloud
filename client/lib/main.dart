@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:inclusive/screens/Landing/index.dart';
 import 'package:inclusive/routes.dart';
+import 'package:inclusive/screens/app.dart';
 import 'package:inclusive/theme.dart';
 
 void main() => runApp(App());
@@ -9,10 +9,10 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: LandingScreen(),
+      home: AppScreen(),
       routes: routes,
-      title: 'Inclusive',
       theme: theme,
+      title: 'Inclusive',
     );
   }
 }

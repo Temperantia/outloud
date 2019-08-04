@@ -2,19 +2,24 @@ import 'package:flutter/material.dart';
 
 Color orange = const Color(0xFFFF8D00);
 Color orangeLight = const Color(0x66FF8D00);
+Color blue = const Color(0xFF185782);
+Color blueLight = const Color(0xFFBCE0FD);
 Color white = const Color(0xFFF9F5F5);
 
-ThemeData theme = new ThemeData(
+ThemeData theme = ThemeData(
   accentColor: white,
   buttonTheme: ButtonThemeData(
     buttonColor: orange,
     minWidth: 200.0,
     padding: EdgeInsets.all(15.0),
     shape: RoundedRectangleBorder(
-      borderRadius: new BorderRadius.circular(20.0),
+      borderRadius: BorderRadius.circular(20.0),
     ),
   ),
   primaryColor: orange,
+  sliderTheme: SliderThemeData(
+    showValueIndicator: ShowValueIndicator.always
+  ),
   textTheme: TextTheme(
     subhead: TextStyle(
       color: white,

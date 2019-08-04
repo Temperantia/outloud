@@ -12,7 +12,7 @@ class Register1Screen extends StatelessWidget {
           decoration: background,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
+            children: [
               RegisterForm1(),
             ],
           ),

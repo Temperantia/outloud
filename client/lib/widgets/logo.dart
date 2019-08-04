@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 final logo = (context) => Column(
-  children: <Widget>[
+  children: [
     Image.asset(
       'images/logo.png',
       height: MediaQuery.of(context).size.height * 0.3,

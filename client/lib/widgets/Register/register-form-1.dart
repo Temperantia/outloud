@@ -26,7 +26,7 @@ class RegisterForm1State extends State<RegisterForm1> {
       key: _formKey,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
+        children: [
           Container(
               padding: EdgeInsets.all(10),
               child: TextInput(name: 'Username', hint: 'J•hn•an•nie')),

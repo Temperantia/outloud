@@ -12,10 +12,10 @@ class LandingScreen extends StatelessWidget {
           decoration: background,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: <Widget>[
+            children: [
               logo(context),
               Column(
-                children: <Widget>[
+                children: [
                   RaisedButton(
                     onPressed: () {
                       Navigator.of(context).pushNamed('/Login');

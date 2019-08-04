@@ -13,7 +13,7 @@ class TextInput extends StatelessWidget {
     return IntrinsicHeight(
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: <Widget>[
+        children: [
           Expanded(
             flex: 1,
             child: Container(
