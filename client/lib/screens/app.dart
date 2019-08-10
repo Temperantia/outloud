@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:inclusive/screens/Search/index.dart';
-import 'package:inclusive/widgets/background.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:inclusive/theme.dart';
+import 'package:flutter_svg/svg.dart';
 
-bool notNull(Object o) => o != null;
+import 'package:inclusive/screens/Search/index.dart';
+import 'package:inclusive/theme.dart';
+import 'package:inclusive/utils/common.dart';
+import 'package:inclusive/widgets/background.dart';
 
 class AppScreen extends StatefulWidget {
   @override
@@ -98,6 +97,7 @@ class _AppState extends State<AppScreen> {
     return DefaultTabController(
       length: 3,
       child: Scaffold(
+        resizeToAvoidBottomPadding: false,
         appBar: _showHeader ? _header() : null,
         body: SafeArea(child: _body()),
       ),

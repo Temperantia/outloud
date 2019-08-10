@@ -11,16 +11,19 @@ ThemeData theme = ThemeData(
   buttonTheme: ButtonThemeData(
     buttonColor: orange,
     minWidth: 200.0,
-    padding: EdgeInsets.all(15.0),
+    padding: const EdgeInsets.all(15.0),
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(20.0),
     ),
   ),
   primaryColor: orange,
   sliderTheme: SliderThemeData(
-    showValueIndicator: ShowValueIndicator.always
+    showValueIndicator: ShowValueIndicator.always,
   ),
   textTheme: TextTheme(
+    caption: TextStyle(
+      color: white,
+    ),
     subhead: TextStyle(
       color: white,
     ),

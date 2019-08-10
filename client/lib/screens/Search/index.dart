@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:inclusive/widgets/Search/search-form-group.dart';
-import 'package:inclusive/widgets/Search/search-form-solo.dart';
+
+import 'package:inclusive/widgets/Search/search-group.dart';
+import 'package:inclusive/widgets/Search/search-solo.dart';
 import 'package:inclusive/theme.dart';
 
 class SearchScreen extends StatefulWidget {
@@ -14,19 +15,21 @@ class _SearchState extends State<SearchScreen> {
   @override
   Widget build(BuildContext context) {
     return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        Flexible(
+        Container(
+          height: MediaQuery.of(context).size.height * 0.15,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               GestureDetector(
-                onTap: () => setState(
-                  () => {
-                    if (!_solo) {_solo = true}
-                  },
-                ),
+                onTap: () => setState(() {
+                  if (!_solo) {
+                    _solo = true;
+                  }
+                }),
                 child: Container(
+                  width: 60,
+                  height: 60,
                   decoration: BoxDecoration(
                     color: _solo ? blue : orange,
                     borderRadius: BorderRadius.circular(50),
@@ -39,19 +42,21 @@ class _SearchState extends State<SearchScreen> {
                 ),
               ),
               GestureDetector(
-                onTap: () => setState(
-                  () => {
-                    if (_solo) {_solo = false}
-                  },
-                ),
+                onTap: () => setState(() {
+                  if (_solo) {
+                    _solo = false;
+                  }
+                }),
                 child: Container(
+                  width: 60,
+                  height: 60,
                   decoration: BoxDecoration(
                     color: _solo ? orange : blue,
                     borderRadius: BorderRadius.circular(50),
                   ),
-                  padding: EdgeInsets.all(20),
+                  padding: EdgeInsets.all(15),
                   child: SvgPicture.asset(
-                    'images/profile.svg',
+                    'images/group.svg',
                     color: white,
                   ),
                 ),
@@ -59,9 +64,9 @@ class _SearchState extends State<SearchScreen> {
             ],
           ),
         ),
-        Flexible(
-          flex: 4,
-          child: _solo ? SearchFormSolo() : SearchFormGroup(),
+        Container(
+          height: MediaQuery.of(context).size.height * 0.7,
+          child: _solo ? SearchSolo() : SearchGroup(),
         ),
       ],
     );

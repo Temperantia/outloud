@@ -25,6 +25,7 @@ dependencies:
 
   flutter_redux: ^0.5.3
   flutter_svg: ^0.14.0
+  flutter_tags: ^0.4.3
 
 dev_dependencies:
   flutter_test:

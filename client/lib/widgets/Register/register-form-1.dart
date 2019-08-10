@@ -28,7 +28,7 @@ class RegisterForm1State extends State<RegisterForm1> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-              padding: EdgeInsets.all(10),
+              padding: const EdgeInsets.all(10),
               child: TextInput(name: 'Username', hint: 'J•hn•an•nie')),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 16.0),
@@ -38,11 +38,14 @@ class RegisterForm1State extends State<RegisterForm1> {
                 // otherwise.
                 if (_formKey.currentState.validate()) {
                   // If the form is valid, display a Snackbar.
-                  Scaffold.of(context)
-                      .showSnackBar(SnackBar(content: Text('Processing Data')));
+                  Scaffold.of(context).showSnackBar(
+                    SnackBar(
+                      content: const Text('Processing Data'),
+                    ),
+                  );
                 }
               },
-              child: Text('Submit'),
+              child: const Text('Submit'),
             ),
           ),
         ],
