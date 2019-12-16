@@ -12,6 +12,7 @@ class App extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: AppScreen(),
+      initialRoute: AppScreen.routeName,
       routes: routes,
       theme: theme,
       title: 'Inclusive',

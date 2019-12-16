@@ -4,6 +4,8 @@ import 'package:inclusive/widgets/background.dart';
 import 'package:inclusive/widgets/logo.dart';
 
 class LandingScreen extends StatelessWidget {
+  static const routeName = '/Landing';
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

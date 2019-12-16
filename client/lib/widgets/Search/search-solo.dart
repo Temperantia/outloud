@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tags/tag.dart';
 
+import 'package:inclusive/screens/app.dart';
 import 'package:inclusive/services/search.dart';
+import 'package:inclusive/services/user.dart';
 import 'package:inclusive/theme.dart';
 import 'package:inclusive/utils/common.dart';
 
@@ -145,8 +147,8 @@ class SearchSoloState extends State<SearchSolo> {
                       });
                     },
                   )
-                : null,
-          ].where(notNull).toList(),
+                : emptyWidget,
+          ],
         ),
         RaisedButton(
           onPressed: () {
@@ -159,6 +161,25 @@ class SearchSoloState extends State<SearchSolo> {
             debugPrint(_homeland.toString());
             debugPrint(_interests.toString());
             debugPrint(_ages.toString());
+            Navigator.of(context).pushNamed(
+              AppScreen.routeName,
+              arguments: AppScreenArguments(
+                searchResults: [
+                  User(
+                    birthDate: DateTime.parse('1969-07-20 20:18:04Z'),
+                    email: 'adulorier@gmail.com',
+                    name: 'Alexandre Du lorier',
+                    username: 'temp',
+                  ),
+                  User(
+                    birthDate: DateTime.parse('1969-07-20 20:18:04Z'),
+                    email: 'adulorier@gmail.com',
+                    name: 'Alexandre Du lorier',
+                    username: 'temp',
+                  ),
+                ],
+              ),
+            );
           },
           child: Text(
             'Look for someone',

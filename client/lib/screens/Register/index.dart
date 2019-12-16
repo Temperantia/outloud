@@ -4,6 +4,8 @@ import 'package:inclusive/widgets/Register/register-form-1.dart';
 import 'package:inclusive/widgets/background.dart';
 
 class Register1Screen extends StatelessWidget {
+  static const routeName = '/Register1';
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
