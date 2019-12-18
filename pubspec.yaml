@@ -20,9 +20,9 @@ dependencies:
   flutter:
     sdk: flutter
   firebase_core: ^0.4.0+9
-  firebase_analytics: ^5.0.2
+  firebase_analytics: ^5.0.9
   firebase_auth: ^0.14.0+5
-  cloud_firestore: ^0.12.9+5
+  cloud_firestore: ^0.13.0+1
   flutter_svg: ^0.14.0
   flutter_tags: ^0.4.3
 
@@ -79,3 +79,6 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+
+module:
+  androidX: true
