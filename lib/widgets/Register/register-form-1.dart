@@ -1,6 +1,4 @@
 // Define a custom Form widget.
-import 'dart:async';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:inclusive/screens/appdata.dart';
@@ -62,8 +60,8 @@ class RegisterForm1State extends State<RegisterForm1> {
                 Firestore.instance
                     .collection('users')
                     .where('name', isEqualTo: appData.user.name)
-                    .snapshots()
-                    .listen((users) {
+                    .getDocuments()
+                    .then((users) {
                   if (users.documents.length > 0) {
                     setState(() {
                       isTakenUsername = true;

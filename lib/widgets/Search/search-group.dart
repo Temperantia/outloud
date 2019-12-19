@@ -2,7 +2,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tags/tag.dart';
 
-import 'package:inclusive/services/search.dart';
 import 'package:inclusive/theme.dart';
 
 class SearchGroup extends StatefulWidget {

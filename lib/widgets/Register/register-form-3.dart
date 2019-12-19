@@ -1,4 +1,3 @@
-// Define a custom Form widget.
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cupertino_date_picker/flutter_cupertino_date_picker.dart';
@@ -46,19 +45,19 @@ class RegisterForm3State extends State<RegisterForm3> {
         child: RaisedButton(
           child: const Text('Get me in already'),
           onPressed: () {
-            /*
             Scaffold.of(context).showSnackBar(
               SnackBar(
                 content: const Text('Getting you in ...'),
               ),
             );
-            */
             Firestore.instance.collection('users').add({
               'name': appData.user.name,
               'email': appData.user.email,
               'birthDate': appData.user.birth,
               'device': appData.identifier,
-            }).then((result) => widget.next());
+            }).then((_) {
+              widget.next();
+            }).catchError((error) => print(error));
           },
         ),
       ),

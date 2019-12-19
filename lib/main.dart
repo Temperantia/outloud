@@ -16,19 +16,19 @@ class App extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: StreamBuilder(
-          stream: Firestore.instance
-              .collection('users')
-              .where('device', isEqualTo: appData.identifier)
-              .snapshots(),
-          builder: (_, snapshot) {
-            if (snapshot.hasData) {
-              if (snapshot.data.documents.length > 0) {
-                return AppScreen();
-              }
-              return LandingScreen();
-            }
-            return LoadingScreen();
-          }),
+              stream: Firestore.instance
+                  .collection('users')
+                  .where('device', isEqualTo: appData.identifier)
+                  .snapshots(),
+              builder: (_, snapshot) {
+                if (snapshot.hasData) {
+                  if (snapshot.data.documents.length > 0) {
+                    return AppScreen();
+                  }
+                  return LandingScreen();
+                }
+                return LoadingScreen();
+              }),
       routes: routes,
       theme: theme,
       title: 'Inclusive',
