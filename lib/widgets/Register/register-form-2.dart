@@ -1,29 +1,28 @@
 // Define a custom Form widget.
-import 'dart:async';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:inclusive/screens/appdata.dart';
+import 'package:validate/validate.dart';
 
-class RegisterForm1 extends StatefulWidget {
+class RegisterForm2 extends StatefulWidget {
   final Function previous;
   final Function next;
 
-  const RegisterForm1({Key key, this.previous, this.next}) : super(key: key);
+  const RegisterForm2({Key key, this.previous, this.next}) : super(key: key);
 
   @override
-  RegisterForm1State createState() {
-    return RegisterForm1State();
+  RegisterForm2State createState() {
+    return RegisterForm2State();
   }
 }
 
-class RegisterForm1State extends State<RegisterForm1> {
+class RegisterForm2State extends State<RegisterForm2> {
   final _formKey = GlobalKey<FormState>();
-  bool isTakenUsername;
+  bool isTakenEmail;
 
   @override
   Widget build(BuildContext context) {
-    isTakenUsername = false;
+    isTakenEmail = false;
     return Form(
       key: _formKey,
       child: Column(
@@ -41,18 +40,23 @@ class RegisterForm1State extends State<RegisterForm1> {
           Container(
               padding: const EdgeInsets.all(10),
               child: TextFormField(
-                  decoration: InputDecoration(
-                    hintText: 'John•ane',
-                    labelText: 'Username',
+                  decoration: const InputDecoration(
+                    hintText: 'John•ane@gmail.com',
+                    labelText: 'Email',
                   ),
                   validator: (String value) {
-                    if (isTakenUsername) {
-                      return 'Name is already taken';
+                    try {
+                      Validate.isEmail(value);
+                    } catch (e) {
+                      return 'Email is not valid';
+                    }
+                    if (isTakenEmail) {
+                      return 'Email is already used';
                     }
                     return null;
                   },
                   onSaved: (String value) {
-                    appData.user.name = value;
+                    appData.user.email = value;
                   })),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 16.0),
@@ -61,15 +65,20 @@ class RegisterForm1State extends State<RegisterForm1> {
                 _formKey.currentState.save();
                 Firestore.instance
                     .collection('users')
-                    .where('name', isEqualTo: appData.user.name)
+                    .where('email', isEqualTo: appData.user.email)
                     .snapshots()
                     .listen((users) {
                   if (users.documents.length > 0) {
                     setState(() {
-                      isTakenUsername = true;
+                      isTakenEmail = true;
                     });
                   }
                   if (_formKey.currentState.validate()) {
+                    FocusScopeNode currentFocus = FocusScope.of(context);
+
+                    if (!currentFocus.hasPrimaryFocus) {
+                      currentFocus.unfocus();
+                    }
                     widget.next();
                   }
                 });

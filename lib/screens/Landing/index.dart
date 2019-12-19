@@ -17,19 +17,21 @@ class LandingScreen extends StatelessWidget {
               logo(context),
               Column(
                 children: [
+                  /*
                   RaisedButton(
                     onPressed: () {
-                      Navigator.of(context).pushNamed('/Login');
+                      Navigator.of(context).pushReplacementNamed('/Login');
                     },
                     child: Text(
                       'LOG ME IN',
                       style: Theme.of(context).textTheme.title,
                     ),
                   ),
-                  const SizedBox(height: 30),
+                  */
+                  // const SizedBox(height: 30),
                   RaisedButton(
                     onPressed: () {
-                      Navigator.of(context).pushNamed('/Register1');
+                      Navigator.of(context).pushReplacementNamed('/Register');
                     },
                     child: Text(
                       'SIGN ME IN',
