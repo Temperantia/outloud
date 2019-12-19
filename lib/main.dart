@@ -15,7 +15,9 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: StreamBuilder(
+      home: FutureBuilder(
+          future: appData.completer.future,
+          builder: (_, snapshot) => StreamBuilder(
               stream: Firestore.instance
                   .collection('users')
                   .where('device', isEqualTo: appData.identifier)
@@ -28,7 +30,7 @@ class App extends StatelessWidget {
                   return LandingScreen();
                 }
                 return LoadingScreen();
-              }),
+              })),
       routes: routes,
       theme: theme,
       title: 'Inclusive',
