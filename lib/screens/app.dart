@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:inclusive/screens/Messaging/index.dart';
 
 import 'package:inclusive/screens/Search/index.dart';
 import 'package:inclusive/theme.dart';
@@ -84,7 +85,7 @@ class _AppState extends State<AppScreen> {
           Stack(
             children: [
               !_showHeader ? _noHeader() : null,
-              SearchScreen(),
+              MessagingScreen(),
             ].where(notNull).toList(),
           ),
         ],
