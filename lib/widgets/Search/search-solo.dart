@@ -3,7 +3,6 @@ import 'package:flutter_tags/tag.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:inclusive/theme.dart';
-import 'package:inclusive/utils/common.dart';
 
 class SearchSolo extends StatefulWidget {
   @override
@@ -145,8 +144,8 @@ class SearchSoloState extends State<SearchSolo> {
                       });
                     },
                   )
-                : null,
-          ].where(notNull).toList(),
+                : Container(),
+          ]
         ),
         RaisedButton(
           onPressed: () {

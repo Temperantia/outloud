@@ -4,7 +4,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:inclusive/screens/Search/index.dart';
 import 'package:inclusive/screens/appdata.dart';
 import 'package:inclusive/theme.dart';
-import 'package:inclusive/utils/common.dart';
 import 'package:inclusive/screens/Profile/profile.dart';
 import 'package:inclusive/widgets/background.dart';
 
@@ -81,14 +80,12 @@ class _AppState extends State<AppScreen> {
           ),
           Stack(
             children: [SearchScreen(), !_showHeader ? _noHeader() : Container(), ]
-                .where(notNull)
-                .toList(),
           ),
           Stack(
             children: [
-              !_showHeader ? _noHeader() : null,
               SearchScreen(),
-            ].where(notNull).toList(),
+              !_showHeader ? _noHeader() : Container(),
+            ]
           ),
         ],
       ),
