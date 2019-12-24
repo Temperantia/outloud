@@ -1,7 +1,8 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cupertino_date_picker/flutter_cupertino_date_picker.dart';
 import 'package:inclusive/screens/appdata.dart';
+import 'package:provider/provider.dart';
+import 'package:inclusive/models/userModel.dart';
 
 class RegisterForm3 extends StatefulWidget {
   final Function previous;
@@ -21,8 +22,9 @@ class RegisterForm3State extends State<RegisterForm3> {
 
   @override
   Widget build(BuildContext context) {
+    final userProvider = Provider.of<UserModel>(context);
     selected = DateTime(now.year - 18, now.month, now.day);
-    appData.user.birth = selected;
+    appData.user.birthDate = selected;
     return Column(mainAxisAlignment: MainAxisAlignment.center, children: [
       Padding(
         padding: const EdgeInsets.symmetric(vertical: 16.0),
@@ -38,7 +40,7 @@ class RegisterForm3State extends State<RegisterForm3> {
         minDateTime: DateTime(now.year - 99, now.month, now.day),
         initialDateTime: selected,
         pickerTheme: DateTimePickerTheme(title: Text('Birthdate')),
-        onChange: (dateTime, _) => appData.user.birth = dateTime,
+        onChange: (dateTime, _) => appData.user.birthDate = dateTime,
       ),
       Padding(
         padding: const EdgeInsets.symmetric(vertical: 16.0),
@@ -50,12 +52,13 @@ class RegisterForm3State extends State<RegisterForm3> {
                 content: const Text('Getting you in ...'),
               ),
             );
-            Firestore.instance.collection('users').document(appData.identifier).setData({
+            userProvider.updateUser(User.fromMap({
               'name': appData.user.name,
               'email': appData.user.email,
-              'birthDate': appData.user.birth,
+              'birthDate': appData.user.birthDate,
               'device': appData.identifier,
-            }).then((_) {
+            }, appData.identifier), appData.identifier)
+           .then((_) {
               widget.next();
             }).catchError((error) => print(error));
           },

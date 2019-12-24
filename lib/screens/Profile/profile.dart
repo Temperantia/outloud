@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:inclusive/models/userModel.dart';
-import 'package:inclusive/screens/appdata.dart';
 import 'package:provider/provider.dart';
-import 'package:inclusive/models/CRUDmodel.dart';
 
 import '../../theme.dart';
 
-class Profil extends StatelessWidget {
-  User user;
+class Profile extends StatelessWidget {
+  final String id;
+  Profile(this.id);
+
   @override
   Widget build(BuildContext context) {
-    final userProvider = Provider.of<CRUDModel>(context);
+    final userProvider = Provider.of<UserModel>(context);
     return FutureBuilder(
-        future: userProvider.getUser(appData.identifier),
+        future: userProvider.getUser(id),
         builder: (context, AsyncSnapshot<User> snapshot) {
           if (snapshot.hasData) {
-            user = snapshot.data;
+            User user = snapshot.data;
             return Card(
                 child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -37,7 +37,7 @@ class Profil extends StatelessWidget {
                     Padding(
                         padding: const EdgeInsets.all(0.0),
                         child: Text(
-                          '25 years old',
+                          user.getAge().toString() + ' years old',
                           textDirection: TextDirection.ltr,
                           textAlign: TextAlign.center,
                           maxLines: 1,
