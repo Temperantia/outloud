@@ -66,7 +66,6 @@ class _AppState extends State<AppScreen> {
 
   Widget _body() {
     return Container(
-      width: MediaQuery.of(context).size.width,
       decoration: background,
       child: TabBarView(
         children: [
