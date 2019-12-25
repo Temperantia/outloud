@@ -1,23 +1,59 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:inclusive/screens/Messaging/index.dart';
+import 'package:inclusive/models/userModel.dart';
+import 'package:inclusive/screens/Profile/profile-edition.dart';
 
 import 'package:inclusive/screens/Search/index.dart';
+import 'package:inclusive/appdata.dart';
 import 'package:inclusive/theme.dart';
-import 'package:inclusive/utils/common.dart';
+import 'package:inclusive/screens/Profile/profile.dart';
 import 'package:inclusive/widgets/background.dart';
+import 'package:provider/provider.dart';
 
 class AppScreen extends StatefulWidget {
   @override
   _AppState createState() => _AppState();
 }
 
-class _AppState extends State<AppScreen> {
+class _AppState extends State<AppScreen> with SingleTickerProviderStateMixin {
   bool _showHeader = false;
+  bool editProfile = false;
+  AppData appDataProvider;
+  UserModel userProvider;
+  TabController tabController;
+
+  @override
+  void initState() {
+    super.initState();
+    tabController = TabController(vsync: this, length: 3);
+    tabController.addListener(() => setState(() => {}));
+  }
+
+  @override
+  void dispose() {
+    tabController.dispose();
+    super.dispose();
+  }
+
+  void onSave(User user) {
+    this.userProvider.updateUser(user, user.id);
+    setState(() => editProfile = false);
+  }
 
   Widget _header() {
     return AppBar(
       actions: [
+        tabController.index == 0
+            ? editProfile
+                ? IconButton(
+                    color: white,
+                    icon: Icon(Icons.cancel),
+                    onPressed: () => setState(() => editProfile = !editProfile))
+                : IconButton(
+                    color: white,
+                    icon: Icon(Icons.edit),
+                    onPressed: () => setState(() => editProfile = !editProfile))
+            : Container(),
         GestureDetector(
           onTap: () {
             setState(() => _showHeader = !_showHeader);
@@ -31,6 +67,7 @@ class _AppState extends State<AppScreen> {
       bottom: PreferredSize(
         preferredSize: Size.fromHeight(0),
         child: TabBar(
+          controller: tabController,
           tabs: [
             SvgPicture.asset(
               'images/profile.svg',
@@ -52,6 +89,8 @@ class _AppState extends State<AppScreen> {
 
   Widget _noHeader() {
     return Positioned(
+      top: 10.0,
+      left: 10.0,
       child: GestureDetector(
         onTap: () {
           setState(() => _showHeader = !_showHeader);
@@ -68,25 +107,24 @@ class _AppState extends State<AppScreen> {
     return Container(
       decoration: background,
       child: TabBarView(
+        controller: tabController,
         children: [
           Stack(
             children: [
-              !_showHeader ? _noHeader() : null,
-              SearchScreen(),
-            ].where(notNull).toList(),
+              editProfile
+                  ? ProfileEditionScreen(appDataProvider.user, onSave)
+                  : Profile(appDataProvider.user),
+              !_showHeader ? _noHeader() : Container(),
+            ],
           ),
-          Stack(
-            children: [
-              !_showHeader ? _noHeader() : null,
-              SearchScreen(),
-            ].where(notNull).toList(),
-          ),
-          Stack(
-            children: [
-              !_showHeader ? _noHeader() : null,
-              MessagingScreen(),
-            ].where(notNull).toList(),
-          ),
+          Stack(children: [
+            SearchScreen(),
+            !_showHeader ? _noHeader() : Container(),
+          ]),
+          Stack(children: [
+            SearchScreen(),
+            !_showHeader ? _noHeader() : Container(),
+          ])
         ],
       ),
     );
@@ -94,6 +132,8 @@ class _AppState extends State<AppScreen> {
 
   @override
   Widget build(BuildContext context) {
+    appDataProvider = Provider.of<AppData>(context);
+    userProvider = Provider.of<UserModel>(context);
     return DefaultTabController(
       length: 3,
       child: Scaffold(

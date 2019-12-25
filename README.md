@@ -1,4 +1,4 @@
-# firebase
+# inclusive
 
 A new Flutter project.
 
