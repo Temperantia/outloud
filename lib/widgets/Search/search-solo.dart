@@ -154,13 +154,6 @@ class SearchSoloState extends State<SearchSolo> {
                 content: Text('Processing Data'),
               ),
             );
-            Firestore.instance.collection('users').add({'ok': 'o'})
-            .then((result) {
-              print(result);
-            })
-            .catchError((error) {
-              print(error);
-            });
             print(_distance.toString());
             print(_homeland.toString());
             print(_interests.toString());

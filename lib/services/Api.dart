@@ -21,12 +21,20 @@ class Api {
     return ref.document(id).get();
   }
 
+  Future<QuerySnapshot> getDocumentsByField(dynamic field, dynamic value) {
+    return ref.where(field, isEqualTo: value).getDocuments();
+  }
+
   Future<void> removeDocument(String id) {
     return ref.document(id).delete();
   }
 
   Future<DocumentReference> addDocument(Map data) {
     return ref.add(data);
+  }
+
+  Future<void> createDocument(Map data, String id) {
+    return ref.document(id).setData(data);
   }
 
   Future<void> updateDocument(Map data, String id) {

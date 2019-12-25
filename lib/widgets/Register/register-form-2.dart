@@ -1,7 +1,8 @@
 // Define a custom Form widget.
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:inclusive/screens/appdata.dart';
+import 'package:inclusive/appdata.dart';
+import 'package:inclusive/models/userModel.dart';
+import 'package:provider/provider.dart';
 import 'package:validate/validate.dart';
 
 class RegisterForm2 extends StatefulWidget {
@@ -17,14 +18,18 @@ class RegisterForm2 extends StatefulWidget {
 }
 
 class RegisterForm2State extends State<RegisterForm2> {
-  final _form2Key = GlobalKey<FormState>();
+  final _formKey = GlobalKey<FormState>();
   bool isTakenEmail;
+  AppData appDataProvider;
+  UserModel userProvider;
 
   @override
   Widget build(BuildContext context) {
+    appDataProvider = Provider.of<AppData>(context);
+    userProvider = Provider.of<UserModel>(context);
     isTakenEmail = false;
     return Form(
-      key: _form2Key,
+      key: _formKey,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -56,24 +61,22 @@ class RegisterForm2State extends State<RegisterForm2> {
                     return null;
                   },
                   onSaved: (String value) {
-                    appData.user.email = value;
+                    appDataProvider.user.email = value;
                   })),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 16.0),
             child: RaisedButton(
               onPressed: () {
-                _form2Key.currentState.save();
-                Firestore.instance
-                    .collection('users')
-                    .where('email', isEqualTo: appData.user.email)
-                    .getDocuments()
-                    .then((users) {
-                  if (users.documents.length > 0) {
+                _formKey.currentState.save();
+                userProvider
+                    .getUserWithEmail(appDataProvider.user.email)
+                    .then((User user) {
+                  if (user != null) {
                     setState(() {
                       isTakenEmail = true;
                     });
                   }
-                  if (_form2Key.currentState.validate()) {
+                  if (_formKey.currentState.validate()) {
                     FocusScopeNode currentFocus = FocusScope.of(context);
 
                     if (!currentFocus.hasPrimaryFocus) {

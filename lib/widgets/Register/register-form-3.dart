@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_cupertino_date_picker/flutter_cupertino_date_picker.dart';
-import 'package:inclusive/screens/appdata.dart';
+import 'package:inclusive/appdata.dart';
+import 'package:inclusive/widgets/Profile/birthdate-picker.dart';
 import 'package:provider/provider.dart';
 import 'package:inclusive/models/userModel.dart';
 
@@ -19,12 +20,15 @@ class RegisterForm3 extends StatefulWidget {
 class RegisterForm3State extends State<RegisterForm3> {
   DateTime now = DateTime.now();
   DateTime selected;
+  var appDataProvider;
 
   @override
   Widget build(BuildContext context) {
+    final appDataProvider = Provider.of<AppData>(context);
     final userProvider = Provider.of<UserModel>(context);
     selected = DateTime(now.year - 18, now.month, now.day);
-    appData.user.birthDate = selected;
+    appDataProvider.user.birthDate = selected;
+
     return Column(mainAxisAlignment: MainAxisAlignment.center, children: [
       Padding(
         padding: const EdgeInsets.symmetric(vertical: 16.0),
@@ -35,13 +39,10 @@ class RegisterForm3State extends State<RegisterForm3> {
           child: const Text('Go back'),
         ),
       ),
-      DatePickerWidget(
-        maxDateTime: DateTime(now.year - 13, now.month, now.day),
-        minDateTime: DateTime(now.year - 99, now.month, now.day),
-        initialDateTime: selected,
-        pickerTheme: DateTimePickerTheme(title: Text('Birthdate')),
-        onChange: (dateTime, _) => appData.user.birthDate = dateTime,
-      ),
+      BirthdatePicker(
+          initial: selected,
+          onChange: (dateTime) => appDataProvider.user.birthDate = dateTime,
+          theme: DateTimePickerTheme(title: Text('Birthdate'))),
       Padding(
         padding: const EdgeInsets.symmetric(vertical: 16.0),
         child: RaisedButton(
@@ -52,13 +53,10 @@ class RegisterForm3State extends State<RegisterForm3> {
                 content: const Text('Getting you in ...'),
               ),
             );
-            userProvider.updateUser(User.fromMap({
-              'name': appData.user.name,
-              'email': appData.user.email,
-              'birthDate': appData.user.birthDate,
-              'device': appData.identifier,
-            }, appData.identifier), appData.identifier)
-           .then((_) {
+            userProvider
+                .createUser(appDataProvider.user, appDataProvider.identifier)
+                .then((_) {
+              appDataProvider.user.id = appDataProvider.identifier;
               widget.next();
             }).catchError((error) => print(error));
           },
