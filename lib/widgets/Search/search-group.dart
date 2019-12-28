@@ -1,8 +1,8 @@
 // Define a custom Form widget.
 import 'package:flutter/material.dart';
-import 'package:flutter_tags/tag.dart';
 
 import 'package:inclusive/theme.dart';
+import 'package:inclusive/widgets/Search/search-interest.dart';
 
 class SearchGroup extends StatefulWidget {
   @override
@@ -12,8 +12,7 @@ class SearchGroup extends StatefulWidget {
 }
 
 class SearchGroupState extends State<SearchGroup> {
-  List _items = [];
-  int _count = 0;
+  List interests = [];
   double _groupSize = 0;
   List<String> _groupSizeLabels = const ['- 10 users', '10 - 50 users', '+ 50 users'];
 
@@ -22,58 +21,16 @@ class SearchGroupState extends State<SearchGroup> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20),
-            color: orange,
-          ),
-          padding: const EdgeInsets.all(20),
-          child: Tags(
-            itemBuilder: (int index) {
-              final item = _items[index];
-
-              return ItemTags(
-                activeColor: blue,
-                key: Key(index.toString()),
-                index: index,
-                onRemoved: () {
-                  setState(() {
-                    _items.removeAt(index);
-                  });
-                },
-                pressEnabled: false,
-                removeButton: ItemTagsRemoveButton(
-                  color: blue,
-                  backgroundColor: white,
-                ),
-                title: item.title,
-                textStyle: Theme.of(context).textTheme.caption,
-              );
-            },
-            itemCount: _items.length,
-            textField: TagsTextField(
-              autofocus: false,
-              helperTextStyle: Theme.of(context).textTheme.caption,
-              hintText: '+ Add an interest',
-              hintTextColor: white,
-              onSubmitted: (String str) {
-                setState(() {
-                  _items.add(Item(index: _count, title: str));
-                  ++_count;
-                });
-              },
-              suggestions: const ['gay', 'lesbian', 'gay community'],
-              suggestionTextColor: blue,
-            ),
-          ),
-        ),
+        SearchInterest(
+            onUpdate: (List interests) =>
+                setState(() => this.interests = interests)),
         SliderTheme(
           data: SliderTheme.of(context).copyWith(
             activeTrackColor: blueLight,
-            inactiveTickMarkColor: blue,
+            inactiveTickMarkColor: orange,
             inactiveTrackColor: blueLight,
-            thumbColor: blue,
-            valueIndicatorColor: blue,
+            thumbColor: orange,
+            valueIndicatorColor: orange,
           ),
           child: Slider(
             value: _groupSize,
@@ -98,7 +55,7 @@ class SearchGroupState extends State<SearchGroup> {
           },
           child: Text(
             'Look for folks',
-            style: Theme.of(context).textTheme.title,
+            style: Theme.of(context).textTheme.caption,
           ),
         ),
       ],

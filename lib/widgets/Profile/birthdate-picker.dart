@@ -16,7 +16,6 @@ class BirthdatePicker extends StatelessWidget {
         minDateTime: DateTime(now.year - 99, now.month, now.day),
         initialDateTime: initial,
         pickerTheme: theme,
-        onCancel: () => print('ok'),
         onChange: (dateTime, _) => onChange(dateTime),
       );
   }

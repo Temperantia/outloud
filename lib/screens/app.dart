@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:inclusive/models/userModel.dart';
+import 'package:inclusive/screens/Messaging/index.dart';
 import 'package:inclusive/screens/Profile/profile-edition.dart';
 
 import 'package:inclusive/screens/Search/index.dart';
@@ -16,7 +17,6 @@ class AppScreen extends StatefulWidget {
 }
 
 class _AppState extends State<AppScreen> with SingleTickerProviderStateMixin {
-  bool _showHeader = false;
   bool editProfile = false;
   AppData appDataProvider;
   UserModel userProvider;
@@ -25,8 +25,11 @@ class _AppState extends State<AppScreen> with SingleTickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    tabController = TabController(vsync: this, length: 3);
+    tabController = TabController(vsync: this, length: 5);
     tabController.addListener(() => setState(() => {}));
+
+    // testing purpose
+    tabController.animateTo(1);
   }
 
   @override
@@ -35,8 +38,8 @@ class _AppState extends State<AppScreen> with SingleTickerProviderStateMixin {
     super.dispose();
   }
 
-  void onSave(User user) {
-    this.userProvider.updateUser(user, user.id);
+  void onSaveProfile(User user) {
+    userProvider.updateUser(user, user.id);
     setState(() => editProfile = false);
   }
 
@@ -54,15 +57,6 @@ class _AppState extends State<AppScreen> with SingleTickerProviderStateMixin {
                     icon: Icon(Icons.edit),
                     onPressed: () => setState(() => editProfile = !editProfile))
             : Container(),
-        GestureDetector(
-          onTap: () {
-            setState(() => _showHeader = !_showHeader);
-          },
-          child: SvgPicture.asset(
-            'images/arrow_right.svg',
-            color: blue,
-          ),
-        ),
       ],
       bottom: PreferredSize(
         preferredSize: Size.fromHeight(0),
@@ -74,30 +68,22 @@ class _AppState extends State<AppScreen> with SingleTickerProviderStateMixin {
               color: white,
             ),
             SvgPicture.asset(
+              'images/message.svg',
+              color: white,
+            ),
+            SvgPicture.asset(
               'images/search.svg',
               color: white,
             ),
             SvgPicture.asset(
-              'images/message.svg',
+              'images/group.svg',
+              color: white,
+            ),
+            SvgPicture.asset(
+              'images/event.svg',
               color: white,
             ),
           ],
-        ),
-      ),
-    );
-  }
-
-  Widget _noHeader() {
-    return Positioned(
-      top: 10.0,
-      left: 10.0,
-      child: GestureDetector(
-        onTap: () {
-          setState(() => _showHeader = !_showHeader);
-        },
-        child: SvgPicture.asset(
-          'images/arrow_right.svg',
-          color: blue,
         ),
       ),
     );
@@ -109,22 +95,13 @@ class _AppState extends State<AppScreen> with SingleTickerProviderStateMixin {
       child: TabBarView(
         controller: tabController,
         children: [
-          Stack(
-            children: [
               editProfile
-                  ? ProfileEditionScreen(appDataProvider.user, onSave)
+                  ? ProfileEditionScreen(appDataProvider.user, onSaveProfile)
                   : Profile(appDataProvider.user),
-              !_showHeader ? _noHeader() : Container(),
-            ],
-          ),
-          Stack(children: [
+            MessagingScreen(),
             SearchScreen(),
-            !_showHeader ? _noHeader() : Container(),
-          ]),
-          Stack(children: [
             SearchScreen(),
-            !_showHeader ? _noHeader() : Container(),
-          ])
+            SearchScreen(),
         ],
       ),
     );
@@ -135,10 +112,10 @@ class _AppState extends State<AppScreen> with SingleTickerProviderStateMixin {
     appDataProvider = Provider.of<AppData>(context);
     userProvider = Provider.of<UserModel>(context);
     return DefaultTabController(
-      length: 3,
+      length: 5,
       child: Scaffold(
-        resizeToAvoidBottomPadding: false,
-        appBar: _showHeader ? _header() : null,
+        resizeToAvoidBottomInset: false,
+        appBar: _header(),
         body: SafeArea(child: _body()),
       ),
     );

@@ -14,18 +14,20 @@ class AppData extends ChangeNotifier {
 
   AppData() {
     if (Platform.isAndroid) {
-      deviceInfoPlugin.androidInfo
-          .then((build) {
-            identifier = build.androidId;
-            completer.complete();
-          });
+      deviceInfoPlugin.androidInfo.then((build) {
+        identifier = build.androidId;
+
+        // testing purpose
+        //identifier = 'apmbMHvueWZDLeAOxaxI';
+        identifier = 'cx0hEmwDTLWYy3COnvPL';
+
+        completer.complete();
+      });
     } else if (Platform.isIOS) {
-      deviceInfoPlugin.iosInfo
-          .then((data) {
-            identifier = data.identifierForVendor;
-            completer.complete();
-          });
+      deviceInfoPlugin.iosInfo.then((data) {
+        identifier = data.identifierForVendor;
+        completer.complete();
+      });
     }
   }
 }
-

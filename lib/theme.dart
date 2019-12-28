@@ -22,6 +22,7 @@ ThemeData theme = ThemeData(
   ),
   textTheme: TextTheme(
     caption: TextStyle(
+      fontSize: 18.0,
       color: white,
     ),
     subhead: TextStyle(

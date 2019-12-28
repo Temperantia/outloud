@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:inclusive/widgets/Search/search-event.dart';
 
 import 'package:inclusive/widgets/Search/search-group.dart';
 import 'package:inclusive/widgets/Search/search-solo.dart';
@@ -11,7 +12,7 @@ class SearchScreen extends StatefulWidget {
 }
 
 class _SearchState extends State<SearchScreen> {
-  bool _solo = true;
+  String type = 'solo';
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -22,16 +23,12 @@ class _SearchState extends State<SearchScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               GestureDetector(
-                onTap: () => setState(() {
-                  if (!_solo) {
-                    _solo = true;
-                  }
-                }),
+                onTap: () => setState(() => type = 'solo'),
                 child: Container(
                   width: 60,
                   height: 60,
                   decoration: BoxDecoration(
-                    color: _solo ? blue : orange,
+                    color: type == 'solo' ? orange : blue,
                     borderRadius: BorderRadius.circular(50),
                   ),
                   padding: EdgeInsets.all(20),
@@ -42,16 +39,12 @@ class _SearchState extends State<SearchScreen> {
                 ),
               ),
               GestureDetector(
-                onTap: () => setState(() {
-                  if (_solo) {
-                    _solo = false;
-                  }
-                }),
+                onTap: () => setState(() => type = 'group'),
                 child: Container(
                   width: 60,
                   height: 60,
                   decoration: BoxDecoration(
-                    color: _solo ? orange : blue,
+                    color: type == 'group' ? orange : blue,
                     borderRadius: BorderRadius.circular(50),
                   ),
                   padding: EdgeInsets.all(15),
@@ -61,12 +54,30 @@ class _SearchState extends State<SearchScreen> {
                   ),
                 ),
               ),
+              GestureDetector(
+                onTap: () => setState(() => type = 'event'),
+                child: Container(
+                  width: 60,
+                  height: 60,
+                  decoration: BoxDecoration(
+                    color: type == 'event' ? orange : blue,
+                    borderRadius: BorderRadius.circular(50),
+                  ),
+                  padding: EdgeInsets.all(15),
+                  child: SvgPicture.asset(
+                    'images/event.svg',
+                    color: white,
+                  ),
+                ),
+              ),
             ],
           ),
         ),
         Container(
           height: MediaQuery.of(context).size.height * 0.7,
-          child: _solo ? SearchSolo() : SearchGroup(),
+          child: type == 'solo'
+              ? SearchSolo()
+              : type == 'group' ? SearchGroup() : SearchEvent(),
         ),
       ],
     );

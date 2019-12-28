@@ -6,6 +6,8 @@ import 'package:inclusive/screens/home.dart';
 import 'package:inclusive/theme.dart';
 import 'package:provider/provider.dart';
 import 'package:inclusive/models/userModel.dart';
+import 'package:inclusive/models/groupModel.dart';
+import 'package:inclusive/models/messageModel.dart';
 
 void main() {
   setupLocator();
@@ -19,6 +21,12 @@ class App extends StatelessWidget {
         providers: [
           ChangeNotifierProvider(
             create: (_) => locator<UserModel>(),
+          ),
+          ChangeNotifierProvider(
+            create: (_) => locator<GroupModel>(),
+          ),
+          ChangeNotifierProvider(
+            create: (_) => locator<MessageModel>(),
           ),
           ChangeNotifierProvider(
             create: (_) => locator<AppData>(),
