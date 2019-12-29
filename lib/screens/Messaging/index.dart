@@ -11,27 +11,20 @@ import 'package:inclusive/theme.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 
-class Conversation {
-  final String id;
-  int lastRead = 0;
-
-  Conversation(this.id);
-}
-
 class MessagingScreen extends StatefulWidget {
+  MessagingScreen({Key key}) : super(key: key);
+
   @override
-  _MessagingState createState() => _MessagingState();
+  MessagingState createState() => MessagingState();
 }
 
-class _MessagingState extends State<MessagingScreen> {
+class MessagingState extends State<MessagingScreen> {
   AppData appDataProvider;
   MessageModel messageProvider;
   UserModel userProvider;
   GroupModel groupProvider;
 
   Conversation current;
-  String peerId;
-  bool isGroup;
   List<Conversation> conversations = [
     Conversation('apmbMHvueWZDLeAOxaxI-cx0hEmwDTLWYy3COnvPL'),
     Conversation('BHpAnkWabxJFoY1FbM57'),
@@ -50,6 +43,8 @@ class _MessagingState extends State<MessagingScreen> {
     super.initState();
     if (conversations.isNotEmpty) {
       current = conversations[0];
+
+      conversations[1].lastRead = 1577490357965;
     }
   }
 
@@ -59,7 +54,7 @@ class _MessagingState extends State<MessagingScreen> {
     appDataProvider = Provider.of<AppData>(context);
     userProvider = Provider.of<UserModel>(context);
     groupProvider = Provider.of<GroupModel>(context);
-
+    print('ok');
     return current == null
         ? Center(
             child: Padding(
@@ -71,31 +66,15 @@ class _MessagingState extends State<MessagingScreen> {
             children: [
               buildConversationIcons(),
               buildConversation(),
+              buildInput()
             ],
           );
   }
 
-  getPeerInfo() async {
-    if (current.id.contains('-')) {
-      peerId = getPeerId(current.id);
-      isGroup = false;
-      return userProvider.getUser(peerId);
-    }
-    peerId = current.id;
-    isGroup = true;
-    return groupProvider.getGroup(peerId);
-  }
-
-  String getPeerId(String conversation) {
-    final List<String> ids = conversation.split('-');
-
-    return appDataProvider.identifier == ids[0] ? ids[1] : ids[0];
-  }
-
   void onChangeConversation(Conversation conversation) {
-    current = conversation;
     setState(() {
-      textController.clear();
+      current = conversation;
+      current.lastRead = DateTime.now().millisecondsSinceEpoch;
     });
   }
 
@@ -104,8 +83,8 @@ class _MessagingState extends State<MessagingScreen> {
       textController.clear();
 
       messageProvider.addMessage(current.id, appDataProvider.identifier, text);
-      if (!isGroup) {
-        userProvider.ping(appDataProvider.identifier, peerId);
+      if (!current.isGroup) {
+        userProvider.ping(appDataProvider.identifier, current.peerId);
       }
       listScrollController.animateTo(0.0,
           duration: Duration(milliseconds: 300), curve: Curves.easeOut);
@@ -114,10 +93,10 @@ class _MessagingState extends State<MessagingScreen> {
     }
   }
 
-  void onCloseConversation(Conversation conversation) {
-    final int index = conversations.indexOf(conversation);
+  void onCloseConversation() {
+    final int index = conversations.indexOf(current);
     setState(() {
-      conversations.remove(conversation);
+      conversations.remove(current);
       if (conversations.isEmpty) {
         current = null;
       } else if (index == conversations.length) {
@@ -131,8 +110,8 @@ class _MessagingState extends State<MessagingScreen> {
   Widget buildConversationIcons() {
     return StreamBuilder(
         stream: userProvider.streamPings(appDataProvider.identifier),
-        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> query) =>
-            query.connectionState == ConnectionState.waiting
+        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> pings) =>
+            pings.connectionState == ConnectionState.waiting
                 ? CircularProgressIndicator(
                     backgroundColor: orange,
                   )
@@ -144,39 +123,61 @@ class _MessagingState extends State<MessagingScreen> {
                       child: Padding(
                           padding: EdgeInsets.all(10.0),
                           child: Row(
-                            children: buildIcons(query.data.documents),
+                            children: buildIcons(pings.data.documents),
                           )),
                     )));
   }
 
   List<Widget> buildIcons(List<DocumentSnapshot> pings) {
     List<Widget> icons = [];
-    Widget icon;
 
     for (final Conversation conversation in conversations) {
-      icon = Container(
-        decoration: BoxDecoration(
-            color: conversation == current ? orange : Colors.transparent,
-            borderRadius: BorderRadius.circular(90.0)),
-        padding: EdgeInsets.all(10.0),
-        margin: EdgeInsets.symmetric(horizontal: 10.0),
-        child: SvgPicture.asset(
-          'images/profile.svg',
-          color: white,
-        ),
+      icons.add(conversation.isGroup
+          ? StreamBuilder(
+              stream: messageProvider.streamConversation(
+                  conversation, appDataProvider.identifier),
+              builder:
+                  (BuildContext context, AsyncSnapshot<List<Message>> query) =>
+                      GestureDetector(
+                          onTap: () => onChangeConversation(conversation),
+                          child: buildIcon(
+                              conversation,
+                              query.data == null ? 0 : query.data.length,
+                              pings)))
+          : GestureDetector(
+              onTap: () => onChangeConversation(conversation),
+              child: buildIcon(conversation, 0, pings)));
+    }
+    return icons;
+  }
+
+  Widget buildIcon(final Conversation conversation, final int newGroupMessages,
+      final List<DocumentSnapshot> pings) {
+    Widget icon;
+
+    icon = Container(
+      decoration: BoxDecoration(
+          color: conversation == current ? orange : Colors.transparent,
+          borderRadius: BorderRadius.circular(90.0)),
+      padding: EdgeInsets.all(10.0),
+      margin: EdgeInsets.symmetric(horizontal: 10.0),
+      child: SvgPicture.asset(
+        'images/profile.svg',
+        color: white,
+      ),
+    );
+
+    if (conversation.isGroup && newGroupMessages > 0) {
+      icon = Badge(
+        badgeColor: orange,
+        badgeContent: Text(newGroupMessages.toString(),
+            style: Theme.of(context).textTheme.caption),
+        child: icon,
       );
-      if (current == conversation) {
-        icon = GestureDetector(
-            onTap: () => onCloseConversation(conversation),
-            child: Badge(
-                position: BadgePosition.bottomRight(),
-                badgeColor: Colors.orange,
-                padding: EdgeInsets.all(0.0),
-                badgeContent: Icon(Icons.close, color: white, size: 20.0),
-                child: icon));
-      }
+    } else {
       if (pings.isNotEmpty) {
-        final String conversationPeerId = getPeerId(conversation.id);
+        final String conversationPeerId =
+            Conversation.getPeerId(conversation.id, appDataProvider);
         final int index = pings
             .map((DocumentSnapshot doc) => doc.documentID)
             .toList()
@@ -195,22 +196,24 @@ class _MessagingState extends State<MessagingScreen> {
           }
         }
       }
-      icons.add(GestureDetector(
-        onTap: () => onChangeConversation(conversation),
-        child: icon,
-      ));
     }
-    return icons;
+    return icon;
   }
 
   Widget buildConversation() {
     return FutureBuilder(
-        future: getPeerInfo(),
+        future:
+            current.getPeerInfo(userProvider, groupProvider, appDataProvider),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return CircularProgressIndicator(
-              backgroundColor: orange,
-            );
+          return Expanded(
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                CircularProgressIndicator(
+                  backgroundColor: orange,
+                )
+              ]));
           }
           final dynamic peerData = snapshot.data;
           return Expanded(
@@ -219,27 +222,22 @@ class _MessagingState extends State<MessagingScreen> {
             Expanded(
                 child: StreamBuilder(
               stream: messageProvider.streamMessages(current.id),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
+              builder: (context, messages) {
+                if (messages.connectionState == ConnectionState.waiting) {
                   return Center(
                       child: CircularProgressIndicator(
                           valueColor: AlwaysStoppedAnimation<Color>(orange)));
                 } else {
-                  final List<dynamic> messages = snapshot.data.documents
-                      .map((final DocumentSnapshot doc) =>
-                          Message.fromMap(doc.data))
-                      .toList();
                   return ListView.builder(
                     shrinkWrap: true,
-                    itemBuilder: (context, index) => buildItem(
-                        index, messages[index], messages.length, peerData),
-                    itemCount: messages.length,
+                    itemBuilder: (context, index) => buildItem(index,
+                        messages.data[index], messages.data.length, peerData),
+                    itemCount: messages.data.length,
                     controller: listScrollController,
                   );
                 }
               },
             )),
-            buildInput()
           ]));
         });
   }
@@ -284,7 +282,7 @@ class _MessagingState extends State<MessagingScreen> {
 
   Widget buildItem(int index, Message message, int total, dynamic peerData) {
     final DateTime messageDateTime =
-        DateTime.fromMillisecondsSinceEpoch(int.parse(message.timestamp));
+        DateTime.fromMillisecondsSinceEpoch(message.timestamp);
     final String messageTime = messageTimeFormat.format(messageDateTime);
     List<Widget> items = [];
 
@@ -331,17 +329,22 @@ class _MessagingState extends State<MessagingScreen> {
             )),
             Text(messageTime, style: Theme.of(context).textTheme.caption)
           ]));
-      if (isGroup && (index == 0 || message.idFrom != lastMessage.idFrom)) {
+      if (current.isGroup &&
+          (index == 0 || message.idFrom != lastMessage.idFrom)) {
         items.add(FutureBuilder(
             future: userProvider.getUser(message.idFrom),
             builder: (BuildContext context, AsyncSnapshot<User> user) =>
-                Row(children: [
-                  Text(
-                      user.connectionState == ConnectionState.waiting
-                          ? ''
-                          : user.data == null ? 'Anonymous' : user.data.name,
-                      style: Theme.of(context).textTheme.caption)
-                ])));
+                Container(
+                    margin: EdgeInsets.only(left: 20.0),
+                    child: Row(children: [
+                      Text(
+                          user.connectionState == ConnectionState.waiting
+                              ? ''
+                              : user.data == null
+                                  ? 'Anonymous'
+                                  : user.data.name,
+                          style: Theme.of(context).textTheme.caption)
+                    ]))));
       }
     }
 

@@ -79,7 +79,7 @@ class UserModel extends ChangeNotifier {
   }
 
   Stream<QuerySnapshot> streamPings(String id) {
-    return _api.streamSubCollectionById(id, 'pings');
+    return _api.streamSubCollectionById(id, 'pings').snapshots();
   }
 
   Future<DocumentSnapshot> getPingsFrom(String id, String idSender) {
