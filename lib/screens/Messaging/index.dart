@@ -11,6 +11,13 @@ import 'package:inclusive/theme.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 
+class Conversation {
+  final String id;
+  int lastRead = 0;
+
+  Conversation(this.id);
+}
+
 class MessagingScreen extends StatefulWidget {
   @override
   _MessagingState createState() => _MessagingState();
@@ -22,14 +29,12 @@ class _MessagingState extends State<MessagingScreen> {
   UserModel userProvider;
   GroupModel groupProvider;
 
-  String current = '';
+  Conversation current;
   String peerId;
   bool isGroup;
-  List<String> conversations = [
-    'BHpAnkWabxJFoY1FbM57',
-    'apmbMHvueWZDLeAOxaxI-cx0hEmwDTLWYy3COnvPL',
-    '241uCmWsouMhTCK09GMW',
-    'FLc9avlMY7g3eYK7qKtE',
+  List<Conversation> conversations = [
+    Conversation('apmbMHvueWZDLeAOxaxI-cx0hEmwDTLWYy3COnvPL'),
+    Conversation('BHpAnkWabxJFoY1FbM57'),
   ];
   DateTime lastMessageTime;
   Message lastMessage;
@@ -55,7 +60,7 @@ class _MessagingState extends State<MessagingScreen> {
     userProvider = Provider.of<UserModel>(context);
     groupProvider = Provider.of<GroupModel>(context);
 
-    return current == ''
+    return current == null
         ? Center(
             child: Padding(
                 padding: EdgeInsets.all(20.0),
@@ -66,18 +71,17 @@ class _MessagingState extends State<MessagingScreen> {
             children: [
               buildConversationIcons(),
               buildConversation(),
-              buildInput(),
             ],
           );
   }
 
   getPeerInfo() async {
-    if (current.contains('-')) {
-      peerId = getPeerId(current);
+    if (current.id.contains('-')) {
+      peerId = getPeerId(current.id);
       isGroup = false;
       return userProvider.getUser(peerId);
     }
-    peerId = current;
+    peerId = current.id;
     isGroup = true;
     return groupProvider.getGroup(peerId);
   }
@@ -88,7 +92,7 @@ class _MessagingState extends State<MessagingScreen> {
     return appDataProvider.identifier == ids[0] ? ids[1] : ids[0];
   }
 
-  void onChangeConversation(String conversation) {
+  void onChangeConversation(Conversation conversation) {
     current = conversation;
     setState(() {
       textController.clear();
@@ -99,7 +103,7 @@ class _MessagingState extends State<MessagingScreen> {
     if (text.trim() != '') {
       textController.clear();
 
-      messageProvider.addMessage(current, appDataProvider.identifier, text);
+      messageProvider.addMessage(current.id, appDataProvider.identifier, text);
       if (!isGroup) {
         userProvider.ping(appDataProvider.identifier, peerId);
       }
@@ -110,12 +114,12 @@ class _MessagingState extends State<MessagingScreen> {
     }
   }
 
-  void onCloseConversation(String conversation) {
+  void onCloseConversation(Conversation conversation) {
     final int index = conversations.indexOf(conversation);
     setState(() {
       conversations.remove(conversation);
       if (conversations.isEmpty) {
-        current = '';
+        current = null;
       } else if (index == conversations.length) {
         current = conversations[index - 1];
       } else {
@@ -149,7 +153,7 @@ class _MessagingState extends State<MessagingScreen> {
     List<Widget> icons = [];
     Widget icon;
 
-    for (final String conversation in conversations) {
+    for (final Conversation conversation in conversations) {
       icon = Container(
         decoration: BoxDecoration(
             color: conversation == current ? orange : Colors.transparent,
@@ -172,7 +176,7 @@ class _MessagingState extends State<MessagingScreen> {
                 child: icon));
       }
       if (pings.isNotEmpty) {
-        final String conversationPeerId = getPeerId(conversation);
+        final String conversationPeerId = getPeerId(conversation.id);
         final int index = pings
             .map((DocumentSnapshot doc) => doc.documentID)
             .toList()
@@ -214,7 +218,7 @@ class _MessagingState extends State<MessagingScreen> {
             buildBanner(peerData),
             Expanded(
                 child: StreamBuilder(
-              stream: messageProvider.streamMessages(current),
+              stream: messageProvider.streamMessages(current.id),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return Center(
@@ -234,7 +238,8 @@ class _MessagingState extends State<MessagingScreen> {
                   );
                 }
               },
-            ))
+            )),
+            buildInput()
           ]));
         });
   }
@@ -326,12 +331,15 @@ class _MessagingState extends State<MessagingScreen> {
             )),
             Text(messageTime, style: Theme.of(context).textTheme.caption)
           ]));
-      if (index == 0 || message.idFrom != lastMessage.idFrom) {
+      if (isGroup && (index == 0 || message.idFrom != lastMessage.idFrom)) {
         items.add(FutureBuilder(
             future: userProvider.getUser(message.idFrom),
             builder: (BuildContext context, AsyncSnapshot<User> user) =>
                 Row(children: [
-                  Text(user.data == null ? 'Anonymous' : user.data.name,
+                  Text(
+                      user.connectionState == ConnectionState.waiting
+                          ? ''
+                          : user.data == null ? 'Anonymous' : user.data.name,
                       style: Theme.of(context).textTheme.caption)
                 ])));
       }
