@@ -1,6 +1,6 @@
 // Define a custom Form widget.
 import 'package:flutter/material.dart';
-import 'package:inclusive/appdata.dart';
+import 'package:inclusive/services/appdata.dart';
 import 'package:inclusive/models/userModel.dart';
 import 'package:provider/provider.dart';
 import 'package:validate/validate.dart';
@@ -20,12 +20,12 @@ class RegisterForm2 extends StatefulWidget {
 class RegisterForm2State extends State<RegisterForm2> {
   final _formKey = GlobalKey<FormState>();
   bool isTakenEmail;
-  AppData appDataProvider;
+  AppData appDataService;
   UserModel userProvider;
 
   @override
   Widget build(BuildContext context) {
-    appDataProvider = Provider.of<AppData>(context);
+    appDataService = Provider.of<AppData>(context);
     userProvider = Provider.of<UserModel>(context);
     isTakenEmail = false;
     return Form(
@@ -61,7 +61,7 @@ class RegisterForm2State extends State<RegisterForm2> {
                     return null;
                   },
                   onSaved: (String value) {
-                    appDataProvider.user.email = value;
+                    appDataService.user.email = value;
                   })),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 16.0),
@@ -69,7 +69,7 @@ class RegisterForm2State extends State<RegisterForm2> {
               onPressed: () {
                 _formKey.currentState.save();
                 userProvider
-                    .getUserWithEmail(appDataProvider.user.email)
+                    .getUserWithEmail(appDataService.user.email)
                     .then((User user) {
                   if (user != null) {
                     setState(() {

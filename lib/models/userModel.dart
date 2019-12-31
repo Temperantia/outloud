@@ -1,9 +1,27 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firestore_helpers/firestore_helpers.dart';
 import 'package:flutter/material.dart';
-import '../locator.dart';
+import 'package:inclusive/locator.dart';
 import 'package:inclusive/services/api.dart';
 
+class Ping {
+  String id;
+  int value;
+
+  Ping.fromMap(Map snapshot, String id)
+      : id = id ?? '',
+        value = snapshot['value'] ?? 0;
+
+  toJson() {
+    return {
+      'id': id,
+      'value': value,
+    };
+  }
+}
+
 class User {
+  final UserModel userProvider = locator<UserModel>();
   String id;
   String name;
   String email;
@@ -12,6 +30,7 @@ class User {
   String description;
   List interests;
   String pics;
+  List<Ping> pings = [];
 
   User({this.id, this.name, this.email, this.birthDate});
 
@@ -39,6 +58,14 @@ class User {
 
   int getAge() {
     return DateTime.now().year - birthDate.year;
+  }
+
+  Stream<List<Ping>> streamPings() {
+    Stream<List<Ping>> stream = userProvider.streamPings(id);
+    stream.listen((final List<Ping> pings) {
+      this.pings = pings;
+    });
+    return stream;
   }
 }
 
@@ -78,8 +105,11 @@ class UserModel extends ChangeNotifier {
     _api.createDocument(data.toJson(), id);
   }
 
-  Stream<QuerySnapshot> streamPings(String id) {
-    return _api.streamSubCollectionById(id, 'pings').snapshots();
+  Stream<List<Ping>> streamPings(String id) {
+    return getDataFromQuery(
+        query: _api.streamSubCollectionById(id, 'pings'),
+        mapper: (final DocumentSnapshot messageDoc) =>
+            Ping.fromMap(messageDoc.data, messageDoc.documentID));
   }
 
   Future<DocumentSnapshot> getPingsFrom(String id, String idSender) {
@@ -96,7 +126,10 @@ class UserModel extends ChangeNotifier {
     if (document.data != null) {
       pings += document.data['value'];
     }
-    _api.createDocumentInSubCollection(Map<String, dynamic>.from({'value': pings}),
-        idNotified, 'pings', idSender);
+    _api.createDocumentInSubCollection(
+        Map<String, dynamic>.from({'value': pings}),
+        idNotified,
+        'pings',
+        idSender);
   }
 }

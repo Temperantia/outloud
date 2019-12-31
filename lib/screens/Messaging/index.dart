@@ -1,12 +1,11 @@
 import 'package:badges/badges.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:inclusive/appdata.dart';
+import 'package:inclusive/services/appdata.dart';
 import 'package:inclusive/models/messageModel.dart';
 import 'package:inclusive/models/userModel.dart';
 import 'package:inclusive/models/groupModel.dart';
+import 'package:inclusive/services/message.dart';
 import 'package:inclusive/theme.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
@@ -19,16 +18,12 @@ class MessagingScreen extends StatefulWidget {
 }
 
 class MessagingState extends State<MessagingScreen> {
-  AppData appDataProvider;
+  AppData appDataService;
+  MessageService messageService;
   MessageModel messageProvider;
   UserModel userProvider;
   GroupModel groupProvider;
 
-  Conversation current;
-  List<Conversation> conversations = [
-    Conversation('apmbMHvueWZDLeAOxaxI-cx0hEmwDTLWYy3COnvPL'),
-    Conversation('BHpAnkWabxJFoY1FbM57'),
-  ];
   DateTime lastMessageTime;
   Message lastMessage;
 
@@ -39,23 +34,14 @@ class MessagingState extends State<MessagingScreen> {
   final TextEditingController textController = TextEditingController();
 
   @override
-  void initState() {
-    super.initState();
-    if (conversations.isNotEmpty) {
-      current = conversations[0];
-
-      conversations[1].lastRead = 1577490357965;
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
+    appDataService = Provider.of<AppData>(context);
+    messageService = Provider.of<MessageService>(context);
     messageProvider = Provider.of<MessageModel>(context);
-    appDataProvider = Provider.of<AppData>(context);
     userProvider = Provider.of<UserModel>(context);
     groupProvider = Provider.of<GroupModel>(context);
-    print('ok');
-    return current == null
+
+    return messageService.currentConversation == null
         ? Center(
             child: Padding(
                 padding: EdgeInsets.all(20.0),
@@ -71,21 +57,16 @@ class MessagingState extends State<MessagingScreen> {
           );
   }
 
-  void onChangeConversation(Conversation conversation) {
+  void onChangeConversation(final Conversation conversation) {
     setState(() {
-      current = conversation;
-      current.lastRead = DateTime.now().millisecondsSinceEpoch;
+      messageService.changeConversation(conversation);
     });
   }
 
-  void onSendMessage(String text) {
+  void onSendMessage(final String text) {
     if (text.trim() != '') {
       textController.clear();
-
-      messageProvider.addMessage(current.id, appDataProvider.identifier, text);
-      if (!current.isGroup) {
-        userProvider.ping(appDataProvider.identifier, current.peerId);
-      }
+      messageService.sendMessage(text);
       listScrollController.animateTo(0.0,
           duration: Duration(milliseconds: 300), curve: Curves.easeOut);
     } else {
@@ -94,150 +75,100 @@ class MessagingState extends State<MessagingScreen> {
   }
 
   void onCloseConversation() {
-    final int index = conversations.indexOf(current);
     setState(() {
-      conversations.remove(current);
-      if (conversations.isEmpty) {
-        current = null;
-      } else if (index == conversations.length) {
-        current = conversations[index - 1];
-      } else {
-        current = conversations[index];
-      }
+      messageService.closeCurrentConversation();
     });
   }
 
   Widget buildConversationIcons() {
-    return StreamBuilder(
-        stream: userProvider.streamPings(appDataProvider.identifier),
-        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> pings) =>
-            pings.connectionState == ConnectionState.waiting
-                ? CircularProgressIndicator(
-                    backgroundColor: orange,
-                  )
-                : SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: ConstrainedBox(
-                      constraints: BoxConstraints(
-                          minWidth: MediaQuery.of(context).size.width),
-                      child: Padding(
-                          padding: EdgeInsets.all(10.0),
-                          child: Row(
-                            children: buildIcons(pings.data.documents),
-                          )),
-                    )));
+    return SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: ConstrainedBox(
+          constraints:
+              BoxConstraints(minWidth: MediaQuery.of(context).size.width),
+          child: Padding(
+              padding: EdgeInsets.all(10.0),
+              child: Row(
+                children: buildIcons(),
+              )),
+        ));
   }
 
-  List<Widget> buildIcons(List<DocumentSnapshot> pings) {
-    List<Widget> icons = [];
+  List<Widget> buildIcons() {
+    final List<Widget> icons = [];
 
-    for (final Conversation conversation in conversations) {
+    for (final Conversation conversation in messageService.conversations) {
       icons.add(conversation.isGroup
-          ? StreamBuilder(
-              stream: messageProvider.streamConversation(
-                  conversation, appDataProvider.identifier),
-              builder:
-                  (BuildContext context, AsyncSnapshot<List<Message>> query) =>
-                      GestureDetector(
-                          onTap: () => onChangeConversation(conversation),
-                          child: buildIcon(
-                              conversation,
-                              query.data == null ? 0 : query.data.length,
-                              pings)))
+          ? GestureDetector(
+              onTap: () => onChangeConversation(conversation),
+              child: buildIcon(conversation,
+                  0)) //query.data == null ? 0 : query.data.length, pings))
           : GestureDetector(
               onTap: () => onChangeConversation(conversation),
-              child: buildIcon(conversation, 0, pings)));
+              child: buildIcon(conversation, 0)));
     }
     return icons;
   }
 
-  Widget buildIcon(final Conversation conversation, final int newGroupMessages,
-      final List<DocumentSnapshot> pings) {
+  Widget buildIcon(
+      final Conversation conversation, final int newGroupMessages) {
     Widget icon;
 
     icon = Container(
       decoration: BoxDecoration(
-          color: conversation == current ? orange : Colors.transparent,
+          color: conversation == messageService.currentConversation
+              ? orange
+              : Colors.transparent,
           borderRadius: BorderRadius.circular(90.0)),
       padding: EdgeInsets.all(10.0),
       margin: EdgeInsets.symmetric(horizontal: 10.0),
-      child: SvgPicture.asset(
-        'images/profile.svg',
+      child: Icon(
+        Icons.person,
         color: white,
       ),
     );
 
-    if (conversation.isGroup && newGroupMessages > 0) {
+    if (messageService.currentConversation == conversation &&
+        conversation.pings > 0 &&
+        !conversation.isGroup) {
+      userProvider.markPingAsRead(
+          appDataService.identifier, conversation.idPeer);
+    }
+    if (conversation.pings > 0) {
       icon = Badge(
         badgeColor: orange,
-        badgeContent: Text(newGroupMessages.toString(),
+        badgeContent: Text(conversation.pings.toString(),
             style: Theme.of(context).textTheme.caption),
         child: icon,
       );
-    } else {
-      if (pings.isNotEmpty) {
-        final String conversationPeerId =
-            Conversation.getPeerId(conversation.id, appDataProvider);
-        final int index = pings
-            .map((DocumentSnapshot doc) => doc.documentID)
-            .toList()
-            .indexOf(conversationPeerId);
-        if (index != -1) {
-          if (current == conversation) {
-            userProvider.markPingAsRead(
-                appDataProvider.identifier, conversationPeerId);
-          } else {
-            icon = Badge(
-              badgeColor: orange,
-              badgeContent: Text(pings[index]['value'].toString(),
-                  style: Theme.of(context).textTheme.caption),
-              child: icon,
-            );
-          }
-        }
-      }
     }
+
     return icon;
   }
 
   Widget buildConversation() {
     return FutureBuilder(
-        future:
-            current.getPeerInfo(userProvider, groupProvider, appDataProvider),
+        future: messageService.currentConversation.getPeerInfo(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-          return Expanded(
-              child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                CircularProgressIndicator(
-                  backgroundColor: orange,
-                )
-              ]));
+            return Expanded(
+                child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                  CircularProgressIndicator(backgroundColor: orange)
+                ]));
           }
           final dynamic peerData = snapshot.data;
           return Expanded(
               child: Column(children: [
             buildBanner(peerData),
             Expanded(
-                child: StreamBuilder(
-              stream: messageProvider.streamMessages(current.id),
-              builder: (context, messages) {
-                if (messages.connectionState == ConnectionState.waiting) {
-                  return Center(
-                      child: CircularProgressIndicator(
-                          valueColor: AlwaysStoppedAnimation<Color>(orange)));
-                } else {
-                  return ListView.builder(
-                    shrinkWrap: true,
-                    itemBuilder: (context, index) => buildItem(index,
-                        messages.data[index], messages.data.length, peerData),
-                    itemCount: messages.data.length,
-                    controller: listScrollController,
-                  );
-                }
-              },
-            )),
+                child: ListView.builder(
+              shrinkWrap: true,
+              itemBuilder: (context, index) => buildItem(index, peerData),
+              itemCount: messageService.currentConversation.messages.length,
+              controller: listScrollController,
+            ))
           ]));
         });
   }
@@ -248,7 +179,7 @@ class MessagingState extends State<MessagingScreen> {
           child: Container(
               decoration: BoxDecoration(color: orange),
               child: Text(
-                data.name,
+                '', //data.name,
                 style: Theme.of(context).textTheme.title,
                 textAlign: TextAlign.center,
               )))
@@ -256,31 +187,28 @@ class MessagingState extends State<MessagingScreen> {
   }
 
   Widget buildInput() {
-    return Padding(
-      padding:
-          EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-      child: Row(children: [
-        Flexible(
-            flex: 6,
-            child: Padding(
-                padding: EdgeInsets.all(10.0),
-                child: TextField(controller: textController))),
-        Material(
-          child: Container(
-            margin: EdgeInsets.symmetric(horizontal: 8.0),
-            child: IconButton(
-              icon: Icon(Icons.send),
-              onPressed: () => onSendMessage(textController.text),
-              color: orange,
-            ),
+    return Row(children: [
+      Flexible(
+          flex: 6,
+          child: Padding(
+              padding: EdgeInsets.all(10.0),
+              child: TextField(controller: textController))),
+      Material(
+        child: Container(
+          margin: EdgeInsets.symmetric(horizontal: 8.0),
+          child: IconButton(
+            icon: Icon(Icons.send),
+            onPressed: () => onSendMessage(textController.text),
+            color: orange,
           ),
-          color: Colors.white,
         ),
-      ]),
-    );
+        color: Colors.white,
+      ),
+    ]);
   }
 
-  Widget buildItem(int index, Message message, int total, dynamic peerData) {
+  Widget buildItem(int index, dynamic peerData) {
+    final Message message = messageService.currentConversation.messages[index];
     final DateTime messageDateTime =
         DateTime.fromMillisecondsSinceEpoch(message.timestamp);
     final String messageTime = messageTimeFormat.format(messageDateTime);
@@ -295,7 +223,7 @@ class MessagingState extends State<MessagingScreen> {
     }
 
     Widget messageWidget;
-    if (appDataProvider.identifier == message.idFrom) {
+    if (appDataService.identifier == message.idFrom) {
       messageWidget = Container(
           margin: EdgeInsets.only(bottom: 10.0),
           child: Row(mainAxisAlignment: MainAxisAlignment.end, children: [
@@ -329,7 +257,7 @@ class MessagingState extends State<MessagingScreen> {
             )),
             Text(messageTime, style: Theme.of(context).textTheme.caption)
           ]));
-      if (current.isGroup &&
+      if (messageService.currentConversation.isGroup &&
           (index == 0 || message.idFrom != lastMessage.idFrom)) {
         items.add(FutureBuilder(
             future: userProvider.getUser(message.idFrom),

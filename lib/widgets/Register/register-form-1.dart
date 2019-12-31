@@ -1,6 +1,6 @@
 // Define a custom Form widget.
 import 'package:flutter/material.dart';
-import 'package:inclusive/appdata.dart';
+import 'package:inclusive/services/appdata.dart';
 import 'package:inclusive/models/userModel.dart';
 import 'package:provider/provider.dart';
 
@@ -19,12 +19,12 @@ class RegisterForm1 extends StatefulWidget {
 class RegisterForm1State extends State<RegisterForm1> {
   final _formKey = GlobalKey<FormState>();
   bool isTakenUsername;
-  AppData appDataProvider;
+  AppData appDataService;
   UserModel userProvider;
 
   @override
   Widget build(BuildContext context) {
-    appDataProvider = Provider.of<AppData>(context);
+    appDataService = Provider.of<AppData>(context);
     userProvider = Provider.of<UserModel>(context);
     isTakenUsername = false;
     return Form(
@@ -55,7 +55,7 @@ class RegisterForm1State extends State<RegisterForm1> {
                     return null;
                   },
                   onSaved: (String value) {
-                    appDataProvider.user.name = value;
+                    appDataService.user.name = value;
                   })),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 16.0),
@@ -64,7 +64,7 @@ class RegisterForm1State extends State<RegisterForm1> {
                 _formKey.currentState.save();
 
                 userProvider
-                    .getUserWithName(appDataProvider.user.name)
+                    .getUserWithName(appDataService.user.name)
                     .then((User user) {
                   if (user != null) {
                     setState(() {

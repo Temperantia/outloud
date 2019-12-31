@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_cupertino_date_picker/flutter_cupertino_date_picker.dart';
-import 'package:inclusive/appdata.dart';
+import 'package:inclusive/services/appdata.dart';
 import 'package:inclusive/widgets/Profile/birthdate-picker.dart';
 import 'package:provider/provider.dart';
 import 'package:inclusive/models/userModel.dart';
@@ -20,14 +20,14 @@ class RegisterForm3 extends StatefulWidget {
 class RegisterForm3State extends State<RegisterForm3> {
   DateTime now = DateTime.now();
   DateTime selected;
-  var appDataProvider;
+  AppData appDataService;
 
   @override
   Widget build(BuildContext context) {
-    final appDataProvider = Provider.of<AppData>(context);
+    final appDataService = Provider.of<AppData>(context);
     final userProvider = Provider.of<UserModel>(context);
     selected = DateTime(now.year - 18, now.month, now.day);
-    appDataProvider.user.birthDate = selected;
+    appDataService.user.birthDate = selected;
 
     return Column(mainAxisAlignment: MainAxisAlignment.center, children: [
       Padding(
@@ -41,7 +41,7 @@ class RegisterForm3State extends State<RegisterForm3> {
       ),
       BirthdatePicker(
           initial: selected,
-          onChange: (dateTime) => appDataProvider.user.birthDate = dateTime,
+          onChange: (dateTime) => appDataService.user.birthDate = dateTime,
           theme: DateTimePickerTheme(title: Text('Birthdate'))),
       Padding(
         padding: const EdgeInsets.symmetric(vertical: 16.0),
@@ -54,9 +54,9 @@ class RegisterForm3State extends State<RegisterForm3> {
               ),
             );
             userProvider
-                .createUser(appDataProvider.user, appDataProvider.identifier)
+                .createUser(appDataService.user, appDataService.identifier)
                 .then((_) {
-              appDataProvider.user.id = appDataProvider.identifier;
+              appDataService.user.id = appDataService.identifier;
               widget.next();
             }).catchError((error) => print(error));
           },

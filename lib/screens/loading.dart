@@ -16,7 +16,7 @@ class LoadingScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               logo(context),
-              CircularProgressIndicator(backgroundColor: orange,),
+              CircularProgressIndicator(backgroundColor: orange),
             ],
           ),
         ),

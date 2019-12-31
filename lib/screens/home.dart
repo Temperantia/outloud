@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:inclusive/appdata.dart';
+import 'package:inclusive/services/appdata.dart';
 import 'package:provider/provider.dart';
 import 'package:inclusive/screens/Landing/index.dart';
 import 'package:inclusive/screens/app.dart';
