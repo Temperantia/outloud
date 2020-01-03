@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:async/async.dart';
 import 'package:flutter/material.dart';
 import 'package:inclusive/locator.dart';
 import 'package:inclusive/services/appdata.dart';
@@ -7,26 +8,27 @@ import 'package:inclusive/models/groupModel.dart';
 import 'package:inclusive/models/userModel.dart';
 import 'package:inclusive/models/messageModel.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:stream_transform/stream_transform.dart';
 
 class Conversation {
-  final AppData appDataService = locator<AppData>();
+  final AppDataService appDataService = locator<AppDataService>();
   final UserModel userProvider = locator<UserModel>();
   final GroupModel groupProvider = locator<GroupModel>();
   final MessageModel messageProvider = locator<MessageModel>();
   final String id;
-  final bool isGroup;
+  bool isGroup;
   String idPeer;
+  Group group;
+  User userPeer;
 
   int lastRead = 0;
   List<Message> messages = [];
-  List<User> peerUsers = [];
   int pings;
 
-  Conversation(this.id, this.lastRead, {this.pings = 0})
-      : isGroup = !id.contains('-'),
-        idPeer = id {
+  Conversation(this.id, this.lastRead, {this.pings = 0}) {
+    isGroup = !id.contains('-');
     if (isGroup) {
+      idPeer = id;
+    } else {
       idPeer = getPeerId(id);
     }
   }
@@ -37,19 +39,22 @@ class Conversation {
 
   String getPeerId(final String conversationId) {
     final List<String> ids = conversationId.split('-');
-
-    return locator<AppData>().identifier == ids[0] ? ids[1] : ids[0];
+    return locator<AppDataService>().identifier == ids[0] ? ids[1] : ids[0];
   }
 
-  Future<dynamic> getPeerInfo() async {
-    return isGroup
-        ? groupProvider.getGroup(idPeer)
-        : userProvider.getUser(idPeer);
+  Future getPeerInfo() async {
+    if (isGroup) {
+      group = await groupProvider.getGroup(idPeer);
+    } else {
+      userPeer = await userProvider.getUser(idPeer);
+    }
   }
 
   Stream<List<Message>> streamMessages() {
     final Stream<List<Message>> stream = messageProvider.streamMessages(id);
-    stream.listen((final List<Message> messages) => this.messages = messages);
+    stream.listen((final List<Message> messages) {
+      this.messages = messages;
+    });
     return stream;
   }
 
@@ -69,23 +74,24 @@ class Conversation {
   } */
 }
 
-class test {
-  List<Conversation> conversations;
-  List<Ping> pings;
-  List<List<Message>> messages;
-}
-
 class MessageService extends ChangeNotifier {
-  final AppData appDataService = locator<AppData>();
+  final AppDataService appDataService = locator<AppDataService>();
   final UserModel userProvider = locator<UserModel>();
   final MessageModel messageProvider = locator<MessageModel>();
 
   Conversation currentConversation;
   List<Conversation> conversations = [
-    //Conversation('BHpAnkWabxJFoY1FbM57', 0),
-    //Conversation('apmbMHvueWZDLeAOxaxI-cx0hEmwDTLWYy3COnvPL', 0),
+    /*  Conversation('BHpAnkWabxJFoY1FbM57', 0),
+    Conversation('apmbMHvueWZDLeAOxaxI-cx0hEmwDTLWYy3COnvPL', 0), */
   ];
+  Completer completer = Completer();
   int pings = 0;
+
+  MessageService() {
+    getConversations().then((conversations) {
+      completer.complete();
+    });
+  }
 
   Future getConversations() async {
     final SharedPreferences sharedPreferences =
@@ -121,40 +127,53 @@ class MessageService extends ChangeNotifier {
         'conversationLastReads', conversationLastReads);
   }
 
-  //  1. stream 1-2-1 pings
-  //  2. conversation
-  //    A. stream messages
-  //      a. stream message users
-  //    B. stream grp pings
-  Stream<test> streamAll() async* {
-    test t = test();
-     Stream<test> s = getConversations().asStream().map((stream) {
-      for (var conversation in stream) {
-        stream.combineLatest(conversation.streamMessages(), null);
-        if (conversation.isGroup) {
-          conversation.streamGroupPings();
-        }
+  Future<Stream> streamAll() async {
+    StreamGroup group = StreamGroup();
 
+    await appDataService.completer.future;
+    await completer.future;
+
+    Stream pingStream = appDataService.user.streamPings();
+    group.add(pingStream);
+    var pings = await pingStream.first;
+    for (var ping in pings) {
+      final int index = conversations.indexWhere(
+          (final Conversation conversation) => conversation.idPeer == ping.id);
+      if (index == -1) {
+        conversations.insert(0, Conversation(ping.id, 0, pings: ping.value));
+      } else {
+        conversations[index].pings = ping.value;
       }
-      //t.conversations = conversations;
-      return stream;
-    })/*.combineLatest(appDataService.user.streamPings(),
-        (conversations, final List<Ping> pings) {
-      for (final Ping ping in pings) {
-        final int index = conversations.indexWhere(
-            (final Conversation conversation) => conversation.id == ping.id);
-        if (index == -1) {
-          conversations.insert(0, Conversation(ping.id, 0, pings: ping.value));
-        } else {
-          conversations[index].pings = ping.value;
+      ++this.pings;
+    }
+
+    int index = 0;
+    Stream conversationStream;
+    Stream pingGroupStream;
+    for (Conversation conversation in conversations) {
+      await conversation.getPeerInfo();
+      conversationStream = conversation.streamMessages();
+      group.add(conversationStream);
+
+      List<Message> messages = await conversationStream.first;
+      
+      if (conversation.isGroup) {
+        List<String> ids = messages.map((mess) => mess.idFrom).toSet().toList();
+        List<User> users = await Future.wait(ids.map((id) => userProvider.getUser(id)));
+        users = List.from(users);
+        users.removeWhere((user) => user == null);
+
+        for (Message mess in messages) {
+          int index = users.indexWhere((user) => user.id == mess.idFrom);
+          mess.author = index == -1 ? null : users[index];
         }
-        ++this.pings;
+        pingGroupStream = conversation.streamGroupPings();
+        group.add(pingGroupStream);
       }
-      t.conversations = conversations;
-      t.pings = pings;
-      return t;
-    })*/;
-    yield* s;
+      conversations[index].messages = messages;
+      ++index;
+    }
+    return group.stream;
   }
 
   void changeConversation(final Conversation conversation) {

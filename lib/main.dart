@@ -30,7 +30,7 @@ class App extends StatelessWidget {
             create: (_) => locator<MessageModel>(),
           ),
           ChangeNotifierProvider(
-            create: (_) => locator<AppData>(),
+            create: (_) => locator<AppDataService>(),
           ),
            ChangeNotifierProvider(
             create: (_) => locator<MessageService>(),

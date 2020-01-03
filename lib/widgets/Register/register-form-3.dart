@@ -20,11 +20,11 @@ class RegisterForm3 extends StatefulWidget {
 class RegisterForm3State extends State<RegisterForm3> {
   DateTime now = DateTime.now();
   DateTime selected;
-  AppData appDataService;
+  AppDataService appDataService;
 
   @override
   Widget build(BuildContext context) {
-    final appDataService = Provider.of<AppData>(context);
+    final appDataService = Provider.of<AppDataService>(context);
     final userProvider = Provider.of<UserModel>(context);
     selected = DateTime(now.year - 18, now.month, now.day);
     appDataService.user.birthDate = selected;

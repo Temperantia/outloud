@@ -77,6 +77,12 @@ class UserModel extends ChangeNotifier {
     return doc.data == null ? null : User.fromMap(doc.data, doc.documentID);
   }
 
+  Stream<User> streamUser(String id) {
+    return _api.streamDocumentById(id).map((DocumentSnapshot doc) {
+      return doc.data == null ? null : User.fromMap(doc.data, doc.documentID);
+    });
+  }
+
   Future<User> getUserWithName(String name) async {
     var snapshot = await _api.getDocumentsByField('name', name);
     return snapshot.documents.isEmpty

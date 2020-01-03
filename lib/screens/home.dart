@@ -9,27 +9,18 @@ import 'package:inclusive/models/userModel.dart';
 class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final userProvider = Provider.of<UserModel>(context);
-    final appDataProvider = Provider.of<AppData>(context);
-    return FutureBuilder(
-        future: appDataProvider.completer.future,
-        builder: (_, snapshot) {
+    final AppDataService appDataService = Provider.of<AppDataService>(context);
+    return StreamBuilder(
+        stream: appDataService.getUser().asStream(),
+        builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return LoadingScreen();
           }
-          return StreamBuilder(
-              stream:
-                  userProvider.getUser(appDataProvider.identifier).asStream(),
-              builder: (_, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return LoadingScreen();
-                }
-                if (snapshot.hasData) {
-                  appDataProvider.user = snapshot.data;
-                  return AppScreen();
-                }
-                return LandingScreen();
-              });
+          if (snapshot.hasData) {
+            appDataService.user = snapshot.data;
+            return AppScreen();
+          }
+          return LandingScreen();
         });
   }
 }

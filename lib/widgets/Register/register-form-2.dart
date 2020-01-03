@@ -20,12 +20,12 @@ class RegisterForm2 extends StatefulWidget {
 class RegisterForm2State extends State<RegisterForm2> {
   final _formKey = GlobalKey<FormState>();
   bool isTakenEmail;
-  AppData appDataService;
+  AppDataService appDataService;
   UserModel userProvider;
 
   @override
   Widget build(BuildContext context) {
-    appDataService = Provider.of<AppData>(context);
+    appDataService = Provider.of<AppDataService>(context);
     userProvider = Provider.of<UserModel>(context);
     isTakenEmail = false;
     return Form(

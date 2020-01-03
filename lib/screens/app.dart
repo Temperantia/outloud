@@ -7,6 +7,7 @@ import 'package:inclusive/screens/Messaging/index.dart';
 import 'package:inclusive/screens/Profile/profile-edition.dart';
 
 import 'package:inclusive/screens/Search/index.dart';
+import 'package:inclusive/screens/loading.dart';
 import 'package:inclusive/services/appdata.dart';
 import 'package:inclusive/services/message.dart';
 import 'package:inclusive/theme.dart';
@@ -20,7 +21,7 @@ class AppScreen extends StatefulWidget {
 }
 
 class _AppState extends State<AppScreen> with SingleTickerProviderStateMixin {
-  AppData appDataService;
+  AppDataService appDataService;
   MessageService messageService;
   UserModel userProvider;
   TabController tabController;
@@ -76,16 +77,19 @@ class _AppState extends State<AppScreen> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    appDataService = Provider.of<AppData>(context);
+    appDataService = Provider.of<AppDataService>(context);
     messageService = Provider.of<MessageService>(context);
     userProvider = Provider.of<UserModel>(context);
 
-    return StreamBuilder(
-        stream: messageService.streamAll(),
+    return FutureBuilder(future: messageService.streamAll(), builder: (context, future) {
+      if (future.connectionState == ConnectionState.waiting) {
+        return LoadingScreen();
+      }
+      return StreamBuilder(
+        stream: future.data,
         builder: (BuildContext context, AsyncSnapshot stream) {
-          if (stream.connectionState == ConnectionState.waiting)
-          return Container();
-          print(stream.data);
+          //print(messageService.currentConversation.messages[2].author);
+          //print(messageService.currentConversation.messages[0].content);
           return Scaffold(
               resizeToAvoidBottomInset: true,
               floatingActionButton: SpeedDial(
@@ -143,7 +147,7 @@ class _AppState extends State<AppScreen> with SingleTickerProviderStateMixin {
                             style: TextStyle(color: white, fontSize: 14.0))),
                   ]),
               body: SafeArea(child: _body()));
-        });
+        });});
   }
 
   List<SpeedDialChild> buildActions() {

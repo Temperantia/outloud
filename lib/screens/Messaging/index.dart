@@ -18,7 +18,7 @@ class MessagingScreen extends StatefulWidget {
 }
 
 class MessagingState extends State<MessagingScreen> {
-  AppData appDataService;
+  AppDataService appDataService;
   MessageService messageService;
   MessageModel messageProvider;
   UserModel userProvider;
@@ -35,7 +35,7 @@ class MessagingState extends State<MessagingScreen> {
 
   @override
   Widget build(BuildContext context) {
-    appDataService = Provider.of<AppData>(context);
+    appDataService = Provider.of<AppDataService>(context);
     messageService = Provider.of<MessageService>(context);
     messageProvider = Provider.of<MessageModel>(context);
     userProvider = Provider.of<UserModel>(context);
@@ -58,6 +58,9 @@ class MessagingState extends State<MessagingScreen> {
   }
 
   void onChangeConversation(final Conversation conversation) {
+    if (conversation == messageService.currentConversation) {
+      return;
+    }
     setState(() {
       messageService.changeConversation(conversation);
     });
@@ -65,8 +68,10 @@ class MessagingState extends State<MessagingScreen> {
 
   void onSendMessage(final String text) {
     if (text.trim() != '') {
-      textController.clear();
-      messageService.sendMessage(text);
+      setState(() {
+        textController.clear();
+        messageService.sendMessage(text);
+      });
       listScrollController.animateTo(0.0,
           duration: Duration(milliseconds: 300), curve: Curves.easeOut);
     } else {
@@ -127,59 +132,47 @@ class MessagingState extends State<MessagingScreen> {
         color: white,
       ),
     );
-
-    if (messageService.currentConversation == conversation &&
-        conversation.pings > 0 &&
-        !conversation.isGroup) {
-      userProvider.markPingAsRead(
-          appDataService.identifier, conversation.idPeer);
-    }
     if (conversation.pings > 0) {
-      icon = Badge(
-        badgeColor: orange,
-        badgeContent: Text(conversation.pings.toString(),
-            style: Theme.of(context).textTheme.caption),
-        child: icon,
-      );
+      if (messageService.currentConversation == conversation &&
+          !conversation.isGroup) {
+        userProvider.markPingAsRead(
+            appDataService.identifier, conversation.idPeer);
+      } else {
+        icon = Badge(
+          badgeColor: orange,
+          badgeContent: Text(conversation.pings.toString(),
+              style: Theme.of(context).textTheme.caption),
+          child: icon,
+        );
+      }
     }
 
     return icon;
   }
 
   Widget buildConversation() {
-    return FutureBuilder(
-        future: messageService.currentConversation.getPeerInfo(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Expanded(
-                child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                  CircularProgressIndicator(backgroundColor: orange)
-                ]));
-          }
-          final dynamic peerData = snapshot.data;
-          return Expanded(
-              child: Column(children: [
-            buildBanner(peerData),
-            Expanded(
-                child: ListView.builder(
-              shrinkWrap: true,
-              itemBuilder: (context, index) => buildItem(index, peerData),
-              itemCount: messageService.currentConversation.messages.length,
-              controller: listScrollController,
-            ))
-          ]));
-        });
+    return Expanded(
+        child: Column(children: [
+      buildBanner(),
+      Expanded(
+          child: ListView.builder(
+        shrinkWrap: true,
+        itemBuilder: (context, index) => buildItem(index),
+        itemCount: messageService.currentConversation.messages.length,
+        controller: listScrollController,
+      ))
+    ]));
   }
 
-  Widget buildBanner(final dynamic data) {
+  Widget buildBanner() {
     return Row(children: [
       Expanded(
           child: Container(
               decoration: BoxDecoration(color: orange),
               child: Text(
-                '', //data.name,
+                messageService.currentConversation.isGroup
+                    ? messageService.currentConversation.group.name
+                    : messageService.currentConversation.userPeer.name,
                 style: Theme.of(context).textTheme.title,
                 textAlign: TextAlign.center,
               )))
@@ -207,7 +200,7 @@ class MessagingState extends State<MessagingScreen> {
     ]);
   }
 
-  Widget buildItem(int index, dynamic peerData) {
+  Widget buildItem(int index) {
     final Message message = messageService.currentConversation.messages[index];
     final DateTime messageDateTime =
         DateTime.fromMillisecondsSinceEpoch(message.timestamp);
@@ -259,20 +252,12 @@ class MessagingState extends State<MessagingScreen> {
           ]));
       if (messageService.currentConversation.isGroup &&
           (index == 0 || message.idFrom != lastMessage.idFrom)) {
-        items.add(FutureBuilder(
-            future: userProvider.getUser(message.idFrom),
-            builder: (BuildContext context, AsyncSnapshot<User> user) =>
-                Container(
-                    margin: EdgeInsets.only(left: 20.0),
-                    child: Row(children: [
-                      Text(
-                          user.connectionState == ConnectionState.waiting
-                              ? ''
-                              : user.data == null
-                                  ? 'Anonymous'
-                                  : user.data.name,
-                          style: Theme.of(context).textTheme.caption)
-                    ]))));
+        items.add(Container(
+            margin: EdgeInsets.only(left: 20.0),
+            child: Row(children: [
+              Text(message.author == null ? 'Anonymous' : message.author.name,
+                  style: Theme.of(context).textTheme.caption)
+            ])));
       }
     }
 

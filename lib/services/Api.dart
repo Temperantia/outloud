@@ -22,6 +22,10 @@ class Api {
     return ref.document(id).get();
   }
 
+  Stream<DocumentSnapshot> streamDocumentById(String id) {
+    return ref.document(id).snapshots();
+  }
+
   Future<QuerySnapshot> getSubCollectionById(String id, String idCollection,
       {dynamic orderBy, bool descending}) {
     CollectionReference collection = ref.document(id).collection(idCollection);

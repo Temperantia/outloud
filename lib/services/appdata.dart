@@ -3,23 +3,25 @@ import 'dart:io';
 
 import 'package:device_info/device_info.dart';
 import 'package:flutter/material.dart';
+import 'package:inclusive/locator.dart';
 import 'package:inclusive/models/userModel.dart';
 
-class AppData extends ChangeNotifier {
+class AppDataService extends ChangeNotifier {
   final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
+  final UserModel userProvider = locator<UserModel>();
   final Completer completer = Completer();
 
   String identifier = '';
   User user = User();
 
-  AppData() {
+  AppDataService() {
     if (Platform.isAndroid) {
       deviceInfoPlugin.androidInfo.then((build) {
         identifier = build.androidId;
 
         // testing purpose
-        //identifier = 'apmbMHvueWZDLeAOxaxI';
-        identifier = 'cx0hEmwDTLWYy3COnvPL';
+        identifier = 'apmbMHvueWZDLeAOxaxI';
+        //identifier = 'cx0hEmwDTLWYy3COnvPL';
 
         completer.complete();
       });
@@ -29,5 +31,10 @@ class AppData extends ChangeNotifier {
         completer.complete();
       });
     }
+  }
+
+  Future<User> getUser() async {
+    await completer.future;
+    return userProvider.getUser(identifier);
   }
 }

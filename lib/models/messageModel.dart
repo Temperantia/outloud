@@ -2,10 +2,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firestore_helpers/firestore_helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:inclusive/locator.dart';
+import 'package:inclusive/models/userModel.dart';
 import 'package:inclusive/services/api.dart';
 import 'package:inclusive/services/message.dart';
 
 class Message {
+  final UserModel userProvider = locator<UserModel>();
+  User author;
   String idFrom;
   String content;
   int timestamp;
@@ -23,6 +26,11 @@ class Message {
       'content': content,
       'timestamp': timestamp,
     };
+  }
+
+  getAuthor() async {
+    final User user = await userProvider.getUser(idFrom);
+    author = user;
   }
 }
 

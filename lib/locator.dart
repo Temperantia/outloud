@@ -12,7 +12,7 @@ void setupLocator() {
   locator.registerLazySingleton(() => Api('users'), instanceName: 'users');
   locator.registerLazySingleton(() => Api('groups'), instanceName: 'groups');
   locator.registerLazySingleton(() => Api('messages'), instanceName: 'messages');
-  locator.registerLazySingleton(() => AppData());
+  locator.registerLazySingleton(() => AppDataService());
   locator.registerLazySingleton(() => MessageService());
   locator.registerLazySingleton(() => UserModel());
   locator.registerLazySingleton(() => GroupModel());
