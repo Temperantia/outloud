@@ -50,8 +50,20 @@ class Api {
         collection: collection, constraints: where, orderBy: orderBy);
   }
 
+  Stream<QuerySnapshot> osef(id) {
+    return ref.document(id).collection(id).snapshots();
+  }
+
   Future<QuerySnapshot> getDocumentsByField(dynamic field, dynamic value) {
     return ref.where(field, isEqualTo: value).getDocuments();
+  }
+
+  Future<QuerySnapshot> getDocumentsByFields(List<MapEntry<dynamic, dynamic>> fields) {
+    Query ref = this.ref;
+    for (MapEntry<dynamic, dynamic> field in fields) {
+      ref = ref.where(field.key, isEqualTo: field.value);
+    }
+    return ref.getDocuments();
   }
 
   Future<void> removeDocument(String id) {

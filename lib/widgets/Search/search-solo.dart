@@ -4,6 +4,10 @@ import 'package:inclusive/theme.dart';
 import 'package:inclusive/widgets/Search/search-interest.dart';
 
 class SearchSolo extends StatefulWidget {
+  SearchSolo({this.onSearch});
+
+  final Function onSearch;
+
   @override
   SearchSoloState createState() {
     return SearchSoloState();
@@ -13,18 +17,15 @@ class SearchSolo extends StatefulWidget {
 class SearchSoloState extends State<SearchSolo> {
   RangeValues _ages = RangeValues(25, 60);
   double _distance = 0;
-  bool _homeland = true;
   List interests = [];
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        SearchInterest(
-            onUpdate: (List interests) =>
-                setState(() => this.interests = interests)),
-        RangeSlider(
+    return Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+      SearchInterest(
+          onUpdate: (List interests) =>
+              setState(() => this.interests = interests)),
+      RangeSlider(
           labels: RangeLabels(
             _ages.start.toInt().toString() + 'y',
             _ages.end.toInt().toString() + 'y',
@@ -39,85 +40,72 @@ class SearchSoloState extends State<SearchSolo> {
             setState(() {
               _ages = values;
             });
-          },
-        ),
-        Column(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              GestureDetector(
-                onTap: () => setState(() {
-                  if (!_homeland) {
-                    _homeland = true;
-                  }
-                }),
-                child: Container(
+          }),
+      Column(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+        Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+          GestureDetector(
+              onTap: () => setState(() {
+                    if (_distance == -1) {
+                      _distance = 0;
+                    }
+                  }),
+              child: Container(
                   decoration: BoxDecoration(
-                    color: _homeland ? orange : blue,
+                    color: _distance == -1 ? blue : orange,
                     borderRadius: BorderRadius.circular(10),
                   ),
                   padding: const EdgeInsets.all(20),
                   child: Text(
-                    'Homeland',
+                    'Local',
                     style: Theme.of(context).textTheme.caption,
-                  ),
-                ),
-              ),
-              GestureDetector(
-                onTap: () => setState(() {
-                  if (_homeland) {
-                    _homeland = false;
-                  }
-                }),
-                child: Container(
+                  ))),
+          GestureDetector(
+              onTap: () => setState(() {
+                    if (_distance >= 0) {
+                      _distance = -1;
+                    }
+                  }),
+              child: Container(
                   decoration: BoxDecoration(
-                    color: _homeland ? blue : orange,
+                    color: _distance == -1 ? orange : blue,
                     borderRadius: BorderRadius.circular(10),
                   ),
                   padding: const EdgeInsets.all(20),
                   child: Text(
-                    'Overseas',
+                    'Global',
                     style: Theme.of(context).textTheme.caption,
-                  ),
-                ),
-              ),
-            ],
-          ),
-          _homeland
-              ? Slider(
-                  value: _distance,
-                  label: _distance.toInt().toString() + 'km',
-                  min: 0,
-                  max: 100,
-                  activeColor: orange,
-                  inactiveColor: blueLight,
-                  divisions: 81,
-                  onChanged: (double value) {
-                    setState(() {
-                      _distance = value;
-                    });
-                  },
-                )
-              : Container(),
+                  )))
         ]),
-        RaisedButton(
+        if (_distance >= 0)
+          Slider(
+              value: _distance,
+              label: _distance.toInt().toString() + 'km',
+              min: 0,
+              max: 100,
+              activeColor: orange,
+              inactiveColor: blueLight,
+              divisions: 81,
+              onChanged: (double value) {
+                setState(() {
+                  _distance = value;
+                });
+              })
+      ]),
+      RaisedButton(
           onPressed: () {
-            Scaffold.of(context).showSnackBar(
-              SnackBar(
-                content: Text('Processing Data'),
-              ),
-            );
-            print(_distance.toString());
-            print(_homeland.toString());
-            print(interests.toString());
-            print(_ages.toString());
+            Scaffold.of(context)
+                .showSnackBar(SnackBar(content: Text('Processing Data')));
+            widget.onSearch(
+                interests
+                    .map((interest) => interest.title)
+                    .toList()
+                    .cast<String>(),
+                _ages.start.toInt(),
+                _ages.end.toInt(),
+                _distance);
           },
-          child: Text(
-            'Look for someone',
-            style: Theme.of(context).textTheme.caption,
-          ),
-        ),
-      ],
-    );
+          child: Text('Look for someone',
+              style: Theme.of(context).textTheme.caption))
+    ]);
   }
 }

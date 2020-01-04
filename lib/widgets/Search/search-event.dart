@@ -1,4 +1,3 @@
-// Define a custom Form widget.
 import 'package:flutter/material.dart';
 //import 'package:flutter_calendar_carousel/classes/event.dart';
 //import 'package:flutter_calendar_carousel/flutter_calendar_carousel.dart';

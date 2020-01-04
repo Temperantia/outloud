@@ -99,6 +99,17 @@ class UserModel extends ChangeNotifier {
             snapshot.documents[0].data, snapshot.documents[0].documentID);
   }
 
+  Future<List<User>> getUsers({List<String> interests = const [], int ageStart = 13, int ageEnd = 99, double distance = -1}) {
+    DateTime now = DateTime.now();
+    DateTime dateStart = DateTime(now.year - ageStart, now.month, now.day);
+    DateTime dateEnd = DateTime(now.year - ageEnd, now.month, now.day);
+
+    _api.getDocumentsByFields([
+      MapEntry('birthDate', dateStart),
+      MapEntry('birthDate', dateEnd),
+    ]);
+  }
+
   Future removeUser(String id) async {
     _api.removeDocument(id);
   }

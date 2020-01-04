@@ -1,4 +1,3 @@
-// Define a custom Form widget.
 import 'package:flutter/material.dart';
 
 import 'package:inclusive/theme.dart';

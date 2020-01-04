@@ -32,14 +32,20 @@ class App extends StatelessWidget {
           ChangeNotifierProvider(
             create: (_) => locator<AppDataService>(),
           ),
-           ChangeNotifierProvider(
+          ChangeNotifierProvider(
             create: (_) => locator<MessageService>(),
           ),
         ],
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
-          home: HomeScreen(),
-          routes: routes,
+          onGenerateRoute: (RouteSettings settings) {
+            var args = settings.arguments;
+            var ok = routes[settings.name];
+            if (ok == null) {
+              return MaterialPageRoute(builder: (context) => HomeScreen());
+            }
+            return MaterialPageRoute(builder: (context) => ok(context));
+          },
           theme: theme,
           title: 'Inclusive',
         ));

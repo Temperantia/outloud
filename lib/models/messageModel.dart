@@ -7,18 +7,19 @@ import 'package:inclusive/services/api.dart';
 import 'package:inclusive/services/message.dart';
 
 class Message {
-  final UserModel userProvider = locator<UserModel>();
-  User author;
-  String idFrom;
-  String content;
-  int timestamp;
-
   Message({this.idFrom, this.content, this.timestamp});
 
   Message.fromMap(Map snapshot)
       : idFrom = snapshot['idFrom'] ?? '',
         content = snapshot['content'] ?? '',
         timestamp = snapshot['timestamp'] ?? 0;
+
+  final UserModel userProvider = locator<UserModel>();
+  final String idFrom;
+  final int timestamp;
+
+  User author;
+  String content;
 
   toJson() {
     return {
@@ -38,11 +39,12 @@ class MessageModel extends ChangeNotifier {
   final Api _api = locator<Api>('messages');
 
   Stream<List<Message>> streamMessages(String conversationId) {
-    return getDataFromQuery(
+    return  getDataFromQuery(
         query: _api.streamSubCollectionById(conversationId, conversationId,
             orderBy: [OrderConstraint('timestamp', false)]),
         mapper: (final DocumentSnapshot messageDoc) =>
-            Message.fromMap(messageDoc.data));
+            Message.fromMap(messageDoc.data)); 
+         //_api.osef(conversationId).map((messages) => messages.documents.map((mess) => Message.fromMap(mess.data)).toList());
   }
 
   Stream<List<Message>> streamGroupPings(
