@@ -130,7 +130,7 @@ class ProfileEditionState extends State<ProfileEditionScreen> {
                     color: orange,
                   ),
                 )),
-        isNameTaken ? Text('Name is already taken') : Container(),
+        if (isNameTaken) Text('Name is already taken'),
         editing == 'age'
             ? BirthdatePicker(
                 initial: widget.user.birthDate,

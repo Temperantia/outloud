@@ -107,8 +107,7 @@ class Profile extends StatelessWidget {
                     fontSize: 18,
                     color: orange,
                   ))),
-          subtitle: Text(
-            user.description,
+          subtitle: Text(user.description,
               style: TextStyle(
                 fontWeight: FontWeight.w500,
                 fontSize: 15,

@@ -9,7 +9,7 @@ final logo = (context) => Column(
     Container(
       padding: const EdgeInsets.all(10.0),
       child: Text(
-        'Lets\'s include today',
+        'Let\'s include today',
         style: Theme.of(context).textTheme.subhead,
       ),
     )
