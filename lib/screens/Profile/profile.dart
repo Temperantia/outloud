@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:inclusive/models/userModel.dart';
 import 'package:inclusive/theme.dart';
+import 'package:flutter_swiper/flutter_swiper.dart';
 
 class Profile extends StatelessWidget {
   final User user;
@@ -58,6 +59,22 @@ class Profile extends StatelessWidget {
                 )),
           ],
         ),
+
+       new Swiper(
+          itemBuilder: (BuildContext context, int index) {
+              List<Object> images = List<Object>();
+
+            //  final imageUrl = await imageLink.getDownloadUrl();
+              //Image.network(imageUrl.toString());
+              
+            ;
+          
+          },                                                                                                                                                                                                                                                                                                                                                              
+          itemCount: 10,
+          itemWidth: 300.0,
+          itemHeight: 200.0,
+          layout: SwiperLayout.STACK,
+        ),
         divider(),
         ListTile(
           dense: true,
@@ -107,3 +124,18 @@ class Profile extends StatelessWidget {
     ));
   }
 }
+
+/*
+UPLOAD UNE IMAGE SUR FIRESTORE
+uploadImage(File image) async {
+    StorageReference reference =
+             FirebaseStorage.instance.ref().child(image.path.toString());
+    StorageUploadTask uploadTask = reference.putFile(image);
+
+    StorageTaskSnapshot downloadUrl = (await uploadTask.onComplete);
+
+    String url = (await downloadUrl.ref.getDownloadURL());
+
+
+}
+*/
