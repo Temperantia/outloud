@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:inclusive/classes/conversation.dart';
@@ -9,6 +10,7 @@ import 'package:inclusive/locator.dart';
 import 'package:inclusive/routes.dart';
 import 'package:inclusive/screens/Landing/index.dart';
 import 'package:inclusive/screens/home.dart';
+import 'package:inclusive/screens/loading.dart';
 import 'package:inclusive/theme.dart';
 import 'package:location_permissions/location_permissions.dart';
 import 'package:provider/provider.dart';
@@ -43,6 +45,10 @@ class App extends StatelessWidget {
     return FutureBuilder(
         future: appDataService.getUser().first,
         builder: (BuildContext context, AsyncSnapshot<User> snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return app(LoadingScreen.id);
+          }
+          print('3');
           final User user = snapshot.data;
           if (user == null) {
             return app(LandingScreen.id);
@@ -55,12 +61,14 @@ class App extends StatelessWidget {
     return StreamBuilder(
         stream: user.streamPings(),
         builder: (context, snapshot) {
-          final List<Conversation> conversations =
-              Provider.of<List<Conversation>>(context);
-          List<Ping> pings = snapshot.data;
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Container();
           }
+
+          final List<Conversation> conversations =
+              Provider.of<List<Conversation>>(context);
+          List<Ping> pings = snapshot.data;
+
           for (Ping ping in pings) {
             final int index = conversations.indexWhere(
                 (final Conversation conversation) =>
@@ -101,10 +109,16 @@ class App extends StatelessWidget {
           return FutureBuilder(
               future: getGroupUsers(conversations, messages),
               builder: (context, snapshot) {
+                print('4');
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  print('5');
+                  return Container();
+                }
                 Provider.of<dynamic>(context);
                 Provider.of<List<Ping>>(context);
 
                 messageService.conversations = snapshot.data;
+                print('ok');
                 return app(HomeScreen.id);
               });
         }));
@@ -186,6 +200,18 @@ class App extends StatelessWidget {
             builder: (context) => createRoute(settings.arguments));
       },
     );
+  }
+
+  checkInternet() async {
+    try {
+      final result = await InternetAddress.lookup('google.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        return true;
+      }
+    } on SocketException catch (_) {
+      print('ko');
+      return false;
+    }
   }
 
   @override

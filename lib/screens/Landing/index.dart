@@ -4,7 +4,7 @@ import 'package:inclusive/widgets/background.dart';
 import 'package:inclusive/widgets/logo.dart';
 
 class LandingScreen extends StatelessWidget {
-  static final String id = '/Landing';
+  static final String id = 'Landing';
   @override
   Widget build(BuildContext context) {
     return Scaffold(

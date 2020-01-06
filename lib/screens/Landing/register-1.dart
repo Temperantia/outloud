@@ -8,7 +8,7 @@ import 'package:inclusive/widgets/background.dart';
 import 'package:provider/provider.dart';
 
 class Register1Screen extends StatefulWidget {
-  static final String id = '/Register1';
+  static final String id = 'Register1';
   @override
   Register1ScreenState createState() {
     return Register1ScreenState();

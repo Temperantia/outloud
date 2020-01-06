@@ -9,7 +9,7 @@ import 'package:validate/validate.dart';
 
 class Register2Screen extends StatefulWidget {
   Register2Screen(String arguments) : name = arguments;
-  static final String id = '/Register2';
+  static final String id = 'Register2';
   final String name;
 
   @override

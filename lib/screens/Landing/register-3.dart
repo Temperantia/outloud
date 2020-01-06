@@ -11,7 +11,7 @@ import 'package:inclusive/models/user.dart';
 class Register3Screen extends StatefulWidget {
   Register3Screen(this.arguments);
   final Map<String, String> arguments;
-  static final String id = '/Register3';
+  static final String id = 'Register3';
 
   @override
   Register3ScreenState createState() {

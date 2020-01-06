@@ -10,7 +10,7 @@ import 'package:provider/provider.dart';
 class ResultsScreen extends StatefulWidget {
   ResultsScreen(arguments) : users = arguments;
   final List<User> users;
-  static final String id = '/Results';
+  static final String id = 'Results';
   @override
   ResultScreenState createState() => ResultScreenState();
 }

@@ -34,7 +34,7 @@ class User {
       'birthDate': birthDate,
       'description': description,
       'interests': interests,
-     // 'pics': pics,
+      'pics': pics,
     };
   }
 
@@ -44,9 +44,6 @@ class User {
 
   Stream<List<Ping>> streamPings() {
     Stream<List<Ping>> stream = userProvider.streamPings(id);
-    stream.listen((final List<Ping> pings) {
-      this.pings = pings;
-    });
     return stream;
   }
 }

@@ -16,7 +16,7 @@ import 'package:inclusive/widgets/background.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
-  static final String id = '/Home';
+  static final String id = 'Home';
   @override
   _HomeState createState() => _HomeState();
 }
