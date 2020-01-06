@@ -13,7 +13,7 @@ class MessageModel extends ChangeNotifier {
 
   Stream<List<Message>> streamMessages(String conversationId) {
     return getDataFromQuery(
-        query: _api.streamSubCollectionById(conversationId, conversationId,
+        query: _api.querySubCollection(conversationId, conversationId,
             orderBy: [OrderConstraint('timestamp', false)]),
         mapper: (final DocumentSnapshot messageDoc) =>
             Message.fromMap(messageDoc.data));
@@ -22,7 +22,7 @@ class MessageModel extends ChangeNotifier {
   Stream<List<Message>> streamGroupPings(
       Conversation conversation, String idFrom) {
     return getDataFromQuery(
-        query: _api.streamSubCollectionById(conversation.id, conversation.id,
+        query: _api.querySubCollection(conversation.id, conversation.id,
             where: [
               QueryConstraint(
                   field: 'timestamp', isGreaterThan: conversation.lastRead)

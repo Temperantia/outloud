@@ -7,6 +7,6 @@ class GroupModel extends ChangeNotifier {
   final Api _api = locator<Api>('groups');
 
   Stream<Group> streamGroup(String id) {
-    return _api.streamDocumentById(id).map((doc) => Group.fromMap(doc.data, doc.documentID));
+    return _api.streamDocument(id).map((doc) => Group.fromMap(doc.data, doc.documentID));
   }
 }
