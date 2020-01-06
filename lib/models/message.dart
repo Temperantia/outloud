@@ -1,39 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firestore_helpers/firestore_helpers.dart';
 import 'package:flutter/material.dart';
+import 'package:inclusive/classes/conversation.dart';
+import 'package:inclusive/classes/message.dart';
 import 'package:inclusive/locator.dart';
-import 'package:inclusive/models/conversation.dart';
-import 'package:inclusive/models/user.dart';
 import 'package:inclusive/services/api.dart';
 
-class Message {
-  Message({this.idFrom, this.content, this.timestamp});
 
-  Message.fromMap(Map snapshot)
-      : idFrom = snapshot['idFrom'] ?? '',
-        content = snapshot['content'] ?? '',
-        timestamp = snapshot['timestamp'] ?? 0;
-
-  final UserModel userProvider = locator<UserModel>();
-  final String idFrom;
-  final int timestamp;
-
-  User author;
-  String content;
-
-  toJson() {
-    return {
-      'idFrom': idFrom,
-      'content': content,
-      'timestamp': timestamp,
-    };
-  }
-
-  getAuthor() async {
-    final User user = await userProvider.getUser(idFrom);
-    author = user;
-  }
-}
 
 class MessageModel extends ChangeNotifier {
   final Api _api = locator<Api>('messages');

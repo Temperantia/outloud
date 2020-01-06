@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:inclusive/models/user.dart';
+import 'package:inclusive/classes/user.dart';
 import 'package:inclusive/theme.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 

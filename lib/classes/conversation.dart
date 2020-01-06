@@ -1,3 +1,4 @@
+import 'package:inclusive/classes/message.dart';
 import 'package:inclusive/locator.dart';
 import 'package:inclusive/services/appdata.dart';
 import 'package:inclusive/models/group.dart';

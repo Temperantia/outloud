@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:inclusive/classes/user.dart';
 import 'package:inclusive/models/user.dart';
 import 'package:inclusive/screens/Landing/register-3.dart';
 import 'package:inclusive/theme.dart';
@@ -33,7 +34,7 @@ class Register2ScreenState extends State<Register2Screen> {
       return;
     }
 
-    User user = await userProvider.getUserWithEmail(email);
+    final User user = await userProvider.getUserWithEmail(email);
     if (user != null) {
       setState(() => error = 'Email is already used');
       return;

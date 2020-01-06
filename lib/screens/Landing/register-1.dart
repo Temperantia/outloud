@@ -1,5 +1,6 @@
 // Define a custom Form widget.
 import 'package:flutter/material.dart';
+import 'package:inclusive/classes/user.dart';
 import 'package:inclusive/screens/Landing/register-2.dart';
 import 'package:inclusive/models/user.dart';
 import 'package:inclusive/theme.dart';
@@ -27,7 +28,7 @@ class Register1ScreenState extends State<Register1Screen> {
       return;
     }
 
-    User user = await userProvider.getUserWithName(name);
+    final User user = await userProvider.getUserWithName(name);
     if (user != null) {
       setState(() => isTakenUsername = true);
       return;

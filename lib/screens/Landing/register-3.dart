@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_cupertino_date_picker/flutter_cupertino_date_picker.dart';
+import 'package:inclusive/classes/user.dart';
 import 'package:inclusive/screens/home.dart';
 import 'package:inclusive/services/appdata.dart';
 import 'package:inclusive/widgets/birthdate-picker.dart';

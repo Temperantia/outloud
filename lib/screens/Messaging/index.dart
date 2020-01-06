@@ -1,9 +1,9 @@
 import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:inclusive/models/conversation.dart';
+import 'package:inclusive/classes/conversation.dart';
+import 'package:inclusive/classes/message.dart';
 import 'package:inclusive/services/appdata.dart';
-import 'package:inclusive/models/message.dart';
 import 'package:inclusive/models/user.dart';
 import 'package:inclusive/services/message.dart';
 import 'package:inclusive/theme.dart';

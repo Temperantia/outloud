@@ -2,6 +2,7 @@ import 'package:badges/badges.dart';
 import 'package:bubble_bottom_bar/bubble_bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:inclusive/classes/user.dart';
 import 'package:inclusive/models/user.dart';
 import 'package:inclusive/screens/Messaging/index.dart';
 import 'package:inclusive/screens/Profile/profile-edition.dart';
@@ -34,7 +35,8 @@ class _HomeState extends State<HomeScreen> with SingleTickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    tabController = TabController(initialIndex: 2, vsync: this, length: 5);
+    tabController =
+        TabController(initialIndex: currentPage, vsync: this, length: 5);
   }
 
   @override
@@ -53,7 +55,7 @@ class _HomeState extends State<HomeScreen> with SingleTickerProviderStateMixin {
         decoration: background,
         child: TabBarView(controller: tabController, children: [
           editProfile
-              ? ProfileEditionScreen(appDataService.user, onSaveProfile)
+              ? ProfileEditionScreen(user, onSaveProfile)
               : Profile(user),
           MessagingScreen(key: messaging),
           SearchScreen(),

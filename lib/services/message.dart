@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:inclusive/classes/conversation.dart';
 import 'package:inclusive/locator.dart';
-import 'package:inclusive/models/conversation.dart';
 import 'package:inclusive/services/appdata.dart';
 import 'package:inclusive/models/user.dart';
 import 'package:inclusive/models/message.dart';

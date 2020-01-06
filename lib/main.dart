@@ -1,8 +1,11 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:inclusive/classes/conversation.dart';
+import 'package:inclusive/classes/message.dart';
+import 'package:inclusive/classes/ping.dart';
+import 'package:inclusive/classes/user.dart';
 import 'package:inclusive/locator.dart';
-import 'package:inclusive/models/conversation.dart';
 import 'package:inclusive/routes.dart';
 import 'package:inclusive/screens/Landing/index.dart';
 import 'package:inclusive/screens/home.dart';
@@ -58,7 +61,7 @@ class App extends StatelessWidget {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Container();
           }
-          for (var ping in pings) {
+          for (Ping ping in pings) {
             final int index = conversations.indexWhere(
                 (final Conversation conversation) =>
                     conversation.idPeer == ping.id);

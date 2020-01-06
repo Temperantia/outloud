@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firestore_helpers/firestore_helpers.dart';
 
 class Api {
-  Firestore _db = Firestore.instance;
+  final Firestore _db = Firestore.instance;
   final String path;
   CollectionReference ref;
 

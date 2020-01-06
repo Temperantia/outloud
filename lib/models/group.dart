@@ -1,23 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:inclusive/classes/group.dart';
 import 'package:inclusive/locator.dart';
 import 'package:inclusive/services/api.dart';
-
-class Group {
-  Group({this.id, this.name});
-
-  Group.fromMap(Map snapshot, String id)
-      : id = id ?? '',
-        name = snapshot['name'] ?? '';
-
-  final String id;
-  final String name;
-
-  toJson() {
-    return {
-      'name': name,
-    };
-  }
-}
 
 class GroupModel extends ChangeNotifier {
   final Api _api = locator<Api>('groups');
