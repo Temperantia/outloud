@@ -5,6 +5,7 @@ import 'package:inclusive/widgets/background.dart';
 import 'package:inclusive/widgets/logo.dart';
 
 class LoadingScreen extends StatelessWidget {
+  static final String id = '/Loading';
   @override
   Widget build(BuildContext context) {
     return Scaffold(

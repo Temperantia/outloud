@@ -4,6 +4,7 @@ import 'package:inclusive/widgets/background.dart';
 import 'package:inclusive/widgets/logo.dart';
 
 class LandingScreen extends StatelessWidget {
+  static final String id = '/Landing';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,10 +20,10 @@ class LandingScreen extends StatelessWidget {
                         RaisedButton(
                             onPressed: () {
                               Navigator.of(context)
-                                  .pushReplacementNamed('/Register');
+                                  .pushNamed('/Register1');
                             },
                             child: Text(
-                              'SIGN ME IN',
+                              'GET STARTED',
                               style: Theme.of(context).textTheme.title,
                             ))
                       ])

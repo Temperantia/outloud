@@ -2,9 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firestore_helpers/firestore_helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:inclusive/locator.dart';
-import 'package:inclusive/models/userModel.dart';
+import 'package:inclusive/models/conversation.dart';
+import 'package:inclusive/models/user.dart';
 import 'package:inclusive/services/api.dart';
-import 'package:inclusive/services/message.dart';
 
 class Message {
   Message({this.idFrom, this.content, this.timestamp});
@@ -39,12 +39,11 @@ class MessageModel extends ChangeNotifier {
   final Api _api = locator<Api>('messages');
 
   Stream<List<Message>> streamMessages(String conversationId) {
-    return  getDataFromQuery(
+    return getDataFromQuery(
         query: _api.streamSubCollectionById(conversationId, conversationId,
             orderBy: [OrderConstraint('timestamp', false)]),
         mapper: (final DocumentSnapshot messageDoc) =>
-            Message.fromMap(messageDoc.data)); 
-         //_api.osef(conversationId).map((messages) => messages.documents.map((mess) => Message.fromMap(mess.data)).toList());
+            Message.fromMap(messageDoc.data));
   }
 
   Stream<List<Message>> streamGroupPings(

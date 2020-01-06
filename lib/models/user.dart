@@ -99,15 +99,15 @@ class UserModel extends ChangeNotifier {
             snapshot.documents[0].data, snapshot.documents[0].documentID);
   }
 
-  Future<List<User>> getUsers({List<String> interests = const [], int ageStart = 13, int ageEnd = 99, double distance = -1}) {
+  Future<List<User>> getUsers({List<String> interests = const [], int ageStart = 13, int ageEnd = 99, double distance = -1}) async {
     DateTime now = DateTime.now();
     DateTime dateStart = DateTime(now.year - ageStart, now.month, now.day);
     DateTime dateEnd = DateTime(now.year - ageEnd, now.month, now.day);
 
-    _api.getDocumentsByFields([
-      MapEntry('birthDate', dateStart),
-      MapEntry('birthDate', dateEnd),
-    ]);
+    return (await _api.streamDataCollection(where:[
+      QueryConstraint(field: 'birthDate', isGreaterThanOrEqualTo: dateEnd),
+      QueryConstraint(field: 'birthDate', isLessThanOrEqualTo: dateStart)
+    ]).getDocuments()).documents.map((doc) => User.fromMap(doc.data, doc.documentID)).toList();
   }
 
   Future removeUser(String id) async {
@@ -118,8 +118,8 @@ class UserModel extends ChangeNotifier {
     _api.updateDocument(data.toJson(), id);
   }
 
-  Future createUser(User data, String id) async {
-    _api.createDocument(data.toJson(), id);
+  Future createUser(User data) async {
+    return _api.createDocument(data.toJson(), data.id);
   }
 
   Stream<List<Ping>> streamPings(String id) {

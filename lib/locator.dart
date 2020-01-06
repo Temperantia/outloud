@@ -1,7 +1,7 @@
 import 'package:get_it/get_it.dart';
-import 'package:inclusive/models/userModel.dart';
-import 'package:inclusive/models/groupModel.dart';
-import 'package:inclusive/models/messageModel.dart';
+import 'package:inclusive/models/user.dart';
+import 'package:inclusive/models/group.dart';
+import 'package:inclusive/models/message.dart';
 import 'package:inclusive/services/api.dart';
 import 'package:inclusive/services/appdata.dart';
 import 'package:inclusive/services/message.dart';

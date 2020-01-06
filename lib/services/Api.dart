@@ -14,8 +14,10 @@ class Api {
     return ref.getDocuments();
   }
 
-  Stream<QuerySnapshot> streamDataCollection() {
-    return ref.snapshots();
+  Query streamDataCollection(
+      {List<QueryConstraint> where = const [],
+      List<OrderConstraint> orderBy = const []}) {
+    return buildQuery(collection: ref, constraints: where, orderBy: orderBy);
   }
 
   Future<DocumentSnapshot> getDocumentById(String id) {
@@ -50,15 +52,12 @@ class Api {
         collection: collection, constraints: where, orderBy: orderBy);
   }
 
-  Stream<QuerySnapshot> osef(id) {
-    return ref.document(id).collection(id).snapshots();
-  }
-
   Future<QuerySnapshot> getDocumentsByField(dynamic field, dynamic value) {
     return ref.where(field, isEqualTo: value).getDocuments();
   }
 
-  Future<QuerySnapshot> getDocumentsByFields(List<MapEntry<dynamic, dynamic>> fields) {
+  Future<QuerySnapshot> getDocumentsByFields(
+      List<MapEntry<dynamic, dynamic>> fields) {
     Query ref = this.ref;
     for (MapEntry<dynamic, dynamic> field in fields) {
       ref = ref.where(field.key, isEqualTo: field.value);

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:inclusive/models/userModel.dart';
+import 'package:inclusive/models/user.dart';
 import 'package:inclusive/theme.dart';
 
 class Profile extends StatelessWidget {

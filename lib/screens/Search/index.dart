@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:inclusive/models/userModel.dart';
+import 'package:inclusive/models/user.dart';
 import 'package:inclusive/screens/Search/results.dart';
 import 'package:inclusive/widgets/Search/search-event.dart';
 
@@ -17,15 +17,12 @@ class SearchScreen extends StatefulWidget {
 class _SearchState extends State<SearchScreen> {
   UserModel userProvider;
   String type = 'solo';
-  bool result = false;
   Widget resultWidget;
 
   @override
   Widget build(BuildContext context) {
     userProvider = Provider.of<UserModel>(context);
-    return result
-        ? Column()
-        : Column(children: [
+    return  Column(children: [
             Container(
                 height: MediaQuery.of(context).size.height * 0.15,
                 child: Row(
@@ -73,13 +70,12 @@ class _SearchState extends State<SearchScreen> {
           ]);
   }
 
-  buildSoloResults(List<String> interests, int ageStart, int ageEnd, double distance) {
-    var users = userProvider.getUsers(
+  buildSoloResults(List<String> interests, int ageStart, int ageEnd, double distance) async {
+    var users = await userProvider.getUsers(
         interests: interests,
         ageStart: ageStart,
         ageEnd: ageEnd,
         distance: distance);
-    resultWidget = Column(children: []);
-    Navigator.pushNamed(context, ResultsScreen.id);
+    Navigator.pushNamed(context, ResultsScreen.id, arguments: users);
   }
 }

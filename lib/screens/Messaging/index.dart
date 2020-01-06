@@ -1,10 +1,10 @@
 import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:inclusive/models/conversation.dart';
 import 'package:inclusive/services/appdata.dart';
-import 'package:inclusive/models/messageModel.dart';
-import 'package:inclusive/models/userModel.dart';
-import 'package:inclusive/models/groupModel.dart';
+import 'package:inclusive/models/message.dart';
+import 'package:inclusive/models/user.dart';
 import 'package:inclusive/services/message.dart';
 import 'package:inclusive/theme.dart';
 import 'package:provider/provider.dart';
@@ -26,9 +26,7 @@ class MessagingState extends State<MessagingScreen> {
 
   AppDataService appDataService;
   MessageService messageService;
-  MessageModel messageProvider;
   UserModel userProvider;
-  GroupModel groupProvider;
 
   DateTime lastMessageTime;
   Message lastMessage;
@@ -37,10 +35,7 @@ class MessagingState extends State<MessagingScreen> {
   Widget build(BuildContext context) {
     appDataService = Provider.of<AppDataService>(context);
     messageService = Provider.of<MessageService>(context);
-    messageProvider = Provider.of<MessageModel>(context);
     userProvider = Provider.of<UserModel>(context);
-    groupProvider = Provider.of<GroupModel>(context);
-    final dynamic peerData = Provider.of<dynamic>(context);
 
     return messageService.currentConversation == null
         ? Center(
@@ -51,7 +46,7 @@ class MessagingState extends State<MessagingScreen> {
                     style: Theme.of(context).textTheme.title)))
         : Column(children: [
             buildConversationIcons(),
-            buildConversation(peerData),
+            buildConversation(),
             buildInput()
           ]);
   }
@@ -135,10 +130,10 @@ class MessagingState extends State<MessagingScreen> {
     return icon;
   }
 
-  Widget buildConversation(dynamic peerData) {
+  Widget buildConversation() {
     return Expanded(
         child: Column(children: [
-      buildBanner(peerData),
+      buildBanner(),
       Expanded(
           child: ListView.builder(
               shrinkWrap: true,
@@ -148,7 +143,7 @@ class MessagingState extends State<MessagingScreen> {
     ]));
   }
 
-  Widget buildBanner(peerData) {
+  Widget buildBanner() {
     return Row(children: [
       Expanded(
           child: Container(

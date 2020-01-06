@@ -3,7 +3,8 @@ import 'dart:io';
 import 'package:device_info/device_info.dart';
 import 'package:flutter/material.dart';
 import 'package:inclusive/locator.dart';
-import 'package:inclusive/models/userModel.dart';
+import 'package:inclusive/models/user.dart';
+import 'package:location_permissions/location_permissions.dart';
 
 class AppDataService extends ChangeNotifier {
   final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
@@ -14,17 +15,26 @@ class AppDataService extends ChangeNotifier {
 
   Stream<User> getUser() async* {
     if (Platform.isAndroid) {
-      var build = await deviceInfoPlugin.androidInfo;
+      AndroidDeviceInfo build = await deviceInfoPlugin.androidInfo;
       identifier = build.androidId;
-
-      // testing purpose
-      identifier = 'apmbMHvueWZDLeAOxaxI';
-      //identifier = 'cx0hEmwDTLWYy3COnvPL';
-
     } else if (Platform.isIOS) {
-      var data = await deviceInfoPlugin.iosInfo;
+      IosDeviceInfo data = await deviceInfoPlugin.iosInfo;
       identifier = data.identifierForVendor;
     }
+    // testing purpose
+    //identifier = 'apmbMHvueWZDLeAOxaxI';
+    //identifier = 'cx0hEmwDTLWYy3COnvPL';
+    //identifier = 'a';
+
     yield* userProvider.streamUser(identifier);
+  }
+
+  Future<PermissionStatus> getLocationPermissions() async {
+    PermissionStatus permission =
+        await LocationPermissions().checkPermissionStatus();
+    if (permission == PermissionStatus.unknown) {
+      permission = await LocationPermissions().requestPermissions();
+    }
+    return permission;
   }
 }
