@@ -11,7 +11,7 @@ class User {
   DateTime birthDate;
   String description;
   List interests;
-  String pics;
+  List pics;
   List<Ping> pings = [];
 
   User({this.id, this.name, this.email, this.birthDate});
@@ -24,7 +24,7 @@ class User {
         birthDate = snapshot['birthDate'].toDate() ?? null,
         description = snapshot['description'] ?? '',
         interests = snapshot['interests'] ?? [],
-        pics = snapshot['pics'] ?? '';
+        pics = snapshot['pics'] ?? [];
 
   toJson() {
     return {
