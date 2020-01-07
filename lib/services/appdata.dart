@@ -18,11 +18,9 @@ class AppDataService extends ChangeNotifier {
     try {
       final result = await InternetAddress.lookup('google.com');
       if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
-        print('ok');
         return true;
       }
     } on SocketException catch (_) {
-      print('ko');
       return false;
     }
   }
@@ -36,8 +34,8 @@ class AppDataService extends ChangeNotifier {
       identifier = data.identifierForVendor;
     }
     // testing purpose
-    //identifier = 'apmbMHvueWZDLeAOxaxI';
-    identifier = 'cx0hEmwDTLWYy3COnvPL';
+    identifier = 'apmbMHvueWZDLeAOxaxI';
+    //identifier = 'cx0hEmwDTLWYy3COnvPL';
     //identifier = 'a';
 
     yield* userProvider.streamUser(identifier);

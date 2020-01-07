@@ -12,7 +12,6 @@ class MessageService extends ChangeNotifier {
   final AppDataService appDataService = locator<AppDataService>();
   final UserModel userProvider = locator<UserModel>();
   final MessageModel messageProvider = locator<MessageModel>();
-  final Completer completer = Completer();
 
   Conversation currentConversation;
   List<Conversation> conversations = [

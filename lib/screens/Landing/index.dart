@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:inclusive/screens/Landing/register-1.dart';
 
 import 'package:inclusive/widgets/background.dart';
 import 'package:inclusive/widgets/logo.dart';
@@ -20,7 +21,7 @@ class LandingScreen extends StatelessWidget {
                         RaisedButton(
                             onPressed: () {
                               Navigator.of(context)
-                                  .pushNamed('/Register1');
+                                  .pushNamed(Register1Screen.id);
                             },
                             child: Text(
                               'GET STARTED',
