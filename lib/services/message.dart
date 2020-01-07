@@ -88,4 +88,13 @@ class MessageService extends ChangeNotifier {
     }
     setConversations();
   }
+
+  void refreshPings() {
+    pings = 0;
+    for (Conversation conversation in conversations) {
+      if (conversation.pings > 0) {
+        ++pings;
+      }
+    }
+  }
 }

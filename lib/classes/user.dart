@@ -1,8 +1,9 @@
+import 'package:inclusive/classes/entity.dart';
 import 'package:inclusive/classes/ping.dart';
 import 'package:inclusive/locator.dart';
 import 'package:inclusive/models/user.dart';
 
-class User {
+class User implements Entity {
   final UserModel userProvider = locator<UserModel>();
   String id;
   String name;
@@ -21,7 +22,7 @@ class User {
         name = snapshot['name'] ?? '',
         email = snapshot['email'] ?? '',
         location = snapshot['location'] ?? '',
-        birthDate = snapshot['birthDate'].toDate() ?? null,
+        birthDate = snapshot['birthDate'].toDate() ?? DateTime.now(),
         description = snapshot['description'] ?? '',
         interests = snapshot['interests'] ?? [],
         pics = snapshot['pics'] ?? [];

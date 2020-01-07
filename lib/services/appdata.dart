@@ -14,6 +14,19 @@ class AppDataService extends ChangeNotifier {
   String identifier;
   User user;
 
+  static Future<bool> checkInternet() async {
+    try {
+      final result = await InternetAddress.lookup('google.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        print('ok');
+        return true;
+      }
+    } on SocketException catch (_) {
+      print('ko');
+      return false;
+    }
+  }
+
   Stream<User> getUser() async* {
     if (Platform.isAndroid) {
       AndroidDeviceInfo build = await deviceInfoPlugin.androidInfo;

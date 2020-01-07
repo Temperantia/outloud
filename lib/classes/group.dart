@@ -1,4 +1,6 @@
-class Group {
+import 'package:inclusive/classes/entity.dart';
+
+class Group implements Entity {
   Group({this.id, this.name});
 
   Group.fromMap(Map snapshot, String id)
