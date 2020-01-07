@@ -12,7 +12,6 @@ class AppDataService extends ChangeNotifier {
   final UserModel userProvider = locator<UserModel>();
 
   String identifier;
-  User user;
 
   static Future<bool> checkInternet() async {
     try {
@@ -23,6 +22,7 @@ class AppDataService extends ChangeNotifier {
     } on SocketException catch (_) {
       return false;
     }
+    return false;
   }
 
   Stream<User> getUser() async* {
@@ -34,9 +34,8 @@ class AppDataService extends ChangeNotifier {
       identifier = data.identifierForVendor;
     }
     // testing purpose
-    identifier = 'apmbMHvueWZDLeAOxaxI';
+    //identifier = 'apmbMHvueWZDLeAOxaxI';
     //identifier = 'cx0hEmwDTLWYy3COnvPL';
-    //identifier = 'a';
 
     yield* userProvider.streamUser(identifier);
   }

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:inclusive/screens/Landing/register-1.dart';
+import 'package:inclusive/screens/Register/register-1.dart';
 
 import 'package:inclusive/widgets/background.dart';
 import 'package:inclusive/widgets/logo.dart';
 
-class LandingScreen extends StatelessWidget {
-  static final String id = 'Landing';
+class RegisterScreen extends StatelessWidget {
+  static final String id = 'Register';
   @override
   Widget build(BuildContext context) {
     return Scaffold(

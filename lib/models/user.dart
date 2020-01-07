@@ -62,8 +62,8 @@ class UserModel extends ChangeNotifier {
     _api.removeDocument(id);
   }
 
-  Future updateUser(User data, String id) async {
-    _api.updateDocument(data.toJson(), id);
+  Future updateUser(User data) async {
+    _api.updateDocument(data.toJson(), data.id);
   }
 
   Future createUser(User data) async {

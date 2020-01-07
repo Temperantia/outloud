@@ -31,11 +31,15 @@ class MessagingState extends State<MessagingScreen> {
   DateTime lastMessageTime;
   Message lastMessage;
 
+  List<Conversation> conversations;
+
   @override
   Widget build(BuildContext context) {
     appDataService = Provider.of<AppDataService>(context);
     messageService = Provider.of<MessageService>(context);
     userProvider = Provider.of<UserModel>(context);
+
+    conversations = Provider.of<List<Conversation>>(context);
 
     return messageService.currentConversation == null
         ? Center(
@@ -56,18 +60,18 @@ class MessagingState extends State<MessagingScreen> {
       return;
     }
     setState(() {
-      messageService.changeConversation(conversation);
+      messageService.changeConversation(conversation, conversations);
     });
   }
 
-  void onSendMessage(final String text) {
+  Future onSendMessage(final String text) async {
     if (text.trim() != '') {
       setState(() {
         textController.clear();
         messageService.sendMessage(text);
+        listScrollController.animateTo(0.0,
+            duration: Duration(milliseconds: 300), curve: Curves.easeOut);
       });
-      listScrollController.animateTo(0.0,
-          duration: Duration(milliseconds: 300), curve: Curves.easeOut);
     } else {
       Fluttertoast.showToast(msg: 'Nothing to send');
     }
@@ -75,7 +79,7 @@ class MessagingState extends State<MessagingScreen> {
 
   void onCloseConversation() {
     setState(() {
-      messageService.closeCurrentConversation();
+      messageService.closeCurrentConversation(conversations);
     });
   }
 
@@ -93,7 +97,7 @@ class MessagingState extends State<MessagingScreen> {
   List<Widget> buildIcons() {
     final List<Widget> icons = [];
 
-    for (final Conversation conversation in messageService.conversations) {
+    for (final Conversation conversation in conversations) {
       icons.add(GestureDetector(
           onTap: () => onChangeConversation(conversation),
           child: buildIcon(conversation)));
@@ -136,6 +140,7 @@ class MessagingState extends State<MessagingScreen> {
       buildBanner(),
       Expanded(
           child: ListView.builder(
+              reverse: true,
               shrinkWrap: true,
               itemBuilder: (context, index) => buildItem(index),
               itemCount: messageService.currentConversation.messages.length,

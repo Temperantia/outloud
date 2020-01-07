@@ -33,7 +33,6 @@ class Register3ScreenState extends State<Register3Screen> {
       birthDate: selected,
     );
     await userProvider.createUser(user);
-    appDataService.user = user;
     Navigator.pushNamedAndRemoveUntil(context, HomeScreen.id, (route) => false);
   }
 

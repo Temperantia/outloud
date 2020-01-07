@@ -1,38 +1,46 @@
 import 'package:flutter/material.dart';
 import 'package:inclusive/classes/user.dart';
-import 'package:inclusive/screens/Landing/register-2.dart';
 import 'package:inclusive/models/user.dart';
+import 'package:inclusive/screens/Register/register-3.dart';
 import 'package:inclusive/theme.dart';
 import 'package:inclusive/widgets/background.dart';
 import 'package:provider/provider.dart';
+import 'package:validate/validate.dart';
 
-class Register1Screen extends StatefulWidget {
-  static final String id = 'Register1';
+class Register2Screen extends StatefulWidget {
+  Register2Screen(String arguments) : name = arguments;
+  static final String id = 'Register2';
+  final String name;
+
   @override
-  Register1ScreenState createState() {
-    return Register1ScreenState();
+  Register2ScreenState createState() {
+    return Register2ScreenState();
   }
 }
 
-class Register1ScreenState extends State<Register1Screen> {
+class Register2ScreenState extends State<Register2Screen> {
   final TextEditingController controller = TextEditingController();
   UserModel userProvider;
-  bool isTakenUsername = false;
+  String error = '';
 
   Future submit() async {
     FocusScope.of(context).unfocus();
-    final String name = controller.text.trim();
-    if (name == '') {
-      Navigator.pushNamed(context, Register2Screen.id, arguments: name);
+    final String email = controller.text.trim();
+
+    try {
+      Validate.isEmail(email);
+    } catch (e) {
+      setState(() => error = 'Email is not valid');
       return;
     }
 
-    final User user = await userProvider.getUserWithName(name);
+    final User user = await userProvider.getUserWithEmail(email);
     if (user != null) {
-      setState(() => isTakenUsername = true);
+      setState(() => error = 'Email is already used');
       return;
     }
-    Navigator.pushNamed(context, Register2Screen.id, arguments: name);
+    Navigator.pushNamed(context, Register3Screen.id,
+        arguments: {'name': widget.name, 'email': email});
   }
 
   @override
@@ -46,22 +54,20 @@ class Register1ScreenState extends State<Register1Screen> {
             child:
                 Column(mainAxisAlignment: MainAxisAlignment.center, children: [
               Container(
-                padding: const EdgeInsets.all(10),
-                child: TextField(
-                  decoration: InputDecoration(
-                    hintText: 'John•ane',
-                    labelText: 'Username',
-                  ),
-                  controller: controller,
-                  onTap: () => isTakenUsername = false,
-                ),
-              ),
-              if (isTakenUsername)
+                  padding: const EdgeInsets.all(10),
+                  child: TextField(
+                    decoration: const InputDecoration(
+                      hintText: 'John•ane@gmail.com',
+                      labelText: 'Email',
+                    ),
+                    controller: controller,
+                    onTap: () => error = '',
+                  )),
+              if (error != '')
                 Row(children: [
                   Container(
                       padding: EdgeInsets.only(left: 10.0),
-                      child: Text('Name is taken already',
-                          style: TextStyle(color: red)))
+                      child: Text(error, style: TextStyle(color: red)))
                 ]),
               Padding(
                   padding: const EdgeInsets.symmetric(vertical: 16.0),

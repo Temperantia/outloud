@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:inclusive/locator.dart';
 import 'package:inclusive/routes.dart';
-import 'package:inclusive/screens/home.dart';
+import 'package:inclusive/screens/landing.dart';
 import 'package:inclusive/theme.dart';
 import 'package:provider/provider.dart';
 import 'package:inclusive/models/user.dart';
@@ -41,9 +41,8 @@ class App extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           theme: theme,
           title: 'Inclusive',
-          initialRoute: HomeScreen.id,
+          initialRoute: LandingScreen.id,
           onGenerateRoute: (RouteSettings settings) {
-            print(settings.name);
             final Function createRoute = routes[settings.name];
             return MaterialPageRoute(
                 builder: (context) => createRoute(settings.arguments));

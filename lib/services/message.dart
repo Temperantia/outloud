@@ -14,10 +14,11 @@ class MessageService extends ChangeNotifier {
   final MessageModel messageProvider = locator<MessageModel>();
 
   Conversation currentConversation;
+  /*
   List<Conversation> conversations = [
     Conversation('BHpAnkWabxJFoY1FbM57', 0),
     Conversation('apmbMHvueWZDLeAOxaxI-cx0hEmwDTLWYy3COnvPL', 0),
-  ];
+  ];*/
   int pings = 0;
 
   Future<List<Conversation>> getConversations() async {
@@ -38,44 +39,43 @@ class MessageService extends ChangeNotifier {
     if (conversations.isNotEmpty) {
       currentConversation = conversations[0];
       currentConversation.markAsRead();
-      setConversations();
+      setConversations(conversations);
     }
-
     return conversations;
   }
 
-  Future setConversations() async {
+  Future setConversations(conversations) async {
     final SharedPreferences sharedPreferences =
         await SharedPreferences.getInstance();
+
     final List<String> conversationIDs = conversations
         .map((final Conversation conversation) => conversation.id)
-        .toList();
+        .toList().cast<String>();
     sharedPreferences.setStringList('conversationIDs', conversationIDs);
+
     final List<String> conversationLastReads = conversations
         .map((final Conversation conversation) =>
             conversation.lastRead.toString())
-        .toList();
+        .toList().cast<String>();
     sharedPreferences.setStringList(
         'conversationLastReads', conversationLastReads);
   }
 
-  void changeConversation(final Conversation conversation) {
+  void changeConversation(final Conversation conversation, conversations) {
     currentConversation = conversation;
     currentConversation.markAsRead();
-    currentConversation.lastRead = DateTime.now().millisecondsSinceEpoch;
-    currentConversation.pings = 0;
-    setConversations();
+    setConversations(conversations);
   }
 
-  void sendMessage(final String text) {
-    messageProvider.addMessage(
+  Future sendMessage(final String text) async {
+    await messageProvider.addMessage(
         currentConversation.id, appDataService.identifier, text);
     if (!currentConversation.isGroup) {
       userProvider.ping(appDataService.identifier, currentConversation.idPeer);
     }
   }
 
-  void closeCurrentConversation() {
+  List<Conversation> closeCurrentConversation(List<Conversation> conversations) {
     final int index = conversations.indexOf(currentConversation);
     conversations.remove(currentConversation);
     if (conversations.isEmpty) {
@@ -85,10 +85,11 @@ class MessageService extends ChangeNotifier {
     } else {
       currentConversation = conversations[index];
     }
-    setConversations();
+    setConversations(conversations);
+    return conversations;
   }
 
-  void refreshPings() {
+  void refreshPings(List<Conversation> conversations) {
     pings = 0;
     for (Conversation conversation in conversations) {
       if (conversation.pings > 0) {

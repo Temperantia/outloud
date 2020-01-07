@@ -14,7 +14,7 @@ class MessageModel extends ChangeNotifier {
   Stream<List<Message>> streamMessages(String conversationId) {
     return getDataFromQuery(
         query: _api.querySubCollection(conversationId, conversationId,
-            orderBy: [OrderConstraint('timestamp', false)]),
+            orderBy: [OrderConstraint('timestamp', true)]),
         mapper: (final DocumentSnapshot messageDoc) =>
             Message.fromMap(messageDoc.data));
   }

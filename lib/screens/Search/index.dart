@@ -76,6 +76,7 @@ class _SearchState extends State<SearchScreen> {
         ageStart: ageStart,
         ageEnd: ageEnd,
         distance: distance);
+        
     Navigator.pushNamed(context, ResultsScreen.id, arguments: users);
   }
 }
