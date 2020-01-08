@@ -1,17 +1,17 @@
 import 'package:inclusive/classes/entity.dart';
 
-class Group implements Entity {
-  Group({this.id, this.name});
+class Group extends Entity {
+  Group({this.id, String name}) : super(name);
 
-  Group.fromMap(Map snapshot, String id)
+  Group.fromMap(Map<String, dynamic> snapshot, String id)
       : id = id ?? '',
-        name = snapshot['name'] ?? '';
+        super(snapshot['name'] as String);
 
   final String id;
-  final String name;
 
-  toJson() {
-    return {
+  Map<String, dynamic> toJson() {
+    return <String, dynamic>{
+      'id': id,
       'name': name,
     };
   }

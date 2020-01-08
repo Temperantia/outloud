@@ -5,7 +5,7 @@ import 'package:inclusive/widgets/background.dart';
 import 'package:inclusive/widgets/logo.dart';
 
 class RegisterScreen extends StatelessWidget {
-  static final String id = 'Register';
+  static const String id = 'Register';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -15,9 +15,9 @@ class RegisterScreen extends StatelessWidget {
                 decoration: background,
                 child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
+                    children: <Widget>[
                       logo(context),
-                      Column(children: [
+                      Column(children: <Widget>[
                         RaisedButton(
                             onPressed: () {
                               Navigator.of(context)

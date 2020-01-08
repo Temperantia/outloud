@@ -14,15 +14,15 @@ class MessageService extends ChangeNotifier {
   final MessageModel messageProvider = locator<MessageModel>();
 
   Conversation currentConversation;
-  /*
-  List<Conversation> conversations = [
-    Conversation('BHpAnkWabxJFoY1FbM57', 0),
-    Conversation('apmbMHvueWZDLeAOxaxI-cx0hEmwDTLWYy3COnvPL', 0),
-  ];*/
   int pings = 0;
 
   Future<List<Conversation>> getConversations() async {
-    List<Conversation> conversations = [];
+    final List<Conversation> conversations = <Conversation>[
+      /*
+    Conversation('BHpAnkWabxJFoY1FbM57', 0),
+    Conversation('apmbMHvueWZDLeAOxaxI-cx0hEmwDTLWYy3COnvPL', 0),
+    */
+    ];
 
     final SharedPreferences sharedPreferences =
         await SharedPreferences.getInstance();
@@ -31,7 +31,7 @@ class MessageService extends ChangeNotifier {
     final List<String> conversationLastReads =
         sharedPreferences.getStringList('conversationLastReads');
     if (conversationIDs == null || conversationLastReads == null) {
-      return List<Conversation>();
+      return conversations;
     }
     conversationIDs.asMap().forEach((final int index, final String id) =>
         conversations
@@ -44,30 +44,33 @@ class MessageService extends ChangeNotifier {
     return conversations;
   }
 
-  Future setConversations(conversations) async {
+  Future<void> setConversations(List<Conversation> conversations) async {
     final SharedPreferences sharedPreferences =
         await SharedPreferences.getInstance();
 
     final List<String> conversationIDs = conversations
         .map((final Conversation conversation) => conversation.id)
-        .toList().cast<String>();
+        .toList()
+        .cast<String>();
     sharedPreferences.setStringList('conversationIDs', conversationIDs);
 
     final List<String> conversationLastReads = conversations
         .map((final Conversation conversation) =>
             conversation.lastRead.toString())
-        .toList().cast<String>();
+        .toList()
+        .cast<String>();
     sharedPreferences.setStringList(
         'conversationLastReads', conversationLastReads);
   }
 
-  void changeConversation(final Conversation conversation, conversations) {
+  void changeConversation(
+      Conversation conversation, List<Conversation> conversations) {
     currentConversation = conversation;
     currentConversation.markAsRead();
     setConversations(conversations);
   }
 
-  Future sendMessage(final String text) async {
+  Future<void> sendMessage(String text) async {
     await messageProvider.addMessage(
         currentConversation.id, appDataService.identifier, text);
     if (!currentConversation.isGroup) {
@@ -75,7 +78,8 @@ class MessageService extends ChangeNotifier {
     }
   }
 
-  List<Conversation> closeCurrentConversation(List<Conversation> conversations) {
+  List<Conversation> closeCurrentConversation(
+      List<Conversation> conversations) {
     final int index = conversations.indexOf(currentConversation);
     conversations.remove(currentConversation);
     if (conversations.isEmpty) {
@@ -91,7 +95,7 @@ class MessageService extends ChangeNotifier {
 
   void refreshPings(List<Conversation> conversations) {
     pings = 0;
-    for (Conversation conversation in conversations) {
+    for (final Conversation conversation in conversations) {
       if (conversation.pings > 0) {
         ++pings;
       }

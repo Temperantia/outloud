@@ -8,9 +8,9 @@ import 'package:location_permissions/location_permissions.dart';
 import 'package:provider/provider.dart';
 
 class ResultsScreen extends StatefulWidget {
-  ResultsScreen(arguments) : users = arguments;
+  const ResultsScreen(this.users);
+  static const String id = 'Results';
   final List<User> users;
-  static final String id = 'Results';
   @override
   ResultScreenState createState() => ResultScreenState();
 }
@@ -21,30 +21,28 @@ class ResultScreenState extends State<ResultsScreen> {
     return Card(
         color: orange,
         child: Container(
-            padding: EdgeInsets.all(20.0),
+            padding: const EdgeInsets.all(20.0),
             child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
+                children: <Widget>[
                   Text(user.name, style: Theme.of(context).textTheme.title),
                   Container(
-                      child: Row(children: [
-                    Text('5'),
+                      child: Row(children: <Widget>[
+                    const Text('5'),
                     Icon(Icons.category),
-                    Text('in common')
+                    const Text('in common')
                   ])),
-                  ButtonBar(children: [
-                    IconButton(
-                      icon: Icon(Icons.add),
-                      onPressed: () {},
-                    )
+                  ButtonBar(children: <IconButton>[
+                    IconButton(icon: Icon(Icons.add), onPressed: () {})
                   ])
                 ])));
   }
 
-  osef() async {
-    var permission = await appDataService.getLocationPermissions();
+  Future<void> osef() async {
+    final PermissionStatus permission =
+        await appDataService.getLocationPermissions();
     if (permission == PermissionStatus.granted) {
-      Position position = await Geolocator()
+      final Position position = await Geolocator()
           .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
       print(position);
     }
@@ -59,7 +57,8 @@ class ResultScreenState extends State<ResultsScreen> {
         body: widget.users.isEmpty
             ? Container()
             : ListView.builder(
-                itemBuilder: (context, index) => buildUser(widget.users[index]),
+                itemBuilder: (BuildContext context, int index) =>
+                    buildUser(widget.users[index]),
                 itemCount: widget.users.length));
   }
 }

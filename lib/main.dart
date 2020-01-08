@@ -20,22 +20,17 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-        providers: [
-          ChangeNotifierProvider(
-            create: (_) => locator<UserModel>(),
-          ),
-          ChangeNotifierProvider(
-            create: (_) => locator<GroupModel>(),
-          ),
-          ChangeNotifierProvider(
-            create: (_) => locator<MessageModel>(),
-          ),
-          ChangeNotifierProvider(
-            create: (_) => locator<AppDataService>(),
-          ),
-          ChangeNotifierProvider(
-            create: (_) => locator<MessageService>(),
-          ),
+        providers: <ChangeNotifierProvider<dynamic>>[
+          ChangeNotifierProvider<UserModel>(
+              create: (_) => locator<UserModel>()),
+          ChangeNotifierProvider<GroupModel>(
+              create: (_) => locator<GroupModel>()),
+          ChangeNotifierProvider<MessageModel>(
+              create: (_) => locator<MessageModel>()),
+          ChangeNotifierProvider<AppDataService>(
+              create: (_) => locator<AppDataService>()),
+          ChangeNotifierProvider<MessageService>(
+              create: (_) => locator<MessageService>()),
         ],
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
@@ -43,9 +38,10 @@ class App extends StatelessWidget {
           title: 'Inclusive',
           initialRoute: LandingScreen.id,
           onGenerateRoute: (RouteSettings settings) {
-            final Function createRoute = routes[settings.name];
-            return MaterialPageRoute(
-                builder: (context) => createRoute(settings.arguments));
+            final Widget Function(dynamic) createRoute = routes[settings.name];
+            return MaterialPageRoute<Widget>(
+                builder: (BuildContext context) =>
+                    createRoute(settings.arguments));
           },
         ));
   }

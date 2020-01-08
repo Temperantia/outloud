@@ -1,13 +1,13 @@
 class Ping {
-  String id;
-  int value;
-
-  Ping.fromMap(Map snapshot, String id)
+  Ping.fromMap(Map<String, dynamic> snapshot, String id)
       : id = id ?? '',
-        value = snapshot['value'] ?? 0;
+        value = snapshot['value'] as int ?? 0;
 
-  toJson() {
-    return {
+  final String id;
+  final int value;
+
+  Map<String, dynamic> toJson() {
+    return <String, dynamic>{
       'id': id,
       'value': value,
     };

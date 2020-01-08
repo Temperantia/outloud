@@ -4,8 +4,7 @@ import 'package:inclusive/theme.dart';
 import 'package:inclusive/widgets/background.dart';
 import 'package:inclusive/widgets/logo.dart';
 
-class LoadingScreen extends StatelessWidget {
-  static final String id = 'Loading';
+class Loading extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -15,7 +14,7 @@ class LoadingScreen extends StatelessWidget {
           decoration: background,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
+            children: <Widget>[
               logo(context),
               CircularProgressIndicator(backgroundColor: orange),
             ],

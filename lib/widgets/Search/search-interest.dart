@@ -5,7 +5,7 @@ import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:inclusive/theme.dart';
 
 class SearchInterest extends StatefulWidget {
-  SearchInterest({this.onUpdate});
+  const SearchInterest({this.onUpdate});
 
   final Function onUpdate;
 
@@ -16,34 +16,37 @@ class SearchInterest extends StatefulWidget {
 }
 
 class SearchInterestState extends State<SearchInterest> {
-  List interests = [];
+  List<Item> interests = <Item>[];
   int _count = 0;
 
   @override
   Widget build(BuildContext context) {
-    return Row(children: [
+    return Row(children: <Widget>[
       Expanded(
-          child: TypeAheadField(suggestionsCallback: (pattern) {
-        List data = [
-          {'name': 'gay'},
-          {'name': 'lesbian'}
+          child: TypeAheadField<Map<String, String>>(
+              suggestionsCallback: (String pattern) {
+        List<Map<String, String>> data = <Map<String, String>>[
+          <String, String>{'name': 'gay'},
+          <String, String>{'name': 'lesbian'},
         ];
-        data =
-            data.where((var elem) => elem['name'].startsWith(pattern)).toList();
+        data = data
+            .where(
+                (Map<String, String> elem) => elem['name'].startsWith(pattern))
+            .toList();
         return data;
-      }, itemBuilder: (context, suggestion) {
+      }, itemBuilder: (BuildContext context, Map<String, String> suggestion) {
         return ListTile(
           leading: Icon(Icons.category),
           title: Text(suggestion['name'], style: TextStyle(color: orange)),
         );
-      }, onSuggestionSelected: (suggestion) {
+      }, onSuggestionSelected: (Map<String, String> suggestion) {
         setState(() {
           interests.add(Item(index: _count, title: suggestion['name']));
+          print(interests);
           ++_count;
         });
       })),
-      /*
-      if (interests.length > 0)
+      if (interests.isNotEmpty)
         Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20),
@@ -91,7 +94,6 @@ class SearchInterestState extends State<SearchInterest> {
               //suggestionTextColor: orange,
             ),*/
                 ))
-                */
     ]);
   }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:inclusive/classes/user.dart';
 import 'package:inclusive/models/user.dart';
 import 'package:inclusive/screens/Search/results.dart';
 import 'package:inclusive/widgets/Search/search-event.dart';
@@ -22,61 +23,60 @@ class _SearchState extends State<SearchScreen> {
   @override
   Widget build(BuildContext context) {
     userProvider = Provider.of<UserModel>(context);
-    return  Column(children: [
-            Container(
-                height: MediaQuery.of(context).size.height * 0.15,
-                child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      GestureDetector(
-                          onTap: () => setState(() => type = 'solo'),
-                          child: Container(
-                              width: 60,
-                              height: 60,
-                              decoration: BoxDecoration(
-                                  color: type == 'solo' ? orange : blue,
-                                  borderRadius: BorderRadius.circular(50)),
-                              padding: EdgeInsets.all(20),
-                              child: SvgPicture.asset('images/profile.svg',
-                                  color: white))),
-                      GestureDetector(
-                          onTap: () => setState(() => type = 'group'),
-                          child: Container(
-                              width: 60,
-                              height: 60,
-                              decoration: BoxDecoration(
-                                  color: type == 'group' ? orange : blue,
-                                  borderRadius: BorderRadius.circular(50)),
-                              padding: EdgeInsets.all(15),
-                              child: SvgPicture.asset('images/group.svg',
-                                  color: white))),
-                      GestureDetector(
-                          onTap: () => setState(() => type = 'event'),
-                          child: Container(
-                              width: 60,
-                              height: 60,
-                              decoration: BoxDecoration(
-                                  color: type == 'event' ? orange : blue,
-                                  borderRadius: BorderRadius.circular(50)),
-                              padding: EdgeInsets.all(15),
-                              child: SvgPicture.asset('images/event.svg',
-                                  color: white)))
-                    ])),
-            Container(
-                height: MediaQuery.of(context).size.height * 0.7,
-                child: type == 'solo'
-                    ? SearchSolo(onSearch: buildSoloResults)
-                    : type == 'group' ? SearchGroup() : SearchEvent())
-          ]);
+    return Column(children: <Widget>[
+      Container(
+          height: MediaQuery.of(context).size.height * 0.15,
+          child:
+              Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: <
+                  GestureDetector>[
+            GestureDetector(
+                onTap: () => setState(() => type = 'solo'),
+                child: Container(
+                    width: 60,
+                    height: 60,
+                    decoration: BoxDecoration(
+                        color: type == 'solo' ? orange : blue,
+                        borderRadius: BorderRadius.circular(50)),
+                    padding: const EdgeInsets.all(20),
+                    child:
+                        SvgPicture.asset('images/profile.svg', color: white))),
+            GestureDetector(
+                onTap: () => setState(() => type = 'group'),
+                child: Container(
+                    width: 60,
+                    height: 60,
+                    decoration: BoxDecoration(
+                        color: type == 'group' ? orange : blue,
+                        borderRadius: BorderRadius.circular(50)),
+                    padding: const EdgeInsets.all(15),
+                    child: SvgPicture.asset('images/group.svg', color: white))),
+            GestureDetector(
+                onTap: () => setState(() => type = 'event'),
+                child: Container(
+                    width: 60,
+                    height: 60,
+                    decoration: BoxDecoration(
+                        color: type == 'event' ? orange : blue,
+                        borderRadius: BorderRadius.circular(50)),
+                    padding: const EdgeInsets.all(15),
+                    child: SvgPicture.asset('images/event.svg', color: white)))
+          ])),
+      Container(
+          height: MediaQuery.of(context).size.height * 0.7,
+          child: type == 'solo'
+              ? SearchSolo(onSearch: buildSoloResults)
+              : type == 'group' ? SearchGroup() : SearchEvent())
+    ]);
   }
 
-  buildSoloResults(List<String> interests, int ageStart, int ageEnd, double distance) async {
-    var users = await userProvider.getUsers(
+  Future<void> buildSoloResults(
+      List<String> interests, int ageStart, int ageEnd, double distance) async {
+    final List<User> users = await userProvider.getUsers(
         interests: interests,
         ageStart: ageStart,
         ageEnd: ageEnd,
         distance: distance);
-        
+
     Navigator.pushNamed(context, ResultsScreen.id, arguments: users);
   }
 }

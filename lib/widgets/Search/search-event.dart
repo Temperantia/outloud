@@ -13,11 +13,11 @@ class SearchEvent extends StatefulWidget {
 }
 
 class SearchEventState extends State<SearchEvent> {
-  List interests = [];
+  List<dynamic> interests = <dynamic>[];
   DateTime currentDate;
   String selectedPeriod = 'Anytime';
   String selectedCustomPeriod = '';
-  List<String> periods = [
+  List<String> periods = <String>[
     'Anytime',
     'Today',
     'Tomorrow',
@@ -30,11 +30,11 @@ class SearchEventState extends State<SearchEvent> {
     return SingleChildScrollView(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
+        children: <Widget>[
           SearchInterest(
-              onUpdate: (List interests) =>
+              onUpdate: (List<dynamic> interests) =>
                   setState(() => this.interests = interests)),
-                  /*
+          /*
           buildPeriods(),
           CalendarCarousel(
             minSelectedDate: DateTime.now(),
@@ -49,8 +49,8 @@ class SearchEventState extends State<SearchEvent> {
           RaisedButton(
             onPressed: () {
               Scaffold.of(context).showSnackBar(
-                SnackBar(
-                  content: const Text('Processing Data'),
+                const SnackBar(
+                  content: Text('Processing Data'),
                 ),
               );
             },
@@ -65,11 +65,11 @@ class SearchEventState extends State<SearchEvent> {
   }
 
   Widget buildPeriods() {
-    List<Widget> periodWidgets = [];
+    final List<Widget> periodWidgets = <Widget>[];
 
     if (selectedPeriod != 'custom') {
-      for (String period in periods) {
-        periodWidgets.add(SizedBox(height: 10.0));
+      for (final String period in periods) {
+        periodWidgets.add(const SizedBox(height: 10.0));
 
         periodWidgets.add(ButtonText(
             width: 120.0,
@@ -78,23 +78,23 @@ class SearchEventState extends State<SearchEvent> {
             onTap: () => setState(() => selectedPeriod = period)));
       }
     }
-    periodWidgets.add(SizedBox(height: 10.0));
+    periodWidgets.add(const SizedBox(height: 10.0));
 
     periodWidgets.add(ButtonText(
         width: 120.0,
         text: 'Then when ?',
         isSelected: () => selectedPeriod == 'custom',
         onTap: () => setState(() => selectedPeriod = 'custom')));
-    periodWidgets.add(SizedBox(height: 10.0));
+    periodWidgets.add(const SizedBox(height: 10.0));
     if (selectedPeriod == 'custom') {
-      periodWidgets
-          .add(Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+      periodWidgets.add(
+          Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
         ButtonText(
             width: 120.0,
             text: 'Start',
             isSelected: () => selectedCustomPeriod == 'start',
             onTap: () => setState(() => selectedCustomPeriod = 'start')),
-        SizedBox(width: 10.0),
+        const SizedBox(width: 10.0),
         ButtonText(
             width: 120.0,
             text: 'End',

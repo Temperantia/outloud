@@ -5,10 +5,10 @@ import 'package:inclusive/models/user.dart';
 class Message {
   Message({this.idFrom, this.content, this.timestamp});
 
-  Message.fromMap(Map snapshot)
-      : idFrom = snapshot['idFrom'] ?? '',
-        content = snapshot['content'] ?? '',
-        timestamp = snapshot['timestamp'] ?? 0;
+  Message.fromMap(Map<String, dynamic> snapshot)
+      : idFrom = snapshot['idFrom'] as String ?? '',
+        content = snapshot['content'] as String ?? '',
+        timestamp = snapshot['timestamp'] as int ?? 0;
 
   final UserModel userProvider = locator<UserModel>();
   final String idFrom;
@@ -17,11 +17,11 @@ class Message {
   User author;
   String content;
 
-  toJson() {
-    return {
+  Map<String, dynamic> toJson() {
+    return <String, dynamic>{
       'idFrom': idFrom,
-      'content': content,
       'timestamp': timestamp,
+      'content': content,
     };
   }
 }

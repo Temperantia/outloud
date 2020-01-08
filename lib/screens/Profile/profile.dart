@@ -4,8 +4,9 @@ import 'package:inclusive/theme.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 
 class Profile extends StatelessWidget {
+  const Profile(this.user);
+
   final User user;
-  Profile(this.user);
 
   Divider divider() {
     return Divider(
@@ -59,17 +60,15 @@ class Profile extends StatelessWidget {
                 )),
           ],
         ),
-
-       new Swiper(
+        new Swiper(
           itemBuilder: (BuildContext context, int index) {
-              List<Object> images = List<Object>();
+            List<Object> images = List<Object>();
 
             //  final imageUrl = await imageLink.getDownloadUrl();
-              //Image.network(imageUrl.toString());
-              
+            //Image.network(imageUrl.toString());
+
             ;
-          
-          },                                                                                                                                                                                                                                                                                                                                                              
+          },
           itemCount: 10,
           itemWidth: 300.0,
           itemHeight: 200.0,

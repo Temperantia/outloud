@@ -1,4 +1,6 @@
-import 'package:inclusive/classes/message.dart';
+import 'package:inclusive/classes/entity.dart';
+import 'package:inclusive/classes/group_ping.dart';
+import 'package:inclusive/classes/message_list.dart';
 import 'package:inclusive/locator.dart';
 import 'package:inclusive/services/appdata.dart';
 import 'package:inclusive/models/group.dart';
@@ -21,14 +23,18 @@ class Conversation {
   final String id;
   bool isGroup;
   String idPeer;
-  dynamic peerData;
+  Entity peerData;
 
   int lastRead = 0;
-  List<Message> messages = [];
-  int pings;
+  int pings = 0;
+  MessageList messageList = MessageList();
 
+  @override
   String toString() {
-    return 'pings : ' + pings.toString() + ' messages : ' + messages.toString();
+    return 'pings : ' +
+        pings.toString() +
+        ' messages : ' +
+        messageList.toString();
   }
 
   String getPeerId(final String conversationId) {
@@ -36,18 +42,18 @@ class Conversation {
     return appDataService.identifier == ids[0] ? ids[1] : ids[0];
   }
 
-  Stream streamPeerInfo() {
+  Stream<Entity> streamPeerInfo() {
     if (isGroup) {
       return groupProvider.streamGroup(idPeer);
     }
     return userProvider.streamUser(idPeer);
   }
 
-  Stream<List<Message>> streamMessages() {
-    return messageProvider.streamMessages(id);
+  Stream<MessageList> streamMessageList() {
+    return messageProvider.streamMessageList(id);
   }
 
-  Stream<List<Message>> streamGroupPings() {
+  Stream<GroupPing> streamGroupPings() {
     return messageProvider.streamGroupPings(this, appDataService.identifier);
   }
 

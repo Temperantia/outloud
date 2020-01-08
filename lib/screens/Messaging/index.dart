@@ -11,7 +11,7 @@ import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 
 class MessagingScreen extends StatefulWidget {
-  MessagingScreen({Key key}) : super(key: key);
+  const MessagingScreen({Key key}) : super(key: key);
 
   @override
   MessagingState createState() => MessagingState();
@@ -33,28 +33,6 @@ class MessagingState extends State<MessagingScreen> {
 
   List<Conversation> conversations;
 
-  @override
-  Widget build(BuildContext context) {
-    appDataService = Provider.of<AppDataService>(context);
-    messageService = Provider.of<MessageService>(context);
-    userProvider = Provider.of<UserModel>(context);
-
-    conversations = Provider.of<List<Conversation>>(context);
-
-    return messageService.currentConversation == null
-        ? Center(
-            child: Padding(
-                padding: EdgeInsets.all(20.0),
-                child: Text('Swipe right to find someone to chat with',
-                    textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.title)))
-        : Column(children: [
-            buildConversationIcons(),
-            buildConversation(),
-            buildInput()
-          ]);
-  }
-
   void onChangeConversation(final Conversation conversation) {
     if (conversation == messageService.currentConversation) {
       return;
@@ -64,13 +42,13 @@ class MessagingState extends State<MessagingScreen> {
     });
   }
 
-  Future onSendMessage(final String text) async {
+  void onSendMessage(final String text) {
     if (text.trim() != '') {
       setState(() {
         textController.clear();
         messageService.sendMessage(text);
         listScrollController.animateTo(0.0,
-            duration: Duration(milliseconds: 300), curve: Curves.easeOut);
+            duration: const Duration(milliseconds: 300), curve: Curves.easeOut);
       });
     } else {
       Fluttertoast.showToast(msg: 'Nothing to send');
@@ -90,12 +68,12 @@ class MessagingState extends State<MessagingScreen> {
             constraints:
                 BoxConstraints(minWidth: MediaQuery.of(context).size.width),
             child: Padding(
-                padding: EdgeInsets.all(10.0),
+                padding: const EdgeInsets.all(10.0),
                 child: Row(children: buildIcons()))));
   }
 
   List<Widget> buildIcons() {
-    final List<Widget> icons = [];
+    final List<Widget> icons = <Widget>[];
 
     for (final Conversation conversation in conversations) {
       icons.add(GestureDetector(
@@ -114,8 +92,8 @@ class MessagingState extends State<MessagingScreen> {
                 ? orange
                 : Colors.transparent,
             borderRadius: BorderRadius.circular(90.0)),
-        padding: EdgeInsets.all(10.0),
-        margin: EdgeInsets.symmetric(horizontal: 10.0),
+        padding: const EdgeInsets.all(10.0),
+        margin: const EdgeInsets.symmetric(horizontal: 10.0),
         child: Icon(Icons.person, color: white));
     if (conversation.pings > 0) {
       if (messageService.currentConversation == conversation &&
@@ -136,20 +114,22 @@ class MessagingState extends State<MessagingScreen> {
 
   Widget buildConversation() {
     return Expanded(
-        child: Column(children: [
+        child: Column(children: <Widget>[
       buildBanner(),
       Expanded(
           child: ListView.builder(
               reverse: true,
               shrinkWrap: true,
-              itemBuilder: (context, index) => buildItem(index),
-              itemCount: messageService.currentConversation.messages.length,
+              itemBuilder: (BuildContext context, int index) =>
+                  buildItem(index),
+              itemCount: messageService
+                  .currentConversation.messageList.messages.length,
               controller: listScrollController))
     ]));
   }
 
   Widget buildBanner() {
-    return Row(children: [
+    return Row(children: <Widget>[
       Expanded(
           child: Container(
               decoration: BoxDecoration(color: orange),
@@ -163,15 +143,15 @@ class MessagingState extends State<MessagingScreen> {
   }
 
   Widget buildInput() {
-    return Row(children: [
+    return Row(children: <Widget>[
       Flexible(
           flex: 6,
           child: Padding(
-              padding: EdgeInsets.all(10.0),
+              padding: const EdgeInsets.all(10.0),
               child: TextField(controller: textController))),
       Material(
           child: Container(
-              margin: EdgeInsets.symmetric(horizontal: 8.0),
+              margin: const EdgeInsets.symmetric(horizontal: 8.0),
               child: IconButton(
                 icon: Icon(Icons.send),
                 onPressed: () => onSendMessage(textController.text),
@@ -182,11 +162,12 @@ class MessagingState extends State<MessagingScreen> {
   }
 
   Widget buildItem(int index) {
-    final Message message = messageService.currentConversation.messages[index];
+    final Message message =
+        messageService.currentConversation.messageList.messages[index];
     final DateTime messageDateTime =
         DateTime.fromMillisecondsSinceEpoch(message.timestamp);
     final String messageTime = messageTimeFormat.format(messageDateTime);
-    List<Widget> items = [];
+    final List<Widget> items = <Widget>[];
 
     if (index == 0 ||
         (lastMessageTime.day != messageDateTime.day ||
@@ -199,43 +180,46 @@ class MessagingState extends State<MessagingScreen> {
     Widget messageWidget;
     if (appDataService.identifier == message.idFrom) {
       messageWidget = Container(
-          margin: EdgeInsets.only(bottom: 10.0),
-          child: Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+          margin: const EdgeInsets.only(bottom: 10.0),
+          child:
+              Row(mainAxisAlignment: MainAxisAlignment.end, children: <Widget>[
             Text(messageTime, style: Theme.of(context).textTheme.caption),
             Flexible(
                 child: Container(
-              child: Text(
-                message.content,
-                style: TextStyle(color: white),
-              ),
-              padding: EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10.0),
-              decoration: BoxDecoration(
-                  color: orange, borderRadius: BorderRadius.circular(8.0)),
-              margin: EdgeInsets.only(left: 10.0, right: 10.0),
-            ))
+                    child: Text(
+                      message.content,
+                      style: TextStyle(color: white),
+                    ),
+                    padding: const EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10.0),
+                    decoration: BoxDecoration(
+                        color: orange,
+                        borderRadius: BorderRadius.circular(8.0)),
+                    margin: const EdgeInsets.only(left: 10.0, right: 10.0)))
           ]));
     } else {
       messageWidget = Container(
-          margin: EdgeInsets.only(bottom: 10.0),
-          child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-            Flexible(
-                child: Container(
-              child: Text(
-                message.content,
-                style: TextStyle(color: orange),
-              ),
-              padding: EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10.0),
-              decoration: BoxDecoration(
-                  color: white, borderRadius: BorderRadius.circular(8.0)),
-              margin: EdgeInsets.only(left: 10.0, right: 10.0),
-            )),
-            Text(messageTime, style: Theme.of(context).textTheme.caption)
-          ]));
+          margin: const EdgeInsets.only(bottom: 10.0),
+          child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                Flexible(
+                    child: Container(
+                  child: Text(
+                    message.content,
+                    style: TextStyle(color: orange),
+                  ),
+                  padding: const EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10.0),
+                  decoration: BoxDecoration(
+                      color: white, borderRadius: BorderRadius.circular(8.0)),
+                  margin: const EdgeInsets.only(left: 10.0, right: 10.0),
+                )),
+                Text(messageTime, style: Theme.of(context).textTheme.caption)
+              ]));
       if (messageService.currentConversation.isGroup &&
           (index == 0 || message.idFrom != lastMessage.idFrom)) {
         items.add(Container(
-            margin: EdgeInsets.only(left: 20.0),
-            child: Row(children: [
+            margin: const EdgeInsets.only(left: 20.0),
+            child: Row(children: <Widget>[
               Text(message.author == null ? 'Anonymous' : message.author.name,
                   style: Theme.of(context).textTheme.caption)
             ])));
@@ -246,5 +230,27 @@ class MessagingState extends State<MessagingScreen> {
     lastMessageTime = messageDateTime;
     lastMessage = message;
     return Column(children: items);
+  }
+
+  @override
+  Widget build(final BuildContext context) {
+    appDataService = Provider.of<AppDataService>(context);
+    messageService = Provider.of<MessageService>(context);
+    userProvider = Provider.of<UserModel>(context);
+
+    conversations = Provider.of<List<Conversation>>(context);
+
+    return conversations.isEmpty
+        ? Center(
+            child: Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Text('Swipe right to find someone to chat with',
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context).textTheme.title)))
+        : Column(children: <Widget>[
+            buildConversationIcons(),
+            buildConversation(),
+            buildInput()
+          ]);
   }
 }

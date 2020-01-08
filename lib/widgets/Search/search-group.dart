@@ -11,17 +11,21 @@ class SearchGroup extends StatefulWidget {
 }
 
 class SearchGroupState extends State<SearchGroup> {
-  List interests = [];
+  List<dynamic> interests = <dynamic>[];
   double _groupSize = 0;
-  List<String> _groupSizeLabels = const ['- 10 users', '10 - 50 users', '+ 50 users'];
+  final List<String> _groupSizeLabels = <String>[
+    '- 10 users',
+    '10 - 50 users',
+    '+ 50 users'
+  ];
 
   @override
   Widget build(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
+      children: <Widget>[
         SearchInterest(
-            onUpdate: (List interests) =>
+            onUpdate: (List<dynamic> interests) =>
                 setState(() => this.interests = interests)),
         SliderTheme(
           data: SliderTheme.of(context).copyWith(
@@ -47,8 +51,8 @@ class SearchGroupState extends State<SearchGroup> {
         RaisedButton(
           onPressed: () {
             Scaffold.of(context).showSnackBar(
-              SnackBar(
-                content: const Text('Processing Data'),
+              const SnackBar(
+                content: Text('Processing Data'),
               ),
             );
           },

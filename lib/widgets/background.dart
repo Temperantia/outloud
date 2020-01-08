@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
-final background = const BoxDecoration(
-  gradient: const LinearGradient(
+const BoxDecoration background = BoxDecoration(
+  gradient: LinearGradient(
     begin: Alignment.topRight,
     end: Alignment.bottomLeft,
-    colors: [
-      const Color(0xFF185782),
-      const Color(0x55185782),
+    colors: <Color>[
+      Color(0xFF185782),
+      Color(0x55185782),
     ],
   ),
 );

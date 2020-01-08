@@ -15,7 +15,8 @@ class AppDataService extends ChangeNotifier {
 
   static Future<bool> checkInternet() async {
     try {
-      final result = await InternetAddress.lookup('google.com');
+      final List<InternetAddress> result =
+          await InternetAddress.lookup('google.com');
       if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
         return true;
       }
@@ -27,10 +28,10 @@ class AppDataService extends ChangeNotifier {
 
   Stream<User> getUser() async* {
     if (Platform.isAndroid) {
-      AndroidDeviceInfo build = await deviceInfoPlugin.androidInfo;
+      final AndroidDeviceInfo build = await deviceInfoPlugin.androidInfo;
       identifier = build.androidId;
     } else if (Platform.isIOS) {
-      IosDeviceInfo data = await deviceInfoPlugin.iosInfo;
+      final IosDeviceInfo data = await deviceInfoPlugin.iosInfo;
       identifier = data.identifierForVendor;
     }
     // testing purpose

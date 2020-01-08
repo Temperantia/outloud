@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:inclusive/theme.dart';
 
 class ButtonText extends StatefulWidget {
+  const ButtonText({this.text, this.width, this.isSelected, this.onTap});
+
   final String text;
   final double width;
-  final Function isSelected;
+  final bool Function() isSelected;
   final Function onTap;
-
-  ButtonText({this.text, this.width, this.isSelected, this.onTap});
 
   @override
   ButtonTextState createState() {
@@ -19,7 +19,7 @@ class ButtonTextState extends State<ButtonText> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: widget.onTap,
+      onTap: () => widget.onTap(),
       child: Container(
         width: widget.width,
         decoration: BoxDecoration(

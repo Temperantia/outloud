@@ -2,7 +2,6 @@ import 'package:badges/badges.dart';
 import 'package:bubble_bottom_bar/bubble_bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
-import 'package:inclusive/classes/conversation.dart';
 import 'package:inclusive/classes/user.dart';
 import 'package:inclusive/models/user.dart';
 import 'package:inclusive/screens/Messaging/index.dart';
@@ -16,7 +15,7 @@ import 'package:inclusive/widgets/background.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
-  static final String id = 'Home';
+  static const String id = 'Home';
   @override
   _HomeState createState() => _HomeState();
 }
@@ -54,12 +53,13 @@ class _HomeState extends State<HomeScreen> with SingleTickerProviderStateMixin {
     return Container(
         decoration: background,
         child: TabBarView(
-            physics: NeverScrollableScrollPhysics(),
+            physics: const NeverScrollableScrollPhysics(),
             controller: tabController,
-            children: [
-              editProfile
-                  ? ProfileEditionScreen(user, onSaveProfile)
-                  : Profile(user),
+            children: <Widget>[
+              if (editProfile)
+                ProfileEditionScreen(user, onSaveProfile)
+              else
+                Profile(user),
               MessagingScreen(key: messaging),
               SearchScreen(),
               SearchScreen(),
@@ -75,7 +75,7 @@ class _HomeState extends State<HomeScreen> with SingleTickerProviderStateMixin {
   }
 
   List<SpeedDialChild> buildActions() {
-    final List<SpeedDialChild> actions = [];
+    final List<SpeedDialChild> actions = <SpeedDialChild>[];
 
     if (currentPage == 0) {
       actions.add(SpeedDialChild(
@@ -92,7 +92,7 @@ class _HomeState extends State<HomeScreen> with SingleTickerProviderStateMixin {
   }
 
   List<BubbleBottomBarItem> buildItems() {
-    return [
+    return <BubbleBottomBarItem>[
       BubbleBottomBarItem(
           icon: Icon(Icons.person, color: orange),
           activeIcon: Icon(Icons.person, color: white),

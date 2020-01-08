@@ -9,9 +9,9 @@ import 'package:provider/provider.dart';
 import 'package:inclusive/models/user.dart';
 
 class Register3Screen extends StatefulWidget {
-  Register3Screen(this.arguments);
+  const Register3Screen(this.arguments);
+  static const String id = 'Register3';
   final Map<String, String> arguments;
-  static final String id = 'Register3';
 
   @override
   Register3ScreenState createState() {
@@ -25,7 +25,7 @@ class Register3ScreenState extends State<Register3Screen> {
   UserModel userProvider;
   DateTime selected;
 
-  Future submit() async {
+  Future<void> submit() async {
     final User user = User(
       id: appDataService.identifier,
       name: widget.arguments['name'],
@@ -33,7 +33,8 @@ class Register3ScreenState extends State<Register3Screen> {
       birthDate: selected,
     );
     await userProvider.createUser(user);
-    Navigator.pushNamedAndRemoveUntil(context, HomeScreen.id, (route) => false);
+    Navigator.pushNamedAndRemoveUntil(
+        context, HomeScreen.id, (Route<dynamic> route) => false);
   }
 
   @override
@@ -46,18 +47,20 @@ class Register3ScreenState extends State<Register3Screen> {
         appBar: AppBar(),
         body: Container(
             decoration: background,
-            child:
-                Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-              BirthdatePicker(
-                  initial: selected,
-                  onChange: (dateTime) => selected = dateTime,
-                  theme: DateTimePickerTheme(title: Text('Birthdate'))),
-              Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 16.0),
-                  child: RaisedButton(
-                      child: Text('Get me in already',
-                          style: Theme.of(context).textTheme.caption),
-                      onPressed: () => submit()))
-            ])));
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  BirthdatePicker(
+                      initial: selected,
+                      onChange: (DateTime dateTime) => selected = dateTime,
+                      theme:
+                          const DateTimePickerTheme(title: Text('Birthdate'))),
+                  Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 16.0),
+                      child: RaisedButton(
+                          child: Text('Get me in already',
+                              style: Theme.of(context).textTheme.caption),
+                          onPressed: () => submit()))
+                ])));
   }
 }

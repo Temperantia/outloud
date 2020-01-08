@@ -8,11 +8,10 @@ import 'package:inclusive/widgets/birthdate-picker.dart';
 import 'package:provider/provider.dart';
 
 class ProfileEditionScreen extends StatefulWidget {
+  ProfileEditionScreen(this.user, this.onSave) : initialUser = user.toJson();
   final User user;
   final Function onSave;
   final dynamic initialUser;
-
-  ProfileEditionScreen(this.user, this.onSave) : initialUser = user.toJson();
 
   @override
   ProfileEditionState createState() => ProfileEditionState();
@@ -22,7 +21,7 @@ class ProfileEditionState extends State<ProfileEditionScreen> {
   UserModel userProvider;
   String editing = '';
   bool isNameTaken = false;
-  List<Item> interests = [];
+  List<Item> interests = <Item>[];
   int count = 0;
   final TextEditingController editName = TextEditingController();
   final TextEditingController editLocation = TextEditingController();
@@ -34,8 +33,8 @@ class ProfileEditionState extends State<ProfileEditionScreen> {
     editName.text = widget.user.name;
     editLocation.text = widget.user.location;
     editDescription.text = widget.user.description;
-    interests = widget.user.interests.map((interest) {
-      Item item = Item(index: count, title: interest);
+    interests = widget.user.interests.map<Item>((dynamic interest) {
+      final Item item = Item(index: count, title: interest as String);
       ++count;
       return item;
     }).toList();
@@ -47,16 +46,15 @@ class ProfileEditionState extends State<ProfileEditionScreen> {
     return SingleChildScrollView(
         child: Card(
             child: Column(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        buildActions(),
-        buildUserInfo(),
-        buildDivider(),
-        buildUserInterests(),
-        buildDivider(),
-        buildUserAbout(),
-      ],
-    )));
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+          buildActions(),
+          buildUserInfo(),
+          buildDivider(),
+          buildUserInterests(),
+          buildDivider(),
+          buildUserAbout(),
+        ])));
   }
 
   Divider buildDivider() {
@@ -70,41 +68,43 @@ class ProfileEditionState extends State<ProfileEditionScreen> {
   }
 
   Widget buildActions() {
-    return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-      Expanded(
-          child: Text('Touch something to edit',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontWeight: FontWeight.w500,
-                fontSize: 15,
-                color: orangeLight,
-              ))),
-      IconButton(
-          color: orange,
-          icon: Icon(Icons.done),
-          onPressed: () {
-            userProvider.getUserWithName(widget.user.name).then((User user) {
-              if (widget.user.name != '' &&
-                  widget.user.name != widget.initialUser['name'] &&
-                  user != null) {
-                setState(() {
-                  isNameTaken = true;
-                });
-              } else {
-                widget.onSave(widget.user);
-              }
-            });
-          })
-    ]);
+    return Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          Expanded(
+              child: Text('Touch something to edit',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 15,
+                    color: orangeLight,
+                  ))),
+          IconButton(
+              color: orange,
+              icon: Icon(Icons.done),
+              onPressed: () async {
+                final User user =
+                    await userProvider.getUserWithName(widget.user.name);
+                if (widget.user.name != '' &&
+                    widget.user.name != widget.initialUser['name'] &&
+                    user != null) {
+                  setState(() {
+                    isNameTaken = true;
+                  });
+                } else {
+                  widget.onSave(widget.user);
+                }
+              })
+        ]);
   }
 
   Widget buildUserInfo() {
     return ListView(
-      shrinkWrap: true,
-      padding: const EdgeInsets.all(0.0),
-      children: [
-        editing == 'name'
-            ? TextField(
+        shrinkWrap: true,
+        padding: const EdgeInsets.all(0.0),
+        children: <Widget>[
+          if (editing == 'name')
+            TextField(
                 autofocus: true,
                 onEditingComplete: () {
                   setState(() {
@@ -117,31 +117,31 @@ class ProfileEditionState extends State<ProfileEditionScreen> {
                 style: TextStyle(
                   fontSize: 32,
                   color: orange,
-                ),
-              )
-            : GestureDetector(
+                ))
+          else
+            GestureDetector(
                 onTap: () => setState(() => editing = 'name'),
                 child: Text(
-                  widget.user.name == ''
-                      ? 'Insert name here'
-                      : widget.user.name,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 32,
-                    color: orange,
-                  ),
-                )),
-        if (isNameTaken) Text('Name is already taken'),
-        editing == 'age'
-            ? BirthdatePicker(
+                    widget.user.name == ''
+                        ? 'Insert name here'
+                        : widget.user.name,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 32,
+                      color: orange,
+                    ))),
+          if (isNameTaken) const Text('Name is already taken'),
+          if (editing == 'age')
+            BirthdatePicker(
                 initial: widget.user.birthDate,
-                onChange: (birthDate) {
+                onChange: (DateTime birthDate) {
                   setState(() => widget.user.birthDate = birthDate);
                 },
-                theme: DateTimePickerTheme(
+                theme: const DateTimePickerTheme(
                   title: Text('BirthDate'),
                 ))
-            : GestureDetector(
+          else
+            GestureDetector(
                 onTap: () => setState(() => editing = 'age'),
                 child: Text(
                   widget.user.getAge().toString() + ' years old',
@@ -151,8 +151,8 @@ class ProfileEditionState extends State<ProfileEditionScreen> {
                     color: orange,
                   ),
                 )),
-        editing == 'location'
-            ? TextField(
+          if (editing == 'location')
+            TextField(
                 autofocus: true,
                 onEditingComplete: () {
                   setState(() => widget.user.location = editLocation.text);
@@ -162,22 +162,20 @@ class ProfileEditionState extends State<ProfileEditionScreen> {
                 style: TextStyle(
                   fontSize: 18,
                   color: orange,
-                ),
-              )
-            : GestureDetector(
+                ))
+          else
+            GestureDetector(
                 onTap: () => setState(() => editing = 'location'),
                 child: Text(
-                  widget.user.location == null || widget.user.location == ''
-                      ? 'Insert location there'
-                      : widget.user.location,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 18,
-                    color: orange,
-                  ),
-                )),
-      ],
-    );
+                    widget.user.location == null || widget.user.location == ''
+                        ? 'Insert location there'
+                        : widget.user.location,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: orange,
+                    )))
+        ]);
   }
 
   Widget buildUserInterests() {
@@ -192,7 +190,7 @@ class ProfileEditionState extends State<ProfileEditionScreen> {
       subtitle: editing == 'interests'
           ? Tags(
               itemBuilder: (int index) {
-                final item = interests[index];
+                final Item item = interests[index];
 
                 return ItemTags(
                   activeColor: blue,
@@ -235,7 +233,7 @@ class ProfileEditionState extends State<ProfileEditionScreen> {
                 },
                 textStyle: TextStyle(
                     fontWeight: FontWeight.w500, fontSize: 15, color: orange),
-                suggestions: const ['gay', 'lesbian', 'gay community'],
+                suggestions: const <String>['gay', 'lesbian', 'gay community'],
                 suggestionTextColor: orange,
               ),
             )
@@ -272,7 +270,7 @@ class ProfileEditionState extends State<ProfileEditionScreen> {
       subtitle: editing == 'description'
           ? TextField(
               autofocus: true,
-              onChanged: (text) {
+              onChanged: (String text) {
                 setState(() => widget.user.description = text);
               },
               controller: editDescription,

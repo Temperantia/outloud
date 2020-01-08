@@ -1,3 +1,4 @@
-abstract class Entity {
-  
+class Entity {
+  Entity(this.name);
+  String name;
 }

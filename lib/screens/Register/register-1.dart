@@ -7,7 +7,7 @@ import 'package:inclusive/widgets/background.dart';
 import 'package:provider/provider.dart';
 
 class Register1Screen extends StatefulWidget {
-  static final String id = 'Register1';
+  static const String id = 'Register1';
   @override
   Register1ScreenState createState() {
     return Register1ScreenState();
@@ -19,7 +19,7 @@ class Register1ScreenState extends State<Register1Screen> {
   UserModel userProvider;
   bool isTakenUsername = false;
 
-  Future submit() async {
+  Future<void> submit() async {
     FocusScope.of(context).unfocus();
     final String name = controller.text.trim();
     if (name == '') {
@@ -43,32 +43,33 @@ class Register1ScreenState extends State<Register1Screen> {
         appBar: AppBar(),
         body: Container(
             decoration: background,
-            child:
-                Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-              Container(
-                padding: const EdgeInsets.all(10),
-                child: TextField(
-                  decoration: InputDecoration(
-                    hintText: 'John•ane',
-                    labelText: 'Username',
-                  ),
-                  controller: controller,
-                  onTap: () => isTakenUsername = false,
-                ),
-              ),
-              if (isTakenUsername)
-                Row(children: [
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
                   Container(
-                      padding: EdgeInsets.only(left: 10.0),
-                      child: Text('Name is taken already',
-                          style: TextStyle(color: red)))
-                ]),
-              Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 16.0),
-                  child: RaisedButton(
-                      onPressed: () => submit(),
-                      child: Text('Keep going',
-                          style: Theme.of(context).textTheme.caption)))
-            ])));
+                    padding: const EdgeInsets.all(10),
+                    child: TextField(
+                      decoration: const InputDecoration(
+                        hintText: 'John•ane',
+                        labelText: 'Username',
+                      ),
+                      controller: controller,
+                      onTap: () => isTakenUsername = false,
+                    ),
+                  ),
+                  if (isTakenUsername)
+                    Row(children: <Widget>[
+                      Container(
+                          padding: const EdgeInsets.only(left: 10.0),
+                          child: Text('Name is taken already',
+                              style: TextStyle(color: red)))
+                    ]),
+                  Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 16.0),
+                      child: RaisedButton(
+                          onPressed: () => submit(),
+                          child: Text('Keep going',
+                              style: Theme.of(context).textTheme.caption)))
+                ])));
   }
 }

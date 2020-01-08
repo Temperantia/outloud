@@ -8,8 +8,8 @@ import 'package:provider/provider.dart';
 import 'package:validate/validate.dart';
 
 class Register2Screen extends StatefulWidget {
-  Register2Screen(String arguments) : name = arguments;
-  static final String id = 'Register2';
+  const Register2Screen(this.name);
+  static const String id = 'Register2';
   final String name;
 
   @override
@@ -23,7 +23,7 @@ class Register2ScreenState extends State<Register2Screen> {
   UserModel userProvider;
   String error = '';
 
-  Future submit() async {
+  Future<void> submit() async {
     FocusScope.of(context).unfocus();
     final String email = controller.text.trim();
 
@@ -40,7 +40,7 @@ class Register2ScreenState extends State<Register2Screen> {
       return;
     }
     Navigator.pushNamed(context, Register3Screen.id,
-        arguments: {'name': widget.name, 'email': email});
+        arguments: <String, String>{'name': widget.name, 'email': email});
   }
 
   @override
@@ -51,30 +51,31 @@ class Register2ScreenState extends State<Register2Screen> {
         appBar: AppBar(),
         body: Container(
             decoration: background,
-            child:
-                Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-              Container(
-                  padding: const EdgeInsets.all(10),
-                  child: TextField(
-                    decoration: const InputDecoration(
-                      hintText: 'John•ane@gmail.com',
-                      labelText: 'Email',
-                    ),
-                    controller: controller,
-                    onTap: () => error = '',
-                  )),
-              if (error != '')
-                Row(children: [
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
                   Container(
-                      padding: EdgeInsets.only(left: 10.0),
-                      child: Text(error, style: TextStyle(color: red)))
-                ]),
-              Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 16.0),
-                  child: RaisedButton(
-                      onPressed: () => submit(),
-                      child: Text('Keep going',
-                          style: Theme.of(context).textTheme.caption)))
-            ])));
+                      padding: const EdgeInsets.all(10),
+                      child: TextField(
+                        decoration: const InputDecoration(
+                          hintText: 'John•ane@gmail.com',
+                          labelText: 'Email',
+                        ),
+                        controller: controller,
+                        onTap: () => error = '',
+                      )),
+                  if (error != '')
+                    Row(children: <Widget>[
+                      Container(
+                          padding: const EdgeInsets.only(left: 10.0),
+                          child: Text(error, style: TextStyle(color: red)))
+                    ]),
+                  Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 16.0),
+                      child: RaisedButton(
+                          onPressed: () => submit(),
+                          child: Text('Keep going',
+                              style: Theme.of(context).textTheme.caption)))
+                ])));
   }
 }

@@ -1,15 +1,17 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:inclusive/classes/entity.dart';
+import 'package:inclusive/classes/group_ping.dart';
+import 'package:inclusive/classes/message_list.dart';
 import 'package:inclusive/classes/user.dart';
 import 'package:inclusive/models/user.dart';
 import 'package:inclusive/screens/Register/index.dart';
 
 import 'package:inclusive/screens/home.dart';
-import 'package:inclusive/screens/loading.dart';
 import 'package:inclusive/services/appdata.dart';
 import 'package:inclusive/services/message.dart';
+import 'package:inclusive/widgets/loading.dart';
 import 'package:provider/provider.dart';
-import 'dart:async';
 
 import 'package:inclusive/classes/conversation.dart';
 import 'package:inclusive/classes/message.dart';
@@ -20,7 +22,7 @@ import 'package:location_permissions/location_permissions.dart';
 import 'package:rxdart/rxdart.dart';
 
 class LandingScreen extends StatefulWidget {
-  static final String id = 'Landing';
+  static const String id = 'Landing';
   @override
   _LandingState createState() => _LandingState();
 }
@@ -38,11 +40,11 @@ class _LandingState extends State<LandingScreen>
   void initState() {
     super.initState();
     AppDataService.checkInternet()
-        .then((connected) => setState(() => this.connected = connected));
+        .then((bool connected) => setState(() => this.connected = connected));
   }
 
   Widget getAppData() {
-    return MultiProvider(providers: [
+    return MultiProvider(providers: <SingleChildCloneableWidget>[
       FutureProvider<PermissionStatus>.value(
           value: appDataService.getLocationPermissions()),
       FutureProvider<List<Conversation>>.value(
@@ -52,18 +54,23 @@ class _LandingState extends State<LandingScreen>
   }
 
   Widget streamUserPings() {
-    return Consumer<User>(builder: (context, user, widget) {
+    return Consumer<User>(
+        builder: (BuildContext context, User user, Widget widget) {
       if (user == null) {
         return RegisterScreen();
       }
       return StreamProvider<List<Ping>>.value(
           value: user.streamPings(),
-          child: Consumer2<List<Conversation>, List<Ping>>(
-              builder: (context, conversations, pings, widget) {
+          child: Consumer2<List<Conversation>, List<Ping>>(builder:
+              (BuildContext context, List<Conversation> conversations,
+                  List<Ping> pings, Widget widget) {
             if (conversations == null || pings == null) {
-              return LoadingScreen();
+              return Loading();
             }
-            for (Ping ping in pings) {
+            if (conversations.isEmpty) {
+              return HomeScreen();
+            }
+            for (final Ping ping in pings) {
               final int index = conversations.indexWhere(
                   (final Conversation conversation) =>
                       conversation.idPeer == ping.id);
@@ -79,94 +86,102 @@ class _LandingState extends State<LandingScreen>
     });
   }
 
-  Widget streamConversations(conversations) {
-    List<Stream> messageStreams = [];
-    List<Stream> peerInfoStreams = [];
-    List<Stream> groupPingStreams = [];
+  Widget streamConversations(List<Conversation> conversations) {
+    final List<Stream<MessageList>> messageStreams = <Stream<MessageList>>[];
+    final List<Stream<Entity>> peerInfoStreams = <Stream<Entity>>[];
+    final List<Stream<GroupPing>> groupPingStreams = <Stream<GroupPing>>[];
 
-    if (conversations.isEmpty) {
-      return HomeScreen();
-    }
-    for (Conversation conversation in conversations) {
-      messageStreams.add(conversation.streamMessages());
+    for (final Conversation conversation in conversations) {
+      messageStreams.add(conversation.streamMessageList());
       peerInfoStreams.add(conversation.streamPeerInfo());
       if (conversation.isGroup) {
         groupPingStreams.add(conversation.streamGroupPings());
       }
     }
     return MultiProvider(
-        providers: [
+        providers: <StreamProvider<dynamic>>[
           streamMessages(conversations, messageStreams),
           streamPeerInfo(conversations, peerInfoStreams),
           streamGroupPings(conversations, groupPingStreams),
         ],
-        child:
-            Consumer<List<List<Message>>>(builder: (context, messages, widget) {
-          if (messages == null) {
-            return LoadingScreen();
+        child: Consumer<List<MessageList>>(builder: (BuildContext context,
+            List<MessageList> messageLists, Widget widget) {
+          if (messageLists == null) {
+            return Loading();
           }
           Provider.of<List<Entity>>(context);
-          Provider.of<List<Ping>>(context);
+          Provider.of<List<GroupPing>>(context);
           messageService.refreshPings(conversations);
 
-          getGroupUsers(conversations, messages);
+          getGroupUsers(conversations, messageLists);
           return HomeScreen();
         }));
   }
 
-  StreamProvider<List<List<Message>>> streamMessages(
-      conversations, messageStreams) {
-    return StreamProvider<List<List<Message>>>.value(
-        value: CombineLatestStream(messageStreams, (List<dynamic> messages) {
+  StreamProvider<List<MessageList>> streamMessages(
+      List<Conversation> conversations,
+      List<Stream<MessageList>> messageStreams) {
+    return StreamProvider<List<MessageList>>.value(
+        value: CombineLatestStream<MessageList, List<MessageList>>(
+            messageStreams, (List<MessageList> messageList) {
       int index = 0;
-      for (Conversation conv in conversations) {
-        conv.messages = messages[index];
+      for (final Conversation conv in conversations) {
+        conv.messageList = messageList[index];
         ++index;
       }
-      return messages.cast<List<Message>>();
+      return messageList;
     }));
   }
 
-  StreamProvider<List<Entity>> streamPeerInfo(conversations, peerInfoStreams) {
+  StreamProvider<List<Entity>> streamPeerInfo(
+      List<Conversation> conversations, List<Stream<Entity>> peerInfoStreams) {
     return StreamProvider<List<Entity>>.value(
-        value: CombineLatestStream(peerInfoStreams, (List<dynamic> peerInfo) {
+        value: CombineLatestStream<Entity, List<Entity>>(peerInfoStreams,
+            (List<Entity> peerInfo) {
       int index = 0;
-      for (Conversation conv in conversations) {
-        conv.peerData = peerInfo[index];
+      for (final Conversation conversation in conversations) {
+        conversation.peerData = peerInfo[index];
         ++index;
       }
-      return peerInfo.cast<Entity>();
+      return peerInfo;
     }));
   }
 
-  StreamProvider streamGroupPings(conversations, groupPingStreams) {
-    return StreamProvider<List<Ping>>.value(
-        value: CombineLatestStream(groupPingStreams, (List<dynamic> pings) {
+  StreamProvider<List<GroupPing>> streamGroupPings(
+      List<Conversation> conversations,
+      List<Stream<GroupPing>> groupPingStreams) {
+    return StreamProvider<List<GroupPing>>.value(
+        value: CombineLatestStream<GroupPing, List<GroupPing>>(groupPingStreams,
+            (List<GroupPing> pings) {
       int index = 0;
-      for (Conversation conv in conversations) {
-        if (conv.isGroup) {
-          conv.pings = pings[index].length;
+      for (final Conversation conversation in conversations) {
+        if (conversation.isGroup) {
+          conversation.pings = pings[index].value;
           ++index;
         }
       }
-      return pings.cast<Ping>();
+      return pings;
     }));
   }
 
-  Future<List<Conversation>> getGroupUsers(conversations, messages) async {
+  Future<List<Conversation>> getGroupUsers(
+      List<Conversation> conversations, List<MessageList> messageLists) async {
     int index = 0;
-    for (Conversation conversation in conversations) {
+    for (final Conversation conversation in conversations) {
       if (conversation.isGroup) {
-        List<Message> m = messages[index];
-        List<String> ids =
-            m.map((mess) => mess.idFrom).toSet().toList().cast<String>();
+        final List<Message> messages = messageLists[index].messages;
+        final List<String> ids = messages
+            .map<String>((Message message) => message.idFrom)
+            .toSet()
+            .toList();
         List<User> users =
-            await Future.wait(ids.map((id) => userProvider.getUser(id)));
-        users = List.from(users);
-        users.removeWhere((user) => user == null);
+            await Future.wait(ids.map((String id) => userProvider.getUser(id)));
+        users = List<User>.from(users);
+        users.removeWhere((User user) => user == null);
 
-        for (Message mess in conversation.messages) {
-          int index = users.indexWhere((user) => user.id == mess.idFrom);
+        for (final Message mess in conversation.messageList.messages) {
+          final int index =
+              users.indexWhere((User user) => user.id == mess.idFrom);
           mess.author = index == -1 ? null : users[index];
         }
       }
@@ -183,14 +198,14 @@ class _LandingState extends State<LandingScreen>
     userProvider = Provider.of<UserModel>(context);
 
     if (!connected) {
-      return LoadingScreen();
+      return Loading();
     }
 
-    return FutureBuilder(
+    return FutureBuilder<User>(
         future: appDataService.getUser().first,
-        builder: (context, snap) {
+        builder: (BuildContext context, AsyncSnapshot<User> snap) {
           if (snap.connectionState == ConnectionState.waiting) {
-            return LoadingScreen();
+            return Loading();
           }
           return getAppData();
         });

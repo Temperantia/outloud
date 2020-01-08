@@ -18,7 +18,7 @@ ThemeData theme = ThemeData(
     ),
   ),
   primaryColor: orange,
-  sliderTheme: SliderThemeData(
+  sliderTheme: const SliderThemeData(
     showValueIndicator: ShowValueIndicator.always,
   ),
   textTheme: TextTheme(
