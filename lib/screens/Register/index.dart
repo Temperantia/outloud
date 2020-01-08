@@ -14,20 +14,18 @@ class RegisterScreen extends StatelessWidget {
                 width: MediaQuery.of(context).size.width,
                 decoration: background,
                 child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       logo(context),
-                      Column(children: <Widget>[
-                        RaisedButton(
-                            onPressed: () {
-                              Navigator.of(context)
-                                  .pushNamed(Register1Screen.id);
-                            },
-                            child: Text(
-                              'GET STARTED',
-                              style: Theme.of(context).textTheme.title,
-                            ))
-                      ])
+                      const SizedBox(height: 50.0),
+                      RaisedButton(
+                          onPressed: () {
+                            Navigator.of(context).pushNamed(Register1Screen.id);
+                          },
+                          child: Text(
+                            'GET STARTED',
+                            style: Theme.of(context).textTheme.title,
+                          ))
                     ]))));
   }
 }

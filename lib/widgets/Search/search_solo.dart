@@ -63,7 +63,7 @@ class SearchSoloState extends State<SearchSolo> {
                               ),
                               padding: const EdgeInsets.all(20),
                               child: Text(
-                                'Local',
+                                'Near',
                                 style: Theme.of(context).textTheme.caption,
                               ))),
                       GestureDetector(
@@ -79,7 +79,7 @@ class SearchSoloState extends State<SearchSolo> {
                               ),
                               padding: const EdgeInsets.all(20),
                               child: Text(
-                                'Global',
+                                'Far',
                                 style: Theme.of(context).textTheme.caption,
                               )))
                     ]),

@@ -26,8 +26,9 @@ class SearchInterestState extends State<SearchInterest> {
           child: TypeAheadField<Map<String, String>>(
               suggestionsCallback: (String pattern) {
         List<Map<String, String>> data = <Map<String, String>>[
-          <String, String>{'name': 'gay'},
-          <String, String>{'name': 'lesbian'},
+          <String, String>{'name': 'gay community'},
+          <String, String>{'name': 'cookies'},
+          <String, String>{'name': 'body painting'},
         ];
         data = data
             .where(

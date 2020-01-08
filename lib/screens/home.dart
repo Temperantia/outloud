@@ -62,8 +62,8 @@ class _HomeState extends State<HomeScreen> with SingleTickerProviderStateMixin {
                 Profile(user),
               MessagingScreen(key: messaging),
               SearchScreen(),
-              SearchScreen(),
-              SearchScreen(),
+              const Center(child: Text('Coming soon')),
+              const Center(child: Text('Coming soon')),
             ]));
   }
 
