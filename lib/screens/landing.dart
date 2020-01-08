@@ -1,25 +1,22 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:location_permissions/location_permissions.dart';
+import 'package:rxdart/rxdart.dart';
+
 import 'package:inclusive/classes/entity.dart';
 import 'package:inclusive/classes/group_ping.dart';
 import 'package:inclusive/classes/message_list.dart';
 import 'package:inclusive/classes/user.dart';
 import 'package:inclusive/models/user.dart';
 import 'package:inclusive/screens/Register/index.dart';
-
 import 'package:inclusive/screens/home.dart';
-import 'package:inclusive/services/appdata.dart';
+import 'package:inclusive/services/app_data.dart';
 import 'package:inclusive/services/message.dart';
 import 'package:inclusive/widgets/loading.dart';
-import 'package:provider/provider.dart';
-
 import 'package:inclusive/classes/conversation.dart';
 import 'package:inclusive/classes/message.dart';
 import 'package:inclusive/classes/ping.dart';
-
-import 'package:location_permissions/location_permissions.dart';
-
-import 'package:rxdart/rxdart.dart';
 
 class LandingScreen extends StatefulWidget {
   static const String id = 'Landing';

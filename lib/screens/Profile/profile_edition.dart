@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_cupertino_date_picker/flutter_cupertino_date_picker.dart';
 import 'package:flutter_tags/tag.dart';
+import 'package:provider/provider.dart';
+
 import 'package:inclusive/classes/user.dart';
 import 'package:inclusive/models/user.dart';
 import 'package:inclusive/theme.dart';
-import 'package:inclusive/widgets/birthdate-picker.dart';
-import 'package:provider/provider.dart';
+import 'package:inclusive/widgets/birthdate_picker.dart';
 
 class ProfileEditionScreen extends StatefulWidget {
   ProfileEditionScreen(this.user, this.onSave) : initialUser = user.toJson();

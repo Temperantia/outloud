@@ -1,12 +1,12 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 import 'package:inclusive/classes/conversation.dart';
 import 'package:inclusive/locator.dart';
-import 'package:inclusive/services/appdata.dart';
+import 'package:inclusive/services/app_data.dart';
 import 'package:inclusive/models/user.dart';
 import 'package:inclusive/models/message.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class MessageService extends ChangeNotifier {
   final AppDataService appDataService = locator<AppDataService>();

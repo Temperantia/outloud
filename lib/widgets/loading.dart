@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:inclusive/theme.dart';
 
+import 'package:inclusive/theme.dart';
 import 'package:inclusive/widgets/background.dart';
 import 'package:inclusive/widgets/logo.dart';
 

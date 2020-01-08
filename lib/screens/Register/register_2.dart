@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:inclusive/classes/user.dart';
-import 'package:inclusive/models/user.dart';
-import 'package:inclusive/screens/Register/register-3.dart';
-import 'package:inclusive/theme.dart';
-import 'package:inclusive/widgets/background.dart';
 import 'package:provider/provider.dart';
 import 'package:validate/validate.dart';
+
+import 'package:inclusive/classes/user.dart';
+import 'package:inclusive/models/user.dart';
+import 'package:inclusive/screens/Register/register_3.dart';
+import 'package:inclusive/theme.dart';
+import 'package:inclusive/widgets/background.dart';
 
 class Register2Screen extends StatefulWidget {
   const Register2Screen(this.name);

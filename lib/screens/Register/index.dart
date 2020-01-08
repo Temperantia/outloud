@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:inclusive/screens/Register/register-1.dart';
 
+import 'package:inclusive/screens/Register/register_1.dart';
 import 'package:inclusive/widgets/background.dart';
 import 'package:inclusive/widgets/logo.dart';
 

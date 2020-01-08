@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:inclusive/theme.dart';
-import 'package:inclusive/widgets/Search/search-interest.dart';
+import 'package:inclusive/widgets/Search/search_interest.dart';
 
 class SearchGroup extends StatefulWidget {
   @override

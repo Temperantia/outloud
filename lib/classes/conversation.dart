@@ -2,7 +2,7 @@ import 'package:inclusive/classes/entity.dart';
 import 'package:inclusive/classes/group_ping.dart';
 import 'package:inclusive/classes/message_list.dart';
 import 'package:inclusive/locator.dart';
-import 'package:inclusive/services/appdata.dart';
+import 'package:inclusive/services/app_data.dart';
 import 'package:inclusive/models/group.dart';
 import 'package:inclusive/models/user.dart';
 import 'package:inclusive/models/message.dart';

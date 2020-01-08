@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
+
 import 'package:inclusive/classes/user.dart';
 import 'package:inclusive/models/user.dart';
 import 'package:inclusive/screens/Search/results.dart';
-import 'package:inclusive/widgets/Search/search-event.dart';
-
-import 'package:inclusive/widgets/Search/search-group.dart';
-import 'package:inclusive/widgets/Search/search-solo.dart';
+import 'package:inclusive/widgets/Search/search_event.dart';
+import 'package:inclusive/widgets/Search/search_group.dart';
+import 'package:inclusive/widgets/Search/search_solo.dart';
 import 'package:inclusive/theme.dart';
-import 'package:provider/provider.dart';
 
 class SearchScreen extends StatefulWidget {
   @override
@@ -26,41 +25,40 @@ class _SearchState extends State<SearchScreen> {
     return Column(children: <Widget>[
       Container(
           height: MediaQuery.of(context).size.height * 0.15,
-          child:
-              Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: <
-                  GestureDetector>[
-            GestureDetector(
-                onTap: () => setState(() => type = 'solo'),
-                child: Container(
-                    width: 60,
-                    height: 60,
-                    decoration: BoxDecoration(
-                        color: type == 'solo' ? orange : blue,
-                        borderRadius: BorderRadius.circular(50)),
-                    padding: const EdgeInsets.all(20),
-                    child:
-                        SvgPicture.asset('images/profile.svg', color: white))),
-            GestureDetector(
-                onTap: () => setState(() => type = 'group'),
-                child: Container(
-                    width: 60,
-                    height: 60,
-                    decoration: BoxDecoration(
-                        color: type == 'group' ? orange : blue,
-                        borderRadius: BorderRadius.circular(50)),
-                    padding: const EdgeInsets.all(15),
-                    child: SvgPicture.asset('images/group.svg', color: white))),
-            GestureDetector(
-                onTap: () => setState(() => type = 'event'),
-                child: Container(
-                    width: 60,
-                    height: 60,
-                    decoration: BoxDecoration(
-                        color: type == 'event' ? orange : blue,
-                        borderRadius: BorderRadius.circular(50)),
-                    padding: const EdgeInsets.all(15),
-                    child: SvgPicture.asset('images/event.svg', color: white)))
-          ])),
+          child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <GestureDetector>[
+                GestureDetector(
+                    onTap: () => setState(() => type = 'solo'),
+                    child: Container(
+                        width: 60,
+                        height: 60,
+                        decoration: BoxDecoration(
+                            color: type == 'solo' ? orange : blue,
+                            borderRadius: BorderRadius.circular(50)),
+                        padding: const EdgeInsets.all(20),
+                        child: Icon(Icons.person, color: white))),
+                GestureDetector(
+                    onTap: () => setState(() => type = 'group'),
+                    child: Container(
+                        width: 60,
+                        height: 60,
+                        decoration: BoxDecoration(
+                            color: type == 'group' ? orange : blue,
+                            borderRadius: BorderRadius.circular(50)),
+                        padding: const EdgeInsets.all(15),
+                        child: Icon(Icons.group, color: white))),
+                GestureDetector(
+                    onTap: () => setState(() => type = 'event'),
+                    child: Container(
+                        width: 60,
+                        height: 60,
+                        decoration: BoxDecoration(
+                            color: type == 'event' ? orange : blue,
+                            borderRadius: BorderRadius.circular(50)),
+                        padding: const EdgeInsets.all(15),
+                        child: Icon(Icons.event, color: white)))
+              ])),
       Container(
           height: MediaQuery.of(context).size.height * 0.7,
           child: type == 'solo'

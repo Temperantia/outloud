@@ -2,17 +2,17 @@ import 'package:badges/badges.dart';
 import 'package:bubble_bottom_bar/bubble_bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:provider/provider.dart';
+
 import 'package:inclusive/classes/user.dart';
 import 'package:inclusive/models/user.dart';
-import 'package:inclusive/screens/Messaging/index.dart';
-import 'package:inclusive/screens/Profile/profile-edition.dart';
-
+import 'package:inclusive/screens/Messaging/messaging.dart';
+import 'package:inclusive/screens/Profile/profile_edition.dart';
 import 'package:inclusive/screens/Search/index.dart';
 import 'package:inclusive/services/message.dart';
 import 'package:inclusive/theme.dart';
 import 'package:inclusive/screens/Profile/profile.dart';
 import 'package:inclusive/widgets/background.dart';
-import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
   static const String id = 'Home';

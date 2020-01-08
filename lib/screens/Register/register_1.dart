@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
 import 'package:inclusive/classes/user.dart';
-import 'package:inclusive/screens/Register/register-2.dart';
+import 'package:inclusive/screens/Register/register_2.dart';
 import 'package:inclusive/models/user.dart';
 import 'package:inclusive/theme.dart';
 import 'package:inclusive/widgets/background.dart';
-import 'package:provider/provider.dart';
 
 class Register1Screen extends StatefulWidget {
   static const String id = 'Register1';

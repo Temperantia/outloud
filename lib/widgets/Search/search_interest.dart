@@ -42,7 +42,6 @@ class SearchInterestState extends State<SearchInterest> {
       }, onSuggestionSelected: (Map<String, String> suggestion) {
         setState(() {
           interests.add(Item(index: _count, title: suggestion['name']));
-          print(interests);
           ++_count;
         });
       })),

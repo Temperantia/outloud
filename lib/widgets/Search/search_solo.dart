@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_tags/tag.dart';
 
 import 'package:inclusive/theme.dart';
-import 'package:inclusive/widgets/Search/search-interest.dart';
+import 'package:inclusive/widgets/Search/search_interest.dart';
 
 class SearchSolo extends StatefulWidget {
   const SearchSolo({this.onSearch});

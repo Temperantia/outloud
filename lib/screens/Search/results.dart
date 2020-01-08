@@ -1,11 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:inclusive/classes/user.dart';
-import 'package:inclusive/services/appdata.dart';
-import 'package:inclusive/theme.dart';
 import 'package:location_permissions/location_permissions.dart';
 import 'package:provider/provider.dart';
+
+import 'package:inclusive/classes/user.dart';
+import 'package:inclusive/services/app_data.dart';
+import 'package:inclusive/theme.dart';
 
 class ResultsScreen extends StatefulWidget {
   const ResultsScreen(this.users);

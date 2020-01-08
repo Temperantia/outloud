@@ -1,11 +1,11 @@
 import 'dart:io';
-
 import 'package:device_info/device_info.dart';
 import 'package:flutter/material.dart';
+import 'package:location_permissions/location_permissions.dart';
+
 import 'package:inclusive/classes/user.dart';
 import 'package:inclusive/locator.dart';
 import 'package:inclusive/models/user.dart';
-import 'package:location_permissions/location_permissions.dart';
 
 class AppDataService extends ChangeNotifier {
   final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();

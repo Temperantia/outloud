@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'package:inclusive/locator.dart';
 import 'package:inclusive/routes.dart';
 import 'package:inclusive/screens/landing.dart';
 import 'package:inclusive/theme.dart';
-import 'package:provider/provider.dart';
 import 'package:inclusive/models/user.dart';
 import 'package:inclusive/models/group.dart';
 import 'package:inclusive/models/message.dart';
-import 'package:inclusive/services/appdata.dart';
+import 'package:inclusive/services/app_data.dart';
 import 'package:inclusive/services/message.dart';
 
 void main() {
