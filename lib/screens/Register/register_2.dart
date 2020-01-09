@@ -49,7 +49,11 @@ class Register2ScreenState extends State<Register2Screen> {
     userProvider = Provider.of<UserModel>(context);
 
     return Scaffold(
-        appBar: AppBar(),
+        appBar: AppBar(
+            iconTheme: IconThemeData(color: white),
+            centerTitle: true,
+            title: Text('Choose an email',
+                style: Theme.of(context).textTheme.title)),
         body: Container(
             decoration: background,
             child: Column(
@@ -58,13 +62,10 @@ class Register2ScreenState extends State<Register2Screen> {
                   Container(
                       padding: const EdgeInsets.all(10),
                       child: TextField(
-                        decoration: const InputDecoration(
-                          hintText: 'John•ane@gmail.com',
-                          labelText: 'Email',
-                        ),
-                        controller: controller,
-                        onTap: () => error = '',
-                      )),
+                          decoration: const InputDecoration(
+                              hintText: 'John•ane@gmail.com'),
+                          controller: controller,
+                          onTap: () => error = '')),
                   if (error != '')
                     Row(children: <Widget>[
                       Container(

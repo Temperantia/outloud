@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_cupertino_date_picker/flutter_cupertino_date_picker.dart';
 import 'package:flutter_tags/tag.dart';
+import 'package:inclusive/widgets/Search/search_interest.dart';
 import 'package:provider/provider.dart';
 
 import 'package:inclusive/classes/user.dart';
@@ -19,14 +20,15 @@ class ProfileEditionScreen extends StatefulWidget {
 }
 
 class ProfileEditionState extends State<ProfileEditionScreen> {
+  final TextEditingController editName = TextEditingController();
+  final TextEditingController editLocation = TextEditingController();
+  final TextEditingController editDescription = TextEditingController();
   UserModel userProvider;
+
   String editing = '';
   bool isNameTaken = false;
   List<Item> interests = <Item>[];
   int count = 0;
-  final TextEditingController editName = TextEditingController();
-  final TextEditingController editLocation = TextEditingController();
-  final TextEditingController editDescription = TextEditingController();
 
   @override
   void initState() {
@@ -189,7 +191,7 @@ class ProfileEditionState extends State<ProfileEditionScreen> {
             color: orange,
           )),
       subtitle: editing == 'interests'
-          ? Tags(
+          ? /* Tags(
               itemBuilder: (int index) {
                 final Item item = interests[index];
 
@@ -237,7 +239,8 @@ class ProfileEditionState extends State<ProfileEditionScreen> {
                 suggestions: const <String>['gay', 'lesbian', 'gay community'],
                 suggestionTextColor: orange,
               ),
-            )
+            )*/
+          const SearchInterest()
           : GestureDetector(
               onTap: () => setState(() => editing = 'interests'),
               child: Text(

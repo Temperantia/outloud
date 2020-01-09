@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_cupertino_date_picker/flutter_cupertino_date_picker.dart';
+import 'package:inclusive/theme.dart';
 import 'package:provider/provider.dart';
 import 'package:inclusive/models/user.dart';
 
@@ -35,7 +35,8 @@ class Register3ScreenState extends State<Register3Screen> {
     );
     await userProvider.createUser(user);
     Navigator.pushNamedAndRemoveUntil(
-        context, HomeScreen.id, (Route<dynamic> route) => false);
+        context, HomeScreen.id, (Route<dynamic> route) => false,
+        arguments: 0);
   }
 
   @override
@@ -45,17 +46,23 @@ class Register3ScreenState extends State<Register3Screen> {
     selected = DateTime(now.year - 18, now.month, now.day);
 
     return Scaffold(
-        appBar: AppBar(),
+        appBar: AppBar(
+            iconTheme: IconThemeData(color: white),
+            centerTitle: true,
+            title: Text('Select your birthdate',
+                style: Theme.of(context).textTheme.title)),
         body: Container(
             decoration: background,
             child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   BirthdatePicker(
-                      initial: selected,
-                      onChange: (DateTime dateTime) => selected = dateTime,
-                      theme:
-                          const DateTimePickerTheme(title: Text('Birthdate'))),
+                    initial: selected,
+                    onChange: (DateTime dateTime) => selected = dateTime,
+                    // theme: DateTimePickerTheme(
+                    //     title: Text('Birthdate',
+                    //         style: Theme.of(context).textTheme.title))
+                  ),
                   Padding(
                       padding: const EdgeInsets.symmetric(vertical: 16.0),
                       child: RaisedButton(

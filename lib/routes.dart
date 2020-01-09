@@ -16,7 +16,8 @@ final Map<String, Widget Function(dynamic)> routes =
       Register2Screen(arguments as String),
   Register3Screen.id: (dynamic arguments) =>
       Register3Screen(arguments as Map<String, String>),
-  HomeScreen.id: (dynamic arguments) => HomeScreen(),
+  HomeScreen.id: (dynamic arguments) =>
+      HomeScreen(initialPage: arguments as int),
   ResultsScreen.id: (dynamic arguments) =>
       ResultsScreen(arguments as List<User>),
 };

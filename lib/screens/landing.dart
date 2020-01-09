@@ -65,7 +65,7 @@ class _LandingState extends State<LandingScreen>
               return Loading();
             }
             if (conversations.isEmpty) {
-              return HomeScreen();
+              return const HomeScreen();
             }
             for (final Ping ping in pings) {
               final int index = conversations.indexWhere(
@@ -111,7 +111,7 @@ class _LandingState extends State<LandingScreen>
           messageService.refreshPings(conversations);
 
           getGroupUsers(conversations, messageLists);
-          return HomeScreen();
+          return const HomeScreen();
         }));
   }
 

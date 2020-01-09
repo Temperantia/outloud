@@ -41,7 +41,11 @@ class Register1ScreenState extends State<Register1Screen> {
     userProvider = Provider.of<UserModel>(context);
 
     return Scaffold(
-        appBar: AppBar(),
+        appBar: AppBar(
+            iconTheme: IconThemeData(color: white),
+            centerTitle: true,
+            title: Text('Choose a name or not',
+                style: Theme.of(context).textTheme.title)),
         body: Container(
             decoration: background,
             child: Column(
@@ -50,13 +54,9 @@ class Register1ScreenState extends State<Register1Screen> {
                   Container(
                     padding: const EdgeInsets.all(10),
                     child: TextField(
-                      decoration: const InputDecoration(
-                        hintText: 'John•ane',
-                        labelText: 'Username',
-                      ),
-                      controller: controller,
-                      onTap: () => isTakenUsername = false,
-                    ),
+                        decoration: const InputDecoration(hintText: 'John•ane'),
+                        controller: controller,
+                        onTap: () => isTakenUsername = false),
                   ),
                   if (isTakenUsername)
                     Row(children: <Widget>[

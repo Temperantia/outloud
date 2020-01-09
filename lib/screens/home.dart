@@ -15,20 +15,23 @@ import 'package:inclusive/screens/Profile/profile.dart';
 import 'package:inclusive/widgets/background.dart';
 
 class HomeScreen extends StatefulWidget {
+  const HomeScreen({this.initialPage = 2});
   static const String id = 'Home';
+  final int initialPage;
   @override
-  _HomeState createState() => _HomeState();
+  _HomeState createState() => _HomeState(initialPage);
 }
 
 class _HomeState extends State<HomeScreen> with SingleTickerProviderStateMixin {
+  _HomeState(this.currentPage);
   final GlobalKey<MessagingState> messaging = GlobalKey<MessagingState>();
 
   MessageService messageService;
   UserModel userProvider;
   User user;
+  int currentPage;
 
   TabController tabController;
-  int currentPage = 2;
   bool editProfile = false;
 
   @override
