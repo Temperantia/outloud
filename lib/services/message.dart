@@ -18,10 +18,8 @@ class MessageService extends ChangeNotifier {
 
   Future<List<Conversation>> getConversations() async {
     final List<Conversation> conversations = <Conversation>[
-      /*
-    Conversation('BHpAnkWabxJFoY1FbM57', 0),
-    Conversation('apmbMHvueWZDLeAOxaxI-cx0hEmwDTLWYy3COnvPL', 0),
-    */
+      /* Conversation('BHpAnkWabxJFoY1FbM57', 0),
+      Conversation('apmbMHvueWZDLeAOxaxI-cx0hEmwDTLWYy3COnvPL', 0), */
     ];
 
     final SharedPreferences sharedPreferences =

@@ -24,8 +24,7 @@ class LandingScreen extends StatefulWidget {
   _LandingState createState() => _LandingState();
 }
 
-class _LandingState extends State<LandingScreen>
-    with SingleTickerProviderStateMixin {
+class _LandingState extends State<LandingScreen> {
   AppDataService appDataService;
   MessageService messageService;
   UserModel userProvider;
@@ -190,6 +189,7 @@ class _LandingState extends State<LandingScreen>
 
   @override
   Widget build(BuildContext context) {
+    print('ok');
     appDataService = Provider.of<AppDataService>(context);
     messageService = Provider.of<MessageService>(context);
     userProvider = Provider.of<UserModel>(context);
@@ -202,7 +202,7 @@ class _LandingState extends State<LandingScreen>
         future: appDataService.getUser().first,
         builder: (BuildContext context, AsyncSnapshot<User> snap) {
           if (snap.connectionState == ConnectionState.waiting) {
-            return Loading();
+            //return Loading();
           }
           return getAppData();
         });

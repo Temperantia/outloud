@@ -38,6 +38,7 @@ class App extends StatelessWidget {
           title: 'Inclusive',
           initialRoute: LandingScreen.id,
           onGenerateRoute: (RouteSettings settings) {
+            print(settings.name);
             final Widget Function(dynamic) createRoute = routes[settings.name];
             return MaterialPageRoute<Widget>(
                 builder: (BuildContext context) =>

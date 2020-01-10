@@ -44,8 +44,8 @@ class Register1ScreenState extends State<Register1Screen> {
         appBar: AppBar(
             iconTheme: IconThemeData(color: white),
             centerTitle: true,
-            title: Text('Choose a name or not',
-                style: Theme.of(context).textTheme.title)),
+            title:
+                Text('Pick a name', style: Theme.of(context).textTheme.title)),
         body: Container(
             decoration: background,
             child: Column(

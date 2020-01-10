@@ -22,10 +22,8 @@ class RegisterScreen extends StatelessWidget {
                           onPressed: () {
                             Navigator.of(context).pushNamed(Register1Screen.id);
                           },
-                          child: Text(
-                            'GET STARTED',
-                            style: Theme.of(context).textTheme.title,
-                          ))
+                          child: Text('GET STARTED',
+                              style: Theme.of(context).textTheme.title))
                     ]))));
   }
 }
