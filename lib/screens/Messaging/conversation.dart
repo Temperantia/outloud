@@ -1,6 +1,11 @@
+import 'package:bubble_bottom_bar/bubble_bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:inclusive/classes/entity.dart';
+import 'package:inclusive/classes/message_list.dart';
+import 'package:inclusive/screens/home.dart';
 import 'package:inclusive/widgets/background.dart';
+import 'package:inclusive/widgets/bubble_bar.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 
@@ -44,6 +49,11 @@ class ConversationState extends State<ConversationScreen> {
     } else {
       Fluttertoast.showToast(msg: 'Nothing to send');
     }
+  }
+
+  void onNavigateBack(int index) {
+    appDataService.currentPage = index;
+    Navigator.pushReplacementNamed(context, HomeScreen.id);
   }
 /* 
   Widget buildConversationIcons() {
@@ -99,12 +109,28 @@ class ConversationState extends State<ConversationScreen> {
 
   Widget buildConversation() {
     return Expanded(
-        child: ListView.builder(
-            reverse: true,
-            shrinkWrap: true,
-            itemBuilder: (BuildContext context, int index) => buildItem(index),
-            itemCount: widget.conversation.messageList.messages.length,
-            controller: listScrollController));
+        child: StreamBuilder<MessageList>(
+            stream: widget.conversation.messageList,
+            builder:
+                (BuildContext context, AsyncSnapshot<MessageList> messageList) {
+              if (messageList.connectionState == ConnectionState.waiting) {
+                return Container();
+              }
+              return FutureBuilder<void>(
+                  future: widget.conversation.getGroupUsers(messageList.data),
+                  builder: (BuildContext context,
+                          AsyncSnapshot<void> snapshot) =>
+                      snapshot.connectionState == ConnectionState.waiting
+                          ? Container()
+                          : ListView.builder(
+                              reverse: true,
+                              shrinkWrap: true,
+                              itemBuilder: (BuildContext context, int index) =>
+                                  buildItem(
+                                      messageList.data.messages[index], index),
+                              itemCount: messageList.data.messages.length,
+                              controller: listScrollController));
+            }));
   }
 
   Widget buildInput() {
@@ -126,8 +152,7 @@ class ConversationState extends State<ConversationScreen> {
     ]);
   }
 
-  Widget buildItem(int index) {
-    final Message message = widget.conversation.messageList.messages[index];
+  Widget buildItem(Message message, int index) {
     final DateTime messageDateTime =
         DateTime.fromMillisecondsSinceEpoch(message.timestamp);
     final String messageTime = messageTimeFormat.format(messageDateTime);
@@ -201,14 +226,28 @@ class ConversationState extends State<ConversationScreen> {
     appDataService = Provider.of<AppDataService>(context);
     messageService = Provider.of<MessageService>(context);
     userProvider = Provider.of<UserModel>(context);
-
-    return Scaffold(
-        appBar: AppBar(
-            centerTitle: true, title: Text(widget.conversation.peerData.name)),
-        body: SafeArea(
-            child: Container(
-                decoration: background,
-                child: Column(
-                    children: <Widget>[buildConversation(), buildInput()]))));
+    return StreamBuilder<Entity>(
+        stream: widget.conversation.streamPeerInfo(),
+        builder: (BuildContext context, AsyncSnapshot<Entity> entity) {
+          return entity.connectionState == ConnectionState.waiting
+              ? Container()
+              : Scaffold(
+                  appBar:
+                      AppBar(centerTitle: true, title: Text(entity.data.name)),
+                  body: SafeArea(
+                      child: Container(
+                          decoration: background,
+                          child: Column(children: <Widget>[
+                            buildConversation(),
+                            buildInput()
+                          ]))),
+                  bottomNavigationBar: BubbleBottomBar(
+                      fabLocation: BubbleBottomBarFabLocation.end,
+                      opacity: 1,
+                      currentIndex: appDataService.currentPage,
+                      onTap: onNavigateBack,
+                      items: bubbleBar(context, messageService.pings)),
+                );
+        });
   }
 }

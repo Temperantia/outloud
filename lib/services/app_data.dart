@@ -10,7 +10,8 @@ import 'package:inclusive/models/user.dart';
 class AppDataService extends ChangeNotifier {
   final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
   final UserModel userProvider = locator<UserModel>();
-
+  bool loading = true;
+  int currentPage = 2;
   String identifier;
 
   static Future<bool> checkInternet() async {

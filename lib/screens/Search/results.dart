@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:location_permissions/location_permissions.dart';
 import 'package:provider/provider.dart';
 
@@ -43,9 +42,8 @@ class ResultScreenState extends State<ResultsScreen> {
     final PermissionStatus permission =
         await appDataService.getLocationPermissions();
     if (permission == PermissionStatus.granted) {
-      final Position position = await Geolocator()
-          .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-      print(position);
+      /* final Position position = await Geolocator()
+          .getCurrentPosition(desiredAccuracy: LocationAccuracy.high); */
     }
   }
 

@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:inclusive/classes/conversation_list.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:inclusive/classes/conversation.dart';
@@ -16,7 +17,7 @@ class MessageService extends ChangeNotifier {
   Conversation currentConversation;
   int pings = 0;
 
-  Future<List<Conversation>> getConversations() async {
+  Future<ConversationList> getConversationList() async {
     final List<Conversation> conversations = <Conversation>[
       /* Conversation('BHpAnkWabxJFoY1FbM57', 0),
       Conversation('apmbMHvueWZDLeAOxaxI-cx0hEmwDTLWYy3COnvPL', 0), */
@@ -29,7 +30,7 @@ class MessageService extends ChangeNotifier {
     final List<String> conversationLastReads =
         sharedPreferences.getStringList('conversationLastReads');
     if (conversationIDs == null || conversationLastReads == null) {
-      return conversations;
+      return ConversationList(conversations: conversations);
     }
     conversationIDs.asMap().forEach((final int index, final String id) =>
         conversations
@@ -39,7 +40,7 @@ class MessageService extends ChangeNotifier {
       currentConversation.markAsRead();
       setConversations(conversations);
     }
-    return conversations;
+    return ConversationList(conversations: conversations);
   }
 
   Future<void> setConversations(List<Conversation> conversations) async {
