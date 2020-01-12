@@ -98,7 +98,7 @@ class SearchSoloState extends State<SearchSolo> {
                         });
                       })
               ]),
-          RaisedButton(
+          /*  RaisedButton(
               onPressed: () {
                 Scaffold.of(context).showSnackBar(
                     const SnackBar(content: Text('Processing Data')));
@@ -111,7 +111,7 @@ class SearchSoloState extends State<SearchSolo> {
                     _distance);
               },
               child: Text('Look for someone',
-                  style: Theme.of(context).textTheme.caption))
+                  style: Theme.of(context).textTheme.caption)) */
         ]);
   }
 }

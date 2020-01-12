@@ -5,9 +5,11 @@ class Api {
   Api(this.path) {
     ref = _db.collection(path);
   }
-  final Firestore _db = Firestore.instance;
+
   final String path;
   CollectionReference ref;
+
+  final Firestore _db = Firestore.instance;
 
   Query queryCollection(
       {List<QueryConstraint> where = const <QueryConstraint>[],

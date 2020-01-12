@@ -10,27 +10,25 @@ import 'package:inclusive/widgets/background.dart';
 class Register1Screen extends StatefulWidget {
   static const String id = 'Register1';
   @override
-  Register1ScreenState createState() {
-    return Register1ScreenState();
-  }
+  _Register1ScreenState createState() => _Register1ScreenState();
 }
 
-class Register1ScreenState extends State<Register1Screen> {
-  final TextEditingController controller = TextEditingController();
-  UserModel userProvider;
-  bool isTakenUsername = false;
+class _Register1ScreenState extends State<Register1Screen> {
+  final TextEditingController _controller = TextEditingController();
+  UserModel _userProvider;
+  bool _isTakenUsername = false;
 
   Future<void> submit() async {
     FocusScope.of(context).unfocus();
-    final String name = controller.text.trim();
+    final String name = _controller.text.trim();
     if (name == '') {
       Navigator.pushNamed(context, Register2Screen.id, arguments: name);
       return;
     }
 
-    final User user = await userProvider.getUserWithName(name);
+    final User user = await _userProvider.getUserWithName(name);
     if (user != null) {
-      setState(() => isTakenUsername = true);
+      setState(() => _isTakenUsername = true);
       return;
     }
     Navigator.pushNamed(context, Register2Screen.id, arguments: name);
@@ -38,7 +36,7 @@ class Register1ScreenState extends State<Register1Screen> {
 
   @override
   Widget build(BuildContext context) {
-    userProvider = Provider.of<UserModel>(context);
+    _userProvider = Provider.of<UserModel>(context);
 
     return Scaffold(
         appBar: AppBar(
@@ -55,10 +53,10 @@ class Register1ScreenState extends State<Register1Screen> {
                     padding: const EdgeInsets.all(10),
                     child: TextField(
                         decoration: const InputDecoration(hintText: 'John•ane'),
-                        controller: controller,
-                        onTap: () => isTakenUsername = false),
+                        controller: _controller,
+                        onTap: () => _isTakenUsername = false),
                   ),
-                  if (isTakenUsername)
+                  if (_isTakenUsername)
                     Row(children: <Widget>[
                       Container(
                           padding: const EdgeInsets.only(left: 10.0),

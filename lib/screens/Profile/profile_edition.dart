@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_cupertino_date_picker/flutter_cupertino_date_picker.dart';
-import 'package:flutter_tags/tag.dart';
-import 'package:inclusive/widgets/Search/search_interest.dart';
 import 'package:provider/provider.dart';
 
 import 'package:inclusive/classes/user.dart';
 import 'package:inclusive/models/user.dart';
 import 'package:inclusive/theme.dart';
+import 'package:inclusive/widgets/Search/search_interest.dart';
 import 'package:inclusive/widgets/birthdate_picker.dart';
 
 class ProfileEditionScreen extends StatefulWidget {
@@ -16,51 +14,27 @@ class ProfileEditionScreen extends StatefulWidget {
   final dynamic initialUser;
 
   @override
-  ProfileEditionState createState() => ProfileEditionState();
+  _ProfileEditionState createState() => _ProfileEditionState();
 }
 
-class ProfileEditionState extends State<ProfileEditionScreen> {
-  final TextEditingController editName = TextEditingController();
-  final TextEditingController editLocation = TextEditingController();
-  final TextEditingController editDescription = TextEditingController();
-  UserModel userProvider;
+class _ProfileEditionState extends State<ProfileEditionScreen> {
+  final TextEditingController _editName = TextEditingController();
+  final TextEditingController _editHome = TextEditingController();
+  final TextEditingController _editDescription = TextEditingController();
+  UserModel _userProvider;
 
-  String editing = '';
-  bool isNameTaken = false;
-  List<Item> interests = <Item>[];
-  int count = 0;
+  String _editing = '';
+  bool _isNameTaken = false;
 
   @override
   void initState() {
     super.initState();
-    editName.text = widget.user.name;
-    editLocation.text = widget.user.location;
-    editDescription.text = widget.user.description;
-    interests = widget.user.interests.map<Item>((dynamic interest) {
-      final Item item = Item(index: count, title: interest as String);
-      ++count;
-      return item;
-    }).toList();
+    _editName.text = widget.user.name;
+    _editHome.text = widget.user.home;
+    _editDescription.text = widget.user.description;
   }
 
-  @override
-  Widget build(BuildContext context) {
-    userProvider = Provider.of<UserModel>(context);
-    return SingleChildScrollView(
-        child: Card(
-            child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-          buildActions(),
-          buildUserInfo(),
-          buildDivider(),
-          buildUserInterests(),
-          buildDivider(),
-          buildUserAbout(),
-        ])));
-  }
-
-  Divider buildDivider() {
+  Divider _buildDivider() {
     return Divider(
       color: Colors.red,
       height: 10,
@@ -70,7 +44,7 @@ class ProfileEditionState extends State<ProfileEditionScreen> {
     );
   }
 
-  Widget buildActions() {
+  Widget _buildActions() {
     return Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
@@ -87,12 +61,12 @@ class ProfileEditionState extends State<ProfileEditionScreen> {
               icon: Icon(Icons.done),
               onPressed: () async {
                 final User user =
-                    await userProvider.getUserWithName(widget.user.name);
+                    await _userProvider.getUserWithName(widget.user.name);
                 if (widget.user.name != '' &&
                     widget.user.name != widget.initialUser['name'] &&
                     user != null) {
                   setState(() {
-                    isNameTaken = true;
+                    _isNameTaken = true;
                   });
                 } else {
                   widget.onSave(widget.user);
@@ -101,29 +75,29 @@ class ProfileEditionState extends State<ProfileEditionScreen> {
         ]);
   }
 
-  Widget buildUserInfo() {
+  Widget _buildUserInfo() {
     return ListView(
         shrinkWrap: true,
         padding: const EdgeInsets.all(0.0),
         children: <Widget>[
-          if (editing == 'name')
+          if (_editing == 'name')
             TextField(
                 autofocus: true,
                 onEditingComplete: () {
                   setState(() {
-                    isNameTaken = false;
-                    widget.user.name = editName.text;
+                    _isNameTaken = false;
+                    widget.user.name = _editName.text;
                   });
                   FocusScope.of(context).unfocus();
                 },
-                controller: editName,
+                controller: _editName,
                 style: TextStyle(
                   fontSize: 32,
                   color: orange,
                 ))
           else
             GestureDetector(
-                onTap: () => setState(() => editing = 'name'),
+                onTap: () => setState(() => _editing = 'name'),
                 child: Text(
                     widget.user.name == ''
                         ? 'Insert name here'
@@ -133,19 +107,16 @@ class ProfileEditionState extends State<ProfileEditionScreen> {
                       fontSize: 32,
                       color: orange,
                     ))),
-          if (isNameTaken) const Text('Name is already taken'),
-          if (editing == 'age')
+          if (_isNameTaken) const Text('Name is already taken'),
+          if (_editing == 'age')
             BirthdatePicker(
                 initial: widget.user.birthDate,
                 onChange: (DateTime birthDate) {
                   setState(() => widget.user.birthDate = birthDate);
-                },
-                theme: const DateTimePickerTheme(
-                  title: Text('BirthDate'),
-                ))
+                })
           else
             GestureDetector(
-                onTap: () => setState(() => editing = 'age'),
+                onTap: () => setState(() => _editing = 'age'),
                 child: Text(
                   widget.user.getAge().toString() + ' years old',
                   textAlign: TextAlign.center,
@@ -154,25 +125,25 @@ class ProfileEditionState extends State<ProfileEditionScreen> {
                     color: orange,
                   ),
                 )),
-          if (editing == 'location')
+          if (_editing == 'location')
             TextField(
                 autofocus: true,
                 onEditingComplete: () {
-                  setState(() => widget.user.location = editLocation.text);
+                  setState(() => widget.user.home = _editHome.text);
                   FocusScope.of(context).unfocus();
                 },
-                controller: editLocation,
+                controller: _editHome,
                 style: TextStyle(
                   fontSize: 18,
                   color: orange,
                 ))
           else
             GestureDetector(
-                onTap: () => setState(() => editing = 'location'),
+                onTap: () => setState(() => _editing = 'location'),
                 child: Text(
-                    widget.user.location == null || widget.user.location == ''
+                    widget.user.home == null || widget.user.home == ''
                         ? 'Insert location there'
-                        : widget.user.location,
+                        : widget.user.home,
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 18,
@@ -190,7 +161,7 @@ class ProfileEditionState extends State<ProfileEditionScreen> {
             fontSize: 18,
             color: orange,
           )),
-      subtitle: editing == 'interests'
+      subtitle: _editing == 'interests'
           ? /* Tags(
               itemBuilder: (int index) {
                 final Item item = interests[index];
@@ -240,9 +211,12 @@ class ProfileEditionState extends State<ProfileEditionScreen> {
                 suggestionTextColor: orange,
               ),
             )*/
-          const SearchInterest()
+          SearchInterest(
+              interests: widget.user.interests,
+              onUpdate: (List<String> interests) =>
+                  setState(() => widget.user.interests = interests))
           : GestureDetector(
-              onTap: () => setState(() => editing = 'interests'),
+              onTap: () => setState(() => _editing = 'interests'),
               child: Text(
                   widget.user.interests.isEmpty
                       ? 'Insert interests up there'
@@ -271,13 +245,13 @@ class ProfileEditionState extends State<ProfileEditionScreen> {
                 fontSize: 18,
                 color: orange,
               ))),
-      subtitle: editing == 'description'
+      subtitle: _editing == 'description'
           ? TextField(
               autofocus: true,
               onChanged: (String text) {
                 setState(() => widget.user.description = text);
               },
-              controller: editDescription,
+              controller: _editDescription,
               maxLines: null,
               style: TextStyle(
                 fontSize: 18,
@@ -285,7 +259,7 @@ class ProfileEditionState extends State<ProfileEditionScreen> {
               ),
             )
           : GestureDetector(
-              onTap: () => setState(() => editing = 'description'),
+              onTap: () => setState(() => _editing = 'description'),
               child: Text(
                   widget.user.description == null ||
                           widget.user.description == ''
@@ -302,5 +276,22 @@ class ProfileEditionState extends State<ProfileEditionScreen> {
         size: 40,
       ),
     );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    _userProvider = Provider.of<UserModel>(context);
+    return SingleChildScrollView(
+        child: Card(
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+          _buildActions(),
+          _buildUserInfo(),
+          _buildDivider(),
+          buildUserInterests(),
+          _buildDivider(),
+          buildUserAbout(),
+        ])));
   }
 }

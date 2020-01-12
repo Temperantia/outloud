@@ -1,4 +1,4 @@
 class GroupPing {
-  GroupPing({this.value});
-  int value = 0;
+  GroupPing({this.value = 0});
+  int value;
 }

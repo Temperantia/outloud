@@ -10,34 +10,32 @@ import 'package:inclusive/widgets/background.dart';
 
 class Register2Screen extends StatefulWidget {
   const Register2Screen(this.name);
-  static const String id = 'Register2';
   final String name;
+  static const String id = 'Register2';
 
   @override
-  Register2ScreenState createState() {
-    return Register2ScreenState();
-  }
+  _Register2ScreenState createState() => _Register2ScreenState();
 }
 
-class Register2ScreenState extends State<Register2Screen> {
-  final TextEditingController controller = TextEditingController();
-  UserModel userProvider;
-  String error = '';
+class _Register2ScreenState extends State<Register2Screen> {
+  final TextEditingController _controller = TextEditingController();
+  UserModel _userProvider;
+  String _error = '';
 
   Future<void> submit() async {
     FocusScope.of(context).unfocus();
-    final String email = controller.text.trim();
+    final String email = _controller.text.trim();
 
     try {
       Validate.isEmail(email);
     } catch (e) {
-      setState(() => error = 'Email is not valid');
+      setState(() => _error = 'Email is not valid');
       return;
     }
 
-    final User user = await userProvider.getUserWithEmail(email);
+    final User user = await _userProvider.getUserWithEmail(email);
     if (user != null) {
-      setState(() => error = 'Email is already used');
+      setState(() => _error = 'Email is already used');
       return;
     }
     Navigator.pushNamed(context, Register3Screen.id,
@@ -46,7 +44,7 @@ class Register2ScreenState extends State<Register2Screen> {
 
   @override
   Widget build(BuildContext context) {
-    userProvider = Provider.of<UserModel>(context);
+    _userProvider = Provider.of<UserModel>(context);
 
     return Scaffold(
         appBar: AppBar(
@@ -64,13 +62,13 @@ class Register2ScreenState extends State<Register2Screen> {
                       child: TextField(
                           decoration: const InputDecoration(
                               hintText: 'John•ane@gmail.com'),
-                          controller: controller,
-                          onTap: () => error = '')),
-                  if (error != '')
+                          controller: _controller,
+                          onTap: () => _error = '')),
+                  if (_error != '')
                     Row(children: <Widget>[
                       Container(
                           padding: const EdgeInsets.only(left: 10.0),
-                          child: Text(error, style: TextStyle(color: red)))
+                          child: Text(_error, style: TextStyle(color: red)))
                     ]),
                   Padding(
                       padding: const EdgeInsets.symmetric(vertical: 16.0),

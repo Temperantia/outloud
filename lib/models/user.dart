@@ -41,7 +41,7 @@ class UserModel extends ChangeNotifier {
             snapshot.documents[0].data, snapshot.documents[0].documentID);
   }
 
-  Future<List<User>> getUsers(
+  Future<List<User>> getUsers(String userId,
       {List<String> interests = const <String>[],
       int ageStart = 13,
       int ageEnd = 99,
@@ -51,12 +51,20 @@ class UserModel extends ChangeNotifier {
         DateTime(now.year - ageStart, now.month, now.day);
     final DateTime dateEnd = DateTime(now.year - ageEnd, now.month, now.day);
 
-    return (await _api.queryCollection(where: <QueryConstraint>[
+    Query query = _api.queryCollection(where: <QueryConstraint>[
       QueryConstraint(field: 'birthDate', isGreaterThanOrEqualTo: dateEnd),
-      QueryConstraint(field: 'birthDate', isLessThanOrEqualTo: dateStart)
-    ]).getDocuments())
+      QueryConstraint(field: 'birthDate', isLessThanOrEqualTo: dateStart),
+    ]);
+    if (interests.isNotEmpty) {
+      query = query.where('interests', arrayContainsAny: interests);
+    }
+
+    return (await query.getDocuments())
         .documents
-        .map((DocumentSnapshot doc) => User.fromMap(doc.data, doc.documentID))
+        .map((DocumentSnapshot doc) {
+          return User.fromMap(doc.data, doc.documentID);
+        })
+        .where((User user) => user.id != userId)
         .toList();
   }
 
@@ -66,6 +74,11 @@ class UserModel extends ChangeNotifier {
 
   Future<void> updateUser(User data) async {
     return _api.updateDocument(data.toJson(), data.id);
+  }
+
+  Future<void> updateLocation(GeoPoint location, String userId) async {
+    return _api
+        .updateDocument(<String, GeoPoint>{'location': location}, userId);
   }
 
   Future<void> createUser(User data) async {

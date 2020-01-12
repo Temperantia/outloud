@@ -24,7 +24,7 @@ class Profile extends StatelessWidget {
     return Card(
         child: Column(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
+      children: <Widget>[
         ListView(
           shrinkWrap: true,
           padding: const EdgeInsets.all(0.0),
@@ -52,7 +52,7 @@ class Profile extends StatelessWidget {
             Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
-                  user.location == null ? '' : user.location,
+                  user.home ?? '',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 18,
@@ -61,14 +61,14 @@ class Profile extends StatelessWidget {
                 )),
           ],
         ),
-        new Swiper(
+        Swiper(
           itemBuilder: (BuildContext context, int index) {
-            List<Object> images = List<Object>();
+            //List<Object> images = List<Object>();
 
             //  final imageUrl = await imageLink.getDownloadUrl();
             //Image.network(imageUrl.toString());
 
-            ;
+            return Container();
           },
           itemCount: 10,
           itemWidth: 300.0,

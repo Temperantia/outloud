@@ -2,13 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_cupertino_date_picker/flutter_cupertino_date_picker.dart';
 
 class BirthdatePicker extends StatelessWidget {
-  BirthdatePicker(
-      {this.initial, this.onChange, this.theme = const DateTimePickerTheme()});
+  BirthdatePicker({this.initial, this.onChange});
 
   final DateTime now = DateTime.now();
   final DateTime initial;
   final Function onChange;
-  final DateTimePickerTheme theme;
 
   @override
   Widget build(BuildContext context) {
@@ -16,8 +14,9 @@ class BirthdatePicker extends StatelessWidget {
       maxDateTime: DateTime(now.year - 13, now.month, now.day),
       minDateTime: DateTime(now.year - 99, now.month, now.day),
       initialDateTime: initial,
-      pickerTheme: theme,
+      pickerTheme: const DateTimePickerTheme(showTitle: false),
       onChange: (DateTime dateTime, _) => onChange(dateTime),
+      onConfirm: (DateTime dateTime, List<int> values) => null,
     );
   }
 }

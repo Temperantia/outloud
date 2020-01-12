@@ -9,8 +9,8 @@ final List<BubbleBottomBarItem> Function(
         int pings) =>
     <BubbleBottomBarItem>[
       BubbleBottomBarItem(
-          icon: Icon(Icons.person, color: orange),
-          activeIcon: Icon(Icons.person, color: white),
+          icon: Icon(Icons.portrait, color: orange),
+          activeIcon: Icon(Icons.portrait, color: white),
           backgroundColor: orange,
           title: Text('Me', style: TextStyle(color: white, fontSize: 14.0))),
       BubbleBottomBarItem(
@@ -26,11 +26,11 @@ final List<BubbleBottomBarItem> Function(
           title:
               Text('Message', style: TextStyle(color: white, fontSize: 14.0))),
       BubbleBottomBarItem(
-          icon: Icon(Icons.search, color: orange),
-          activeIcon: Icon(Icons.search, color: white),
+          icon: Icon(Icons.view_list, color: orange),
+          activeIcon: Icon(Icons.view_list, color: white),
           backgroundColor: orange,
           title:
-              Text('Search', style: TextStyle(color: white, fontSize: 14.0))),
+              Text('People', style: TextStyle(color: white, fontSize: 14.0))),
       BubbleBottomBarItem(
           icon: Icon(Icons.people, color: orange),
           activeIcon: Icon(Icons.people, color: white),

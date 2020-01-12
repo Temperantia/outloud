@@ -1,6 +1,6 @@
 import 'package:inclusive/classes/message.dart';
 
 class MessageList {
-  MessageList({this.messages});
-  List<Message> messages = <Message>[];
+  MessageList({this.messages = const <Message>[]});
+  List<Message> messages;
 }

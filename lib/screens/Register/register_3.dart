@@ -11,29 +11,26 @@ import 'package:inclusive/widgets/background.dart';
 
 class Register3Screen extends StatefulWidget {
   const Register3Screen(this.arguments);
-  static const String id = 'Register3';
   final Map<String, String> arguments;
+  static const String id = 'Register3';
 
   @override
-  Register3ScreenState createState() {
-    return Register3ScreenState();
-  }
+  _Register3ScreenState createState() => _Register3ScreenState();
 }
 
-class Register3ScreenState extends State<Register3Screen> {
-  final DateTime now = DateTime.now();
-  AppDataService appDataService;
-  UserModel userProvider;
-  DateTime selected;
+class _Register3ScreenState extends State<Register3Screen> {
+  AppDataService _appDataService;
+  UserModel _userProvider;
+  DateTime _selected;
 
   Future<void> submit() async {
     final User user = User(
-      id: appDataService.identifier,
+      id: _appDataService.identifier,
       name: widget.arguments['name'],
       email: widget.arguments['email'],
-      birthDate: selected,
+      birthDate: _selected,
     );
-    await userProvider.createUser(user);
+    await _userProvider.createUser(user);
     Navigator.pushNamedAndRemoveUntil(
         context, HomeScreen.id, (Route<dynamic> route) => false,
         arguments: 0);
@@ -41,9 +38,10 @@ class Register3ScreenState extends State<Register3Screen> {
 
   @override
   Widget build(BuildContext context) {
-    appDataService = Provider.of<AppDataService>(context);
-    userProvider = Provider.of<UserModel>(context);
-    selected = DateTime(now.year - 18, now.month, now.day);
+    _appDataService = Provider.of<AppDataService>(context);
+    _userProvider = Provider.of<UserModel>(context);
+    final DateTime now = DateTime.now();
+    _selected = DateTime(now.year - 18, now.month, now.day);
 
     return Scaffold(
         appBar: AppBar(
@@ -57,11 +55,8 @@ class Register3ScreenState extends State<Register3Screen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   BirthdatePicker(
-                    initial: selected,
-                    onChange: (DateTime dateTime) => selected = dateTime,
-                    // theme: DateTimePickerTheme(
-                    //     title: Text('Birthdate',
-                    //         style: Theme.of(context).textTheme.title))
+                    initial: _selected,
+                    onChange: (DateTime dateTime) => _selected = dateTime,
                   ),
                   Padding(
                       padding: const EdgeInsets.symmetric(vertical: 16.0),

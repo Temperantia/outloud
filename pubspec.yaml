@@ -37,6 +37,9 @@ dependencies:
   geolocator: ^5.1.5
   location_permissions: ^2.0.3
   flutter_swiper: ^1.1.6
+  timeago: ^2.0.24
+  flutter_slidable: ^0.5.4
+  rubber: ^0.4.0
 
 dev_dependencies:
   flutter_test:

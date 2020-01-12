@@ -18,88 +18,100 @@ import 'package:inclusive/widgets/background.dart';
 class HomeScreen extends StatefulWidget {
   static const String id = 'Home';
   @override
-  _HomeState createState() => _HomeState();
+  _HomeScreenState createState() => _HomeScreenState();
 }
 
-class _HomeState extends State<HomeScreen> with SingleTickerProviderStateMixin {
-  final GlobalKey<MessagingState> messaging = GlobalKey<MessagingState>();
+class _HomeScreenState extends State<HomeScreen>
+    with SingleTickerProviderStateMixin, WidgetsBindingObserver {
+  AppDataService _appDataService;
+  MessageService _messageService;
+  UserModel _userProvider;
 
-  AppDataService appDataService;
-  MessageService messageService;
-  UserModel userProvider;
-  User user;
-
-  TabController tabController;
-  bool editProfile = false;
+  TabController _tabController;
+  bool _editProfile = false;
 
   @override
   void initState() {
     super.initState();
-    tabController = TabController(vsync: this, length: 5);
+    WidgetsBinding.instance.addObserver(this);
+    _tabController = TabController(vsync: this, length: 5);
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    switch (state) {
+      case AppLifecycleState.detached:
+        break;
+      case AppLifecycleState.inactive:
+        break;
+      case AppLifecycleState.paused:
+        break;
+      case AppLifecycleState.resumed:
+        _appDataService.refreshLocation();
+        break;
+    }
   }
 
   @override
   void dispose() {
-    tabController.dispose();
+    _tabController.dispose();
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
 
-  void onSaveProfile(User user) {
-    userProvider.updateUser(user);
-    setState(() => editProfile = false);
+  void _onSaveProfile(User user) {
+    _userProvider.updateUser(user);
+    setState(() => _editProfile = false);
   }
 
-  Widget _body() {
+  void _onChangePage(int index) {
+    setState(() {
+      _appDataService.currentPage = index;
+      _tabController.animateTo(index);
+    });
+  }
+
+  Widget _buildBody() {
+    final User user = Provider.of<User>(context);
+
     return Container(
         decoration: background,
         child: TabBarView(
             physics: const NeverScrollableScrollPhysics(),
-            controller: tabController,
+            controller: _tabController,
             children: <Widget>[
-              if (editProfile)
-                ProfileEditionScreen(user, onSaveProfile)
+              if (_editProfile)
+                ProfileEditionScreen(user, _onSaveProfile)
               else
                 Profile(user),
-              MessagingScreen(key: messaging),
-              SearchScreen(),
+              const MessagingScreen(),
+              SearchScreen(onCreateUserConversation: _onChangePage),
               const Center(child: Text('Coming soon')),
               const Center(child: Text('Coming soon')),
             ]));
   }
 
-  void onChangePage(final int index) {
-    setState(() {
-      appDataService.currentPage = index;
-      tabController.animateTo(index);
-    });
-  }
-
-  List<SpeedDialChild> buildActions() {
+  List<SpeedDialChild> _buildActions() {
     final List<SpeedDialChild> actions = <SpeedDialChild>[];
 
-    if (appDataService.currentPage == 0) {
+    if (_appDataService.currentPage == 0) {
       actions.add(SpeedDialChild(
           backgroundColor: orange,
-          child: Icon(editProfile ? Icons.cancel : Icons.edit, color: white),
-          onTap: () => setState(() => editProfile = !editProfile)));
-    } else if (appDataService.currentPage == 1) {
-      actions.add(SpeedDialChild(
-          backgroundColor: orange,
-          child: Icon(Icons.close, color: white),
-          onTap: () => messaging.currentState.onCloseConversation()));
+          child: Icon(_editProfile ? Icons.cancel : Icons.edit, color: white),
+          onTap: () => setState(() => _editProfile = !_editProfile)));
     }
     return actions;
   }
 
   @override
   Widget build(BuildContext context) {
-    messageService = Provider.of<MessageService>(context);
-    userProvider = Provider.of<UserModel>(context);
-    appDataService = Provider.of<AppDataService>(context);
+    _messageService = Provider.of<MessageService>(context);
+    _userProvider = Provider.of<UserModel>(context);
+    _appDataService = Provider.of<AppDataService>(context);
 
-    user = Provider.of<User>(context);
+    _appDataService.refreshLocation();
 
-    tabController.animateTo(appDataService.currentPage);
+    _tabController.animateTo(_appDataService.currentPage);
     return Scaffold(
         resizeToAvoidBottomInset: false,
         floatingActionButton: SpeedDial(
@@ -108,14 +120,14 @@ class _HomeState extends State<HomeScreen> with SingleTickerProviderStateMixin {
             animatedIcon: AnimatedIcons.menu_close,
             foregroundColor: white,
             overlayOpacity: 0,
-            children: buildActions()),
+            children: _buildActions()),
         floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
         bottomNavigationBar: BubbleBottomBar(
             fabLocation: BubbleBottomBarFabLocation.end,
             opacity: 1,
-            currentIndex: appDataService.currentPage,
-            onTap: onChangePage,
-            items: bubbleBar(context, messageService.pings)),
-        body: SafeArea(child: _body()));
+            currentIndex: _appDataService.currentPage,
+            onTap: _onChangePage,
+            items: bubbleBar(context, _messageService.pings)),
+        body: SafeArea(child: _buildBody()));
   }
 }

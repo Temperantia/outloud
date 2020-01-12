@@ -16,30 +16,43 @@ class Conversation with ChangeNotifier {
     if (isGroup) {
       idPeer = id;
     } else {
-      idPeer = getPeerId(id);
+      idPeer = _getPeerId(id);
     }
   }
-  final AppDataService appDataService = locator<AppDataService>();
-  final UserModel userProvider = locator<UserModel>();
-  final GroupModel groupProvider = locator<GroupModel>();
-  final MessageModel messageProvider = locator<MessageModel>();
   final String id;
-  bool isGroup;
-  Entity entity;
-  String idPeer;
 
+  final AppDataService _appDataService = locator<AppDataService>();
+  final UserModel _userProvider = locator<UserModel>();
+  final GroupModel _groupProvider = locator<GroupModel>();
+  final MessageModel _messageProvider = locator<MessageModel>();
+
+  bool isGroup;
+  String idPeer;
   int lastRead = 0;
   int pings = 0;
-  Stream<Entity> peerData;
-  Stream<MessageList> messageList;
-  Stream<GroupPing> groupPings;
 
-  @override
-  String toString() {
-    return 'pings : ' +
-        pings.toString() +
-        ' messages : ' +
-        messageList.toString();
+  static String makeUserConversationId(String id, String idPeer) {
+    return id + '-' + idPeer;
+  }
+
+  String _getPeerId(final String conversationId) {
+    final List<String> ids = conversationId.split('-');
+    return _appDataService.identifier == ids[0] ? ids[1] : ids[0];
+  }
+
+  Stream<Entity> streamEntity() {
+    if (isGroup) {
+      return _groupProvider.streamGroup(idPeer);
+    }
+    return _userProvider.streamUser(idPeer);
+  }
+
+  Stream<MessageList> streamMessageList() {
+    return _messageProvider.streamMessageList(id);
+  }
+
+  Stream<GroupPing> streamGroupPings() {
+    return _messageProvider.streamGroupPings(this, _appDataService.identifier);
   }
 
   Future<void> getGroupUsers(MessageList messageList) async {
@@ -48,7 +61,7 @@ class Conversation with ChangeNotifier {
         .toSet()
         .toList();
     List<User> users =
-        await Future.wait(ids.map((String id) => userProvider.getUser(id)));
+        await Future.wait(ids.map((String id) => _userProvider.getUser(id)));
     users = List<User>.from(users);
     users.removeWhere((User user) => user == null);
 
@@ -58,24 +71,8 @@ class Conversation with ChangeNotifier {
     }
   }
 
-  String getPeerId(final String conversationId) {
-    final List<String> ids = conversationId.split('-');
-    return appDataService.identifier == ids[0] ? ids[1] : ids[0];
-  }
-
-  Stream<Entity> streamPeerInfo() {
-    if (isGroup) {
-      return groupProvider.streamGroup(idPeer);
-    }
-    return userProvider.streamUser(idPeer);
-  }
-
-  Stream<MessageList> streamMessageList() {
-    return messageProvider.streamMessageList(id);
-  }
-
-  Stream<GroupPing> streamGroupPings() {
-    return messageProvider.streamGroupPings(this, appDataService.identifier);
+  Stream<Message> streamLastMessage() {
+    return _messageProvider.streamLastMessage(id);
   }
 
   void markAsRead() {

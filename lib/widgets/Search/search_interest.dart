@@ -5,9 +5,10 @@ import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:inclusive/theme.dart';
 
 class SearchInterest extends StatefulWidget {
-  const SearchInterest({this.onUpdate});
+  const SearchInterest({this.onUpdate, this.interests});
 
   final Function onUpdate;
+  final List<String> interests;
 
   @override
   SearchInterestState createState() {
@@ -16,68 +17,64 @@ class SearchInterest extends StatefulWidget {
 }
 
 class SearchInterestState extends State<SearchInterest> {
-  List<Item> interests = <Item>[];
-  int _count = 0;
+  final TextEditingController _controller = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    return Row(children: <Widget>[
-      Expanded(
-          child: TypeAheadField<Map<String, String>>(
-              suggestionsCallback: (String pattern) {
-        List<Map<String, String>> data = <Map<String, String>>[
-          <String, String>{'name': 'gay community'},
-          <String, String>{'name': 'cookies'},
-          <String, String>{'name': 'body painting'},
-        ];
-        data = data
-            .where(
-                (Map<String, String> elem) => elem['name'].startsWith(pattern))
-            .toList();
-        return data;
-      }, itemBuilder: (BuildContext context, Map<String, String> suggestion) {
-        return ListTile(
-          leading: Icon(Icons.category),
-          title: Text(suggestion['name'], style: TextStyle(color: orange)),
-        );
-      }, onSuggestionSelected: (Map<String, String> suggestion) {
-        setState(() {
-          interests.add(Item(index: _count, title: suggestion['name']));
-          ++_count;
-        });
-      })),
-      if (interests.isNotEmpty)
-        Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20),
-              color: blue,
-            ),
-            padding: const EdgeInsets.all(20),
-            child: Tags(
-                itemBuilder: (int index) {
-                  final Item item = interests[index];
+    return Column(children: <Widget>[
+      TypeAheadField<Map<String, String>>(
+          textFieldConfiguration:
+              TextFieldConfiguration<String>(controller: _controller),
+          suggestionsCallback: (String pattern) {
+            List<Map<String, String>> data = <Map<String, String>>[
+              <String, String>{'name': 'gay community'},
+              <String, String>{'name': 'cookies'},
+              <String, String>{'name': 'body painting'},
+            ];
+            data = data
+                .where((Map<String, String> elem) =>
+                    elem['name'].startsWith(pattern))
+                .toList();
+            return data;
+          },
+          itemBuilder: (BuildContext context, Map<String, String> suggestion) {
+            return ListTile(
+              leading: Icon(Icons.category),
+              title: Text(suggestion['name'], style: TextStyle(color: orange)),
+            );
+          },
+          onSuggestionSelected: (Map<String, String> suggestion) {
+            setState(() {
+              _controller.clear();
+              widget.interests.add(suggestion['name']);
+              widget.onUpdate(widget.interests);
+            });
+          }),
+      if (widget.interests.isNotEmpty)
+        Tags(
+            itemBuilder: (int index) {
+              final String item = widget.interests[index];
 
-                  return ItemTags(
-                      activeColor: orange,
-                      key: Key(index.toString()),
-                      index: index,
-                      onRemoved: () {
-                        setState(() {
-                          interests.removeAt(index);
-                          _count -= 1;
-                        });
-                        widget.onUpdate(interests);
-                      },
-                      pressEnabled: false,
-                      removeButton: ItemTagsRemoveButton(
-                        color: orange,
-                        backgroundColor: white,
-                      ),
-                      title: item.title,
-                      textStyle: Theme.of(context).textTheme.caption);
-                },
-                itemCount: interests
-                    .length /*
+              return ItemTags(
+                  activeColor: orange,
+                  key: Key(index.toString()),
+                  index: index,
+                  onRemoved: () {
+                    setState(() {
+                      widget.interests.removeAt(index);
+                    });
+                    widget.onUpdate(widget.interests);
+                  },
+                  pressEnabled: false,
+                  removeButton: ItemTagsRemoveButton(
+                    color: orange,
+                    backgroundColor: white,
+                  ),
+                  title: item,
+                  textStyle: Theme.of(context).textTheme.caption);
+            },
+            itemCount: widget.interests
+                .length /*
             textField: TagsTextField(
               autofocus: false,
               helperTextStyle: Theme.of(context).textTheme.caption,
@@ -85,15 +82,15 @@ class SearchInterestState extends State<SearchInterest> {
               hintTextColor: white,
               onSubmitted: (String str) {
                 setState(() {
-                  interests.add(Item(index: _count, title: str));
+                  widget.interests.add(Item(index: _count, title: str));
                   ++_count;
-                  widget.onUpdate(interests);
+                  widget.onUpdate(widget.interests);
                 });
               },
               //suggestions: const ['gay', 'lesbian', 'gay community'],
               //suggestionTextColor: orange,
             ),*/
-                ))
+            )
     ]);
   }
 }

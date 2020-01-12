@@ -11,7 +11,7 @@ import 'package:inclusive/services/api.dart';
 class MessageModel extends ChangeNotifier {
   final Api _api = locator<Api>('messages');
 
-  Stream<MessageList> streamMessageList(final String conversationId) {
+  Stream<MessageList> streamMessageList(String conversationId) {
     return getDataFromQuery(
         query: _api.querySubCollection(conversationId, conversationId,
             orderBy: <OrderConstraint>[OrderConstraint('timestamp', true)]),
@@ -20,8 +20,18 @@ class MessageModel extends ChangeNotifier {
         (List<Message> messages) => MessageList(messages: messages));
   }
 
-  Stream<GroupPing> streamGroupPings(
-      Conversation conversation, final String idFrom) {
+  Stream<Message> streamLastMessage(String conversationId) {
+    return getDataFromQuery(
+        query: _api.querySubCollection(conversationId, conversationId,
+            orderBy: <OrderConstraint>[
+              OrderConstraint('timestamp', true)
+            ]).limit(1),
+        mapper: (DocumentSnapshot messageDoc) =>
+            Message.fromMap(messageDoc.data)).map<Message>(
+        (List<Message> messages) => messages.isEmpty ? null : messages[0]);
+  }
+
+  Stream<GroupPing> streamGroupPings(Conversation conversation, String idFrom) {
     return getDataFromQuery(
         query: _api.querySubCollection(conversation.id, conversation.id,
             where: <QueryConstraint>[
