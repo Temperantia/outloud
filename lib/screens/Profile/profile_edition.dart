@@ -1,4 +1,11 @@
+import 'dart:typed_data';
+
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_swiper/flutter_swiper.dart';
+import 'package:inclusive/services/app_data.dart';
+import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:provider/provider.dart';
 
 import 'package:inclusive/classes/user.dart';
@@ -21,6 +28,7 @@ class _ProfileEditionState extends State<ProfileEditionScreen> {
   final TextEditingController _editName = TextEditingController();
   final TextEditingController _editHome = TextEditingController();
   final TextEditingController _editDescription = TextEditingController();
+  AppDataService _appDataService;
   UserModel _userProvider;
 
   String _editing = '';
@@ -32,6 +40,14 @@ class _ProfileEditionState extends State<ProfileEditionScreen> {
     _editName.text = widget.user.name;
     _editHome.text = widget.user.home;
     _editDescription.text = widget.user.description;
+  }
+
+  @override
+  void dispose() {
+    _editName.dispose();
+    _editHome.dispose();
+    _editDescription.dispose();
+    super.dispose();
   }
 
   Divider _buildDivider() {
@@ -152,7 +168,47 @@ class _ProfileEditionState extends State<ProfileEditionScreen> {
         ]);
   }
 
-  Widget buildUserInterests() {
+  Widget _buildUserPictures() {
+    return Expanded(
+        child: Swiper(
+            itemBuilder: (BuildContext context, int index) {
+              return Image.network(widget.user.pics[index].toString());
+            },
+            itemCount: widget.user.pics.length,
+            control: const SwiperControl(),
+            pagination: const SwiperPagination(),
+            loop: false));
+  }
+
+  Widget _buildUserPictureInput() {
+    return _editing == 'pictures'
+        ? Container()
+        : GestureDetector(
+            onTap: () async {
+              List<Asset> images;
+              try {
+                images = await MultiImagePicker.pickImages(maxImages: 20);
+              } catch (error) {
+                return;
+              }
+              final List<dynamic> pics = List<dynamic>.from(widget.user.pics);
+
+              for (final Asset image in images) {
+                final dynamic imageUri =
+                    await _appDataService.saveImage(image, widget.user.id);
+                pics.add(imageUri);
+              }
+              widget.user.pics = pics;
+            },
+            child: Text('Click to upload pictures',
+                style: TextStyle(
+                  fontWeight: FontWeight.w500,
+                  fontSize: 15,
+                  color: orangeLight,
+                )));
+  }
+
+  Widget _buildUserInterests() {
     return ListTile(
       dense: true,
       title: Text('Interests',
@@ -162,56 +218,7 @@ class _ProfileEditionState extends State<ProfileEditionScreen> {
             color: orange,
           )),
       subtitle: _editing == 'interests'
-          ? /* Tags(
-              itemBuilder: (int index) {
-                final Item item = interests[index];
-
-                return ItemTags(
-                  activeColor: blue,
-                  key: Key(index.toString()),
-                  index: index,
-                  onRemoved: () {
-                    setState(() {
-                      interests.removeAt(index);
-                      widget.user.interests = interests
-                          .map((Item interest) => interest.title)
-                          .toList();
-                    });
-                  },
-                  pressEnabled: false,
-                  removeButton: ItemTagsRemoveButton(
-                    color: blue,
-                    backgroundColor: orange,
-                  ),
-                  title: item.title,
-                  textStyle: Theme.of(context).textTheme.caption,
-                );
-              },
-              itemCount: interests.length,
-              textField: TagsTextField(
-                autofocus: true,
-                helperTextStyle: TextStyle(
-                    fontWeight: FontWeight.w500,
-                    fontSize: 15,
-                    color: orangeLight),
-                hintText: '+ Add an interest',
-                hintTextColor: orange,
-                onSubmitted: (String str) {
-                  setState(() {
-                    interests.add(Item(index: count, title: str));
-                    ++count;
-                    widget.user.interests = interests
-                        .map((Item interest) => interest.title)
-                        .toList();
-                  });
-                },
-                textStyle: TextStyle(
-                    fontWeight: FontWeight.w500, fontSize: 15, color: orange),
-                suggestions: const <String>['gay', 'lesbian', 'gay community'],
-                suggestionTextColor: orange,
-              ),
-            )*/
-          SearchInterest(
+          ? SearchInterest(
               interests: widget.user.interests,
               onUpdate: (List<String> interests) =>
                   setState(() => widget.user.interests = interests))
@@ -234,7 +241,7 @@ class _ProfileEditionState extends State<ProfileEditionScreen> {
     );
   }
 
-  Widget buildUserAbout() {
+  Widget _buildUserAbout() {
     return ListTile(
       dense: true,
       title: Padding(
@@ -280,18 +287,20 @@ class _ProfileEditionState extends State<ProfileEditionScreen> {
 
   @override
   Widget build(BuildContext context) {
+    _appDataService = Provider.of<AppDataService>(context);
     _userProvider = Provider.of<UserModel>(context);
-    return SingleChildScrollView(
-        child: Card(
-            child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
+    return Card(
+        child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
           _buildActions(),
           _buildUserInfo(),
+          if (widget.user.pics.isNotEmpty) _buildUserPictures(),
+          _buildUserPictureInput(),
           _buildDivider(),
-          buildUserInterests(),
+          _buildUserInterests(),
           _buildDivider(),
-          buildUserAbout(),
-        ])));
+          _buildUserAbout(),
+        ]));
   }
 }

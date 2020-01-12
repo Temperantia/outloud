@@ -55,47 +55,51 @@ class _SearchScreenState extends State<SearchScreen>
                 me.location.longitude,
                 user.location.latitude,
                 user.location.longitude),
-        builder: (BuildContext context, distance) => GestureDetector(
-            onTap: () =>
-                Navigator.pushNamed(context, ProfileScreen.id, arguments: user),
-            child: Card(
-                color: orange,
-                child: Container(
-                    padding: const EdgeInsets.all(20.0),
-                    child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Text(user.name,
-                              style: Theme.of(context).textTheme.title),
-                          Text(user.getAge().toString(),
-                              style: Theme.of(context).textTheme.title),
-                          Column(children: <Widget>[
-                            if (commonInterests > 0)
-                              Container(
-                                  child: Row(children: <Widget>[
-                                Text(commonInterests.toString()),
-                                Icon(Icons.category),
-                                const Text('in common'),
-                              ])),
-                            if (distance.hasData)
-                              Text((distance.data / 1000).round().toString() +
-                                  ' km')
-                          ]),
-                          ButtonBar(children: <IconButton>[
-                            if (!conversationList.hasUserConversation(user.id))
-                              IconButton(
-                                  icon: Icon(Icons.message),
-                                  onPressed: () {
-                                    setState(() {
-                                      _messageService.addUserConversation(
-                                          conversationList,
-                                          _appDataService.identifier,
-                                          user.id);
-                                      widget.onCreateUserConversation(1);
-                                    });
-                                  }),
-                          ]),
-                        ])))));
+        builder: (BuildContext context, AsyncSnapshot<double> distance) =>
+            GestureDetector(
+                onTap: () => Navigator.pushNamed(context, ProfileScreen.id,
+                    arguments: user),
+                child: Card(
+                    color: orange,
+                    child: Container(
+                        padding: const EdgeInsets.all(20.0),
+                        child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Text(user.name,
+                                  style: Theme.of(context).textTheme.title),
+                              Text(user.getAge().toString(),
+                                  style: Theme.of(context).textTheme.title),
+                              Column(children: <Widget>[
+                                if (commonInterests > 0)
+                                  Container(
+                                      child: Row(children: <Widget>[
+                                    Text(commonInterests.toString()),
+                                    Icon(Icons.category),
+                                    const Text('in common'),
+                                  ])),
+                                if (distance.hasData)
+                                  Text((distance.data / 1000)
+                                          .round()
+                                          .toString() +
+                                      ' km')
+                              ]),
+                              ButtonBar(children: <IconButton>[
+                                if (!conversationList
+                                    .hasUserConversation(user.id))
+                                  IconButton(
+                                      icon: Icon(Icons.message),
+                                      onPressed: () {
+                                        setState(() {
+                                          _messageService.addUserConversation(
+                                              conversationList,
+                                              _appDataService.identifier,
+                                              user.id);
+                                          widget.onCreateUserConversation(1);
+                                        });
+                                      }),
+                              ]),
+                            ])))));
   }
 
   Widget buildUpperLayer(AsyncSnapshot<List<User>> users,

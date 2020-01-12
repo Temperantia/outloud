@@ -28,9 +28,9 @@ class User extends Entity {
         interests = snapshot['interests'] == null
             ? <String>[]
             : snapshot['interests'].cast<String>() as List<String>,
-        pics = snapshot['interests'] == null
-            ? <String>[]
-            : snapshot['interests'].cast<String>() as List<String>,
+        pics = snapshot['pics'] == null
+            ? <dynamic>[]
+            : snapshot['pics'] as List<dynamic>,
         super(snapshot['name'] as String);
 
   final String id;
@@ -40,7 +40,7 @@ class User extends Entity {
   DateTime birthDate;
   String description;
   List<String> interests;
-  List<String> pics;
+  List<dynamic> pics;
 
   final UserModel _userProvider = locator<UserModel>();
 

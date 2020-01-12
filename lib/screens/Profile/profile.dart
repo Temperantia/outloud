@@ -61,20 +61,15 @@ class Profile extends StatelessWidget {
                 )),
           ],
         ),
-        Swiper(
-          itemBuilder: (BuildContext context, int index) {
-            //List<Object> images = List<Object>();
-
-            //  final imageUrl = await imageLink.getDownloadUrl();
-            //Image.network(imageUrl.toString());
-
-            return Container();
-          },
-          itemCount: 10,
-          itemWidth: 300.0,
-          itemHeight: 200.0,
-          layout: SwiperLayout.STACK,
-        ),
+        Expanded(
+            child: Swiper(
+                itemBuilder: (BuildContext context, int index) {
+                  return Image.network(user.pics[index].toString());
+                },
+                itemCount: user.pics.length,
+                control: const SwiperControl(),
+                pagination: const SwiperPagination(),
+                loop: false)),
         divider(),
         ListTile(
           dense: true,
