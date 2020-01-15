@@ -50,7 +50,6 @@ class UserModel extends ChangeNotifier {
     final DateTime dateStart =
         DateTime(now.year - ageStart, now.month, now.day);
     final DateTime dateEnd = DateTime(now.year - ageEnd, now.month, now.day);
-
     Query query = _api.queryCollection(where: <QueryConstraint>[
       QueryConstraint(field: 'birthDate', isGreaterThanOrEqualTo: dateEnd),
       QueryConstraint(field: 'birthDate', isLessThanOrEqualTo: dateStart),
