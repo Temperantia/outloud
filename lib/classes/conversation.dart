@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+
 import 'package:inclusive/classes/entity.dart';
 import 'package:inclusive/classes/group_ping.dart';
 import 'package:inclusive/classes/message.dart';

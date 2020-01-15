@@ -7,7 +7,7 @@ import 'package:inclusive/widgets/Search/search_interest.dart';
 class SearchSolo extends StatefulWidget {
   const SearchSolo({this.onSearch});
 
-  final Function onSearch;
+  final void Function() onSearch;
 
   @override
   SearchSoloState createState() {

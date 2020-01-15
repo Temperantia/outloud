@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:inclusive/classes/conversation_list.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'package:inclusive/classes/conversation_list.dart';
 import 'package:inclusive/classes/conversation.dart';
 import 'package:inclusive/locator.dart';
 import 'package:inclusive/services/app_data.dart';

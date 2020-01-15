@@ -1,30 +1,26 @@
-import 'dart:typed_data';
-
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
-import 'package:inclusive/services/app_data.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:provider/provider.dart';
 
 import 'package:inclusive/classes/user.dart';
 import 'package:inclusive/models/user.dart';
+import 'package:inclusive/services/app_data.dart';
 import 'package:inclusive/theme.dart';
 import 'package:inclusive/widgets/Search/search_interest.dart';
 import 'package:inclusive/widgets/birthdate_picker.dart';
 
-class ProfileEditionScreen extends StatefulWidget {
-  ProfileEditionScreen(this.user, this.onSave) : initialUser = user.toJson();
+class ProfileEdition extends StatefulWidget {
+  ProfileEdition(this.user, this.onSave) : initialUser = user.toJson();
   final User user;
-  final Function onSave;
+  final void Function(User) onSave;
   final dynamic initialUser;
 
   @override
   _ProfileEditionState createState() => _ProfileEditionState();
 }
 
-class _ProfileEditionState extends State<ProfileEditionScreen> {
+class _ProfileEditionState extends State<ProfileEdition> {
   final TextEditingController _editName = TextEditingController();
   final TextEditingController _editHome = TextEditingController();
   final TextEditingController _editDescription = TextEditingController();
@@ -157,7 +153,7 @@ class _ProfileEditionState extends State<ProfileEditionScreen> {
             GestureDetector(
                 onTap: () => setState(() => _editing = 'location'),
                 child: Text(
-                    widget.user.home == null || widget.user.home == ''
+                    widget.user.home == ''
                         ? 'Insert location there'
                         : widget.user.home,
                     textAlign: TextAlign.center,
@@ -268,8 +264,7 @@ class _ProfileEditionState extends State<ProfileEditionScreen> {
           : GestureDetector(
               onTap: () => setState(() => _editing = 'description'),
               child: Text(
-                  widget.user.description == null ||
-                          widget.user.description == ''
+                  widget.user.description == ''
                       ? 'Insert description down there'
                       : widget.user.description,
                   style: TextStyle(

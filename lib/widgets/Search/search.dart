@@ -1,26 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:rubber/rubber.dart';
+
+import 'package:inclusive/screens/Profile/profile.dart';
 import 'package:inclusive/classes/conversation_list.dart';
-import 'package:inclusive/screens/profile.dart';
 import 'package:inclusive/services/app_data.dart';
 import 'package:inclusive/services/message.dart';
 import 'package:inclusive/theme.dart';
 import 'package:inclusive/widgets/Search/search_interest.dart';
 import 'package:inclusive/widgets/background.dart';
-import 'package:provider/provider.dart';
-
 import 'package:inclusive/classes/user.dart';
 import 'package:inclusive/models/user.dart';
-import 'package:rubber/rubber.dart';
 
-class SearchScreen extends StatefulWidget {
-  const SearchScreen({this.onCreateUserConversation});
+class Search extends StatefulWidget {
+  const Search({this.onCreateUserConversation});
   final void Function(int) onCreateUserConversation;
   @override
-  _SearchScreenState createState() => _SearchScreenState();
+  _SearchState createState() => _SearchState();
 }
 
-class _SearchScreenState extends State<SearchScreen>
-    with SingleTickerProviderStateMixin {
+class _SearchState extends State<Search> with SingleTickerProviderStateMixin {
   RubberAnimationController _controller;
 
   AppDataService _appDataService;
@@ -102,7 +101,7 @@ class _SearchScreenState extends State<SearchScreen>
                             ])))));
   }
 
-  Widget buildUpperLayer(AsyncSnapshot<List<User>> users,
+  Widget _buildUpperLayer(AsyncSnapshot<List<User>> users,
       ConversationList conversationList, User user) {
     return Container(
         decoration: BoxDecoration(color: white),
@@ -121,7 +120,7 @@ class _SearchScreenState extends State<SearchScreen>
         ]));
   }
 
-  Widget buildLowerLayer() {
+  Widget _buildLowerLayer() {
     return Container(
         padding: const EdgeInsets.only(top: 20.0),
         decoration: background,
@@ -173,45 +172,7 @@ class _SearchScreenState extends State<SearchScreen>
         builder: (BuildContext context, AsyncSnapshot<List<User>> users) =>
             RubberBottomSheet(
                 animationController: _controller,
-                upperLayer: buildUpperLayer(users, conversationList, user),
-                lowerLayer: buildLowerLayer()));
-    /*
-      Container(
-          height: MediaQuery.of(context).size.height * 0.15,
-          child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <GestureDetector>[
-                GestureDetector(
-                    onTap: () => setState(() => _type = 'solo'),
-                    child: Container(
-                        width: 60,
-                        height: 60,
-                        decoration: BoxDecoration(
-                            color: _type == 'solo' ? orange : blue,
-                            borderRadius: BorderRadius.circular(50)),
-                        padding: const EdgeInsets.all(20),
-                        child: Icon(Icons.person, color: white))),
-                GestureDetector(
-                    onTap: () => setState(() => _type = 'group'),
-                    child: Container(
-                        width: 60,
-                        height: 60,
-                        decoration: BoxDecoration(
-                            color: _type == 'group' ? orange : blue,
-                            borderRadius: BorderRadius.circular(50)),
-                        padding: const EdgeInsets.all(15),
-                        child: Icon(Icons.group, color: white))),
-                GestureDetector(
-                    onTap: () => setState(() => _type = 'event'),
-                    child: Container(
-                        width: 60,
-                        height: 60,
-                        decoration: BoxDecoration(
-                            color: _type == 'event' ? orange : blue,
-                            borderRadius: BorderRadius.circular(50)),
-                        padding: const EdgeInsets.all(15),
-                        child: Icon(Icons.event, color: white)))
-              ])),
-              */
+                upperLayer: _buildUpperLayer(users, conversationList, user),
+                lowerLayer: _buildLowerLayer()));
   }
 }

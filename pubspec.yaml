@@ -10,37 +10,34 @@ dependencies:
   flutter:
     sdk: flutter
   firebase_core: ^0.4.0+9
-  firebase_analytics: ^5.0.9
-  firebase_auth: ^0.14.0+5
-  firebase_database: ^3.1.1
   firebase_storage: ^3.1.1
   cloud_firestore: ^0.12.9+6
-  flutter_svg: ^0.14.0
-  flutter_tags: ^0.4.3
-  validate: ^1.7.0
-  flutter_cupertino_date_picker: ^1.0.12
-  device_info: ^0.4.1+4
-  carousel_slider: ^1.3.0
-  get_it: ^3.0.3
+  firestore_helpers: ^3.2.1+1
+
   provider: ^3.2.0
+  get_it: ^3.0.3
+  validate: ^1.7.0
+  timeago: ^2.0.24
+  rxdart: ^0.23.1
+
+  device_info: ^0.4.1+4
   shared_preferences: ^0.5.6
-  fluttertoast: ^3.1.3
-  flutter_calendar_carousel: ^1.4.10
-  cupertino_icons: ^0.1.2
-  flutter_typeahead: ^1.7.0
+  location_permissions: ^2.0.3
+  geolocator: ^5.1.5
+
   badges: ^1.1.0
   bubble_bottom_bar: ^1.2.0
+  carousel_slider: ^1.3.0
+  fluttertoast: ^3.1.3
+  flutter_calendar_carousel: ^1.4.10
+  flutter_cupertino_date_picker: ^1.0.12
   flutter_speed_dial: ^1.2.5
-  firestore_helpers: ^3.2.1+1
-  stream_transform: ^1.1.0
-  rxdart: ^0.23.1
-  geolocator: ^5.1.5
-  location_permissions: ^2.0.3
   flutter_swiper: ^1.1.6
-  timeago: ^2.0.24
   flutter_slidable: ^0.5.4
-  rubber: ^0.4.0
+  flutter_tags: ^0.4.3
+  flutter_typeahead: ^1.7.0
   multi_image_picker: ^4.6.1
+  rubber: ^0.4.0
 
 dev_dependencies:
   flutter_test:

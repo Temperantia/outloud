@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:inclusive/classes/entity.dart';
-import 'package:inclusive/classes/message_list.dart';
-import 'package:inclusive/widgets/view.dart';
-import 'package:inclusive/widgets/background.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 
+import 'package:inclusive/classes/entity.dart';
+import 'package:inclusive/classes/message_list.dart';
+import 'package:inclusive/widgets/loading.dart';
+import 'package:inclusive/widgets/view.dart';
+import 'package:inclusive/widgets/background.dart';
 import 'package:inclusive/classes/conversation.dart';
 import 'package:inclusive/classes/message.dart';
 import 'package:inclusive/services/app_data.dart';
@@ -18,10 +19,10 @@ class ConversationScreen extends StatefulWidget {
   static const String id = 'Conversation';
   final Conversation conversation;
   @override
-  _ConversationState createState() => _ConversationState();
+  _ConversationScreenState createState() => _ConversationScreenState();
 }
 
-class _ConversationState extends State<ConversationScreen> {
+class _ConversationScreenState extends State<ConversationScreen> {
   final DateFormat _messageTimeFormat = DateFormat.jm();
   final DateFormat _messageDateFormat = DateFormat.yMd();
 
@@ -172,7 +173,7 @@ class _ConversationState extends State<ConversationScreen> {
         stream: widget.conversation.streamEntity(),
         builder: (BuildContext context, AsyncSnapshot<Entity> entity) {
           return entity.connectionState == ConnectionState.waiting
-              ? Container()
+              ? Loading()
               : View(
                   title: entity.data.name,
                   child: Container(

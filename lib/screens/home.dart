@@ -1,18 +1,18 @@
 import 'package:bubble_bottom_bar/bubble_bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
-import 'package:inclusive/services/app_data.dart';
-import 'package:inclusive/widgets/bubble_bar.dart';
 import 'package:provider/provider.dart';
 
+import 'package:inclusive/widgets/Profile/profile.dart';
+import 'package:inclusive/services/app_data.dart';
+import 'package:inclusive/widgets/bubble_bar.dart';
 import 'package:inclusive/classes/user.dart';
 import 'package:inclusive/models/user.dart';
-import 'package:inclusive/screens/Messaging/messaging.dart';
-import 'package:inclusive/screens/Profile/profile_edition.dart';
-import 'package:inclusive/screens/Search/index.dart';
+import 'package:inclusive/widgets/Messaging/messaging.dart';
+import 'package:inclusive/widgets/Profile/profile_edition.dart';
+import 'package:inclusive/widgets/Search/search.dart';
 import 'package:inclusive/services/message.dart';
 import 'package:inclusive/theme.dart';
-import 'package:inclusive/screens/Profile/profile.dart';
 import 'package:inclusive/widgets/background.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -81,11 +81,11 @@ class _HomeScreenState extends State<HomeScreen>
             controller: _tabController,
             children: <Widget>[
               if (_editProfile)
-                ProfileEditionScreen(user, _onSaveProfile)
+                ProfileEdition(user, _onSaveProfile)
               else
                 Profile(user),
-              const MessagingScreen(),
-              SearchScreen(onCreateUserConversation: _onChangePage),
+              const Messaging(),
+              Search(onCreateUserConversation: _onChangePage),
               const Center(child: Text('Coming soon')),
               const Center(child: Text('Coming soon')),
             ]));

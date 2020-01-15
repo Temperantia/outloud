@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firestore_helpers/firestore_helpers.dart';
 import 'package:flutter/material.dart';
+
 import 'package:inclusive/classes/conversation.dart';
 import 'package:inclusive/classes/group_ping.dart';
 import 'package:inclusive/classes/message.dart';

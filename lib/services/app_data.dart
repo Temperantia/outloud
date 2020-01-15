@@ -7,13 +7,13 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:inclusive/screens/home.dart';
 import 'package:location_permissions/location_permissions.dart';
+import 'package:multi_image_picker/multi_image_picker.dart';
 
+import 'package:inclusive/screens/home.dart';
 import 'package:inclusive/classes/user.dart';
 import 'package:inclusive/locator.dart' as loc;
 import 'package:inclusive/models/user.dart';
-import 'package:multi_image_picker/multi_image_picker.dart';
 
 class AppDataService extends ChangeNotifier {
   final UserModel _userProvider = loc.locator<UserModel>();

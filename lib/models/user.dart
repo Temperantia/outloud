@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firestore_helpers/firestore_helpers.dart';
 import 'package:flutter/material.dart';
+
 import 'package:inclusive/classes/ping.dart';
 import 'package:inclusive/classes/user.dart';
 import 'package:inclusive/locator.dart';
