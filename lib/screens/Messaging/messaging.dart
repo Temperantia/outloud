@@ -64,9 +64,23 @@ class _MessagingState extends State<MessagingScreen> {
                     child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
-                          Text(entity.name),
-                          Text(lastMessage == null ? '' : lastMessage.content),
-                          Text(lastMessageDateTime ?? '')
+                          Text(entity.name == '' ? 'Anonymous' : entity.name,
+                              style: Theme.of(context).textTheme.caption),
+                          Flexible(
+                              child: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 20.0),
+                                  child: Text(
+                                      lastMessage == null
+                                          ? ''
+                                          : lastMessage.content,
+                                      softWrap: false,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .caption))),
+                          Text(lastMessageDateTime ?? '',
+                              style: Theme.of(context).textTheme.caption)
                         ])))));
   }
 

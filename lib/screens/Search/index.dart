@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:geocoder/geocoder.dart';
 import 'package:inclusive/classes/conversation_list.dart';
 import 'package:inclusive/screens/profile.dart';
 import 'package:inclusive/services/app_data.dart';
@@ -40,13 +41,6 @@ class _SearchScreenState extends State<SearchScreen>
   }
 
   Widget _buildUser(User user, ConversationList conversationList, User me) {
-    final int commonInterests = me.interests.isEmpty
-        ? 0
-        : me.interests
-            .map<int>(
-                (String interest) => user.interests.contains(interest) ? 1 : 0)
-            .reduce((int curr, int next) => curr + next);
-
     return FutureBuilder<double>(
         future: me.location == null || user.location == null
             ? Future<double>(null)
@@ -56,50 +50,81 @@ class _SearchScreenState extends State<SearchScreen>
                 user.location.latitude,
                 user.location.longitude),
         builder: (BuildContext context, AsyncSnapshot<double> distance) =>
-            GestureDetector(
-                onTap: () => Navigator.pushNamed(context, ProfileScreen.id,
-                    arguments: user),
-                child: Card(
-                    color: orange,
-                    child: Container(
-                        padding: const EdgeInsets.all(20.0),
-                        child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              Text(user.name,
-                                  style: Theme.of(context).textTheme.title),
-                              Text(user.getAge().toString(),
-                                  style: Theme.of(context).textTheme.title),
-                              Column(children: <Widget>[
-                                if (commonInterests > 0)
-                                  Container(
-                                      child: Row(children: <Widget>[
-                                    Text(commonInterests.toString()),
-                                    Icon(Icons.category),
-                                    const Text('in common'),
-                                  ])),
-                                if (distance.hasData)
-                                  Text((distance.data / 1000)
-                                          .round()
-                                          .toString() +
-                                      ' km')
-                              ]),
-                              ButtonBar(children: <IconButton>[
-                                if (!conversationList
-                                    .hasUserConversation(user.id))
-                                  IconButton(
-                                      icon: Icon(Icons.message),
-                                      onPressed: () {
-                                        setState(() {
-                                          _messageService.addUserConversation(
-                                              conversationList,
-                                              _appDataService.identifier,
-                                              user.id);
-                                          widget.onCreateUserConversation(1);
-                                        });
-                                      }),
-                              ]),
-                            ])))));
+            _buildUserDetails(user, conversationList, me, distance));
+  }
+
+  Widget _buildUserDetails(User user, ConversationList conversationList,
+      User me, AsyncSnapshot<double> distance) {
+    final int commonInterests = me.interests.isEmpty
+        ? 0
+        : me.interests
+            .map<int>(
+                (String interest) => user.interests.contains(interest) ? 1 : 0)
+            .reduce((int curr, int next) => curr + next);
+
+    return GestureDetector(
+        onTap: () =>
+            Navigator.pushNamed(context, ProfileScreen.id, arguments: user),
+        child: Card(
+            color: orange,
+            child: Container(
+                padding: const EdgeInsets.all(20.0),
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Text(user.name == '' ? 'Anonymous' : user.name, style: Theme.of(context).textTheme.title),
+                      //Text(user.getAge().toString(),
+                       //   style: Theme.of(context).textTheme.title),
+                      Column(children: <Widget>[
+                        if (commonInterests > 0)
+                          Container(
+                              child: Row(children: <Widget>[
+                            Text(commonInterests.toString(), style: Theme.of(context)
+                                                    .textTheme
+                                                    .caption),
+                            Icon(Icons.category, color: white),
+                             Text('in common', style: Theme.of(context)
+                                                    .textTheme
+                                                    .caption),
+                          ])),
+                        if (distance.hasData)
+                          if (distance.data / 1000 > 3000)
+                            FutureBuilder<List<Address>>(
+                                future: Geocoder.local
+                                    .findAddressesFromCoordinates(Coordinates(
+                                        user.location.latitude,
+                                        user.location.longitude)),
+                                builder: (BuildContext context, AsyncSnapshot<List<Address>> address) =>
+                                    address.hasData
+                                        ? address.data.isEmpty || address.data[0].countryCode == null
+                                            ? Text('${(distance.data / 1000).round().toString()} km',
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .caption)
+                                            : Text('Location (${address.data[0].countryName.toString()})',
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .caption)
+                                        : Container())
+                          else
+                            Text('${(distance.data / 1000).round().toString()} km',
+                                style: Theme.of(context).textTheme.caption)
+                      ]),
+                      ButtonBar(children: <IconButton>[
+                        if (!conversationList.hasUserConversation(user.id))
+                          IconButton(
+                              icon: Icon(Icons.message, color: white),
+                              onPressed: () {
+                                setState(() {
+                                  _messageService.addUserConversation(
+                                      conversationList,
+                                      _appDataService.identifier,
+                                      user.id);
+                                  widget.onCreateUserConversation(1);
+                                });
+                              }),
+                      ]),
+                    ]))));
   }
 
   Widget buildUpperLayer(AsyncSnapshot<List<User>> users,

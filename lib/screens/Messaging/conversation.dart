@@ -174,7 +174,8 @@ class _ConversationState extends State<ConversationScreen> {
           return entity.connectionState == ConnectionState.waiting
               ? Container()
               : View(
-                  title: entity.data.name,
+                  title:
+                      entity.data.name == '' ? 'Anonymous' : entity.data.name,
                   child: Container(
                       decoration: background,
                       child: Column(children: <Widget>[

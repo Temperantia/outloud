@@ -42,7 +42,7 @@ class Profile extends StatelessWidget {
               padding: const EdgeInsets.all(0.0),
               children: <Widget>[
                 Text(
-                  user.name,
+                  user.name == '' ? 'Anonymous' : user.name,
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 32,

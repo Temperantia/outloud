@@ -41,6 +41,7 @@ dependencies:
   flutter_slidable: ^0.5.4
   rubber: ^0.4.0
   multi_image_picker: ^4.6.1
+  geocoder: ^0.2.1
 
 dev_dependencies:
   flutter_test:
