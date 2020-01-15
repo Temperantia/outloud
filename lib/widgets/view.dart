@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 
 import 'package:inclusive/services/app_data.dart';
 import 'package:inclusive/services/message.dart';
+import 'package:inclusive/theme.dart';
 import 'package:inclusive/widgets/bubble_bar.dart';
 
 class View extends StatelessWidget {
@@ -15,7 +16,10 @@ class View extends StatelessWidget {
     final AppDataService appDataService = Provider.of<AppDataService>(context);
     final MessageService messageService = Provider.of<MessageService>(context);
     return Scaffold(
-        appBar: AppBar(centerTitle: true, title: Text(title)),
+        appBar: AppBar(
+            leading: GestureDetector(
+                onTap: () => Navigator.pop(context),
+                child: Icon(Icons.keyboard_arrow_left, color: white))),
         bottomNavigationBar: BubbleBottomBar(
             fabLocation: BubbleBottomBarFabLocation.end,
             opacity: 1,

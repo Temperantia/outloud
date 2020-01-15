@@ -166,14 +166,16 @@ class _ProfileEditionState extends State<ProfileEdition> {
 
   Widget _buildUserPictures() {
     return Expanded(
-        child: Swiper(
-            itemBuilder: (BuildContext context, int index) {
-              return Image.network(widget.user.pics[index].toString());
-            },
-            itemCount: widget.user.pics.length,
-            control: const SwiperControl(),
-            pagination: const SwiperPagination(),
-            loop: false));
+        child: widget.user.pics.isEmpty
+            ? Image.asset('images/default-user-profile-image-png-7.png')
+            : Swiper(
+                itemBuilder: (BuildContext context, int index) {
+                  return Image.network(widget.user.pics[index].toString());
+                },
+                itemCount: widget.user.pics.length,
+                control: const SwiperControl(),
+                pagination: const SwiperPagination(),
+                loop: false));
   }
 
   Widget _buildUserPictureInput() {
@@ -284,18 +286,19 @@ class _ProfileEditionState extends State<ProfileEdition> {
   Widget build(BuildContext context) {
     _appDataService = Provider.of<AppDataService>(context);
     _userProvider = Provider.of<UserModel>(context);
-    return Card(
+    return Container(
+        decoration: BoxDecoration(color: white),
         child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-          _buildActions(),
-          _buildUserInfo(),
-          if (widget.user.pics.isNotEmpty) _buildUserPictures(),
-          _buildUserPictureInput(),
-          _buildDivider(),
-          _buildUserInterests(),
-          _buildDivider(),
-          _buildUserAbout(),
-        ]));
+              _buildActions(),
+              _buildUserPictures(),
+              _buildUserInfo(),
+              _buildUserPictureInput(),
+              _buildDivider(),
+              _buildUserInterests(),
+              _buildDivider(),
+              _buildUserAbout(),
+            ]));
   }
 }
