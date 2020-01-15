@@ -21,100 +21,103 @@ class Profile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
+    return Container(
+        decoration: BoxDecoration(color: white),
         child: Column(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: <Widget>[
-        ListView(
-          shrinkWrap: true,
-          padding: const EdgeInsets.all(0.0),
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            Text(
-              user.name,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 32,
-                color: orange,
-              ),
+            Expanded(
+                child: user.pics.isEmpty
+                    ? Image.asset('images/default-user-profile-image-png-7.png')
+                    : Swiper(
+                        itemBuilder: (BuildContext context, int index) {
+                          return Image.network(user.pics[index].toString());
+                        },
+                        itemCount: user.pics.length,
+                        layout: SwiperLayout.STACK,
+                        itemWidth: 500.0,
+                      )),
+            ListView(
+              shrinkWrap: true,
+              padding: const EdgeInsets.all(0.0),
+              children: <Widget>[
+                Text(
+                  user.name,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 32,
+                    color: orange,
+                  ),
+                ),
+                Padding(
+                    padding: const EdgeInsets.all(0.0),
+                    child: Text(
+                      user.getAge().toString() + ' years old',
+                      textDirection: TextDirection.ltr,
+                      textAlign: TextAlign.center,
+                      maxLines: 1,
+                      style: TextStyle(
+                        fontSize: 18,
+                        color: orange,
+                      ),
+                    )),
+                Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      user.home,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 18,
+                        color: orange,
+                      ),
+                    )),
+              ],
             ),
-            Padding(
-                padding: const EdgeInsets.all(0.0),
-                child: Text(
-                  user.getAge().toString() + ' years old',
-                  textDirection: TextDirection.ltr,
-                  textAlign: TextAlign.center,
-                  maxLines: 1,
-                  style: TextStyle(
-                    fontSize: 18,
-                    color: orange,
-                  ),
-                )),
-            Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  user.home,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 18,
-                    color: orange,
-                  ),
-                )),
-          ],
-        ),
-        Expanded(
-            child: Swiper(
-                itemBuilder: (BuildContext context, int index) {
-                  return Image.network(user.pics[index].toString());
-                },
-                itemCount: user.pics.length,
-                control: const SwiperControl(),
-                pagination: const SwiperPagination(),
-                loop: false)),
-        divider(),
-        ListTile(
-          dense: true,
-          title: Text('Interests',
-              style: TextStyle(
-                fontWeight: FontWeight.w500,
-                fontSize: 18,
-                color: orange,
-              )),
-          subtitle: Text(user.interests.join(', '),
-              style: TextStyle(
-                fontWeight: FontWeight.w500,
-                fontSize: 15,
-                color: orangeLight,
-              )),
-          leading: Icon(
-            Icons.category,
-            color: blueLight,
-            size: 40,
-          ),
-        ),
-        divider(),
-        ListTile(
-          dense: true,
-          title: Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Text('About me',
+            divider(),
+            ListTile(
+              dense: true,
+              title: Text('Interests',
                   style: TextStyle(
                     fontWeight: FontWeight.w500,
                     fontSize: 18,
                     color: orange,
-                  ))),
-          subtitle: Text(user.description,
-              style: TextStyle(
-                fontWeight: FontWeight.w500,
-                fontSize: 15,
-                color: orangeLight,
-              )),
-          leading: Icon(
-            Icons.description,
-            color: blueLight,
-            size: 40,
-          ),
-        )
-      ],
-    ));
+                  )),
+              subtitle: Text(user.interests.join(', '),
+                  style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 15,
+                    color: orangeLight,
+                  )),
+              leading: Icon(
+                Icons.category,
+                color: blueLight,
+                size: 40,
+              ),
+            ),
+            divider(),
+            ListTile(
+              dense: true,
+              title: Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Text('About me',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w500,
+                        fontSize: 18,
+                        color: orange,
+                      ))),
+              subtitle: Text(user.description,
+                  style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 15,
+                    color: orangeLight,
+                  )),
+              leading: Icon(
+                Icons.description,
+                color: blueLight,
+                size: 40,
+              ),
+            )
+          ],
+        ));
   }
 }

@@ -17,6 +17,8 @@ class View extends StatelessWidget {
     final MessageService messageService = Provider.of<MessageService>(context);
     return Scaffold(
         appBar: AppBar(
+            centerTitle: true,
+            title: Text(title, style: Theme.of(context).textTheme.caption),
             leading: GestureDetector(
                 onTap: () => Navigator.pop(context),
                 child: Icon(Icons.keyboard_arrow_left, color: white))),

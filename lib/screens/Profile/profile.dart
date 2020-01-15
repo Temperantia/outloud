@@ -11,6 +11,6 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return View(title: user.name, child: Profile(user));
+    return View(child: Profile(user));
   }
 }
