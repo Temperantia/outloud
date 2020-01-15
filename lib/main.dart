@@ -11,7 +11,7 @@ import 'package:inclusive/services/app_data.dart';
 import 'package:inclusive/services/message.dart';
 import 'package:inclusive/classes/conversation_list.dart';
 import 'package:inclusive/classes/user.dart';
-import 'package:inclusive/screens/Register/index.dart';
+import 'package:inclusive/screens/Register/register.dart';
 import 'package:inclusive/screens/Register/register_1.dart';
 import 'package:inclusive/screens/Register/register_2.dart';
 import 'package:inclusive/screens/Register/register_3.dart';
@@ -50,7 +50,7 @@ class App extends StatelessWidget {
               child: MaterialApp(
                   debugShowCheckedModeBanner: false,
                   theme: theme,
-                  title: 'Inclusive',
+                  title: 'Inc•lusive',
                   initialRoute: HomeScreen.id,
                   onGenerateRoute: (RouteSettings settings) {
                     final String name = settings.name;

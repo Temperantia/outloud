@@ -1,4 +1,5 @@
 import 'package:get_it/get_it.dart';
+
 import 'package:inclusive/models/user.dart';
 import 'package:inclusive/models/group.dart';
 import 'package:inclusive/models/message.dart';

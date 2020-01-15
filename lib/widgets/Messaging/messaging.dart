@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:provider/provider.dart';
+import 'package:timeago/timeago.dart';
+
 import 'package:inclusive/classes/conversation.dart';
 import 'package:inclusive/classes/conversation_list.dart';
 import 'package:inclusive/classes/entity.dart';
@@ -7,17 +10,15 @@ import 'package:inclusive/classes/message.dart';
 import 'package:inclusive/screens/Messaging/conversation.dart';
 import 'package:inclusive/services/message.dart';
 import 'package:inclusive/theme.dart';
-import 'package:provider/provider.dart';
-import 'package:timeago/timeago.dart';
 
-class MessagingScreen extends StatefulWidget {
-  const MessagingScreen({Key key}) : super(key: key);
+class Messaging extends StatefulWidget {
+  const Messaging({Key key}) : super(key: key);
 
   @override
   _MessagingState createState() => _MessagingState();
 }
 
-class _MessagingState extends State<MessagingScreen> {
+class _MessagingState extends State<Messaging> {
   MessageService _messageService;
   ConversationList _conversationList;
 

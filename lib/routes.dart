@@ -1,13 +1,13 @@
 import 'package:flutter/cupertino.dart';
-import 'package:inclusive/classes/conversation.dart';
 
+import 'package:inclusive/classes/conversation.dart';
 import 'package:inclusive/classes/user.dart';
 import 'package:inclusive/screens/Messaging/conversation.dart';
 import 'package:inclusive/screens/Register/register_1.dart';
 import 'package:inclusive/screens/Register/register_2.dart';
 import 'package:inclusive/screens/Register/register_3.dart';
 import 'package:inclusive/screens/home.dart';
-import 'package:inclusive/screens/profile.dart';
+import 'package:inclusive/screens/Profile/profile.dart';
 
 final Map<String, Widget Function(dynamic)> routes =
     <String, Widget Function(dynamic)>{

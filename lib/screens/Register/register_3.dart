@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:inclusive/theme.dart';
 import 'package:provider/provider.dart';
-import 'package:inclusive/models/user.dart';
 
+import 'package:inclusive/theme.dart';
+import 'package:inclusive/models/user.dart';
 import 'package:inclusive/classes/user.dart';
 import 'package:inclusive/screens/home.dart';
 import 'package:inclusive/services/app_data.dart';
