@@ -9,6 +9,11 @@ class Group extends Entity {
 
   final String id;
 
+  List<String> interests;
+
+  String owner;
+  List<String> adminIds;
+
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
       'id': id,

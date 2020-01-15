@@ -1,8 +1,4 @@
-import 'dart:typed_data';
-
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:inclusive/services/app_data.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';

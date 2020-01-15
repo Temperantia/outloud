@@ -67,8 +67,8 @@ class Profile extends StatelessWidget {
                   return Image.network(user.pics[index].toString());
                 },
                 itemCount: user.pics.length,
-                control: const SwiperControl(),
-                pagination: const SwiperPagination(),
+                layout: SwiperLayout.STACK,
+                itemWidth: 500.0,
                 loop: false)),
         divider(),
         ListTile(
