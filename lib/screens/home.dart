@@ -1,9 +1,9 @@
 import 'package:bubble_bottom_bar/bubble_bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:inclusive/widgets/Profile/profile_parent.dart';
 import 'package:provider/provider.dart';
 
-import 'package:inclusive/widgets/Profile/profile.dart';
 import 'package:inclusive/services/app_data.dart';
 import 'package:inclusive/widgets/bubble_bar.dart';
 import 'package:inclusive/classes/user.dart';
@@ -83,7 +83,7 @@ class _HomeScreenState extends State<HomeScreen>
               if (_editProfile)
                 ProfileEdition(user, _onSaveProfile)
               else
-                Profile(user),
+                ProfileParent(user),
               const Messaging(),
               Search(onCreateUserConversation: _onChangePage),
               const Center(child: Text('Coming soon')),

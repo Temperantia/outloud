@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:inclusive/classes/entity.dart';
+import 'package:inclusive/classes/interest.dart';
 import 'package:inclusive/classes/ping.dart';
 import 'package:inclusive/locator.dart';
 import 'package:inclusive/models/user.dart';
@@ -16,7 +17,6 @@ class User extends Entity {
     this.description,
     this.interests,
     this.pics,
-    this.motto,
     this.scholarship,
     this.businessTitle,
   }) : super(name);
@@ -29,12 +29,15 @@ class User extends Entity {
         birthDate = (snapshot['birthDate'] as Timestamp).toDate(),
         description = snapshot['description'] as String ?? '',
         interests = snapshot['interests'] == null
-            ? <String>[]
-            : snapshot['interests'].cast<String>() as List<String>,
+            ? <Interest>[]
+            : (snapshot['interests'] as List<dynamic>)
+                .map<Interest>((dynamic interest) => Interest.fromMap(
+                    Map<String, String>.from(
+                        interest as Map<dynamic, dynamic>)))
+                .toList(),
         pics = snapshot['pics'] == null
-            ? <dynamic>[]
-            : snapshot['pics'] as List<dynamic>,
-        motto = snapshot['motto'] as String ?? '',
+            ? <String>[]
+            : snapshot['pics'].cast<String>() as List<String>,
         scholarship = snapshot['scholarship'] as String ?? '',
         businessTitle = snapshot['businessTitle'] as String ?? '',
         super(snapshot['name'] as String);
@@ -45,9 +48,8 @@ class User extends Entity {
   GeoPoint location;
   DateTime birthDate;
   String description = '';
-  List<String> interests = <String>[];
-  List<dynamic> pics = <dynamic>[];
-  String motto = '';
+  List<Interest> interests = <Interest>[];
+  List<String> pics = <String>[];
   String scholarship = '';
   String businessTitle = '';
 
@@ -59,11 +61,12 @@ class User extends Entity {
       'email': email,
       'home': home,
       'location': location,
-      'birthDate': birthDate,
+      'birthDate': Timestamp.fromDate(birthDate),
       'description': description,
-      'interests': interests,
+      'interests': interests
+          .map<Map<String, String>>((Interest interest) => interest.toJson())
+          .toList(),
       'pics': pics,
-      'motto': motto,
       'scholarship': scholarship,
       'businessTitle': businessTitle,
     };

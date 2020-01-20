@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:inclusive/classes/user.dart';
-import 'package:inclusive/widgets/Profile/profile.dart';
+import 'package:inclusive/widgets/Profile/profile_detail.dart';
 import 'package:inclusive/widgets/view.dart';
 
 class ProfileScreen extends StatelessWidget {
@@ -11,6 +11,6 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return View(child: Profile(user));
+    return View(child: ProfileDetail(user));
   }
 }

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
-Color orange = const Color(0xFFFF8D00);
-Color orangeLight = const Color(0x66FF8D00);
+Color yellow = const Color(0xFFFFEF00);
+Color orange = const Color(0xFFFF8C00);
+Color orangeLight = const Color(0x66FF8C00);
 Color blue = const Color(0xFF185782);
 Color blueLight = const Color(0xFFBCE0FD);
 Color red = const Color(0xFFFF0000);
@@ -20,18 +21,5 @@ ThemeData theme = ThemeData(
   primaryColor: orange,
   sliderTheme: const SliderThemeData(
     showValueIndicator: ShowValueIndicator.always,
-  ),
-  textTheme: TextTheme(
-    caption: TextStyle(
-      fontSize: 18.0,
-      color: white,
-    ),
-    subhead: TextStyle(
-      color: white,
-    ),
-    title: TextStyle(
-      fontSize: 24.0,
-      color: white,
-    ),
   ),
 );

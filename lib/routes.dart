@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:inclusive/classes/conversation.dart';
 import 'package:inclusive/classes/user.dart';
 import 'package:inclusive/screens/Messaging/conversation.dart';
+import 'package:inclusive/screens/Profile/profile_information.dart';
 import 'package:inclusive/screens/Register/register_1.dart';
 import 'package:inclusive/screens/Register/register_2.dart';
 import 'package:inclusive/screens/Register/register_3.dart';
@@ -21,4 +22,6 @@ final Map<String, Widget Function(dynamic)> routes =
       ConversationScreen(conversation: arguments as Conversation),
   ProfileScreen.id: (dynamic arguments) =>
       ProfileScreen(user: arguments as User),
+  ProfileInformationScreen.id: (dynamic arguments) =>
+      ProfileInformationScreen(),
 };

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:inclusive/classes/conversation_list.dart';
+import 'package:inclusive/classes/interest.dart';
 import 'package:inclusive/screens/Profile/profile.dart';
 import 'package:inclusive/services/app_data.dart';
 import 'package:inclusive/services/message.dart';
@@ -28,7 +29,7 @@ class _SearchScreenState extends State<SearchScreen>
   MessageService _messageService;
   UserModel _userProvider;
   RangeValues _ages = const RangeValues(25, 60);
-  List<String> _interests = <String>[];
+  List<Interest> _interests = <Interest>[];
 
   @override
   void initState() {
@@ -59,7 +60,7 @@ class _SearchScreenState extends State<SearchScreen>
         ? 0
         : me.interests
             .map<int>(
-                (String interest) => user.interests.contains(interest) ? 1 : 0)
+                (Interest interest) => user.interests.contains(interest) ? 1 : 0)
             .reduce((int curr, int next) => curr + next);
 
     return GestureDetector(
@@ -156,9 +157,7 @@ class _SearchScreenState extends State<SearchScreen>
             Flexible(
                 child: SearchInterest(
                     interests: _interests,
-                    onUpdate: (List<String> interests) {
-                      setState(() => _interests = interests);
-                    }))
+                   ))
           ]),
           Row(children: <Widget>[
             Icon(Icons.cake),
@@ -192,7 +191,7 @@ class _SearchScreenState extends State<SearchScreen>
         Provider.of<ConversationList>(context);
     return FutureBuilder<List<User>>(
         future: _userProvider.getUsers(_appDataService.identifier,
-            interests: _interests,
+            interests: _interests.map<String>((Interest interest) => interest.name).toList(),
             ageStart: _ages.start.toInt(),
             ageEnd: _ages.end.toInt()),
         builder: (BuildContext context, AsyncSnapshot<List<User>> users) =>

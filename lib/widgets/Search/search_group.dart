@@ -24,9 +24,7 @@ class SearchGroupState extends State<SearchGroup> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: <Widget>[
-        SearchInterest(
-            onUpdate: (List<dynamic> interests) =>
-                setState(() => this.interests = interests)),
+        SearchInterest(),
         SliderTheme(
           data: SliderTheme.of(context).copyWith(
             activeTrackColor: blueLight,

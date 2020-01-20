@@ -152,7 +152,10 @@ class _ConversationScreenState extends State<ConversationScreen> {
           flex: 6,
           child: Padding(
               padding: const EdgeInsets.all(10.0),
-              child: TextField(controller: _textController))),
+              child: TextField(
+                  controller: _textController,
+                  maxLines: null,
+                  keyboardType: TextInputType.multiline))),
       Material(
           child: Container(
               margin: const EdgeInsets.symmetric(horizontal: 8.0),

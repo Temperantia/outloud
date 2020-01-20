@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tags/tag.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
+import 'package:inclusive/classes/interest.dart';
 
 import 'package:inclusive/theme.dart';
 
@@ -8,7 +9,7 @@ class SearchInterest extends StatefulWidget {
   const SearchInterest({this.onUpdate, this.interests});
 
   final Function onUpdate;
-  final List<String> interests;
+  final List<Interest> interests;
 
   @override
   SearchInterestState createState() {
@@ -46,14 +47,14 @@ class SearchInterestState extends State<SearchInterest> {
           onSuggestionSelected: (Map<String, String> suggestion) {
             setState(() {
               _controller.clear();
-              widget.interests.add(suggestion['name']);
+              widget.interests.add(Interest(name: suggestion['name']));
               widget.onUpdate(widget.interests);
             });
           }),
       if (widget.interests.isNotEmpty)
         Tags(
             itemBuilder: (int index) {
-              final String item = widget.interests[index];
+              final Interest item = widget.interests[index];
 
               return ItemTags(
                   activeColor: orange,
@@ -70,7 +71,7 @@ class SearchInterestState extends State<SearchInterest> {
                     color: orange,
                     backgroundColor: white,
                   ),
-                  title: item,
+                  title: item.name,
                   textStyle: Theme.of(context).textTheme.caption);
             },
             itemCount: widget.interests

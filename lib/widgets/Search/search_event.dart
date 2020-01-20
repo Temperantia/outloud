@@ -31,9 +31,7 @@ class SearchEventState extends State<SearchEvent> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
-          SearchInterest(
-              onUpdate: (List<dynamic> interests) =>
-                  setState(() => this.interests = interests)),
+          SearchInterest(),
           /*
           buildPeriods(),
           CalendarCarousel(

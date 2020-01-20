@@ -5,10 +5,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:device_info/device_info.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:location_permissions/location_permissions.dart';
-import 'package:multi_image_picker/multi_image_picker.dart';
 
 import 'package:inclusive/screens/home.dart';
 import 'package:inclusive/classes/user.dart';
@@ -53,7 +51,7 @@ class AppDataService extends ChangeNotifier {
     // testing purpose
     //identifier = 'apmbMHvueWZDLeAOxaxI';
     //identifier = 'cx0hEmwDTLWYy3COnvPL';
-    //identifier = 'cx0hEmwDTLWYy3COnvPL';
+    //identifier = 'b';
 
     yield* _userProvider.streamUser(identifier);
   }
@@ -71,15 +69,16 @@ class AppDataService extends ChangeNotifier {
     }
   }
 
-  Future<dynamic> saveImage(Asset asset, String userId) async {
-    final ByteData byteData = await asset.getByteData();
-    final Uint8List imageData = byteData.buffer.asUint8List();
+  Future<String> saveImage(Uint8List image, String userId) async {
     final StorageReference ref = FirebaseStorage.instance
         .ref()
         .child('images/users/$userId/${DateTime.now()}');
-    final StorageUploadTask uploadTask = ref.putData(imageData);
+    final StorageUploadTask uploadTask = ref.putData(image);
     final StorageTaskSnapshot result = await uploadTask.onComplete;
+    return (await result.ref.getDownloadURL()).toString();
+  }
 
-    return await result.ref.getDownloadURL();
+  Future<void> deleteImage(String url, String userId) async {
+    (await FirebaseStorage.instance.getReferenceFromUrl(url)).delete();
   }
 }

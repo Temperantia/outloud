@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
-import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:provider/provider.dart';
 
 import 'package:inclusive/classes/user.dart';
 import 'package:inclusive/models/user.dart';
-import 'package:inclusive/services/app_data.dart';
 import 'package:inclusive/theme.dart';
 import 'package:inclusive/widgets/Search/search_interest.dart';
 import 'package:inclusive/widgets/birthdate_picker.dart';
@@ -24,7 +22,6 @@ class _ProfileEditionState extends State<ProfileEdition> {
   final TextEditingController _editName = TextEditingController();
   final TextEditingController _editHome = TextEditingController();
   final TextEditingController _editDescription = TextEditingController();
-  AppDataService _appDataService;
   UserModel _userProvider;
 
   String _editing = '';
@@ -183,20 +180,20 @@ class _ProfileEditionState extends State<ProfileEdition> {
         ? Container()
         : GestureDetector(
             onTap: () async {
-              List<Asset> images;
+              /*  List<Asset> images;
               try {
                 images = await MultiImagePicker.pickImages(maxImages: 20);
               } catch (error) {
                 return;
               }
-              final List<dynamic> pics = List<dynamic>.from(widget.user.pics);
+              final List<String> pics = List<String>.from(widget.user.pics);
 
               for (final Asset image in images) {
-                final dynamic imageUri =
+                final String imageUri =
                     await _appDataService.saveImage(image, widget.user.id);
                 pics.add(imageUri);
               }
-              widget.user.pics = pics;
+              widget.user.pics = pics; */
             },
             child: Text('Click to upload pictures',
                 style: TextStyle(
@@ -216,10 +213,7 @@ class _ProfileEditionState extends State<ProfileEdition> {
             color: orange,
           )),
       subtitle: _editing == 'interests'
-          ? SearchInterest(
-              interests: widget.user.interests,
-              onUpdate: (List<String> interests) =>
-                  setState(() => widget.user.interests = interests))
+          ? SearchInterest(interests: widget.user.interests)
           : GestureDetector(
               onTap: () => setState(() => _editing = 'interests'),
               child: Text(
@@ -284,7 +278,6 @@ class _ProfileEditionState extends State<ProfileEdition> {
 
   @override
   Widget build(BuildContext context) {
-    _appDataService = Provider.of<AppDataService>(context);
     _userProvider = Provider.of<UserModel>(context);
     return Container(
         decoration: BoxDecoration(color: white),

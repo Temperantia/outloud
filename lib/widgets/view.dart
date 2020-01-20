@@ -8,9 +8,11 @@ import 'package:inclusive/theme.dart';
 import 'package:inclusive/widgets/bubble_bar.dart';
 
 class View extends StatelessWidget {
-  const View({@required this.child, this.title = ''});
+  const View(
+      {@required this.child, this.title = '', this.actions = const <Widget>[]});
   final Widget child;
   final String title;
+  final List<Widget> actions;
   @override
   Widget build(BuildContext context) {
     final AppDataService appDataService = Provider.of<AppDataService>(context);
@@ -21,7 +23,8 @@ class View extends StatelessWidget {
             title: Text(title, style: Theme.of(context).textTheme.caption),
             leading: GestureDetector(
                 onTap: () => Navigator.pop(context),
-                child: Icon(Icons.keyboard_arrow_left, color: white))),
+                child: Icon(Icons.keyboard_arrow_left, color: white)),
+            actions: actions),
         bottomNavigationBar: BubbleBottomBar(
             fabLocation: BubbleBottomBarFabLocation.end,
             opacity: 1,
