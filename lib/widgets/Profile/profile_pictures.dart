@@ -1,28 +1,43 @@
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
-import 'package:inclusive/classes/user.dart';
+import 'package:inclusive/services/app_data.dart';
 import 'package:inclusive/theme.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
+import 'package:provider/provider.dart';
 import 'package:reorderables/reorderables.dart';
 
 class ProfilePictures extends StatefulWidget {
-  const ProfilePictures(this.user, {Key key}) : super(key: key);
+  const ProfilePictures(this.pics, {Key key}) : super(key: key);
 
-  final User user;
+  final List<dynamic> pics;
 
   @override
   ProfilePicturesState createState() => ProfilePicturesState();
 }
 
 class ProfilePicturesState extends State<ProfilePictures> {
-  final List<dynamic> pictures = <dynamic>[];
-  final List<String> picturesToDelete = <String>[];
+  AppDataService _appDataService;
+  final List<dynamic> _pictures = <dynamic>[];
+  final List<String> _picturesToDelete = <String>[];
 
   @override
   void initState() {
     super.initState();
-    widget.user.pics.forEach(pictures.add);
+    widget.pics.forEach(_pictures.add);
+  }
+
+  Future<List<String>> onSave(String userId) async {
+    for (final String pictureToDelete in _picturesToDelete) {
+      _appDataService.deleteImage(pictureToDelete, userId);
+    }
+
+    return Future.wait<String>(_pictures.map((dynamic picture) async {
+      if (picture is Uint8List) {
+        return await _appDataService.saveImage(picture, userId);
+      }
+      return picture as String;
+    }).toList());
   }
 
   Future<void> _addPicture() async {
@@ -35,14 +50,14 @@ class ProfilePicturesState extends State<ProfilePictures> {
     } catch (error) {
       return;
     }
-    setState(() => pictures.add(picture));
+    setState(() => _pictures.add(picture));
   }
 
   Future<void> _removePicture(dynamic picture) async {
     if (picture is String) {
-      picturesToDelete.add(picture);
+      _picturesToDelete.add(picture);
     }
-    setState(() => pictures.remove(picture));
+    setState(() => _pictures.remove(picture));
   }
 
   Widget _buildPicture(dynamic picture) {
@@ -63,23 +78,25 @@ class ProfilePicturesState extends State<ProfilePictures> {
 
   @override
   Widget build(BuildContext context) {
+    _appDataService = Provider.of<AppDataService>(context);
+
     return ReorderableWrap(
       spacing: 8.0,
       padding: const EdgeInsets.all(8.0),
       onReorder: (int oldIndex, int newIndex) => setState(() {
-        if (oldIndex >= pictures.length) {
+        if (oldIndex >= _pictures.length) {
           return;
         }
-        final dynamic picture = pictures[oldIndex];
-        if (newIndex >= pictures.length) {
-          newIndex = pictures.length - 1;
+        final dynamic picture = _pictures[oldIndex];
+        if (newIndex >= _pictures.length) {
+          newIndex = _pictures.length - 1;
         }
-        pictures.removeAt(oldIndex);
-        pictures.insert(newIndex, picture);
+        _pictures.removeAt(oldIndex);
+        _pictures.insert(newIndex, picture);
       }),
       children: <Widget>[
-        for (final dynamic picture in pictures) _buildPicture(picture),
-        for (int index = pictures.length; index < 9; index++)
+        for (final dynamic picture in _pictures) _buildPicture(picture),
+        for (int index = _pictures.length; index < 9; index++)
           Stack(alignment: AlignmentDirectional.bottomEnd, children: <Widget>[
             Container(
                 width: MediaQuery.of(context).size.width * 0.3,

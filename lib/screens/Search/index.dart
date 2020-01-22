@@ -29,7 +29,7 @@ class _SearchScreenState extends State<SearchScreen>
   MessageService _messageService;
   UserModel _userProvider;
   RangeValues _ages = const RangeValues(25, 60);
-  List<Interest> _interests = <Interest>[];
+  final List<Interest> _interests = <Interest>[];
 
   @override
   void initState() {
@@ -59,10 +59,9 @@ class _SearchScreenState extends State<SearchScreen>
     final int commonInterests = me.interests.isEmpty
         ? 0
         : me.interests
-            .map<int>(
-                (Interest interest) => user.interests.contains(interest) ? 1 : 0)
+            .map<int>((Interest interest) =>
+                user.interests.contains(interest) ? 1 : 0)
             .reduce((int curr, int next) => curr + next);
-
     return GestureDetector(
         onTap: () =>
             Navigator.pushNamed(context, ProfileScreen.id, arguments: user),
@@ -73,20 +72,19 @@ class _SearchScreenState extends State<SearchScreen>
                 child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
-                      Text(user.name == '' ? 'Anonymous' : user.name, style: Theme.of(context).textTheme.title),
+                      Text(user.name == '' ? 'Anonymous' : user.name,
+                          style: Theme.of(context).textTheme.title),
                       //Text(user.getAge().toString(),
-                       //   style: Theme.of(context).textTheme.title),
+                      //   style: Theme.of(context).textTheme.title),
                       Column(children: <Widget>[
                         if (commonInterests > 0)
                           Container(
                               child: Row(children: <Widget>[
-                            Text(commonInterests.toString(), style: Theme.of(context)
-                                                    .textTheme
-                                                    .caption),
+                            Text(commonInterests.toString(),
+                                style: Theme.of(context).textTheme.caption),
                             Icon(Icons.category, color: white),
-                             Text('in common', style: Theme.of(context)
-                                                    .textTheme
-                                                    .caption),
+                            Text('in common',
+                                style: Theme.of(context).textTheme.caption),
                           ])),
                         if (distance.hasData)
                           if (distance.data / 1000 > 3000)
@@ -156,8 +154,8 @@ class _SearchScreenState extends State<SearchScreen>
             Icon(Icons.category),
             Flexible(
                 child: SearchInterest(
-                    interests: _interests,
-                   ))
+              interests: _interests,
+            ))
           ]),
           Row(children: <Widget>[
             Icon(Icons.cake),
@@ -191,7 +189,9 @@ class _SearchScreenState extends State<SearchScreen>
         Provider.of<ConversationList>(context);
     return FutureBuilder<List<User>>(
         future: _userProvider.getUsers(_appDataService.identifier,
-            interests: _interests.map<String>((Interest interest) => interest.name).toList(),
+            interests: _interests
+                .map<String>((Interest interest) => interest.name)
+                .toList(),
             ageStart: _ages.start.toInt(),
             ageEnd: _ages.end.toInt()),
         builder: (BuildContext context, AsyncSnapshot<List<User>> users) =>

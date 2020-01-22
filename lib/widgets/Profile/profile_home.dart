@@ -1,18 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_google_places/flutter_google_places.dart';
-import 'package:inclusive/classes/user.dart';
 import 'package:google_maps_webservice/places.dart';
 import 'package:inclusive/theme.dart';
 
 class ProfileHome extends StatefulWidget {
-  const ProfileHome(this.user);
-  final User user;
+  const ProfileHome(this.home, {Key key}) : super(key: key);
+  final String home;
   @override
-  _ProfileHome createState() => _ProfileHome();
+  ProfileHomeState createState() => ProfileHomeState();
 }
 
-class _ProfileHome extends State<ProfileHome> {
-  final TextEditingController _editHome = TextEditingController();
+class ProfileHomeState extends State<ProfileHome> {
+  final TextEditingController _controller = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _controller.text = widget.home;
+  }
+
+  String onSave() {
+    return _controller.text;
+  }
 
   Future<void> _handlePressButton() async {
     final Prediction p = await PlacesAutocomplete.show(
@@ -23,7 +32,7 @@ class _ProfileHome extends State<ProfileHome> {
       types: <String>['(cities)'],
     );
     if (p != null) {
-      _editHome.text = p.description;
+      _controller.text = p.description;
       Navigator.pop(context);
     }
   }
@@ -49,14 +58,14 @@ class _ProfileHome extends State<ProfileHome> {
   Widget build(BuildContext context) {
     return TextField(
       decoration: InputDecoration(
-          labelText: 'Select your home',
+          labelText: 'You are in',
           focusColor: orange,
           border: const OutlineInputBorder()),
       onTap: () => showDialog<AlertDialog>(
           context: context,
           builder: (BuildContext context) => _buildAlertDialog()),
       readOnly: true,
-      controller: _editHome,
+      controller: _controller,
     );
   }
 }

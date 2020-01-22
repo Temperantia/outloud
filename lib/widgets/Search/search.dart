@@ -28,7 +28,7 @@ class _SearchState extends State<Search> with SingleTickerProviderStateMixin {
   MessageService _messageService;
   UserModel _userProvider;
   RangeValues _ages = const RangeValues(25, 60);
-  List<Interest> _interests = <Interest>[];
+  final List<Interest> _interests = <Interest>[];
 
   @override
   void initState() {
@@ -72,6 +72,15 @@ class _SearchState extends State<Search> with SingleTickerProviderStateMixin {
                 child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
+                      Container(
+                        width: 100.0,
+                        child:
+                       user.pics.isEmpty ?
+                        Image.asset(
+                            'images/default-user-profile-image-png-7.png',
+                            fit: BoxFit.fill)
+                      :
+                        Image.network(user.pics[0].toString())),
                       Text(user.name == '' ? 'Anonymous' : user.name, style: Theme.of(context).textTheme.title),
                       //Text(user.getAge().toString(),
                        //   style: Theme.of(context).textTheme.title),
@@ -113,7 +122,7 @@ class _SearchState extends State<Search> with SingleTickerProviderStateMixin {
                       ButtonBar(children: <IconButton>[
                         if (!conversationList.hasUserConversation(user.id))
                           IconButton(
-                              icon: Icon(Icons.message, color: white),
+                              icon: Icon(Icons.add, color: white),
                               onPressed: () {
                                 setState(() {
                                   _messageService.addUserConversation(

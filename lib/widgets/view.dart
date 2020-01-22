@@ -26,8 +26,7 @@ class View extends StatelessWidget {
                 child: Icon(Icons.keyboard_arrow_left, color: white)),
             actions: actions),
         bottomNavigationBar: BubbleBottomBar(
-            fabLocation: BubbleBottomBarFabLocation.end,
-            opacity: 1,
+            opacity: 1.0,
             currentIndex: appDataService.currentPage,
             onTap: (int index) => appDataService.navigateBack(context, index),
             items: bubbleBar(context, messageService.pings)),

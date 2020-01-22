@@ -25,7 +25,7 @@ class SearchSoloState extends State<SearchSolo> {
     return Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
-          SearchInterest(),
+          const SearchInterest(),
           RangeSlider(
               labels: RangeLabels(
                 _ages.start.toInt().toString() + 'y',

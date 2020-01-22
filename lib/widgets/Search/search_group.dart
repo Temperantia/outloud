@@ -24,7 +24,7 @@ class SearchGroupState extends State<SearchGroup> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: <Widget>[
-        SearchInterest(),
+        const SearchInterest(),
         SliderTheme(
           data: SliderTheme.of(context).copyWith(
             activeTrackColor: blueLight,

@@ -17,8 +17,9 @@ class User extends Entity {
     this.description,
     this.interests,
     this.pics,
-    this.scholarship,
-    this.businessTitle,
+    this.facts,
+    this.education,
+    this.profession,
   }) : super(name);
 
   User.fromMap(Map<String, dynamic> snapshot, String id)
@@ -38,8 +39,11 @@ class User extends Entity {
         pics = snapshot['pics'] == null
             ? <String>[]
             : snapshot['pics'].cast<String>() as List<String>,
-        scholarship = snapshot['scholarship'] as String ?? '',
-        businessTitle = snapshot['businessTitle'] as String ?? '',
+        facts = snapshot['facts'] == null
+            ? <String>[]
+            : snapshot['facts'].cast<String>() as List<String>,
+        education = snapshot['education'] as String ?? '',
+        profession = snapshot['profession'] as String ?? '',
         super(snapshot['name'] as String);
 
   final String id;
@@ -50,8 +54,9 @@ class User extends Entity {
   String description = '';
   List<Interest> interests = <Interest>[];
   List<String> pics = <String>[];
-  String scholarship = '';
-  String businessTitle = '';
+  List<String> facts = <String>[];
+  String education = '';
+  String profession = '';
 
   final UserModel _userProvider = locator<UserModel>();
 
@@ -67,8 +72,9 @@ class User extends Entity {
           .map<Map<String, String>>((Interest interest) => interest.toJson())
           .toList(),
       'pics': pics,
-      'scholarship': scholarship,
-      'businessTitle': businessTitle,
+      'facts': facts,
+      'education': education,
+      'profession': profession,
     };
   }
 

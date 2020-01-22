@@ -7,9 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:inclusive/services/app_data.dart';
 import 'package:inclusive/widgets/bubble_bar.dart';
 import 'package:inclusive/classes/user.dart';
-import 'package:inclusive/models/user.dart';
 import 'package:inclusive/widgets/Messaging/messaging.dart';
-import 'package:inclusive/widgets/Profile/profile_edition.dart';
 import 'package:inclusive/widgets/Search/search.dart';
 import 'package:inclusive/services/message.dart';
 import 'package:inclusive/theme.dart';
@@ -25,10 +23,8 @@ class _HomeScreenState extends State<HomeScreen>
     with SingleTickerProviderStateMixin, WidgetsBindingObserver {
   AppDataService _appDataService;
   MessageService _messageService;
-  UserModel _userProvider;
 
   TabController _tabController;
-  bool _editProfile = false;
 
   @override
   void initState() {
@@ -59,11 +55,6 @@ class _HomeScreenState extends State<HomeScreen>
     super.dispose();
   }
 
-  void _onSaveProfile(User user) {
-    _userProvider.updateUser(user);
-    setState(() => _editProfile = false);
-  }
-
   void _onChangePage(int index) {
     setState(() {
       _appDataService.currentPage = index;
@@ -80,10 +71,7 @@ class _HomeScreenState extends State<HomeScreen>
             physics: const NeverScrollableScrollPhysics(),
             controller: _tabController,
             children: <Widget>[
-              if (_editProfile)
-                ProfileEdition(user, _onSaveProfile)
-              else
-                ProfileParent(user),
+              ProfileParent(user),
               const Messaging(),
               Search(onCreateUserConversation: _onChangePage),
               const Center(child: Text('Coming soon')),
@@ -94,26 +82,18 @@ class _HomeScreenState extends State<HomeScreen>
   List<SpeedDialChild> _buildActions() {
     final List<SpeedDialChild> actions = <SpeedDialChild>[];
 
-    if (_appDataService.currentPage == 0) {
-      actions.add(SpeedDialChild(
-          backgroundColor: orange,
-          child: Icon(_editProfile ? Icons.cancel : Icons.edit, color: white),
-          onTap: () => setState(() => _editProfile = !_editProfile)));
-    }
     return actions;
   }
 
   @override
   Widget build(BuildContext context) {
     _messageService = Provider.of<MessageService>(context);
-    _userProvider = Provider.of<UserModel>(context);
     _appDataService = Provider.of<AppDataService>(context);
 
     _appDataService.refreshLocation();
 
     _tabController.animateTo(_appDataService.currentPage);
     return Scaffold(
-        resizeToAvoidBottomInset: false,
         floatingActionButton: SpeedDial(
             child: Icon(Icons.add, color: white),
             backgroundColor: orange,

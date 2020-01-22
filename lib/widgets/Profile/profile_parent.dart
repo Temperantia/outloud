@@ -43,7 +43,9 @@ class ProfileParent extends StatelessWidget {
                   child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
-                        Icon(Icons.tune),
+                        Padding(
+                            padding: const EdgeInsets.only(right: 10.0),
+                            child: Icon(Icons.tune)),
                         const Text('Settings',
                             style: TextStyle(fontSize: 20.0)),
                       ]))),
@@ -55,7 +57,9 @@ class ProfileParent extends StatelessWidget {
                   child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
-                        Icon(Icons.brush),
+                        Padding(
+                            padding: const EdgeInsets.only(right: 10.0),
+                            child: Icon(Icons.brush)),
                         const Text('Personal Information',
                             style: TextStyle(fontSize: 20.0)),
                       ]))),
@@ -63,11 +67,13 @@ class ProfileParent extends StatelessWidget {
               onTap: () => _onClickView(context, ProfileScreen.id, user: user),
               child: Container(
                   padding: const EdgeInsets.symmetric(vertical: 5.0),
-                  decoration: BoxDecoration(color: blueLight),
+                  decoration: BoxDecoration(color: blueAlt),
                   child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
-                        Icon(Icons.remove_red_eye),
+                        Padding(
+                            padding: const EdgeInsets.only(right: 10.0),
+                            child: Icon(Icons.remove_red_eye)),
                         const Text('See how you appear',
                             style: TextStyle(fontSize: 20.0)),
                       ])))
