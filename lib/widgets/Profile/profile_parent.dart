@@ -16,6 +16,10 @@ class ProfileParent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String info = '${user.name} • ${user.getAge().toString()}';
+    if (user.home != '') {
+      info += ' • ${user.home}';
+    }
     return Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: <
         Widget>[
       Column(children: <Widget>[
@@ -30,8 +34,7 @@ class ProfileParent extends StatelessWidget {
                       fit: BoxFit.fill)
                   : Image.network(user.pics[0].toString(), fit: BoxFit.fill),
             )),
-        Text('${user.name} • ${user.getAge().toString()} • ${user.home}',
-            style: const TextStyle(fontSize: 30.0))
+        Text(info, style: const TextStyle(fontSize: 30.0))
       ]),
       Column(
         children: <Widget>[
@@ -63,20 +66,23 @@ class ProfileParent extends StatelessWidget {
                         const Text('Personal Information',
                             style: TextStyle(fontSize: 20.0)),
                       ]))),
-          GestureDetector(
-              onTap: () => _onClickView(context, ProfileScreen.id, user: user),
-              child: Container(
-                  padding: const EdgeInsets.symmetric(vertical: 5.0),
-                  decoration: BoxDecoration(color: blueAlt),
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Padding(
-                            padding: const EdgeInsets.only(right: 10.0),
-                            child: Icon(Icons.remove_red_eye)),
-                        const Text('See how you appear',
-                            style: TextStyle(fontSize: 20.0)),
-                      ])))
+          Padding(
+              padding: const EdgeInsets.only(top: 20.0),
+              child: GestureDetector(
+                  onTap: () =>
+                      _onClickView(context, ProfileScreen.id, user: user),
+                  child: Container(
+                      padding: const EdgeInsets.symmetric(vertical: 5.0),
+                      decoration: BoxDecoration(color: blueAlt),
+                      child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Padding(
+                                padding: const EdgeInsets.only(right: 10.0),
+                                child: Icon(Icons.remove_red_eye)),
+                            const Text('See how you appear',
+                                style: TextStyle(fontSize: 20.0)),
+                          ]))))
         ],
       )
     ]);

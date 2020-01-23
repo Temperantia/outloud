@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:inclusive/classes/interest.dart';
 import 'package:inclusive/classes/user.dart';
-import 'package:inclusive/theme.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 class ArrowPainter extends CustomPainter {
@@ -34,9 +33,9 @@ class ProfileDetail extends StatelessWidget {
   final User user;
 
   Widget _buildDivider({bool reverse = false}) {
-    return CustomPaint(
-      painter: ArrowPainter(reverse: reverse),
-    );
+    return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 10.0),
+        child: CustomPaint(painter: ArrowPainter(reverse: reverse)));
   }
 
   @override
@@ -67,13 +66,16 @@ class ProfileDetail extends StatelessWidget {
                   TextSpan(
                       text: '${user.name} • ${user.getAge().toString()}',
                       style: TextStyle(fontWeight: FontWeight.bold)),
-                  if (user.home != '') TextSpan(text: '• ${user.home}'),
+                  if (user.home != '') TextSpan(text: ' • ${user.home}'),
                 ]))),
             _buildDivider(),
             if (user.interests.isNotEmpty)
               ListTile(
                   leading: Icon(Icons.whatshot),
-                  title: const Text('Interests'),
+                  title: const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 10.0),
+                      child:
+                          Text('Interests', style: TextStyle(fontSize: 20.0))),
                   subtitle: Text(user.interests
                       .map<String>((Interest interest) {
                         String name = '#${interest.name} ';
@@ -91,22 +93,31 @@ class ProfileDetail extends StatelessWidget {
                       'images/baseline_emoji_people_black_18.png',
                       height: 25.0,
                       color: Colors.grey),
-                  title: const Text('About me'),
+                  title: const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 10.0),
+                      child:
+                          Text('About me', style: TextStyle(fontSize: 20.0))),
                   subtitle: Text(user.description)),
             if (user.profession != '')
               ListTile(
                   leading: Icon(MdiIcons.briefcaseOutline),
-                  title: Text('Profession • ${user.profession}')),
+                  title: Text('Profession • ${user.profession}',
+                      style: const TextStyle(fontSize: 20.0))),
             if (user.education != '')
               ListTile(
                   leading: Icon(MdiIcons.schoolOutline),
-                  title: Text('Education • ${user.education}')),
+                  title: Text('Education • ${user.education}',
+                      style: const TextStyle(fontSize: 20.0))),
             _buildDivider(),
             if (user.facts.isNotEmpty)
               ListTile(
                   leading: Icon(Icons.check_circle),
-                  title: const Text('Some truth'),
+                  title: const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 10.0),
+                      child:
+                          Text('Some truth', style: TextStyle(fontSize: 20.0))),
                   subtitle: Text(user.facts.join(' • '))),
+            const SizedBox(height: 100.0),
           ]))
     ]);
   }

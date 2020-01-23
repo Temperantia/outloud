@@ -11,17 +11,17 @@ Color white = const Color(0xFFF9F5F5);
 Color black = const Color(0xFF000000);
 
 ThemeData theme = ThemeData(
-  accentColor: white,
-  buttonTheme: ButtonThemeData(
-    buttonColor: orange,
-    minWidth: 200.0,
-    padding: const EdgeInsets.all(15.0),
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(20.0),
+    accentColor: white,
+    buttonTheme: ButtonThemeData(
+      buttonColor: orange,
+      minWidth: 200.0,
+      padding: const EdgeInsets.all(15.0),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20.0),
+      ),
     ),
-  ),
-  primaryColor: orange,
-  sliderTheme: const SliderThemeData(
-    showValueIndicator: ShowValueIndicator.always,
-  ),
-);
+    primaryColor: orange,
+    sliderTheme: const SliderThemeData(
+      showValueIndicator: ShowValueIndicator.always,
+    ),
+    textTheme: const TextTheme(body1: TextStyle(fontSize: 16.0)));
