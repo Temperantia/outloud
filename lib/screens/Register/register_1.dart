@@ -52,7 +52,7 @@ class _Register1ScreenState extends State<Register1Screen> {
                   Container(
                     padding: const EdgeInsets.all(10),
                     child: TextField(
-                        decoration: const InputDecoration(hintText: 'John•ane'),
+                        decoration: const InputDecoration(hintText: 'Riley'),
                         controller: _controller,
                         onTap: () => _isTakenUsername = false),
                   ),
@@ -67,8 +67,7 @@ class _Register1ScreenState extends State<Register1Screen> {
                       padding: const EdgeInsets.symmetric(vertical: 16.0),
                       child: RaisedButton(
                           onPressed: () => submit(),
-                          child: Text('Keep going',
-                              style: Theme.of(context).textTheme.caption)))
+                          child: const Text('Keep going')))
                 ])));
   }
 }

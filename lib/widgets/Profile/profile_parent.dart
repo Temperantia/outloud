@@ -16,7 +16,10 @@ class ProfileParent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String info = '${user.name} • ${user.getAge().toString()}';
+    String info = '${user.getAge().toString()}';
+    if (user.name != '') {
+      info = '${user.name} • $info';
+    }
     if (user.home != '') {
       info += ' • ${user.home}';
     }

@@ -9,17 +9,17 @@ import 'package:inclusive/models/user.dart';
 class User extends Entity {
   User({
     this.id = '',
-    String name,
-    this.email,
-    this.home,
+    String name = '',
+    this.email = '',
+    this.home = '',
     this.location,
     this.birthDate,
-    this.description,
-    this.interests,
-    this.pics,
-    this.facts,
-    this.education,
-    this.profession,
+    this.description = '',
+    this.interests = const <Interest>[],
+    this.pics = const <String>[],
+    this.facts = const <String>[],
+    this.education = '',
+    this.profession = '',
   }) : super(name);
 
   User.fromMap(Map<String, dynamic> snapshot, String id)
@@ -47,16 +47,16 @@ class User extends Entity {
         super(snapshot['name'] as String);
 
   final String id;
-  String email = '';
-  String home = '';
+  String email;
+  String home;
   GeoPoint location;
   DateTime birthDate;
-  String description = '';
-  List<Interest> interests = <Interest>[];
-  List<String> pics = <String>[];
-  List<String> facts = <String>[];
-  String education = '';
-  String profession = '';
+  String description;
+  List<Interest> interests;
+  List<String> pics;
+  List<String> facts;
+  String education;
+  String profession;
 
   final UserModel _userProvider = locator<UserModel>();
 

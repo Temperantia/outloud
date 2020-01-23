@@ -61,7 +61,7 @@ class _Register2ScreenState extends State<Register2Screen> {
                       padding: const EdgeInsets.all(10),
                       child: TextField(
                           decoration: const InputDecoration(
-                              hintText: 'John•ane@gmail.com'),
+                              hintText: 'riley@gmail.com'),
                           controller: _controller,
                           onTap: () => _error = '')),
                   if (_error != '')
@@ -74,8 +74,7 @@ class _Register2ScreenState extends State<Register2Screen> {
                       padding: const EdgeInsets.symmetric(vertical: 16.0),
                       child: RaisedButton(
                           onPressed: () => submit(),
-                          child: Text('Keep going',
-                              style: Theme.of(context).textTheme.caption)))
+                          child: const Text('Keep going')))
                 ])));
   }
 }

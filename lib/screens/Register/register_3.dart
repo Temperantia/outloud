@@ -61,8 +61,7 @@ class _Register3ScreenState extends State<Register3Screen> {
                   Padding(
                       padding: const EdgeInsets.symmetric(vertical: 16.0),
                       child: RaisedButton(
-                          child: Text('Get me in already',
-                              style: Theme.of(context).textTheme.caption),
+                          child: const Text('Get me in already'),
                           onPressed: () => submit()))
                 ])));
   }

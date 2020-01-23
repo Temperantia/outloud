@@ -40,6 +40,10 @@ class ProfileDetail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String text = '${user.getAge().toString()}';
+    if (user.name != '') {
+      text = '${user.name} • $text';
+    }
     return ListView(children: <Widget>[
       Container(
           width: MediaQuery.of(context).size.width,
@@ -64,7 +68,7 @@ class ProfileDetail extends StatelessWidget {
                             fontSize: 30.0, color: Colors.black),
                         children: <TextSpan>[
                   TextSpan(
-                      text: '${user.name} • ${user.getAge().toString()}',
+                      text: text,
                       style: TextStyle(fontWeight: FontWeight.bold)),
                   if (user.home != '') TextSpan(text: ' • ${user.home}'),
                 ]))),
