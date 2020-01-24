@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:inclusive/classes/user.dart';
 import 'package:inclusive/models/user.dart';
-import 'package:inclusive/theme.dart';
 import 'package:inclusive/widgets/Profile/profile_description.dart';
 import 'package:inclusive/widgets/Profile/profile_education.dart';
 import 'package:inclusive/widgets/Profile/profile_facts.dart';
@@ -13,7 +12,7 @@ import 'package:inclusive/widgets/view.dart';
 import 'package:provider/provider.dart';
 
 class ProfileInformationScreen extends StatefulWidget {
-  static const String id = 'ProfileSettings';
+  static const String id = 'ProfileInformation';
   @override
   _ProfileInformationScreen createState() => _ProfileInformationScreen();
 }
@@ -72,32 +71,31 @@ class _ProfileInformationScreen extends State<ProfileInformationScreen> {
     final User user = Provider.of<User>(context);
     return View(
         child: ListView(children: <Widget>[
-          Padding(
-              padding: const EdgeInsets.only(bottom: 20.0),
-              child: ProfilePictures(user.pics, key: _pictures)),
-          Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: ProfileHome(user.home, key: _home)),
-          Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: ProfileInterests(user.interests, key: _interests)),
-          Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: ProfileProfession(user.profession, key: _profession)),
-          Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: ProfileDescription(user.description, key: _description)),
-          Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: ProfileEducation(user.education, key: _education)),
-          Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: ProfileFacts(user.facts, key: _facts)),
-        ]),
-        actions: <Widget>[
-          GestureDetector(
-              onTap: () => _onSave(user),
-              child: Icon(Icons.check, color: white))
-        ]);
+      Padding(
+          padding: const EdgeInsets.only(bottom: 20.0),
+          child: ProfilePictures(user.pics, key: _pictures)),
+      Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: ProfileHome(user.home, key: _home)),
+      Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: ProfileInterests(user.interests, key: _interests)),
+      Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: ProfileProfession(user.profession, key: _profession)),
+      Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: ProfileDescription(user.description, key: _description)),
+      Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: ProfileEducation(user.education, key: _education)),
+      Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: ProfileFacts(user.facts, key: _facts)),
+      Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: RaisedButton(
+              onPressed: () => _onSave(user), child: const Text('Save')))
+    ]));
   }
 }

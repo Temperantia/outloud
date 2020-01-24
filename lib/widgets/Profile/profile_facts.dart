@@ -50,70 +50,79 @@ class ProfileFactsState extends State<ProfileFacts>
   }
 
   List<String> onSave() {
-    return _facts;
+    final List<String> facts = <String>[];
+    String text;
+    for (final TextEditingController controller in _controllers) {
+      text = controller.text.trim();
+      if (text != '') {
+        facts.add(text);
+      }
+    }
+    return facts;
   }
 
-  void _addController({String text = ''}) {
-    _controllers.add(TextEditingController(text: text));
+  void _addController({String text = '', int index = -1, bool focus = false}) {
+    if (index == -1) {
+      _controllers.add(TextEditingController(text: text));
+    } else {
+      _controllers.insert(index, TextEditingController(text: text));
+    }
   }
 
-  void _removeController() {
-    _controllers.removeLast();
+  void _removeController({int index = -1}) {
+    if (index == -1) {
+      _controllers.removeLast();
+    } else {
+      _controllers.removeAt(index);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-        shrinkWrap: true,
-        itemCount: _facts.length + 1,
-        itemBuilder: (BuildContext context, int index) =>
-            Row(children: <Widget>[
-              Flexible(
-                child: TextField(
-                    onChanged: (String value) {
-                      setState(() {
-                        if (value == '') {
-                          _facts.removeAt(index);
-                          _removeController();
-                        }
-                      });
-                    },
-                    controller: _controllers[index],
-                    decoration: InputDecoration(
-                        labelText: 'Your fact',
-                        hintText: _hints[index],
-                        focusColor: orange,
-                        border: const OutlineInputBorder())),
-              ),
-              if (index == _facts.length &&
-                  _facts.length < _maxFacts - 1 &&
-                  _controllers[index].text != '')
-                GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        _facts.add(_controllers[index].text.trim());
-                        _addController();
-                      });
-                    },
-                    child: Icon(Icons.add)),
-              if (index < _facts.length &&
-                  (_facts[index] != _controllers[index].text))
-                GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        _facts[index] = _controllers[index].text;
-                      });
-                    },
-                    child: Icon(Icons.edit)),
-              if (index < _facts.length)
-                GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        _facts.removeAt(index);
-                        _removeController();
-                      });
-                    },
-                    child: Icon(Icons.close))
-            ]));
+    return Column(children: <Widget>[
+      Row(children: const <Widget>[
+        Padding(
+            padding: EdgeInsets.symmetric(vertical: 20.0),
+            child: Text('Your facts'))
+      ]),
+      ListView.builder(
+          shrinkWrap: true,
+          itemCount: _controllers.length,
+          itemBuilder: (BuildContext context, int index) =>
+              Row(children: <Widget>[
+                Flexible(
+                    child: TextField(
+                        onChanged: (String value) {
+                          setState(() {
+                            if (value == '') {
+                              _removeController(index: index);
+                            }
+                          });
+                        },
+                        controller: _controllers[index],
+                        decoration: InputDecoration(
+                            hintText: _hints[index],
+                            focusColor: orange,
+                            border: const OutlineInputBorder()))),
+                if (index == _controllers.length - 1 &&
+                    _controllers.length < _maxFacts - 1 &&
+                    _controllers[index].text != '')
+                  GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          _addController(index: index + 1, focus: true);
+                        });
+                      },
+                      child: Icon(Icons.add)),
+                if (index < _controllers.length - 1)
+                  GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          _removeController(index: index);
+                        });
+                      },
+                      child: Icon(Icons.close))
+              ]))
+    ]);
   }
 }

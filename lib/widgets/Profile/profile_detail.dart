@@ -72,55 +72,66 @@ class ProfileDetail extends StatelessWidget {
                       style: TextStyle(fontWeight: FontWeight.bold)),
                   if (user.home != '') TextSpan(text: ' • ${user.home}'),
                 ]))),
-            _buildDivider(),
             if (user.interests.isNotEmpty)
-              ListTile(
-                  leading: Icon(Icons.whatshot),
-                  title: const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 10.0),
-                      child:
-                          Text('Interests', style: TextStyle(fontSize: 20.0))),
-                  subtitle: Text(user.interests
-                      .map<String>((Interest interest) {
-                        String name = '#${interest.name} ';
-                        if (interest.comment != '') {
-                          name += '• ${interest.comment}\n';
-                        }
-                        return name;
-                      })
-                      .toList()
-                      .join())),
-            _buildDivider(reverse: true),
-            if (user.description != '')
-              ListTile(
-                  leading: Image.asset(
-                      'images/baseline_emoji_people_black_18.png',
-                      height: 25.0,
-                      color: Colors.grey),
-                  title: const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 10.0),
-                      child:
-                          Text('About me', style: TextStyle(fontSize: 20.0))),
-                  subtitle: Text(user.description)),
-            if (user.profession != '')
-              ListTile(
-                  leading: Icon(MdiIcons.briefcaseOutline),
-                  title: Text('Profession • ${user.profession}',
-                      style: const TextStyle(fontSize: 20.0))),
-            if (user.education != '')
-              ListTile(
-                  leading: Icon(MdiIcons.schoolOutline),
-                  title: Text('Education • ${user.education}',
-                      style: const TextStyle(fontSize: 20.0))),
-            _buildDivider(),
+              Column(children: <Widget>[
+                _buildDivider(),
+                ListTile(
+                    leading: Icon(Icons.whatshot),
+                    title: const Padding(
+                        padding: EdgeInsets.symmetric(vertical: 10.0),
+                        child: Text('Interests',
+                            style: TextStyle(fontSize: 20.0))),
+                    subtitle: Text(user.interests
+                        .map<String>((Interest interest) {
+                          String name = '#${interest.name} ';
+                          if (interest.comment != '') {
+                            name += '• ${interest.comment}\n';
+                          }
+                          return name;
+                        })
+                        .toList()
+                        .join())),
+              ]),
+            if (user.description != '' &&
+                user.profession != '' &&
+                user.education != '')
+              Column(
+                children: <Widget>[
+                  _buildDivider(reverse: true),
+                  if (user.description != '')
+                    ListTile(
+                        leading: Image.asset(
+                            'images/baseline_emoji_people_black_18.png',
+                            height: 25.0,
+                            color: Colors.grey),
+                        title: const Padding(
+                            padding: EdgeInsets.symmetric(vertical: 10.0),
+                            child: Text('About me',
+                                style: TextStyle(fontSize: 20.0))),
+                        subtitle: Text(user.description)),
+                  if (user.profession != '')
+                    ListTile(
+                        leading: Icon(MdiIcons.briefcaseOutline),
+                        title: Text('Profession • ${user.profession}',
+                            style: const TextStyle(fontSize: 20.0))),
+                  if (user.education != '')
+                    ListTile(
+                        leading: Icon(MdiIcons.schoolOutline),
+                        title: Text('Education • ${user.education}',
+                            style: const TextStyle(fontSize: 20.0))),
+                ],
+              ),
             if (user.facts.isNotEmpty)
-              ListTile(
-                  leading: Icon(Icons.check_circle),
-                  title: const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 10.0),
-                      child:
-                          Text('Some truth', style: TextStyle(fontSize: 20.0))),
-                  subtitle: Text(user.facts.join(' • '))),
+              Column(children: <Widget>[
+                _buildDivider(),
+                ListTile(
+                    leading: Icon(Icons.check_circle),
+                    title: const Padding(
+                        padding: EdgeInsets.symmetric(vertical: 10.0),
+                        child: Text('Some truth',
+                            style: TextStyle(fontSize: 20.0))),
+                    subtitle: Text(user.facts.join(' • '))),
+              ]),
             const SizedBox(height: 100.0),
           ]))
     ]);
