@@ -15,7 +15,6 @@ class BirthdatePicker extends StatelessWidget {
         minDateTime: DateTime(now.year - 99, now.month, now.day),
         initialDateTime: initial,
         pickerTheme: const DateTimePickerTheme(showTitle: false),
-        onChange: (DateTime dateTime, _) => onChange(dateTime),
-        onConfirm: (DateTime dateTime, List<int> values) => null);
+        onChange: (DateTime dateTime, _) => onChange(dateTime));
   }
 }

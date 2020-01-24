@@ -44,10 +44,6 @@ dependencies:
   flutter_google_places: ^0.2.3
   arrow_path: ^1.0.0
 
-dev_dependencies:
-  flutter_test:
-    sdk: flutter
-
 flutter:
   uses-material-design: true
   assets:

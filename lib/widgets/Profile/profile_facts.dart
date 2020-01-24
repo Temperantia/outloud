@@ -104,8 +104,7 @@ class ProfileFactsState extends State<ProfileFacts>
                             hintText: _hints[index],
                             focusColor: orange,
                             border: const OutlineInputBorder()))),
-                if (index == _controllers.length - 1 &&
-                    _controllers.length < _maxFacts - 1 &&
+                if (_controllers.length < _maxFacts - 1 &&
                     _controllers[index].text != '')
                   GestureDetector(
                       onTap: () {
