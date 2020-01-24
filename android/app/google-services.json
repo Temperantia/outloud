@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "581270806192",
+    "firebase_url": "https://incl-9b378.firebaseio.com",
+    "project_id": "incl-9b378",
+    "storage_bucket": "incl-9b378.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:581270806192:android:a7b1810748bbf17a48e575",
+        "android_client_info": {
+          "package_name": "com.goodies.inclusive"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "581270806192-0ndfiesj5h6pu58dscevamkou2n70uoq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA8Sr5IJJrEcAG2QThNr8cjBsAoOj6gSGg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "581270806192-0ndfiesj5h6pu58dscevamkou2n70uoq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
