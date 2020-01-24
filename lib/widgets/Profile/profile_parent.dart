@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:inclusive/classes/user.dart';
 import 'package:inclusive/screens/Profile/profile.dart';
 import 'package:inclusive/screens/Profile/profile_information.dart';
+import 'package:inclusive/screens/Profile/profile_settings.dart';
 import 'package:inclusive/theme.dart';
 
 class ProfileParent extends StatelessWidget {
@@ -42,7 +43,7 @@ class ProfileParent extends StatelessWidget {
       Column(
         children: <Widget>[
           GestureDetector(
-              //onTap: () => _onClickView(),
+              onTap: () => _onClickView(context, ProfileSettingsScreen.id),
               child: Container(
                   padding: const EdgeInsets.symmetric(vertical: 5.0),
                   decoration: BoxDecoration(color: yellow),
