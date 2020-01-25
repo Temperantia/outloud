@@ -104,12 +104,11 @@ class _SearchState extends State<Search> with SingleTickerProviderStateMixin {
                           IconButton(
                               icon: Icon(Icons.add, color: white),
                               onPressed: () async {
-                                                                  await _messageService.addUserConversation(
-                                      conversationList,
-                                      _appDataService.identifier,
-                                      user.id);
+                                await _messageService.addUserConversation(
+                                    conversationList,
+                                    _appDataService.identifier,
+                                    user.id);
                                 setState(() {
-
                                   widget.onCreateUserConversation(1);
                                 });
                               }),

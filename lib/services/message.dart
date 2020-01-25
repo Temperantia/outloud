@@ -64,6 +64,12 @@ class MessageService extends ChangeNotifier {
     await setConversations(conversationList);
   }
 
+  Future<void> pinConversation(
+      Conversation conversation, ConversationList conversationList) async {
+    conversation.pinned = !conversation.pinned;
+    await setConversations(conversationList);
+  }
+
   Future<void> sendMessage(Conversation conversation, String text) async {
     await messageProvider.addMessage(
         conversation.id, appDataService.identifier, text);

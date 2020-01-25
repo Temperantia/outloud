@@ -12,19 +12,29 @@ import 'package:inclusive/models/user.dart';
 import 'package:inclusive/models/message.dart';
 
 class Conversation with ChangeNotifier {
-  factory Conversation(String id, {int lastRead = 0, int pings = 0}) {
+  factory Conversation(String id,
+      {int lastRead = 0, int pings = 0, bool pinned = false}) {
     final List<String> ids = id.split('-');
+    final AppDataService appDataService = locator<AppDataService>();
+
     return ids.length == 1
-        ? Conversation.group(id, lastRead: lastRead, pings: pings)
-        : Conversation.user(ids[0], ids[1], lastRead: lastRead, pings: pings);
+        ? Conversation.group(id,
+            lastRead: lastRead, pings: pings, pinned: pinned)
+        : Conversation.user(
+            appDataService.identifier == ids[0] ? ids[0] : ids[1],
+            appDataService.identifier == ids[0] ? ids[1] : ids[0],
+            lastRead: lastRead,
+            pings: pings,
+            pinned: pinned);
   }
 
   Conversation.user(String idMy, this.idPeer,
-      {this.lastRead = 0, this.pings = 0})
+      {this.lastRead = 0, this.pings = 0, this.pinned = false})
       : isGroup = false,
         id = getUserConversationId(idMy, idPeer);
 
-  Conversation.group(this.id, {this.lastRead = 0, this.pings = 0})
+  Conversation.group(this.id,
+      {this.lastRead = 0, this.pings = 0, this.pinned = false})
       : isGroup = true,
         idPeer = id;
 
@@ -33,6 +43,7 @@ class Conversation with ChangeNotifier {
   final String idPeer;
   int lastRead;
   int pings;
+  bool pinned;
 
   final AppDataService _appDataService = locator<AppDataService>();
   final UserModel _userProvider = locator<UserModel>();

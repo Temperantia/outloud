@@ -48,6 +48,16 @@ class _MessagingState extends State<Messaging> {
         : format(DateTime.fromMillisecondsSinceEpoch(lastMessage.timestamp));
     return Slidable(
         actionPane: const SlidableDrawerActionPane(),
+        actions: <Widget>[
+          IconSlideAction(
+              caption: conversation.pinned ? 'Unpin' : 'Pin',
+              icon: Icons.pin_drop,
+              onTap: () async {
+                await _messageService.pinConversation(
+                    conversation, _conversationList);
+                setState(() {});
+              })
+        ],
         secondaryActions: <Widget>[
           IconSlideAction(
               caption: 'Close',
@@ -94,16 +104,26 @@ class _MessagingState extends State<Messaging> {
   Widget build(BuildContext context) {
     _messageService = Provider.of<MessageService>(context);
     _conversationList = Provider.of<ConversationList>(context);
-    return _conversationList.conversations.isEmpty
-        ? Center(
-            child: Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Text('Swipe right to find someone to chat with',
-                    textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.title)))
-        : ListView.builder(
-            itemBuilder: (BuildContext context, int index) =>
-                _streamConversation(context, index),
-            itemCount: _conversationList.conversations.length);
+    if (_conversationList.conversations.isEmpty)
+      return Center(
+          child: Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Text('Swipe right to find someone to chat with',
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.title)));
+    _conversationList.conversations
+        .sort((Conversation conversation1, Conversation conversation2) {
+      if (conversation1.pinned && !conversation2.pinned) {
+        return -1;
+      } else if (!conversation1.pinned && conversation2.pinned) {
+        return 1;
+      }
+      return 0;
+    });
+
+    return ListView.builder(
+        itemBuilder: (BuildContext context, int index) =>
+            _streamConversation(context, index),
+        itemCount: _conversationList.conversations.length);
   }
 }
