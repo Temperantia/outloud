@@ -60,6 +60,7 @@ class MessageService extends ChangeNotifier {
 
   Future<void> closeConversation(
       Conversation conversation, ConversationList conversationList) async {
+    await conversation.markAsRead();
     conversationList.conversations.remove(conversation);
     await setConversations(conversationList);
   }

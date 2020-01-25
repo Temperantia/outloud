@@ -174,11 +174,7 @@ class _ConversationScreenState extends State<ConversationScreen> {
   Widget build(final BuildContext context) {
     _appDataService = Provider.of<AppDataService>(context);
     _messageService = Provider.of<MessageService>(context);
-    if (!widget.conversation.isGroup) {
-      final UserModel userProvider = Provider.of<UserModel>(context);
-      userProvider.markPingAsRead(
-          _appDataService.identifier, widget.conversation.idPeer);
-    }
+
     widget.conversation.markAsRead();
 
     _messageService.setConversations(Provider.of<ConversationList>(context));

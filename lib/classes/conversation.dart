@@ -89,8 +89,11 @@ class Conversation with ChangeNotifier {
     return _messageProvider.streamLastMessage(id);
   }
 
-  void markAsRead() {
+  Future<void> markAsRead() async {
     lastRead = DateTime.now().millisecondsSinceEpoch;
     pings = 0;
+    if (!isGroup) {
+      await _userProvider.markPingAsRead(_appDataService.identifier, idPeer);
+    }
   }
 }
