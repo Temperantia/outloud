@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:inclusive/classes/user.dart';
 import 'package:inclusive/models/user.dart';
-import 'package:inclusive/widgets/Profile/profile_description.dart';
-import 'package:inclusive/widgets/Profile/profile_education.dart';
-import 'package:inclusive/widgets/Profile/profile_facts.dart';
-import 'package:inclusive/widgets/Profile/profile_home.dart';
-import 'package:inclusive/widgets/Profile/profile_interests.dart';
-import 'package:inclusive/widgets/Profile/profile_pictures.dart';
-import 'package:inclusive/widgets/Profile/profile_profession.dart';
+import 'package:inclusive/widgets/Profile/Edition/profile_description.dart';
+import 'package:inclusive/widgets/Profile/Edition/profile_education.dart';
+import 'package:inclusive/widgets/Profile/Edition/profile_facts.dart';
+import 'package:inclusive/widgets/Profile/Edition/profile_home.dart';
+import 'package:inclusive/widgets/Profile/Edition/profile_interests.dart';
+import 'package:inclusive/widgets/Profile/Edition/profile_pictures.dart';
+import 'package:inclusive/widgets/Profile/Edition/profile_profession.dart';
 import 'package:inclusive/widgets/view.dart';
 import 'package:provider/provider.dart';
 

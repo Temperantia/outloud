@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:inclusive/services/search.dart';
 import 'package:provider/provider.dart';
 
 import 'package:inclusive/locator.dart';
@@ -37,6 +38,8 @@ class App extends StatelessWidget {
               create: (_) => locator<AppDataService>()),
           ChangeNotifierProvider<MessageService>(
               create: (_) => locator<MessageService>()),
+          ChangeNotifierProvider<SearchService>(
+              create: (_) => locator<SearchService>()),
         ],
         child: Consumer2<AppDataService, MessageService>(builder:
             (BuildContext context, AppDataService appDataService,

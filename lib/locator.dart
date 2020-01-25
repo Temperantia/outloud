@@ -6,6 +6,7 @@ import 'package:inclusive/models/message.dart';
 import 'package:inclusive/services/api.dart';
 import 'package:inclusive/services/app_data.dart';
 import 'package:inclusive/services/message.dart';
+import 'package:inclusive/services/search.dart';
 
 GetIt locator = GetIt.instance;
 
@@ -16,6 +17,7 @@ void setupLocator() {
       instanceName: 'messages');
   locator.registerLazySingleton(() => AppDataService());
   locator.registerLazySingleton(() => MessageService());
+  locator.registerLazySingleton(() => SearchService());
   locator.registerLazySingleton(() => UserModel());
   locator.registerLazySingleton(() => GroupModel());
   locator.registerLazySingleton(() => MessageModel());

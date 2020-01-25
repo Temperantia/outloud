@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:inclusive/classes/user.dart';
 import 'package:inclusive/models/user.dart';
+import 'package:inclusive/screens/Profile/profile_settings_search.dart';
 import 'package:inclusive/theme.dart';
 import 'package:inclusive/widgets/birthdate_picker.dart';
 import 'package:provider/provider.dart';
@@ -22,6 +23,13 @@ class ProfileSettings extends StatelessWidget {
     DateTime birthDate = user.birthDate;
 
     return ListView(padding: const EdgeInsets.all(20.0), children: <Widget>[
+      Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: RaisedButton(
+              onPressed: () {
+                Navigator.pushNamed(context, ProfileSettingsSearchScreen.id);
+              },
+              child: const Text('Search settings'))),
       Padding(
           padding: const EdgeInsets.symmetric(vertical: 20.0),
           child: TextField(
@@ -62,7 +70,7 @@ class ProfileSettings extends StatelessWidget {
                 user.name = name;
                 user.birthDate = birthDate;
                 user.email = email;
-                return _onSave(user, context);
+                _onSave(user, context);
               },
               child: const Text('Save')))
     ]);

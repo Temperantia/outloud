@@ -5,6 +5,7 @@ import 'package:inclusive/classes/user.dart';
 import 'package:inclusive/screens/Messaging/conversation.dart';
 import 'package:inclusive/screens/Profile/profile_information.dart';
 import 'package:inclusive/screens/Profile/profile_settings.dart';
+import 'package:inclusive/screens/Profile/profile_settings_search.dart';
 import 'package:inclusive/screens/Register/register_1.dart';
 import 'package:inclusive/screens/Register/register_2.dart';
 import 'package:inclusive/screens/Register/register_3.dart';
@@ -26,4 +27,6 @@ final Map<String, Widget Function(dynamic)> routes =
   ProfileInformationScreen.id: (dynamic arguments) =>
       ProfileInformationScreen(),
   ProfileSettingsScreen.id: (dynamic arguments) => ProfileSettingsScreen(),
+  ProfileSettingsSearchScreen.id: (dynamic arguments) =>
+      ProfileSettingsSearchScreen(),
 };

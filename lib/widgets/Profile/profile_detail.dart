@@ -133,6 +133,10 @@ class ProfileDetail extends StatelessWidget {
                     subtitle: Text(user.facts.join(' • '))),
               ]),
             const SizedBox(height: 100.0),
+            Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: RaisedButton(
+                    onPressed: () {}, child: const Text('Friends')))
           ]))
     ]);
   }
