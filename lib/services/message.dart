@@ -23,16 +23,24 @@ class MessageService extends ChangeNotifier {
 
     final SharedPreferences sharedPreferences =
         await SharedPreferences.getInstance();
+
     final List<String> conversationIDs =
         sharedPreferences.getStringList('conversationIDs');
     final List<String> conversationLastReads =
         sharedPreferences.getStringList('conversationLastReads');
-    if (conversationIDs == null || conversationLastReads == null) {
+    final List<String> conversationPinneds =
+        sharedPreferences.getStringList('conversationPinneds');
+
+    if (conversationIDs == null ||
+        conversationLastReads == null ||
+        conversationPinneds == null) {
       return ConversationList(conversations: conversations);
     }
+
     conversationIDs.asMap().forEach((final int index, final String id) =>
         conversations.add(Conversation(id,
-            lastRead: int.parse(conversationLastReads[index]))));
+            lastRead: int.parse(conversationLastReads[index]),
+            pinned: conversationPinneds[index] == 'true')));
     return ConversationList(conversations: conversations);
   }
 
@@ -44,12 +52,44 @@ class MessageService extends ChangeNotifier {
         .map<String>((final Conversation conversation) => conversation.id)
         .toList();
     await sharedPreferences.setStringList('conversationIDs', conversationIDs);
+
     final List<String> conversationLastReads = conversationList.conversations
         .map<String>((final Conversation conversation) =>
             conversation.lastRead.toString())
         .toList();
     await sharedPreferences.setStringList(
         'conversationLastReads', conversationLastReads);
+
+    final List<String> conversationPinneds = conversationList.conversations
+        .map<String>((final Conversation conversation) =>
+            conversation.pinned ? 'true' : 'false')
+        .toList();
+    await sharedPreferences.setStringList(
+        'conversationPinneds', conversationPinneds);
+  }
+
+  ConversationList sortConversationList(ConversationList conversationList) {
+    conversationList.conversations
+        .sort((Conversation conversation1, Conversation conversation2) {
+      if (conversation1.pinned && !conversation2.pinned) {
+        return -1;
+      } else if (!conversation1.pinned && conversation2.pinned) {
+        return 1;
+      }
+      if (conversation1.lastMessage != null &&
+          conversation2.lastMessage != null) {
+        if (conversation1.lastMessage.timestamp >
+            conversation2.lastMessage.timestamp) {
+          return -1;
+        } else if (conversation1.lastMessage.timestamp <
+            conversation2.lastMessage.timestamp) {
+          return 1;
+        }
+      }
+
+      return 0;
+    });
+    return conversationList;
   }
 
   Future<void> addUserConversation(

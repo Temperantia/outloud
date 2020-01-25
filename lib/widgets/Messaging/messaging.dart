@@ -111,15 +111,14 @@ class _MessagingState extends State<Messaging> {
               child: Text('Swipe right to find someone to chat with',
                   textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.title)));
-    _conversationList.conversations
-        .sort((Conversation conversation1, Conversation conversation2) {
-      if (conversation1.pinned && !conversation2.pinned) {
-        return -1;
-      } else if (!conversation1.pinned && conversation2.pinned) {
-        return 1;
-      }
-      return 0;
-    });
+
+    for (final Conversation conversation in _conversationList.conversations) {
+      conversation.streamLastMessage().listen((Message lastMessage) {
+        conversation.lastMessage = lastMessage;
+      });
+    }
+
+    _conversationList = _messageService.sortConversationList(_conversationList);
 
     return ListView.builder(
         itemBuilder: (BuildContext context, int index) =>

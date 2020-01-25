@@ -45,6 +45,8 @@ class Conversation with ChangeNotifier {
   int pings;
   bool pinned;
 
+  Message lastMessage;
+
   final AppDataService _appDataService = locator<AppDataService>();
   final UserModel _userProvider = locator<UserModel>();
   final GroupModel _groupProvider = locator<GroupModel>();
