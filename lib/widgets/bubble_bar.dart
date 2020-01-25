@@ -18,8 +18,7 @@ final List<BubbleBottomBarItem> Function(
           icon: pings > 0
               ? Badge(
                   badgeColor: orange,
-                  badgeContent: Text(pings.toString(),
-                      style: Theme.of(context).textTheme.caption),
+                  badgeContent: Text(pings.toString()),
                   child: Icon(Icons.message, color: orange))
               : Icon(Icons.message, color: orange),
           activeIcon: Icon(Icons.message, color: white),

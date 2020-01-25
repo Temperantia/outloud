@@ -18,10 +18,10 @@ class ProfileParent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String info = '${user.getAge().toString()}';
-    if (user.name != '') {
+    if (user.name.isNotEmpty) {
       info = '${user.name} • $info';
     }
-    if (user.home != '') {
+    if (user.home.isNotEmpty) {
       info += ' • ${user.home}';
     }
     return Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: <

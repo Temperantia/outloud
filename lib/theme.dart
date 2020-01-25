@@ -11,7 +11,7 @@ Color white = const Color(0xFFF9F5F5);
 Color black = const Color(0xFF000000);
 
 ThemeData theme = ThemeData(
-    accentColor: white,
+    //accentColor: white,
     buttonTheme: ButtonThemeData(
       buttonColor: orange,
       minWidth: 200.0,

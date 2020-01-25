@@ -12,33 +12,35 @@ import 'package:inclusive/models/user.dart';
 import 'package:inclusive/models/message.dart';
 
 class Conversation with ChangeNotifier {
-  Conversation(this.id, this.lastRead, {this.pings = 0}) {
-    isGroup = !id.contains('-');
-    if (isGroup) {
-      idPeer = id;
-    } else {
-      idPeer = _getPeerId(id);
-    }
+  factory Conversation(String id, {int lastRead = 0, int pings = 0}) {
+    final List<String> ids = id.split('-');
+    return ids.length == 1
+        ? Conversation.group(id, lastRead: lastRead, pings: pings)
+        : Conversation.user(ids[0], ids[1], lastRead: lastRead, pings: pings);
   }
+
+  Conversation.user(String idMy, this.idPeer,
+      {this.lastRead = 0, this.pings = 0})
+      : isGroup = false,
+        id = getUserConversationId(idMy, idPeer);
+
+  Conversation.group(this.id, {this.lastRead = 0, this.pings = 0})
+      : isGroup = true,
+        idPeer = id;
+
+  final bool isGroup;
   final String id;
+  final String idPeer;
+  int lastRead;
+  int pings;
 
   final AppDataService _appDataService = locator<AppDataService>();
   final UserModel _userProvider = locator<UserModel>();
   final GroupModel _groupProvider = locator<GroupModel>();
   final MessageModel _messageProvider = locator<MessageModel>();
 
-  bool isGroup;
-  String idPeer;
-  int lastRead = 0;
-  int pings = 0;
-
-  static String makeUserConversationId(String id, String idPeer) {
-    return id + '-' + idPeer;
-  }
-
-  String _getPeerId(final String conversationId) {
-    final List<String> ids = conversationId.split('-');
-    return _appDataService.identifier == ids[0] ? ids[1] : ids[0];
+  static String getUserConversationId(String id1, String id2) {
+    return id1.compareTo(id2) < 0 ? '$id1-$id2' : '$id2-$id1';
   }
 
   Stream<Entity> streamEntity() {

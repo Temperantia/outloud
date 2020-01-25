@@ -41,7 +41,7 @@ class ProfileDetail extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String text = '${user.getAge().toString()}';
-    if (user.name != '') {
+    if (user.name.isNotEmpty) {
       text = '${user.name} • $text';
     }
     return ListView(children: <Widget>[
@@ -70,7 +70,7 @@ class ProfileDetail extends StatelessWidget {
                   TextSpan(
                       text: text,
                       style: TextStyle(fontWeight: FontWeight.bold)),
-                  if (user.home != '') TextSpan(text: ' • ${user.home}'),
+                  if (user.home.isNotEmpty) TextSpan(text: ' • ${user.home}'),
                 ]))),
             if (user.interests.isNotEmpty)
               Column(children: <Widget>[
@@ -84,7 +84,7 @@ class ProfileDetail extends StatelessWidget {
                     subtitle: Text(user.interests
                         .map<String>((Interest interest) {
                           String name = '#${interest.name} ';
-                          if (interest.comment != '') {
+                          if (interest.comment.isNotEmpty) {
                             name += '• ${interest.comment}\n';
                           }
                           return name;
@@ -92,13 +92,13 @@ class ProfileDetail extends StatelessWidget {
                         .toList()
                         .join())),
               ]),
-            if (user.description != '' &&
-                user.profession != '' &&
-                user.education != '')
+            if (user.description.isNotEmpty &&
+                user.profession.isNotEmpty &&
+                user.education.isNotEmpty)
               Column(
                 children: <Widget>[
                   _buildDivider(reverse: true),
-                  if (user.description != '')
+                  if (user.description.isNotEmpty)
                     ListTile(
                         leading: Image.asset(
                             'images/baseline_emoji_people_black_18.png',
@@ -109,12 +109,12 @@ class ProfileDetail extends StatelessWidget {
                             child: Text('About me',
                                 style: TextStyle(fontSize: 20.0))),
                         subtitle: Text(user.description)),
-                  if (user.profession != '')
+                  if (user.profession.isNotEmpty)
                     ListTile(
                         leading: Icon(MdiIcons.briefcaseOutline),
                         title: Text('Profession • ${user.profession}',
                             style: const TextStyle(fontSize: 20.0))),
-                  if (user.education != '')
+                  if (user.education.isNotEmpty)
                     ListTile(
                         leading: Icon(MdiIcons.schoolOutline),
                         title: Text('Education • ${user.education}',

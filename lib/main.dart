@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:inclusive/classes/conversation.dart';
+import 'package:inclusive/classes/group_ping.dart';
+import 'package:inclusive/classes/ping.dart';
+import 'package:inclusive/classes/search_preferences.dart';
 import 'package:inclusive/services/search.dart';
 import 'package:provider/provider.dart';
 
@@ -13,9 +17,6 @@ import 'package:inclusive/services/message.dart';
 import 'package:inclusive/classes/conversation_list.dart';
 import 'package:inclusive/classes/user.dart';
 import 'package:inclusive/screens/Register/register.dart';
-import 'package:inclusive/screens/Register/register_1.dart';
-import 'package:inclusive/screens/Register/register_2.dart';
-import 'package:inclusive/screens/Register/register_3.dart';
 import 'package:inclusive/screens/home.dart';
 
 void main() {
@@ -24,6 +25,33 @@ void main() {
 }
 
 class App extends StatelessWidget {
+  void _streamPings(User user, ConversationList conversationList,
+      MessageService messageService) {
+    user.streamPings().listen((List<Ping> userPings) {
+      String userConversationId;
+      for (final Ping userPing in userPings) {
+        userConversationId =
+            Conversation.getUserConversationId(user.id, userPing.id);
+        final int index = conversationList.conversations.indexWhere(
+            (Conversation conversation) =>
+                conversation.id == userConversationId);
+        if (index == -1) {
+          conversationList.conversations
+              .add(Conversation(userConversationId, pings: userPing.value));
+        } else {
+          conversationList.conversations[index].pings = userPing.value;
+        }
+      }
+      messageService.refreshPings(conversationList.conversations);
+    });
+    for (final Conversation conversation in conversationList.conversations) {
+      conversation.streamGroupPings().listen((GroupPing groupPing) {
+        conversation.pings = groupPing.value;
+        messageService.refreshPings(conversationList.conversations);
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -41,14 +69,19 @@ class App extends StatelessWidget {
           ChangeNotifierProvider<SearchService>(
               create: (_) => locator<SearchService>()),
         ],
-        child: Consumer2<AppDataService, MessageService>(builder:
-            (BuildContext context, AppDataService appDataService,
-                MessageService messageService, Widget w) {
+        child: Consumer3<AppDataService, MessageService, SearchService>(builder:
+            (BuildContext context,
+                AppDataService appDataService,
+                MessageService messageService,
+                SearchService searchService,
+                Widget w) {
           return MultiProvider(
               providers: <SingleChildCloneableWidget>[
+                StreamProvider<User>.value(value: appDataService.getUser()),
                 FutureProvider<ConversationList>.value(
                     value: messageService.getConversationList()),
-                StreamProvider<User>.value(value: appDataService.getUser())
+                FutureProvider<SearchPreferences>.value(
+                    value: searchService.getSearchPreferences()),
               ],
               child: MaterialApp(
                   debugShowCheckedModeBanner: false,
@@ -60,13 +93,18 @@ class App extends StatelessWidget {
                     return MaterialPageRoute<Widget>(
                         builder: (BuildContext context) {
                       final User user = Provider.of<User>(context);
-                      return name != RegisterScreen.id &&
-                              name != Register1Screen.id &&
-                              name != Register2Screen.id &&
-                              name != Register3Screen.id &&
-                              user == null
+                      return !name.startsWith('Register') && user == null
                           ? RegisterScreen()
-                          : routes[settings.name](settings.arguments);
+                          : Consumer<ConversationList>(builder:
+                              (BuildContext context,
+                                  ConversationList conversationList, Widget w) {
+                              if (conversationList != null) {
+                                _streamPings(
+                                    user, conversationList, messageService);
+                              }
+
+                              return routes[settings.name](settings.arguments);
+                            });
                     });
                   }));
         }));

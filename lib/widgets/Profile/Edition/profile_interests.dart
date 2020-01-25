@@ -54,7 +54,7 @@ class ProfileInterestsState extends State<ProfileInterests>
     String text;
     for (int index = 0; index < _controllersLeft.length; index++) {
       text = _controllersLeft[index].text.trim();
-      if (text != '') {
+      if (text.isNotEmpty) {
         interests.add(Interest(
             name: text, comment: _controllersRight[index].text.trim()));
       }
@@ -167,7 +167,7 @@ class ProfileInterestsState extends State<ProfileInterests>
                 Flexible(
                     flex: _focusRight[index].hasFocus ? 5 : 3,
                     child: TextField(
-                        enabled: _controllersLeft[index].text != '',
+                        enabled: _controllersLeft[index].text.isNotEmpty,
                         onChanged: (String value) => setState(() {}),
                         focusNode: _focusRight[index],
                         controller: _controllersRight[index],
@@ -176,7 +176,7 @@ class ProfileInterestsState extends State<ProfileInterests>
                             focusColor: orange,
                             border: const OutlineInputBorder()))),
                 if (_controllersLeft.length < maxInterests - 1 &&
-                    _controllersLeft[index].text != '')
+                    _controllersLeft[index].text.isNotEmpty)
                   GestureDetector(
                       onTap: () {
                         setState(() {

@@ -64,7 +64,7 @@ class _Register2ScreenState extends State<Register2Screen> {
                               hintText: 'riley@gmail.com'),
                           controller: _controller,
                           onTap: () => _error = '')),
-                  if (_error != '')
+                  if (_error.isNotEmpty)
                     Row(children: <Widget>[
                       Container(
                           padding: const EdgeInsets.only(left: 10.0),

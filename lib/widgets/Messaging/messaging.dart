@@ -52,8 +52,11 @@ class _MessagingState extends State<Messaging> {
           IconSlideAction(
               caption: 'Close',
               icon: Icons.close,
-              onTap: () => setState(() => _messageService.closeConversation(
-                  conversation, _conversationList)))
+              onTap: () async {
+                await _messageService.closeConversation(
+                    conversation, _conversationList);
+                setState(() {});
+              })
         ],
         child: GestureDetector(
             onTap: () => Navigator.pushNamed(context, ConversationScreen.id,
@@ -65,7 +68,7 @@ class _MessagingState extends State<Messaging> {
                     child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
-                          Text(entity.name == '' ? 'Anonymous' : entity.name,
+                          Text(entity.name.isEmpty ? 'Anonymous' : entity.name,
                               style: Theme.of(context).textTheme.caption),
                           Flexible(
                               child: Container(
@@ -81,7 +84,9 @@ class _MessagingState extends State<Messaging> {
                                           .textTheme
                                           .caption))),
                           Text(lastMessageDateTime ?? '',
-                              style: Theme.of(context).textTheme.caption)
+                              style: Theme.of(context).textTheme.caption),
+                          if (conversation.pings > 0)
+                            Text(conversation.pings.toString())
                         ])))));
   }
 

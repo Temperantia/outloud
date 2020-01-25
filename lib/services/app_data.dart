@@ -51,7 +51,7 @@ class AppDataService extends ChangeNotifier {
     // testing purpose
     //identifier = 'apmbMHvueWZDLeAOxaxI';
     //identifier = 'cx0hEmwDTLWYy3COnvPL';
-    //identifier = 'b';
+    identifier = 'b';
 
     yield* _userProvider.streamUser(identifier);
   }

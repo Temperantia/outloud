@@ -18,8 +18,7 @@ class MessageService extends ChangeNotifier {
 
   Future<ConversationList> getConversationList() async {
     final List<Conversation> conversations = <Conversation>[
-      /* Conversation('BHpAnkWabxJFoY1FbM57', 0),
-      Conversation('apmbMHvueWZDLeAOxaxI-cx0hEmwDTLWYy3COnvPL', 0), */
+      //Conversation('BHpAnkWabxJFoY1FbM57'),
     ];
 
     final SharedPreferences sharedPreferences =
@@ -32,8 +31,8 @@ class MessageService extends ChangeNotifier {
       return ConversationList(conversations: conversations);
     }
     conversationIDs.asMap().forEach((final int index, final String id) =>
-        conversations
-            .add(Conversation(id, int.parse(conversationLastReads[index]))));
+        conversations.add(Conversation(id,
+            lastRead: int.parse(conversationLastReads[index]))));
     return ConversationList(conversations: conversations);
   }
 
@@ -44,27 +43,25 @@ class MessageService extends ChangeNotifier {
     final List<String> conversationIDs = conversationList.conversations
         .map<String>((final Conversation conversation) => conversation.id)
         .toList();
-    sharedPreferences.setStringList('conversationIDs', conversationIDs);
+    await sharedPreferences.setStringList('conversationIDs', conversationIDs);
     final List<String> conversationLastReads = conversationList.conversations
         .map<String>((final Conversation conversation) =>
             conversation.lastRead.toString())
         .toList();
-    sharedPreferences.setStringList(
+    await sharedPreferences.setStringList(
         'conversationLastReads', conversationLastReads);
   }
 
-  void addUserConversation(
-      ConversationList conversationList, String id, String idPeer) {
-    final String conversationId =
-        Conversation.makeUserConversationId(id, idPeer);
-    conversationList.conversations.add(Conversation(conversationId, 0));
-    setConversations(conversationList);
+  Future<void> addUserConversation(
+      ConversationList conversationList, String id, String idPeer) async {
+    conversationList.conversations.add(Conversation.user(id, idPeer));
+    await setConversations(conversationList);
   }
 
-  void closeConversation(
-      Conversation conversation, ConversationList conversationList) {
+  Future<void> closeConversation(
+      Conversation conversation, ConversationList conversationList) async {
     conversationList.conversations.remove(conversation);
-    setConversations(conversationList);
+    await setConversations(conversationList);
   }
 
   Future<void> sendMessage(Conversation conversation, String text) async {

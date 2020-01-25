@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:inclusive/classes/interest.dart';
+import 'package:inclusive/classes/search_preferences.dart';
+import 'package:inclusive/widgets/loading.dart';
 import 'package:provider/provider.dart';
-import 'package:rubber/rubber.dart';
 
 import 'package:inclusive/screens/Profile/profile.dart';
 import 'package:inclusive/classes/conversation_list.dart';
 import 'package:inclusive/services/app_data.dart';
 import 'package:inclusive/services/message.dart';
 import 'package:inclusive/theme.dart';
-import 'package:inclusive/widgets/Search/search_interest.dart';
-import 'package:inclusive/widgets/background.dart';
 import 'package:inclusive/classes/user.dart';
 import 'package:inclusive/models/user.dart';
 
@@ -22,23 +21,9 @@ class Search extends StatefulWidget {
 }
 
 class _SearchState extends State<Search> with SingleTickerProviderStateMixin {
-  RubberAnimationController _controller;
-
   AppDataService _appDataService;
   MessageService _messageService;
   UserModel _userProvider;
-  RangeValues _ages = const RangeValues(25, 60);
-  final List<Interest> _interests = <Interest>[];
-
-  @override
-  void initState() {
-    _controller = RubberAnimationController(
-        vsync: this,
-        duration: const Duration(milliseconds: 200),
-        lowerBoundValue: AnimationControllerValue(percentage: 0.4),
-        upperBoundValue: AnimationControllerValue(percentage: 1.0));
-    super.initState();
-  }
 
   Widget _buildUser(User user, ConversationList conversationList, User me) {
     return FutureBuilder<double>(
@@ -58,8 +43,8 @@ class _SearchState extends State<Search> with SingleTickerProviderStateMixin {
     final int commonInterests = me.interests.isEmpty
         ? 0
         : me.interests
-            .map<int>(
-                (Interest interest) => user.interests.contains(interest) ? 1 : 0)
+            .map<int>((Interest interest) =>
+                user.interests.contains(interest) ? 1 : 0)
             .reduce((int curr, int next) => curr + next);
 
     return GestureDetector(
@@ -73,28 +58,23 @@ class _SearchState extends State<Search> with SingleTickerProviderStateMixin {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       Container(
-                        width: 100.0,
-                        child:
-                       user.pics.isEmpty ?
-                        Image.asset(
-                            'images/default-user-profile-image-png-7.png',
-                            fit: BoxFit.fill)
-                      :
-                        Image.network(user.pics[0].toString())),
-                      Text(user.name == '' ? 'Anonymous' : user.name, style: Theme.of(context).textTheme.title),
-                      //Text(user.getAge().toString(),
-                       //   style: Theme.of(context).textTheme.title),
+                          width: 100.0,
+                          child: user.pics.isEmpty
+                              ? Image.asset(
+                                  'images/default-user-profile-image-png-7.png',
+                                  fit: BoxFit.fill)
+                              : Image.network(user.pics[0].toString())),
+                      Text(user.name.isEmpty ? 'Anonymous' : user.name,
+                          style: Theme.of(context).textTheme.title),
                       Column(children: <Widget>[
                         if (commonInterests > 0)
                           Container(
                               child: Row(children: <Widget>[
-                            Text(commonInterests.toString(), style: Theme.of(context)
-                                                    .textTheme
-                                                    .caption),
+                            Text(commonInterests.toString(),
+                                style: Theme.of(context).textTheme.caption),
                             Icon(Icons.category, color: white),
-                             Text('in common', style: Theme.of(context)
-                                                    .textTheme
-                                                    .caption),
+                            Text('in common',
+                                style: Theme.of(context).textTheme.caption),
                           ])),
                         if (distance.hasData)
                           if (distance.data / 1000 > 3000)
@@ -123,70 +103,18 @@ class _SearchState extends State<Search> with SingleTickerProviderStateMixin {
                         if (!conversationList.hasUserConversation(user.id))
                           IconButton(
                               icon: Icon(Icons.add, color: white),
-                              onPressed: () {
-                                setState(() {
-                                  _messageService.addUserConversation(
+                              onPressed: () async {
+                                                                  await _messageService.addUserConversation(
                                       conversationList,
                                       _appDataService.identifier,
                                       user.id);
+                                setState(() {
+
                                   widget.onCreateUserConversation(1);
                                 });
                               }),
                       ]),
                     ]))));
-  }
-
-  Widget _buildUpperLayer(AsyncSnapshot<List<User>> users,
-      ConversationList conversationList, User user) {
-    return Container(
-        decoration: BoxDecoration(color: white),
-        child: Column(children: <Widget>[
-          Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[Icon(Icons.drag_handle)]),
-          Expanded(
-              child: users.hasData
-                  ? ListView.builder(
-                      itemBuilder: (BuildContext context, int index) =>
-                          _buildUser(users.data[index], conversationList, user),
-                      itemCount: users.data.length,
-                    )
-                  : Container())
-        ]));
-  }
-
-  Widget _buildLowerLayer() {
-    return Container(
-        padding: const EdgeInsets.only(top: 20.0),
-        decoration: background,
-        child: Column(children: <Widget>[
-          Row(children: <Widget>[
-            Icon(Icons.category),
-            Flexible(
-                child: SearchInterest(
-                    interests: _interests,
-                    ))
-          ]),
-          Row(children: <Widget>[
-            Icon(Icons.cake),
-            Flexible(
-                child: RangeSlider(
-                    labels: RangeLabels(
-                      _ages.start.toInt().toString() + 'y',
-                      _ages.end.toInt().toString() + 'y',
-                    ),
-                    min: 13,
-                    max: 99,
-                    activeColor: orange,
-                    inactiveColor: blueLight,
-                    values: _ages,
-                    divisions: 87,
-                    onChanged: (RangeValues values) {
-                      // TODO(alex): onChangedEnd should be called instead and update when values are different
-                      setState(() => _ages = values);
-                    })),
-          ])
-        ]));
   }
 
   @override
@@ -197,15 +125,20 @@ class _SearchState extends State<Search> with SingleTickerProviderStateMixin {
     final User user = Provider.of<User>(context);
     final ConversationList conversationList =
         Provider.of<ConversationList>(context);
+    final SearchPreferences searchPreferences =
+        Provider.of<SearchPreferences>(context);
     return FutureBuilder<List<User>>(
         future: _userProvider.getUsers(_appDataService.identifier,
-            interests: _interests.map<String>((Interest interest) => interest.name).toList(),
-            ageStart: _ages.start.toInt(),
-            ageEnd: _ages.end.toInt()),
+            interests: searchPreferences.interests,
+            ageStart: searchPreferences.ageRange.start.toInt(),
+            ageEnd: searchPreferences.ageRange.end.toInt()),
         builder: (BuildContext context, AsyncSnapshot<List<User>> users) =>
-            RubberBottomSheet(
-                animationController: _controller,
-                upperLayer: _buildUpperLayer(users, conversationList, user),
-                lowerLayer: _buildLowerLayer()));
+            users.hasData
+                ? ListView.builder(
+                    itemBuilder: (BuildContext context, int index) =>
+                        _buildUser(users.data[index], conversationList, user),
+                    itemCount: users.data.length,
+                  )
+                : Loading());
   }
 }

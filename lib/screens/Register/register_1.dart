@@ -21,7 +21,7 @@ class _Register1ScreenState extends State<Register1Screen> {
   Future<void> submit() async {
     FocusScope.of(context).unfocus();
     final String name = _controller.text.trim();
-    if (name == '') {
+    if (name.isEmpty) {
       Navigator.pushNamed(context, Register2Screen.id, arguments: name);
       return;
     }

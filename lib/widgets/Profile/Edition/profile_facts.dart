@@ -54,7 +54,7 @@ class ProfileFactsState extends State<ProfileFacts>
     String text;
     for (final TextEditingController controller in _controllers) {
       text = controller.text.trim();
-      if (text != '') {
+      if (text.isNotEmpty) {
         facts.add(text);
       }
     }
@@ -94,7 +94,7 @@ class ProfileFactsState extends State<ProfileFacts>
                     child: TextField(
                         onChanged: (String value) {
                           setState(() {
-                            if (value == '') {
+                            if (value.isEmpty) {
                               _removeController(index: index);
                             }
                           });
@@ -105,7 +105,7 @@ class ProfileFactsState extends State<ProfileFacts>
                             focusColor: orange,
                             border: const OutlineInputBorder()))),
                 if (_controllers.length < _maxFacts - 1 &&
-                    _controllers[index].text != '')
+                    _controllers[index].text.isNotEmpty)
                   GestureDetector(
                       onTap: () {
                         setState(() {

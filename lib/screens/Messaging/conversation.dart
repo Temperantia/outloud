@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:inclusive/classes/conversation_list.dart';
+import 'package:inclusive/models/user.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 
@@ -33,13 +35,13 @@ class _ConversationScreenState extends State<ConversationScreen> {
   MessageService _messageService;
 
   void _onSendMessage(String text) {
-    if (text.trim() != '') {
+    if (text.trim().isEmpty) {
+      Fluttertoast.showToast(msg: 'Nothing to send');
+    } else {
       _textController.clear();
       _messageService.sendMessage(widget.conversation, text);
       _listScrollController.animateTo(0.0,
           duration: const Duration(milliseconds: 300), curve: Curves.linear);
-    } else {
-      Fluttertoast.showToast(msg: 'Nothing to send');
     }
   }
 
@@ -172,6 +174,14 @@ class _ConversationScreenState extends State<ConversationScreen> {
   Widget build(final BuildContext context) {
     _appDataService = Provider.of<AppDataService>(context);
     _messageService = Provider.of<MessageService>(context);
+    if (!widget.conversation.isGroup) {
+      final UserModel userProvider = Provider.of<UserModel>(context);
+      userProvider.markPingAsRead(
+          _appDataService.identifier, widget.conversation.idPeer);
+    }
+    widget.conversation.markAsRead();
+
+    _messageService.setConversations(Provider.of<ConversationList>(context));
     return StreamBuilder<Entity>(
         stream: widget.conversation.streamEntity(),
         builder: (BuildContext context, AsyncSnapshot<Entity> entity) {
@@ -179,7 +189,7 @@ class _ConversationScreenState extends State<ConversationScreen> {
               ? Loading()
               : View(
                   title:
-                      entity.data.name == '' ? 'Anonymous' : entity.data.name,
+                      entity.data.name.isEmpty ? 'Anonymous' : entity.data.name,
                   child: Container(
                       decoration: background,
                       child: Column(children: <Widget>[
