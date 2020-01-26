@@ -14,14 +14,14 @@ class _ProfileSettingsSearchState extends State<ProfileSettingsSearch> {
   SearchPreferences searchPreferences;
 
   Future<void> _onSave(BuildContext context) async {
-    final SearchService searchService = Provider.of<SearchService>(context);
+    final SearchService searchService = Provider.of(context);
     await searchService.setSearchPreferences(searchPreferences);
     Navigator.pop(context);
   }
 
   @override
   Widget build(BuildContext context) {
-    searchPreferences = Provider.of<SearchPreferences>(context);
+    searchPreferences = Provider.of(context);
 
     return ListView(padding: const EdgeInsets.all(20.0), children: <Widget>[
       Column(children: <Widget>[

@@ -102,8 +102,8 @@ class _MessagingState extends State<Messaging> {
 
   @override
   Widget build(BuildContext context) {
-    _messageService = Provider.of<MessageService>(context);
-    _conversationList = Provider.of<ConversationList>(context);
+    _messageService = Provider.of(context);
+    _conversationList = Provider.of(context);
     if (_conversationList.conversations.isEmpty)
       return Center(
           child: Padding(

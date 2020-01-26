@@ -44,7 +44,7 @@ class _Register2ScreenState extends State<Register2Screen> {
 
   @override
   Widget build(BuildContext context) {
-    _userProvider = Provider.of<UserModel>(context);
+    _userProvider = Provider.of(context);
 
     return Scaffold(
         appBar: AppBar(

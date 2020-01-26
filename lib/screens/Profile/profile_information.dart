@@ -67,8 +67,8 @@ class _ProfileInformationScreen extends State<ProfileInformationScreen> {
 
   @override
   Widget build(BuildContext context) {
-    _userProvider = Provider.of<UserModel>(context);
-    final User user = Provider.of<User>(context);
+    _userProvider = Provider.of(context);
+    final User user = Provider.of(context);
     return View(
         child: ListView(children: <Widget>[
       Padding(

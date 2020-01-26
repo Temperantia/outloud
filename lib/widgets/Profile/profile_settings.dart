@@ -8,14 +8,14 @@ import 'package:provider/provider.dart';
 
 class ProfileSettings extends StatelessWidget {
   Future<void> _onSave(User user, BuildContext context) async {
-    final UserModel _userProvider = Provider.of<UserModel>(context);
+    final UserModel _userProvider = Provider.of(context);
     _userProvider.updateUser(user);
     Navigator.pop(context);
   }
 
   @override
   Widget build(BuildContext context) {
-    final User user = Provider.of<User>(context);
+    final User user = Provider.of(context);
     final TextEditingController _nameController = TextEditingController()
       ..text = user.name;
     final TextEditingController _emailController = TextEditingController()

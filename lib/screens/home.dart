@@ -1,6 +1,7 @@
 import 'package:bubble_bottom_bar/bubble_bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:inclusive/widgets/Groups/groups.dart';
 import 'package:inclusive/widgets/Profile/profile_parent.dart';
 import 'package:provider/provider.dart';
 
@@ -63,7 +64,7 @@ class _HomeScreenState extends State<HomeScreen>
   }
 
   Widget _buildBody() {
-    final User user = Provider.of<User>(context);
+    final User user = Provider.of(context);
 
     return Container(
         decoration: background,
@@ -74,7 +75,7 @@ class _HomeScreenState extends State<HomeScreen>
               ProfileParent(user),
               const Messaging(),
               Search(onCreateUserConversation: _onChangePage),
-              const Center(child: Text('Coming soon')),
+              Groups(),
               const Center(child: Text('Coming soon')),
             ]));
   }
@@ -87,8 +88,8 @@ class _HomeScreenState extends State<HomeScreen>
 
   @override
   Widget build(BuildContext context) {
-    _messageService = Provider.of<MessageService>(context);
-    _appDataService = Provider.of<AppDataService>(context);
+    _messageService = Provider.of(context);
+    _appDataService = Provider.of(context);
 
     _appDataService.refreshLocation();
 

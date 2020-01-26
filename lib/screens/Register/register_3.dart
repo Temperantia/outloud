@@ -38,8 +38,8 @@ class _Register3ScreenState extends State<Register3Screen> {
 
   @override
   Widget build(BuildContext context) {
-    _appDataService = Provider.of<AppDataService>(context);
-    _userProvider = Provider.of<UserModel>(context);
+    _appDataService = Provider.of(context);
+    _userProvider = Provider.of(context);
     final DateTime now = DateTime.now();
     _selected = DateTime(now.year - 18, now.month, now.day);
 

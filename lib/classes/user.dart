@@ -8,34 +8,29 @@ import 'package:inclusive/models/user.dart';
 
 class User extends Entity {
   User({
-    this.id = '',
+    String id = '',
     String name = '',
     this.email = '',
     this.home = '',
-    this.location,
+    GeoPoint location,
     this.birthDate,
-    this.description = '',
-    this.interests = const <Interest>[],
+    String description = '',
+    List<Interest> interests = const <Interest>[],
     this.pics = const <String>[],
     this.facts = const <String>[],
     this.education = '',
     this.profession = '',
-  }) : super(name);
+  }) : super(
+            id: id,
+            name: name,
+            description: description,
+            location: location,
+            interests: interests);
 
   User.fromMap(Map<String, dynamic> snapshot, String id)
-      : id = id ?? '',
-        email = snapshot['email'] as String ?? '',
+      : email = snapshot['email'] as String ?? '',
         home = snapshot['home'] as String ?? '',
-        location = snapshot['location'] as GeoPoint,
         birthDate = (snapshot['birthDate'] as Timestamp).toDate(),
-        description = snapshot['description'] as String ?? '',
-        interests = snapshot['interests'] == null
-            ? <Interest>[]
-            : (snapshot['interests'] as List<dynamic>)
-                .map<Interest>((dynamic interest) => Interest.fromMap(
-                    Map<String, String>.from(
-                        interest as Map<dynamic, dynamic>)))
-                .toList(),
         pics = snapshot['pics'] == null
             ? <String>[]
             : snapshot['pics'].cast<String>() as List<String>,
@@ -44,15 +39,23 @@ class User extends Entity {
             : snapshot['facts'].cast<String>() as List<String>,
         education = snapshot['education'] as String ?? '',
         profession = snapshot['profession'] as String ?? '',
-        super(snapshot['name'] as String);
+        super(
+          id: id ?? '',
+          name: snapshot['name'] as String,
+          description: snapshot['description'] as String ?? '',
+          location: snapshot['location'] as GeoPoint,
+          interests: snapshot['interests'] == null
+              ? <Interest>[]
+              : (snapshot['interests'] as List<dynamic>)
+                  .map<Interest>((dynamic interest) => Interest.fromMap(
+                      Map<String, String>.from(
+                          interest as Map<dynamic, dynamic>)))
+                  .toList(),
+        );
 
-  final String id;
   String email;
   String home;
-  GeoPoint location;
   DateTime birthDate;
-  String description;
-  List<Interest> interests;
   List<String> pics;
   List<String> facts;
   String education;

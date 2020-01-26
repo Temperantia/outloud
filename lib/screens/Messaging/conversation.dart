@@ -171,8 +171,8 @@ class _ConversationScreenState extends State<ConversationScreen> {
 
   @override
   Widget build(final BuildContext context) {
-    _appDataService = Provider.of<AppDataService>(context);
-    _messageService = Provider.of<MessageService>(context);
+    _appDataService = Provider.of(context);
+    _messageService = Provider.of(context);
 
     widget.conversation.markAsRead();
 

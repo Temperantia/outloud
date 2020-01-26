@@ -15,8 +15,8 @@ class View extends StatelessWidget {
   final List<Widget> actions;
   @override
   Widget build(BuildContext context) {
-    final AppDataService appDataService = Provider.of<AppDataService>(context);
-    final MessageService messageService = Provider.of<MessageService>(context);
+    final AppDataService appDataService = Provider.of(context);
+    final MessageService messageService = Provider.of(context);
     return Scaffold(
         appBar: AppBar(
             centerTitle: true,

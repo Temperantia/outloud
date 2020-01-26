@@ -78,7 +78,7 @@ class ProfilePicturesState extends State<ProfilePictures> {
 
   @override
   Widget build(BuildContext context) {
-    _appDataService = Provider.of<AppDataService>(context);
+    _appDataService = Provider.of(context);
 
     return ReorderableWrap(
       spacing: 8.0,

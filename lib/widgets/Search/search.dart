@@ -118,14 +118,14 @@ class _SearchState extends State<Search> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    _appDataService = Provider.of<AppDataService>(context);
-    _messageService = Provider.of<MessageService>(context);
-    _userProvider = Provider.of<UserModel>(context);
-    final User user = Provider.of<User>(context);
+    _appDataService = Provider.of(context);
+    _messageService = Provider.of(context);
+    _userProvider = Provider.of(context);
+    final User user = Provider.of(context);
     final ConversationList conversationList =
-        Provider.of<ConversationList>(context);
+        Provider.of(context);
     final SearchPreferences searchPreferences =
-        Provider.of<SearchPreferences>(context);
+        Provider.of(context);
     return FutureBuilder<List<User>>(
         future: _userProvider.getUsers(_appDataService.identifier,
             interests: searchPreferences.interests,

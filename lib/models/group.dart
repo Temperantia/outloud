@@ -13,4 +13,16 @@ class GroupModel extends ChangeNotifier {
         .streamDocument(id)
         .map((DocumentSnapshot doc) => Group.fromMap(doc.data, doc.documentID));
   }
+
+  Future<List<Group>> getGroups(String userId) async {
+    final Query query = _api.queryCollection();
+
+    return (await query.getDocuments())
+        .documents
+        .map((DocumentSnapshot doc) {
+          return Group.fromMap(doc.data, doc.documentID);
+        })
+        .where((Group group) => !group.hasUser(userId))
+        .toList();
+  }
 }
