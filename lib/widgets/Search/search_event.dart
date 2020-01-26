@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 //import 'package:flutter_calendar_carousel/classes/event.dart';
 //import 'package:flutter_calendar_carousel/flutter_calendar_carousel.dart';
 
-import 'package:inclusive/widgets/Search/search_interest.dart';
+//import 'package:inclusive/widgets/Search/search_interest.dart';
 import 'package:inclusive/widgets/button_text.dart';
 
 class SearchEvent extends StatefulWidget {
@@ -31,7 +31,7 @@ class SearchEventState extends State<SearchEvent> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
-          const SearchInterest(),
+          //const SearchInterest(),
           /*
           buildPeriods(),
           CalendarCarousel(

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_tags/tag.dart';
 
 import 'package:inclusive/theme.dart';
-import 'package:inclusive/widgets/Search/search_interest.dart';
+//import 'package:inclusive/widgets/Search/search_interest.dart';
 
 class SearchSolo extends StatefulWidget {
   const SearchSolo({this.onSearch});
@@ -25,7 +25,7 @@ class SearchSoloState extends State<SearchSolo> {
     return Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
-          const SearchInterest(),
+          //const SearchInterest(),
           RangeSlider(
               labels: RangeLabels(
                 _ages.start.toInt().toString() + 'y',

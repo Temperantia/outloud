@@ -45,10 +45,12 @@ class App extends StatelessWidget {
       messageService.refreshPings(conversationList.conversations);
     });
     for (final Conversation conversation in conversationList.conversations) {
-      conversation.streamGroupPings().listen((GroupPing groupPing) {
-        conversation.pings = groupPing.value;
-        messageService.refreshPings(conversationList.conversations);
-      });
+      if (conversation.isGroup) {
+        conversation.streamGroupPings().listen((GroupPing groupPing) {
+          conversation.pings = groupPing.value;
+          messageService.refreshPings(conversationList.conversations);
+        });
+      }
     }
   }
 

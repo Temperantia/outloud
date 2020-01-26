@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:inclusive/theme.dart';
-import 'package:inclusive/widgets/Search/search_interest.dart';
+//import 'package:inclusive/widgets/Search/search_interest.dart';
 
 class SearchGroup extends StatefulWidget {
   @override
@@ -24,7 +24,7 @@ class SearchGroupState extends State<SearchGroup> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: <Widget>[
-        const SearchInterest(),
+        //const SearchInterest(),
         SliderTheme(
           data: SliderTheme.of(context).copyWith(
             activeTrackColor: blueLight,
