@@ -97,7 +97,7 @@ class App extends StatelessWidget {
                       final User user = Provider.of(context);
                       return !name.startsWith('Register') &&
                               name != 'Login' &&
-                              user != null
+                              user == null
                           ? RegisterScreen()
                           : Consumer<ConversationList>(builder:
                               (BuildContext context,
