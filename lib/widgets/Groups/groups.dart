@@ -49,7 +49,7 @@ class _GroupsState extends State<Groups> {
             children: <Widget>[Text(info)],
           ),
           Row(
-            children: <Widget>[Text('Interests')],
+            children: const <Widget>[Text('Interests')],
           )
         ]),
       ],
@@ -58,7 +58,7 @@ class _GroupsState extends State<Groups> {
 
   Widget _buildMiddleRow(Group group) {
     return ExpandablePanel(
-        header: Text('12k members'),
+        header: const Text('12k members'),
         collapsed: Text(
           group.description,
           softWrap: true,
@@ -70,7 +70,7 @@ class _GroupsState extends State<Groups> {
 
   Row _buildLowerRow(Group group) {
     return Row(
-      children: <Widget>[Text('New members today')],
+      children: const <Widget>[Text('New members today')],
     );
   }
 

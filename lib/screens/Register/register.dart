@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:inclusive/screens/Register/login.dart';
 
 import 'package:inclusive/screens/Register/register_1.dart';
 import 'package:inclusive/widgets/background.dart';
@@ -20,10 +21,17 @@ class RegisterScreen extends StatelessWidget {
                       const SizedBox(height: 50.0),
                       RaisedButton(
                           onPressed: () {
+                            Navigator.of(context).pushNamed(LoginScreen.id);
+                          },
+                          child: Text('LOGIN',
+                              style: Theme.of(context).textTheme.title)),
+                      const SizedBox(height: 20.0),
+                      RaisedButton(
+                          onPressed: () {
                             Navigator.of(context).pushNamed(Register1Screen.id);
                           },
                           child: Text('GET STARTED',
-                              style: Theme.of(context).textTheme.title))
+                              style: Theme.of(context).textTheme.title)),
                     ]))));
   }
 }

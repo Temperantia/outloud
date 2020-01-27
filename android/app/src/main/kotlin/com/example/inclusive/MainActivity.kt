@@ -1,4 +1,4 @@
-package com.example.inclusive
+package com.goodies.inclusive
 
 import androidx.annotation.NonNull;
 import io.flutter.embedding.android.FlutterActivity

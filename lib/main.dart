@@ -95,7 +95,9 @@ class App extends StatelessWidget {
                     return MaterialPageRoute<Widget>(
                         builder: (BuildContext context) {
                       final User user = Provider.of(context);
-                      return !name.startsWith('Register') && user != null
+                      return !name.startsWith('Register') &&
+                              name != 'Login' &&
+                              user != null
                           ? RegisterScreen()
                           : Consumer<ConversationList>(builder:
                               (BuildContext context,

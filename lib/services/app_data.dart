@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -6,7 +7,9 @@ import 'package:device_info/device_info.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:location_permissions/location_permissions.dart';
+import 'package:http/http.dart' as http;
 
 import 'package:inclusive/screens/home.dart';
 import 'package:inclusive/classes/user.dart';
@@ -21,6 +24,29 @@ class AppDataService extends ChangeNotifier {
 
   int currentPage = 2;
   String identifier;
+  final GoogleSignIn _googleSignIn = GoogleSignIn(
+    scopes: <String>[
+      'email',
+      'https://www.googleapis.com/auth/user.birthday.read',
+      'https://www.googleapis.com/auth/user.organization.read',
+    ],
+  );
+
+  Future<void> handleSignIn() async {
+    try {
+      final GoogleSignInAccount account = await _googleSignIn.signIn();
+      final http.Response response = await http.get(
+        'https://people.googleapis.com/v1/people/me'
+        '?personFields=birthdays,genders,names,organizations',
+        headers: await account.authHeaders,
+      );
+      final Map<String, dynamic> data =
+          json.decode(response.body) as Map<String, dynamic>;
+      print(data);
+    } catch (error) {
+      print(error);
+    }
+  }
 
   void navigateBack(BuildContext context, int index) {
     currentPage = index;
