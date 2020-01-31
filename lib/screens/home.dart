@@ -95,16 +95,17 @@ class _HomeScreenState extends State<HomeScreen>
 
     _tabController.animateTo(_appDataService.currentPage);
     return Scaffold(
-        floatingActionButton: SpeedDial(
+        /*floatingActionButton: SpeedDial(
             child: Icon(Icons.add, color: white),
             backgroundColor: orange,
             animatedIcon: AnimatedIcons.menu_close,
             foregroundColor: white,
             overlayOpacity: 0,
             children: _buildActions()),
-        floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
+            */
+        //floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
         bottomNavigationBar: BubbleBottomBar(
-            fabLocation: BubbleBottomBarFabLocation.end,
+            //fabLocation: BubbleBottomBarFabLocation.end,
             opacity: 1,
             currentIndex: _appDataService.currentPage,
             onTap: _onChangePage,
