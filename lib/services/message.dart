@@ -1,16 +1,16 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:inclusive/services/auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:inclusive/classes/conversation_list.dart';
 import 'package:inclusive/classes/conversation.dart';
 import 'package:inclusive/locator.dart';
-import 'package:inclusive/services/app_data.dart';
 import 'package:inclusive/models/user.dart';
 import 'package:inclusive/models/message.dart';
 
 class MessageService extends ChangeNotifier {
-  final AppDataService appDataService = locator<AppDataService>();
+  final AuthService _authService = locator<AuthService>();
   final UserModel userProvider = locator<UserModel>();
   final MessageModel messageProvider = locator<MessageModel>();
 
@@ -113,9 +113,9 @@ class MessageService extends ChangeNotifier {
 
   Future<void> sendMessage(Conversation conversation, String text) async {
     await messageProvider.addMessage(
-        conversation.id, appDataService.identifier, text);
+        conversation.id, _authService.identifier, text);
     if (!conversation.isGroup) {
-      userProvider.ping(appDataService.identifier, conversation.idPeer);
+      userProvider.ping(_authService.identifier, conversation.idPeer);
     }
   }
 

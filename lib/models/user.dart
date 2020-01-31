@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:inclusive/classes/ping.dart';
 import 'package:inclusive/classes/user.dart';
 import 'package:inclusive/locator.dart';
-import 'package:inclusive/services/api.dart';
+import 'package:inclusive/models/api.dart';
 
 class UserModel extends ChangeNotifier {
   final Api _api = locator<Api>('users');

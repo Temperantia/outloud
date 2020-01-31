@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 import 'package:inclusive/classes/group.dart';
 import 'package:inclusive/locator.dart';
-import 'package:inclusive/services/api.dart';
+import 'package:inclusive/models/api.dart';
 
 class GroupModel extends ChangeNotifier {
   final Api _api = locator<Api>('groups');

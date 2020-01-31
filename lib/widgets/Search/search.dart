@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:inclusive/classes/interest.dart';
 import 'package:inclusive/classes/search_preferences.dart';
+import 'package:inclusive/services/auth.dart';
 import 'package:inclusive/widgets/loading.dart';
 import 'package:provider/provider.dart';
 
 import 'package:inclusive/screens/Profile/profile.dart';
 import 'package:inclusive/classes/conversation_list.dart';
-import 'package:inclusive/services/app_data.dart';
 import 'package:inclusive/services/message.dart';
 import 'package:inclusive/theme.dart';
 import 'package:inclusive/classes/user.dart';
@@ -21,7 +21,7 @@ class Search extends StatefulWidget {
 }
 
 class _SearchState extends State<Search> with SingleTickerProviderStateMixin {
-  AppDataService _appDataService;
+  AuthService _authService;
   MessageService _messageService;
   UserModel _userProvider;
 
@@ -29,7 +29,7 @@ class _SearchState extends State<Search> with SingleTickerProviderStateMixin {
     return FutureBuilder<double>(
         future: me.location == null || user.location == null
             ? Future<double>(null)
-            : _appDataService.locator.distanceBetween(
+            : _authService.geoLocator.distanceBetween(
                 me.location.latitude,
                 me.location.longitude,
                 user.location.latitude,
@@ -106,7 +106,7 @@ class _SearchState extends State<Search> with SingleTickerProviderStateMixin {
                               onPressed: () async {
                                 await _messageService.addUserConversation(
                                     conversationList,
-                                    _appDataService.identifier,
+                                    _authService.identifier,
                                     user.id);
                                 setState(() {
                                   widget.onCreateUserConversation(1);
@@ -118,7 +118,7 @@ class _SearchState extends State<Search> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    _appDataService = Provider.of(context);
+    _authService = Provider.of(context);
     _messageService = Provider.of(context);
     _userProvider = Provider.of(context);
     final User user = Provider.of(context);
@@ -127,7 +127,7 @@ class _SearchState extends State<Search> with SingleTickerProviderStateMixin {
     final SearchPreferences searchPreferences =
         Provider.of(context);
     return FutureBuilder<List<User>>(
-        future: _userProvider.getUsers(_appDataService.identifier,
+        future: _userProvider.getUsers(_authService.identifier,
             interests: searchPreferences.interests,
             ageStart: searchPreferences.ageRange.start.toInt(),
             ageEnd: searchPreferences.ageRange.end.toInt()),

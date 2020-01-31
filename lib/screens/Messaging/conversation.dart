@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:inclusive/classes/conversation_list.dart';
+import 'package:inclusive/services/auth.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 
@@ -11,7 +12,6 @@ import 'package:inclusive/widgets/view.dart';
 import 'package:inclusive/widgets/background.dart';
 import 'package:inclusive/classes/conversation.dart';
 import 'package:inclusive/classes/message.dart';
-import 'package:inclusive/services/app_data.dart';
 import 'package:inclusive/services/message.dart';
 import 'package:inclusive/theme.dart';
 
@@ -30,7 +30,7 @@ class _ConversationScreenState extends State<ConversationScreen> {
   final ScrollController _listScrollController = ScrollController();
   final TextEditingController _textController = TextEditingController();
 
-  AppDataService _appDataService;
+  AuthService _authService;
   MessageService _messageService;
 
   void _onSendMessage(String text) {
@@ -95,7 +95,7 @@ class _ConversationScreenState extends State<ConversationScreen> {
     }
 
     Widget messageWidget;
-    if (_appDataService.identifier == message.idFrom) {
+    if (_authService.identifier == message.idFrom) {
       messageWidget = Container(
           margin: const EdgeInsets.only(bottom: 10.0),
           child:
@@ -171,7 +171,7 @@ class _ConversationScreenState extends State<ConversationScreen> {
 
   @override
   Widget build(final BuildContext context) {
-    _appDataService = Provider.of(context);
+    _authService = Provider.of(context);
     _messageService = Provider.of(context);
 
     widget.conversation.markAsRead();
