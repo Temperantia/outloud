@@ -14,6 +14,8 @@ class AppDataService extends ChangeNotifier {
     Navigator.pushReplacementNamed(context, HomeScreen.id);
   }
 
+  //coucou
+
   static Future<bool> checkInternet() async {
     try {
       final List<InternetAddress> result =
