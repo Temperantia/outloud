@@ -37,8 +37,9 @@ class _ConversationScreenState extends State<ConversationScreen> {
     if (text.trim().isEmpty) {
       Fluttertoast.showToast(msg: 'Nothing to send');
     } else {
+
       _textController.clear();
-      _messageService.sendMessage(widget.conversation, text);
+      _messageService.sendMessage(widget.conversation, text.trim());       //suprression des espaces avant et apres le message
       _listScrollController.animateTo(0.0,
           duration: const Duration(milliseconds: 300), curve: Curves.linear);
     }
