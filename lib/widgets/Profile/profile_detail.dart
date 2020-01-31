@@ -79,7 +79,7 @@ class ProfileDetail extends StatelessWidget {
                     leading: Icon(Icons.whatshot),
                     title: const Padding(
                         padding: EdgeInsets.symmetric(vertical: 10.0),
-                        child: Text('Interests',
+                        child: Text('Interested in',
                             style: TextStyle(fontSize: 20.0))),
                     subtitle: Text(user.interests
                         .map<String>((Interest interest) {
@@ -128,15 +128,10 @@ class ProfileDetail extends StatelessWidget {
                     leading: Icon(Icons.check_circle),
                     title: const Padding(
                         padding: EdgeInsets.symmetric(vertical: 10.0),
-                        child: Text('Some truth',
+                        child: Text('What im into',
                             style: TextStyle(fontSize: 20.0))),
                     subtitle: Text(user.facts.join(' • '))),
               ]),
-            const SizedBox(height: 100.0),
-            Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: RaisedButton(
-                    onPressed: () {}, child: const Text('Friends')))
           ]))
     ]);
   }

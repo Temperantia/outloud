@@ -3,6 +3,7 @@ import 'package:inclusive/classes/conversation.dart';
 import 'package:inclusive/classes/group_ping.dart';
 import 'package:inclusive/classes/ping.dart';
 import 'package:inclusive/classes/search_preferences.dart';
+import 'package:inclusive/services/auth.dart';
 import 'package:inclusive/services/search.dart';
 import 'package:provider/provider.dart';
 
@@ -66,20 +67,22 @@ class App extends StatelessWidget {
               create: (_) => locator<MessageModel>()),
           ChangeNotifierProvider<AppDataService>(
               create: (_) => locator<AppDataService>()),
+          ChangeNotifierProvider<AuthService>(
+              create: (_) => locator<AuthService>()),
           ChangeNotifierProvider<MessageService>(
               create: (_) => locator<MessageService>()),
           ChangeNotifierProvider<SearchService>(
               create: (_) => locator<SearchService>()),
         ],
-        child: Consumer3<AppDataService, MessageService, SearchService>(builder:
+        child: Consumer3<AuthService, MessageService, SearchService>(builder:
             (BuildContext context,
-                AppDataService appDataService,
+                AuthService authService,
                 MessageService messageService,
                 SearchService searchService,
                 Widget w) {
           return MultiProvider(
               providers: <SingleChildCloneableWidget>[
-                StreamProvider<User>.value(value: appDataService.getUser()),
+                StreamProvider<User>.value(value: authService.streamUser()),
                 FutureProvider<ConversationList>.value(
                     value: messageService.getConversationList()),
                 FutureProvider<SearchPreferences>.value(

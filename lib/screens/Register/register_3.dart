@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:inclusive/services/auth.dart';
 import 'package:provider/provider.dart';
 
 import 'package:inclusive/theme.dart';
 import 'package:inclusive/models/user.dart';
 import 'package:inclusive/classes/user.dart';
 import 'package:inclusive/screens/home.dart';
-import 'package:inclusive/services/app_data.dart';
 import 'package:inclusive/widgets/birthdate_picker.dart';
 import 'package:inclusive/widgets/background.dart';
 
@@ -19,13 +19,13 @@ class Register3Screen extends StatefulWidget {
 }
 
 class _Register3ScreenState extends State<Register3Screen> {
-  AppDataService _appDataService;
+  AuthService _authService;
   UserModel _userProvider;
   DateTime _selected;
 
   Future<void> submit() async {
     final User user = User(
-      id: _appDataService.identifier,
+      id: _authService.identifier,
       name: widget.arguments['name'],
       email: widget.arguments['email'],
       birthDate: _selected,
@@ -38,7 +38,7 @@ class _Register3ScreenState extends State<Register3Screen> {
 
   @override
   Widget build(BuildContext context) {
-    _appDataService = Provider.of(context);
+    _authService = Provider.of(context);
     _userProvider = Provider.of(context);
     final DateTime now = DateTime.now();
     _selected = DateTime(now.year - 18, now.month, now.day);

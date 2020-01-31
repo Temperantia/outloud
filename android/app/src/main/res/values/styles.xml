@@ -5,4 +5,7 @@
              Flutter draws its first frame -->
         <item name="android:windowBackground">@drawable/launch_background</item>
     </style>
+    <string name="app_name">Inc•lusive</string>
+    <string name="facebook_app_id">594523264663305</string>
+    <string name="fb_login_protocol_scheme">fb594523264663305</string>
 </resources>

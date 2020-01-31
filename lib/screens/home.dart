@@ -1,6 +1,7 @@
 import 'package:bubble_bottom_bar/bubble_bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:inclusive/services/auth.dart';
 import 'package:inclusive/widgets/Groups/groups.dart';
 import 'package:inclusive/widgets/Profile/profile_parent.dart';
 import 'package:provider/provider.dart';
@@ -23,6 +24,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen>
     with SingleTickerProviderStateMixin, WidgetsBindingObserver {
   AppDataService _appDataService;
+  AuthService _authService;
   MessageService _messageService;
 
   TabController _tabController;
@@ -44,7 +46,7 @@ class _HomeScreenState extends State<HomeScreen>
       case AppLifecycleState.paused:
         break;
       case AppLifecycleState.resumed:
-        _appDataService.refreshLocation();
+        _authService.refreshLocation();
         break;
     }
   }
@@ -90,21 +92,23 @@ class _HomeScreenState extends State<HomeScreen>
   Widget build(BuildContext context) {
     _messageService = Provider.of(context);
     _appDataService = Provider.of(context);
+    _authService = Provider.of(context);
 
-    _appDataService.refreshLocation();
+    _authService.refreshLocation();
 
     _tabController.animateTo(_appDataService.currentPage);
     return Scaffold(
-        floatingActionButton: SpeedDial(
+        /*floatingActionButton: SpeedDial(
             child: Icon(Icons.add, color: white),
             backgroundColor: orange,
             animatedIcon: AnimatedIcons.menu_close,
             foregroundColor: white,
             overlayOpacity: 0,
             children: _buildActions()),
-        floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
+            */
+        //floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
         bottomNavigationBar: BubbleBottomBar(
-            fabLocation: BubbleBottomBarFabLocation.end,
+            //fabLocation: BubbleBottomBarFabLocation.end,
             opacity: 1,
             currentIndex: _appDataService.currentPage,
             onTap: _onChangePage,

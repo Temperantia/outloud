@@ -6,26 +6,23 @@ import 'package:inclusive/classes/message.dart';
 import 'package:inclusive/classes/message_list.dart';
 import 'package:inclusive/classes/user.dart';
 import 'package:inclusive/locator.dart';
-import 'package:inclusive/services/app_data.dart';
 import 'package:inclusive/models/group.dart';
 import 'package:inclusive/models/user.dart';
 import 'package:inclusive/models/message.dart';
+import 'package:inclusive/services/auth.dart';
 
 class Conversation with ChangeNotifier {
   factory Conversation(String id,
       {int lastRead = 0, int pings = 0, bool pinned = false}) {
     final List<String> ids = id.split('-');
-    final AppDataService appDataService = locator<AppDataService>();
+    final AuthService authService = locator<AuthService>();
 
     return ids.length == 1
         ? Conversation.group(id,
             lastRead: lastRead, pings: pings, pinned: pinned)
-        : Conversation.user(
-            appDataService.identifier == ids[0] ? ids[0] : ids[1],
-            appDataService.identifier == ids[0] ? ids[1] : ids[0],
-            lastRead: lastRead,
-            pings: pings,
-            pinned: pinned);
+        : Conversation.user(authService.identifier == ids[0] ? ids[0] : ids[1],
+            authService.identifier == ids[0] ? ids[1] : ids[0],
+            lastRead: lastRead, pings: pings, pinned: pinned);
   }
 
   Conversation.user(String idMy, this.idPeer,
@@ -47,7 +44,7 @@ class Conversation with ChangeNotifier {
 
   Message lastMessage;
 
-  final AppDataService _appDataService = locator<AppDataService>();
+  final AuthService _authService = locator<AuthService>();
   final UserModel _userProvider = locator<UserModel>();
   final GroupModel _groupProvider = locator<GroupModel>();
   final MessageModel _messageProvider = locator<MessageModel>();
@@ -68,7 +65,7 @@ class Conversation with ChangeNotifier {
   }
 
   Stream<GroupPing> streamGroupPings() {
-    return _messageProvider.streamGroupPings(this, _appDataService.identifier);
+    return _messageProvider.streamGroupPings(this, _authService.identifier);
   }
 
   Future<void> getGroupUsers(MessageList messageList) async {
@@ -95,7 +92,7 @@ class Conversation with ChangeNotifier {
     lastRead = DateTime.now().millisecondsSinceEpoch;
     pings = 0;
     if (!isGroup) {
-      await _userProvider.markPingAsRead(_appDataService.identifier, idPeer);
+      await _userProvider.markPingAsRead(_authService.identifier, idPeer);
     }
   }
 }
