@@ -3,8 +3,9 @@ import 'package:get_it/get_it.dart';
 import 'package:inclusive/models/user.dart';
 import 'package:inclusive/models/group.dart';
 import 'package:inclusive/models/message.dart';
-import 'package:inclusive/services/api.dart';
+import 'package:inclusive/models/api.dart';
 import 'package:inclusive/services/app_data.dart';
+import 'package:inclusive/services/auth.dart';
 import 'package:inclusive/services/message.dart';
 import 'package:inclusive/services/search.dart';
 
@@ -16,6 +17,7 @@ void setupLocator() {
   locator.registerLazySingleton(() => Api('messages'),
       instanceName: 'messages');
   locator.registerLazySingleton(() => AppDataService());
+  locator.registerLazySingleton(() => AuthService());
   locator.registerLazySingleton(() => MessageService());
   locator.registerLazySingleton(() => SearchService());
   locator.registerLazySingleton(() => UserModel());

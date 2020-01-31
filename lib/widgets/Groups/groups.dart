@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:inclusive/classes/group.dart';
 import 'package:inclusive/models/group.dart';
-import 'package:inclusive/services/app_data.dart';
+import 'package:inclusive/services/auth.dart';
 import 'package:inclusive/theme.dart';
 import 'package:inclusive/widgets/loading.dart';
 import 'package:provider/provider.dart';
@@ -76,11 +76,11 @@ class _GroupsState extends State<Groups> {
 
   @override
   Widget build(BuildContext context) {
-    final AppDataService appDataService = Provider.of(context);
+    final AuthService authService = Provider.of(context);
     final GroupModel groupProvider = Provider.of(context);
 
     return FutureBuilder<List<Group>>(
-        future: groupProvider.getGroups(appDataService.identifier),
+        future: groupProvider.getGroups(authService.identifier),
         builder: (BuildContext context, AsyncSnapshot<List<Group>> groups) =>
             !groups.hasData
                 ? Loading()

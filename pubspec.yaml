@@ -14,6 +14,8 @@ dependencies:
   cloud_firestore: ^0.12.9+6
   firestore_helpers: ^3.2.1+1
   google_sign_in: ^4.1.1
+  #firebase_auth: ^0.15.4
+  flutter_facebook_login: ^3.0.0
 
   provider: ^3.2.0
   get_it: ^3.0.3
@@ -45,6 +47,7 @@ dependencies:
   flutter_google_places: ^0.2.3
   arrow_path: ^1.0.0
   expandable: ^4.1.2
+  flutter_auth_buttons: ^0.6.0
 
 flutter:
   uses-material-design: true

@@ -7,7 +7,7 @@ import 'package:inclusive/classes/group_ping.dart';
 import 'package:inclusive/classes/message.dart';
 import 'package:inclusive/classes/message_list.dart';
 import 'package:inclusive/locator.dart';
-import 'package:inclusive/services/api.dart';
+import 'package:inclusive/models/api.dart';
 
 class MessageModel extends ChangeNotifier {
   final Api _api = locator<Api>('messages');
