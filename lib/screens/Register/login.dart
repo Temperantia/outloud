@@ -13,7 +13,8 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final TextEditingController _controller = TextEditingController();
+  final TextEditingController _controllerEmail = TextEditingController();
+  final TextEditingController _controllerPassword = TextEditingController();
 
   Future<void> submit() async {}
 
@@ -22,6 +23,7 @@ class _LoginScreenState extends State<LoginScreen> {
     final AuthService authService = Provider.of(context);
 
     return Scaffold(
+        resizeToAvoidBottomInset: false,
         appBar: AppBar(
             iconTheme: IconThemeData(color: white),
             centerTitle: true,
@@ -32,16 +34,36 @@ class _LoginScreenState extends State<LoginScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Container(
-                      padding: const EdgeInsets.all(10),
+                      padding: const EdgeInsets.all(10.0),
                       child: TextField(
-                        decoration: const InputDecoration(hintText: 'Riley'),
-                        controller: _controller,
+                        decoration: const InputDecoration(hintText: 'Email'),
+                        controller: _controllerEmail,
                       )),
-                  GoogleSignInButton(
-                      onPressed: () => authService.signInGoogle()),
-                  FacebookSignInButton(
-                    onPressed: () => authService.signInFacebook(),
-                  )
+                  Container(
+                      padding: const EdgeInsets.all(10.0),
+                      child: TextField(
+                        obscureText: true,
+                        decoration: const InputDecoration(hintText: 'Password'),
+                        controller: _controllerPassword,
+                      )),
+                  RaisedButton(
+                      onPressed: () {
+                        authService.signInEmail(
+                            _controllerEmail.text, _controllerPassword.text);
+                        //Navigator.of(context).pushNamed(LoginScreen.id);
+                      },
+                      child: Text('LOGIN',
+                          style: Theme.of(context).textTheme.title)),
+                  const SizedBox(height: 50.0),
+                  Container(
+                      width: 270.0,
+                      child: GoogleSignInButton(
+                          onPressed: () => authService.signInGoogle())),
+                  Container(
+                      width: 270.0,
+                      child: FacebookSignInButton(
+                        onPressed: () => authService.signInFacebook(),
+                      ))
                 ])));
   }
 }

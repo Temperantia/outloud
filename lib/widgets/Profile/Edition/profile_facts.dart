@@ -83,7 +83,7 @@ class ProfileFactsState extends State<ProfileFacts>
       Row(children: const <Widget>[
         Padding(
             padding: EdgeInsets.symmetric(vertical: 20.0),
-            child: Text('Your facts'))
+            child: Text('Anecdotes'))
       ]),
       ListView.builder(
           shrinkWrap: true,

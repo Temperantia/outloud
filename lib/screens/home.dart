@@ -1,6 +1,5 @@
 import 'package:bubble_bottom_bar/bubble_bottom_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:inclusive/services/auth.dart';
 import 'package:inclusive/widgets/Groups/groups.dart';
 import 'package:inclusive/widgets/Profile/profile_parent.dart';
@@ -12,7 +11,6 @@ import 'package:inclusive/classes/user.dart';
 import 'package:inclusive/widgets/Messaging/messaging.dart';
 import 'package:inclusive/widgets/Search/search.dart';
 import 'package:inclusive/services/message.dart';
-import 'package:inclusive/theme.dart';
 import 'package:inclusive/widgets/background.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -80,12 +78,6 @@ class _HomeScreenState extends State<HomeScreen>
               Groups(),
               const Center(child: Text('Coming soon')),
             ]));
-  }
-
-  List<SpeedDialChild> _buildActions() {
-    final List<SpeedDialChild> actions = <SpeedDialChild>[];
-
-    return actions;
   }
 
   @override

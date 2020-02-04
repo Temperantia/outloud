@@ -105,7 +105,7 @@ class App extends StatelessWidget {
                           : Consumer<ConversationList>(builder:
                               (BuildContext context,
                                   ConversationList conversationList, Widget w) {
-                              if (conversationList != null) {
+                              if (conversationList != null && user != null) {
                                 _streamPings(
                                     user, conversationList, messageService);
                               }
