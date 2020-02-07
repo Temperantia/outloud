@@ -26,6 +26,7 @@ void main() {
 }
 
 class App extends StatelessWidget {
+  /*
   void _streamPings(User user, ConversationList conversationList,
       MessageService messageService) {
     user.streamPings().listen((List<Ping> userPings) {
@@ -54,10 +55,10 @@ class App extends StatelessWidget {
       }
     }
   }
-
+*/
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
+    return /* MultiProvider(
         providers: <ChangeNotifierProvider<ChangeNotifier>>[
           ChangeNotifierProvider<UserModel>(
               create: (_) => locator<UserModel>()),
@@ -88,32 +89,35 @@ class App extends StatelessWidget {
                 FutureProvider<SearchPreferences>.value(
                     value: searchService.getSearchPreferences()),
               ],
-              child: MaterialApp(
-                  debugShowCheckedModeBanner: false,
-                  theme: theme,
-                  title: 'Inc•lusive',
-                  initialRoute: HomeScreen.id,
-                  onGenerateRoute: (RouteSettings settings) {
-                    final String name = settings.name;
-                    return MaterialPageRoute<Widget>(
-                        builder: (BuildContext context) {
-                      final User user = Provider.of(context);
-                      return !name.startsWith('Register') &&
-                              name != 'Login' &&
-                              user == null
-                          ? RegisterScreen()
-                          : Consumer<ConversationList>(builder:
-                              (BuildContext context,
-                                  ConversationList conversationList, Widget w) {
+              child:
+              */
+        MaterialApp(
+            debugShowCheckedModeBanner: false,
+            theme: theme,
+            title: 'Inc•lusive',
+            initialRoute: HomeScreen.id,
+            onGenerateRoute: (RouteSettings settings) {
+              final String name = settings.name;
+              return MaterialPageRoute<Widget>(builder: (BuildContext context) {
+                final User user = Provider.of(context);
+                return !name.startsWith('Register') &&
+                        name != 'Login' &&
+                        user == null
+                    ? RegisterScreen()
+                    : Consumer<ConversationList>(builder: (BuildContext context,
+                        ConversationList conversationList, Widget w) {
+                        /*
                               if (conversationList != null && user != null) {
                                 _streamPings(
                                     user, conversationList, messageService);
                               }
-
-                              return routes[settings.name](settings.arguments);
-                            });
-                    });
-                  }));
+*/
+                        return routes[settings.name](settings.arguments);
+                      });
+              });
+            });
+    /*);
         }));
+        */
   }
 }
