@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:async_redux/async_redux.dart';
 import 'package:business/login/actions/login.dart';
-import 'package:business/login/models/login_state.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart';

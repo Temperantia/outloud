@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:inclusive/register/login.dart';
 import 'package:inclusive/register/login_connector_widget.dart';
 
 import 'package:inclusive/register/register_1.dart';

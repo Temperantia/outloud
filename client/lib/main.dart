@@ -1,17 +1,10 @@
 import 'package:async_redux/async_redux.dart';
 import 'package:flutter/material.dart';
 import 'package:business/app_state.dart';
-import 'package:inclusive/register/login.dart';
 import 'package:inclusive/register/login_connector_widget.dart';
-import 'package:provider/provider.dart';
 
 import 'package:inclusive/locator.dart';
-import 'package:inclusive/routes.dart';
 import 'package:inclusive/theme.dart';
-import 'package:inclusive/classes/conversation_list.dart';
-import 'package:inclusive/classes/user.dart';
-import 'package:inclusive/register/register.dart';
-import 'package:inclusive/screens/home.dart';
 
 Store<AppState> store;
 

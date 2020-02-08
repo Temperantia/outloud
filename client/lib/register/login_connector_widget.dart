@@ -27,7 +27,7 @@ class ViewModel extends BaseModel<AppState> {
   ViewModel.build({
     this.connected,
     this.onLoginGoogle,
-  }) : super(equals: [connected]);
+  }) : super(equals: <Object>[connected]);
 
   bool connected;
   VoidCallback onLoginGoogle;
