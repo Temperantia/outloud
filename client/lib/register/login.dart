@@ -1,27 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_auth_buttons/flutter_auth_buttons.dart';
-import 'package:inclusive/services/auth.dart';
-import 'package:provider/provider.dart';
 
 import 'package:inclusive/theme.dart';
 import 'package:inclusive/widgets/background.dart';
 
-class LoginScreen extends StatefulWidget {
-  static const String id = 'Login';
-  @override
-  _LoginScreenState createState() => _LoginScreenState();
-}
-
-class _LoginScreenState extends State<LoginScreen> {
+class LoginScreen extends StatelessWidget {
+  LoginScreen({this.connected, this.onLoginGoogle});
+  final bool connected;
+  final VoidCallback onLoginGoogle;
   final TextEditingController _controllerEmail = TextEditingController();
   final TextEditingController _controllerPassword = TextEditingController();
 
-  Future<void> submit() async {}
-
   @override
   Widget build(BuildContext context) {
-    final AuthService authService = Provider.of(context);
-
     return Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
@@ -33,6 +24,7 @@ class _LoginScreenState extends State<LoginScreen> {
             child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
+                  Text(connected.toString()),
                   Container(
                       padding: const EdgeInsets.all(10.0),
                       child: TextField(
@@ -48,8 +40,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       )),
                   RaisedButton(
                       onPressed: () {
-                        authService.signInEmail(
-                            _controllerEmail.text, _controllerPassword.text);
+                        //authService.signInEmail(
+                        //    _controllerEmail.text, _controllerPassword.text);
                         //Navigator.of(context).pushNamed(LoginScreen.id);
                       },
                       child: Text('LOGIN',
@@ -57,13 +49,12 @@ class _LoginScreenState extends State<LoginScreen> {
                   const SizedBox(height: 50.0),
                   Container(
                       width: 270.0,
-                      child: GoogleSignInButton(
-                          onPressed: () => authService.signInGoogle())),
+                      child: GoogleSignInButton(onPressed: onLoginGoogle)),
                   Container(
                       width: 270.0,
                       child: FacebookSignInButton(
-                        onPressed: () => authService.signInFacebook(),
-                      ))
+                          //onPressed: () => authService.signInFacebook(),
+                          ))
                 ])));
   }
 }

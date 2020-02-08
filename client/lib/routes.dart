@@ -2,20 +2,23 @@ import 'package:flutter/cupertino.dart';
 
 import 'package:inclusive/classes/conversation.dart';
 import 'package:inclusive/classes/user.dart';
+import 'package:inclusive/register/login_connector_widget.dart';
+import 'package:inclusive/register/register.dart';
 import 'package:inclusive/screens/Messaging/conversation.dart';
 import 'package:inclusive/screens/Profile/profile_information.dart';
 import 'package:inclusive/screens/Profile/profile_settings.dart';
 import 'package:inclusive/screens/Profile/profile_settings_search.dart';
-import 'package:inclusive/screens/Register/login.dart';
-import 'package:inclusive/screens/Register/register_1.dart';
-import 'package:inclusive/screens/Register/register_2.dart';
-import 'package:inclusive/screens/Register/register_3.dart';
+import 'package:inclusive/register/login.dart';
+import 'package:inclusive/register/register_1.dart';
+import 'package:inclusive/register/register_2.dart';
+import 'package:inclusive/register/register_3.dart';
 import 'package:inclusive/screens/home.dart';
 import 'package:inclusive/screens/Profile/profile.dart';
 
 final Map<String, Widget Function(dynamic)> routes =
     <String, Widget Function(dynamic)>{
-  LoginScreen.id: (dynamic arguments) => LoginScreen(),
+  LoginConnectorWidget.id: (dynamic arguments) => LoginConnectorWidget(),
+  RegisterScreen.id: (dynamic arguments) => RegisterScreen(),
   Register1Screen.id: (dynamic arguments) => Register1Screen(),
   Register2Screen.id: (dynamic arguments) =>
       Register2Screen(arguments as String),

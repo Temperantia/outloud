@@ -1,26 +1,22 @@
+import 'package:async_redux/async_redux.dart';
 import 'package:flutter/material.dart';
-import 'package:inclusive/classes/conversation.dart';
-import 'package:inclusive/classes/group_ping.dart';
-import 'package:inclusive/classes/ping.dart';
-import 'package:inclusive/classes/search_preferences.dart';
-import 'package:inclusive/services/auth.dart';
-import 'package:inclusive/services/search.dart';
+import 'package:business/app_state.dart';
+import 'package:inclusive/register/login.dart';
+import 'package:inclusive/register/login_connector_widget.dart';
 import 'package:provider/provider.dart';
 
 import 'package:inclusive/locator.dart';
 import 'package:inclusive/routes.dart';
 import 'package:inclusive/theme.dart';
-import 'package:inclusive/models/user.dart';
-import 'package:inclusive/models/group.dart';
-import 'package:inclusive/models/message.dart';
-import 'package:inclusive/services/app_data.dart';
-import 'package:inclusive/services/message.dart';
 import 'package:inclusive/classes/conversation_list.dart';
 import 'package:inclusive/classes/user.dart';
-import 'package:inclusive/screens/Register/register.dart';
+import 'package:inclusive/register/register.dart';
 import 'package:inclusive/screens/home.dart';
 
+Store<AppState> store;
+
 void main() {
+  store = Store<AppState>(initialState: AppState.initialState());
   setupLocator();
   runApp(App());
 }
@@ -91,31 +87,39 @@ class App extends StatelessWidget {
               ],
               child:
               */
-        MaterialApp(
-            debugShowCheckedModeBanner: false,
-            theme: theme,
-            title: 'Inc•lusive',
-            initialRoute: HomeScreen.id,
-            onGenerateRoute: (RouteSettings settings) {
-              final String name = settings.name;
-              return MaterialPageRoute<Widget>(builder: (BuildContext context) {
-                final User user = Provider.of(context);
-                return !name.startsWith('Register') &&
-                        name != 'Login' &&
-                        user == null
-                    ? RegisterScreen()
-                    : Consumer<ConversationList>(builder: (BuildContext context,
-                        ConversationList conversationList, Widget w) {
-                        /*
+        StoreProvider<AppState>(
+            store: store,
+            child: MaterialApp(
+              debugShowCheckedModeBanner: false,
+              theme: theme,
+              title: 'Inc•lusive',
+              home: LoginConnectorWidget(),
+              /*
+                initialRoute: RegisterScreen.id,
+                onGenerateRoute: (RouteSettings settings) {
+                  final String name = settings.name;
+                  return MaterialPageRoute<Widget>(
+                      builder: (BuildContext context) {
+                    //final User user = Provider.of(context);
+                    /*return !name.startsWith('Register') &&
+                            name != 'Login' &&
+                            user == null
+                        ? RegisterScreen() */
+                    /*: Consumer<ConversationList>(builder:
+                            (BuildContext context,
+                                ConversationList conversationList, Widget w) {
+                                  */
+                    /*
                               if (conversationList != null && user != null) {
                                 _streamPings(
                                     user, conversationList, messageService);
                               }
 */
-                        return routes[settings.name](settings.arguments);
-                      });
-              });
-            });
+                    return routes[name](settings.arguments);
+                    //});
+                                      });
+                }*/
+            ));
     /*);
         }));
         */

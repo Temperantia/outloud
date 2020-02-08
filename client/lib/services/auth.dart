@@ -30,8 +30,8 @@ class AuthService extends ChangeNotifier {
 
   // Email Sign in
   Future<void> signInEmail(String email, String password) async {
-    final AuthResult result = await firebaseAuth.signInWithEmailAndPassword(
-        email: email, password: password);
+    //final AuthResult result = await firebaseAuth.signInWithEmailAndPassword(
+    //    email: email, password: password);
   }
   // Phone Sign in
 
