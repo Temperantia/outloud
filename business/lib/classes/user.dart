@@ -1,10 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import 'package:inclusive/classes/entity.dart';
-import 'package:inclusive/classes/interest.dart';
-import 'package:inclusive/classes/ping.dart';
-import 'package:inclusive/locator.dart';
-import 'package:inclusive/models/user.dart';
+import 'entity.dart';
+import 'interest.dart';
 
 class User extends Entity {
   User({
@@ -61,8 +58,6 @@ class User extends Entity {
   String education;
   String profession;
 
-  final UserModel _userProvider = locator<UserModel>();
-
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
       'name': name,
@@ -97,9 +92,5 @@ class User extends Entity {
       }
     }
     return age;
-  }
-
-  Stream<List<Ping>> streamPings() {
-    return _userProvider.streamPings(id);
   }
 }

@@ -4,7 +4,7 @@ import 'dart:typed_data';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
-import 'package:inclusive/screens/home.dart';
+import 'package:inclusive/home.dart';
 
 class AppDataService extends ChangeNotifier {
   int currentPage = 2;

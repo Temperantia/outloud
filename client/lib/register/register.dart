@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:inclusive/register/login_connector_widget.dart';
+import 'package:inclusive/register/login.dart';
 
 import 'package:inclusive/register/register_1.dart';
 import 'package:inclusive/widgets/background.dart';
@@ -21,8 +21,7 @@ class RegisterScreen extends StatelessWidget {
                       const SizedBox(height: 50.0),
                       RaisedButton(
                           onPressed: () {
-                            Navigator.of(context)
-                                .pushNamed(LoginConnectorWidget.id);
+                            Navigator.of(context).pushNamed(LoginScreen.id);
                           },
                           child: Text('LOGIN',
                               style: Theme.of(context).textTheme.title)),

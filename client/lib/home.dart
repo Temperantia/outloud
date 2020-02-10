@@ -1,16 +1,6 @@
 import 'package:bubble_bottom_bar/bubble_bottom_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:inclusive/services/auth.dart';
-import 'package:inclusive/widgets/Groups/groups.dart';
-import 'package:inclusive/widgets/Profile/profile_parent.dart';
-import 'package:provider/provider.dart';
-
-import 'package:inclusive/services/app_data.dart';
 import 'package:inclusive/widgets/bubble_bar.dart';
-import 'package:inclusive/classes/user.dart';
-import 'package:inclusive/widgets/Messaging/messaging.dart';
-import 'package:inclusive/widgets/Search/search.dart';
-import 'package:inclusive/services/message.dart';
 import 'package:inclusive/widgets/background.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -21,10 +11,6 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen>
     with SingleTickerProviderStateMixin, WidgetsBindingObserver {
-  AppDataService _appDataService;
-  AuthService _authService;
-  MessageService _messageService;
-
   TabController _tabController;
 
   @override
@@ -44,7 +30,6 @@ class _HomeScreenState extends State<HomeScreen>
       case AppLifecycleState.paused:
         break;
       case AppLifecycleState.resumed:
-        _authService.refreshLocation();
         break;
     }
   }
@@ -58,37 +43,31 @@ class _HomeScreenState extends State<HomeScreen>
 
   void _onChangePage(int index) {
     setState(() {
-      _appDataService.currentPage = index;
+      //_appDataService.currentPage = index;
       _tabController.animateTo(index);
     });
   }
 
   Widget _buildBody() {
-    final User user = Provider.of(context);
-
     return Container(
         decoration: background,
         child: TabBarView(
             physics: const NeverScrollableScrollPhysics(),
             controller: _tabController,
-            children: <Widget>[
-              ProfileParent(user),
-              const Messaging(),
-              Search(onCreateUserConversation: _onChangePage),
-              Groups(),
-              const Center(child: Text('Coming soon')),
+            children: const <Widget>[
+              Center(child: Text('Coming soon')),
+              Center(child: Text('Coming soon')),
+              Center(child: Text('Coming soon')),
+              Center(child: Text('Coming soon')),
+              Center(child: Text('Coming soon')),
             ]));
   }
 
   @override
   Widget build(BuildContext context) {
-    _messageService = Provider.of(context);
-    _appDataService = Provider.of(context);
-    _authService = Provider.of(context);
+    //_authService.refreshLocation();
 
-    _authService.refreshLocation();
-
-    _tabController.animateTo(_appDataService.currentPage);
+    //_tabController.animateTo(_appDataService.currentPage);
     return Scaffold(
         /*floatingActionButton: SpeedDial(
             child: Icon(Icons.add, color: white),
@@ -102,9 +81,9 @@ class _HomeScreenState extends State<HomeScreen>
         bottomNavigationBar: BubbleBottomBar(
             //fabLocation: BubbleBottomBarFabLocation.end,
             opacity: 1,
-            currentIndex: _appDataService.currentPage,
+            currentIndex: 0,
             onTap: _onChangePage,
-            items: bubbleBar(context, _messageService.pings)),
+            items: bubbleBar(context, 0)),
         body: SafeArea(child: _buildBody()));
   }
 }

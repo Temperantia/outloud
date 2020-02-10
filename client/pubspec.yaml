@@ -19,13 +19,12 @@ dependencies:
   firebase_auth: ^0.15.4
   flutter_facebook_login: ^3.0.0
 
-  provider: ^3.2.0
-  get_it: ^3.0.3
+  provider: ^4.0.1
   validate: ^1.7.0
   timeago: ^2.0.24
-  rxdart: ^0.22.0
   intl: ^0.16.1
   async_redux: ^2.5.2
+  provider_for_redux: ^1.1.0
 
   device_info: ^0.4.1+4
   shared_preferences: ^0.5.6
@@ -52,6 +51,7 @@ dependencies:
   arrow_path: ^1.0.0
   expandable: ^4.1.2
   flutter_auth_buttons: ^0.6.0
+  enum_to_string: ^1.0.8
 
 flutter:
   uses-material-design: true

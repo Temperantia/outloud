@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:inclusive/classes/interest.dart';
+
+import 'interest.dart';
 
 class Entity {
   Entity({this.id, this.name, this.description, this.location, this.interests});

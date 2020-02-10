@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:validate/validate.dart';
 
-import 'package:inclusive/classes/user.dart';
-import 'package:inclusive/models/user.dart';
 import 'package:inclusive/register/register_3.dart';
 import 'package:inclusive/theme.dart';
 import 'package:inclusive/widgets/background.dart';
@@ -19,7 +16,6 @@ class Register2Screen extends StatefulWidget {
 
 class _Register2ScreenState extends State<Register2Screen> {
   final TextEditingController _controller = TextEditingController();
-  UserModel _userProvider;
   String _error = '';
 
   Future<void> submit() async {
@@ -33,19 +29,12 @@ class _Register2ScreenState extends State<Register2Screen> {
       return;
     }
 
-    final User user = await _userProvider.getUserWithEmail(email);
-    if (user != null) {
-      setState(() => _error = 'Email is already used');
-      return;
-    }
     Navigator.pushNamed(context, Register3Screen.id,
         arguments: <String, String>{'name': widget.name, 'email': email});
   }
 
   @override
   Widget build(BuildContext context) {
-    _userProvider = Provider.of(context);
-
     return Scaffold(
         appBar: AppBar(
             iconTheme: IconThemeData(color: white),

@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'package:inclusive/services/app_data.dart';
-import 'package:inclusive/services/message.dart';
 import 'package:inclusive/theme.dart';
 import 'package:inclusive/widgets/bubble_bar.dart';
 
@@ -16,7 +15,6 @@ class View extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final AppDataService appDataService = Provider.of(context);
-    final MessageService messageService = Provider.of(context);
     return Scaffold(
         appBar: AppBar(
             centerTitle: true,
@@ -29,7 +27,7 @@ class View extends StatelessWidget {
             opacity: 1.0,
             currentIndex: appDataService.currentPage,
             onTap: (int index) => appDataService.navigateBack(context, index),
-            items: bubbleBar(context, messageService.pings)),
+            items: bubbleBar(context, 0)),
         body: SafeArea(child: child));
   }
 }

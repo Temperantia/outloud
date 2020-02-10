@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
-import 'package:inclusive/classes/user.dart';
 import 'package:inclusive/register/register_2.dart';
-import 'package:inclusive/models/user.dart';
 import 'package:inclusive/theme.dart';
 import 'package:inclusive/widgets/background.dart';
 
@@ -15,7 +12,6 @@ class Register1Screen extends StatefulWidget {
 
 class _Register1ScreenState extends State<Register1Screen> {
   final TextEditingController _controller = TextEditingController();
-  UserModel _userProvider;
   bool _isTakenUsername = false;
 
   Future<void> submit() async {
@@ -26,18 +22,11 @@ class _Register1ScreenState extends State<Register1Screen> {
       return;
     }
 
-    final User user = await _userProvider.getUserWithName(name);
-    if (user != null) {
-      setState(() => _isTakenUsername = true);
-      return;
-    }
     Navigator.pushNamed(context, Register2Screen.id, arguments: name);
   }
 
   @override
   Widget build(BuildContext context) {
-    _userProvider = Provider.of(context);
-
     return Scaffold(
         appBar: AppBar(
             iconTheme: IconThemeData(color: white),
