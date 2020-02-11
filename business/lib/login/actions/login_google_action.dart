@@ -26,7 +26,7 @@ class LoginGoogleAction extends ReduxAction<AppState> {
           birthday['month'] as int, birthday['day'] as int);
       final AuthCredential credential = GoogleAuthProvider.getCredential(
           accessToken: auth.accessToken, idToken: auth.idToken);
-      await register(AuthMode.Google, credential, birthdate, dispatch);
+      await register(AuthMode.Google, credential, birthdate);
       return state.copy(loginState: state.loginState.copy(connected: true));
     } catch (error) {
       return state.copy(loginState: state.loginState.copy(connected: false));

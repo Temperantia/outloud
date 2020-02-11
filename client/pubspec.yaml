@@ -52,8 +52,13 @@ dependencies:
   expandable: ^4.1.2
   flutter_auth_buttons: ^0.6.0
   enum_to_string: ^1.0.8
+  country_code_picker: ^1.2.4
 
 flutter:
   uses-material-design: true
   assets:
     - images/
+  fonts:
+    - family: Hiragino
+      fonts:
+        - asset: fonts/hiragino-maru-gothic-pron-w4.otf

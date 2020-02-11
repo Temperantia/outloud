@@ -1,8 +1,7 @@
 // Firebase User login (Email, Phone, Facebook, Google)
 import 'package:business/classes/user.dart';
 import 'package:business/models/user.dart';
-import 'package:business/user/actions/user_update_stream_action.dart';
-import 'package:business/user/models/user_state.dart';
+
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
@@ -21,8 +20,11 @@ enum AuthMode {
   Google,
 }
 
-Future<void> register(AuthMode mode, AuthCredential credential,
-    DateTime birthdate, Function dispatch) async {
+Future<String> register(
+  AuthMode mode,
+  AuthCredential credential,
+  DateTime birthdate,
+) async {
   final AuthResult result = await firebaseAuth.signInWithCredential(credential);
   final String id = result.user.uid;
   final String name = result.user.displayName;
@@ -31,47 +33,44 @@ Future<void> register(AuthMode mode, AuthCredential credential,
     await createUser(User(id: id, name: name, birthDate: birthdate));
   }
 
-  listenUser(id, dispatch);
-
   final SharedPreferences sharedPreferences =
       await SharedPreferences.getInstance();
   await sharedPreferences.setString('authMode', EnumToString.parse(mode));
+  return id;
 }
 
-Future<bool> login(Function dispatch) async {
+Future<String> login() async {
   final SharedPreferences sharedPreferences =
       await SharedPreferences.getInstance();
   final AuthMode authMode = EnumToString.fromString(
       AuthMode.values, sharedPreferences.getString('authMode'));
 
   if (authMode == null) {
-    return false;
+    return null;
   }
 
-  AuthCredential credentials;
-  if (authMode == AuthMode.Facebook) {
-    final FacebookAccessToken fbToken = await facebookSignIn.currentAccessToken;
-    credentials =
-        FacebookAuthProvider.getCredential(accessToken: fbToken.token);
-  } else {
-    final GoogleSignInAccount account = await googleSignIn.signInSilently();
-    final GoogleSignInAuthentication auth = await account.authentication;
-    credentials = GoogleAuthProvider.getCredential(
-        accessToken: auth.accessToken, idToken: auth.idToken);
+  try {
+    AuthCredential credentials;
+    if (authMode == AuthMode.Facebook) {
+      final FacebookAccessToken fbToken =
+          await facebookSignIn.currentAccessToken;
+      credentials =
+          FacebookAuthProvider.getCredential(accessToken: fbToken.token);
+    } else {
+      final GoogleSignInAccount account =
+          await googleSignIn.signInSilently(suppressErrors: false);
+      final GoogleSignInAuthentication auth = await account.authentication;
+      credentials = GoogleAuthProvider.getCredential(
+          accessToken: auth.accessToken, idToken: auth.idToken);
+    }
+    final AuthResult result =
+        await firebaseAuth.signInWithCredential(credentials);
+    final User user = await getUser(result.user.uid);
+    if (user == null) {
+      return null;
+    }
+    return user.id;
+  } catch (error) {
+    return null;
   }
-  final AuthResult result =
-      await firebaseAuth.signInWithCredential(credentials);
-
-  final User user = await getUser(result.user.uid);
-  if (user == null) {
-    return false;
-  }
-  listenUser(result.user.uid, dispatch);
-  return true;
-}
-
-void listenUser(String id, Function dispatch) {
-  UserState.userStream = streamUser(id);
-  UserState.userStream
-      .listen((User user) => dispatch(UserUpdateStreamAction(user)));
 }

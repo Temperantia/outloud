@@ -1,44 +1,52 @@
 import 'package:badges/badges.dart';
-import 'package:bubble_bottom_bar/bubble_bottom_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:inclusive/theme.dart';
 
-final List<BubbleBottomBarItem> Function(
-    BuildContext, int) bubbleBar = (BuildContext context,
-        int pings) =>
-    <BubbleBottomBarItem>[
-      BubbleBottomBarItem(
-          icon: Icon(Icons.portrait, color: orange),
-          activeIcon: Icon(Icons.portrait, color: white),
-          backgroundColor: orange,
-          title: Text('Me', style: TextStyle(color: white, fontSize: 14.0))),
-      BubbleBottomBarItem(
-          icon: pings > 0
-              ? Badge(
-                  badgeColor: orange,
-                  badgeContent: Text(pings.toString()),
-                  child: Icon(Icons.message, color: orange))
-              : Icon(Icons.message, color: orange),
-          activeIcon: Icon(Icons.message, color: white),
-          backgroundColor: orange,
-          title:
-              Text('Message', style: TextStyle(color: white, fontSize: 14.0))),
-      BubbleBottomBarItem(
-          icon: Icon(Icons.view_list, color: orange),
-          activeIcon: Icon(Icons.view_list, color: white),
-          backgroundColor: orange,
-          title:
-              Text('People', style: TextStyle(color: white, fontSize: 14.0))),
-      BubbleBottomBarItem(
-          icon: Icon(Icons.people, color: orange),
-          activeIcon: Icon(Icons.people, color: white),
-          backgroundColor: orange,
-          title: Text('Group', style: TextStyle(color: white, fontSize: 14.0))),
-      BubbleBottomBarItem(
-          icon: Icon(Icons.event, color: orange),
-          activeIcon: Icon(Icons.event, color: white),
-          backgroundColor: orange,
-          title: Text('Event', style: TextStyle(color: white, fontSize: 14.0))),
-    ];
+final Widget Function(String) _buildIcon = (String image) => Container(
+      width: 50.0,
+      height: 50.0,
+      child: Image.asset(image),
+    );
+
+final BottomNavigationBarItem Function(String) _buildItem =
+    (String image) => BottomNavigationBarItem(
+          icon: Container(
+              margin: const EdgeInsets.only(bottom: 10.0),
+              child: _buildIcon(image)),
+          activeIcon: Container(
+              padding: const EdgeInsets.all(10.0),
+              margin: const EdgeInsets.only(bottom: 10.0),
+              decoration: const BoxDecoration(
+                  gradient: gradient,
+                  borderRadius: BorderRadius.all(Radius.circular(90.0))),
+              child: _buildIcon(image)),
+          title: Container(),
+        );
+
+final List<BottomNavigationBarItem> Function(BuildContext, int) bubbleBar =
+    (BuildContext context, int pings) => <BottomNavigationBarItem>[
+          _buildItem('images/usuario.png'),
+          BottomNavigationBarItem(
+            icon: Container(
+                margin: const EdgeInsets.only(bottom: 10.0),
+                child: pings > 0
+                    ? Badge(
+                        badgeColor: pink,
+                        badgeContent: Text(pings.toString()),
+                        child: _buildIcon('images/charla.png'))
+                    : _buildIcon('images/charla.png')),
+            activeIcon: Container(
+                margin: const EdgeInsets.only(bottom: 10.0),
+                padding: const EdgeInsets.all(10.0),
+                decoration: const BoxDecoration(
+                    gradient: gradient,
+                    borderRadius: BorderRadius.all(Radius.circular(90.0))),
+                child: _buildIcon('images/charla.png')),
+            title: Container(),
+          ),
+          _buildItem('images/lista.png'),
+          _buildItem('images/evento.png'),
+          _buildItem('images/grupo.png'),
+        ];

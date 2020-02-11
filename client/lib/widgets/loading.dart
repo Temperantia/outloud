@@ -16,7 +16,7 @@ class Loading extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[
                       logo(context),
-                      CircularProgressIndicator(backgroundColor: orange),
+                      const CircularProgressIndicator(backgroundColor: orange),
                     ]))));
   }
 }

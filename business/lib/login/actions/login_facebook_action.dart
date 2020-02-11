@@ -8,8 +8,6 @@ import 'package:intl/intl.dart';
 import 'package:http/http.dart';
 
 class LoginFacebookAction extends ReduxAction<AppState> {
-  LoginFacebookAction();
-
   @override
   Future<AppState> reduce() async {
     final FacebookLoginResult result =
@@ -27,7 +25,7 @@ class LoginFacebookAction extends ReduxAction<AppState> {
         final DateTime birthdate =
             DateFormat.yMd('en_US').parse(data['birthday'] as String);
 
-        await register(AuthMode.Facebook, credentials, birthdate, dispatch);
+        await register(AuthMode.Facebook, credentials, birthdate);
 
         break;
       case FacebookLoginStatus.cancelledByUser:

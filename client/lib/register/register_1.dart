@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:inclusive/register/register_2.dart';
-import 'package:inclusive/theme.dart';
-import 'package:inclusive/widgets/background.dart';
+import 'package:inclusive/widgets/view.dart';
 
 class Register1Screen extends StatefulWidget {
   static const String id = 'Register1';
@@ -12,7 +11,6 @@ class Register1Screen extends StatefulWidget {
 
 class _Register1ScreenState extends State<Register1Screen> {
   final TextEditingController _controller = TextEditingController();
-  bool _isTakenUsername = false;
 
   Future<void> submit() async {
     FocusScope.of(context).unfocus();
@@ -27,36 +25,22 @@ class _Register1ScreenState extends State<Register1Screen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-            iconTheme: IconThemeData(color: white),
-            centerTitle: true,
-            title:
-                Text('Pick a name', style: Theme.of(context).textTheme.title)),
-        body: Container(
-            decoration: background,
-            child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Container(
-                    padding: const EdgeInsets.all(10),
-                    child: TextField(
-                        decoration: const InputDecoration(hintText: 'Riley'),
-                        controller: _controller,
-                        onTap: () => _isTakenUsername = false),
-                  ),
-                  if (_isTakenUsername)
-                    Row(children: <Widget>[
-                      Container(
-                          padding: const EdgeInsets.only(left: 10.0),
-                          child: Text('Name is taken already',
-                              style: TextStyle(color: red)))
-                    ]),
-                  Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 16.0),
-                      child: RaisedButton(
-                          onPressed: () => submit(),
-                          child: const Text('Keep going')))
-                ])));
+    return View(
+        title: 'Pick a name',
+        child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Container(
+                  padding: const EdgeInsets.all(10),
+                  child: TextField(
+                    decoration: const InputDecoration(hintText: 'Riley'),
+                    controller: _controller,
+                  )),
+              Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 16.0),
+                  child: RaisedButton(
+                      onPressed: () => submit(),
+                      child: const Text('Keep going')))
+            ]));
   }
 }

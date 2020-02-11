@@ -1,7 +1,10 @@
-import 'package:bubble_bottom_bar/bubble_bottom_bar.dart';
+import 'package:async_redux/async_redux.dart';
+import 'package:business/app_state.dart';
 import 'package:flutter/material.dart';
-import 'package:inclusive/widgets/bubble_bar.dart';
-import 'package:inclusive/widgets/background.dart';
+import 'package:inclusive/profile/profile.dart';
+import 'package:inclusive/theme.dart';
+import 'package:inclusive/widgets/view.dart';
+import 'package:provider_for_redux/provider_for_redux.dart';
 
 class HomeScreen extends StatefulWidget {
   static const String id = 'Home';
@@ -41,25 +44,18 @@ class _HomeScreenState extends State<HomeScreen>
     super.dispose();
   }
 
-  void _onChangePage(int index) {
-    setState(() {
-      //_appDataService.currentPage = index;
-      _tabController.animateTo(index);
-    });
-  }
-
   Widget _buildBody() {
     return Container(
-        decoration: background,
+        decoration: BoxDecoration(gradient: gradient),
         child: TabBarView(
             physics: const NeverScrollableScrollPhysics(),
             controller: _tabController,
-            children: const <Widget>[
-              Center(child: Text('Coming soon')),
-              Center(child: Text('Coming soon')),
-              Center(child: Text('Coming soon')),
-              Center(child: Text('Coming soon')),
-              Center(child: Text('Coming soon')),
+            children: <Widget>[
+              Profile(),
+              const Center(child: Text('Coming soon')),
+              const Center(child: Text('Coming soon')),
+              const Center(child: Text('Coming soon')),
+              const Center(child: Text('Coming soon')),
             ]));
   }
 
@@ -67,23 +63,17 @@ class _HomeScreenState extends State<HomeScreen>
   Widget build(BuildContext context) {
     //_authService.refreshLocation();
 
-    //_tabController.animateTo(_appDataService.currentPage);
-    return Scaffold(
-        /*floatingActionButton: SpeedDial(
-            child: Icon(Icons.add, color: white),
-            backgroundColor: orange,
-            animatedIcon: AnimatedIcons.menu_close,
-            foregroundColor: white,
-            overlayOpacity: 0,
-            children: _buildActions()),
-            */
-        //floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
-        bottomNavigationBar: BubbleBottomBar(
-            //fabLocation: BubbleBottomBarFabLocation.end,
-            opacity: 1,
-            currentIndex: 0,
-            onTap: _onChangePage,
-            items: bubbleBar(context, 0)),
-        body: SafeArea(child: _buildBody()));
+    return ReduxConsumer<AppState>(builder: (BuildContext context,
+        Store<AppState> store,
+        AppState state,
+        void Function(ReduxAction<dynamic>) dispatch,
+        Widget child) {
+      _tabController.animateTo(state.homePageIndex);
+
+      return View(
+        child: _buildBody(),
+        showAppBar: false,
+      );
+    });
   }
 }
