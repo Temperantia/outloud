@@ -49,7 +49,7 @@ Future<String> login() async {
   final Map<String, dynamic> registerPreferencesMap = registerPreferences.first as Map<String, dynamic>;
   
   final AuthMode authMode = EnumToString.fromString(
-      AuthMode.values, registerPreferencesMap['authMode']) as AuthMode;
+      AuthMode.values, registerPreferencesMap['authMode'] as String);
 
   if (authMode == null) {
     return null;
