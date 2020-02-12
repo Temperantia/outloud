@@ -1,6 +1,7 @@
 import 'package:async_redux/async_redux.dart';
 import 'package:business/app_state.dart';
 import 'package:flutter/material.dart';
+import 'package:inclusive/events/events.dart';
 import 'package:inclusive/profile/profile.dart';
 import 'package:inclusive/theme.dart';
 import 'package:inclusive/widgets/view.dart';
@@ -20,7 +21,7 @@ class _HomeScreenState extends State<HomeScreen>
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-    _tabController = TabController(vsync: this, length: 5);
+    _tabController = TabController(vsync: this, length: 4);
   }
 
   @override
@@ -52,8 +53,7 @@ class _HomeScreenState extends State<HomeScreen>
             controller: _tabController,
             children: <Widget>[
               Profile(),
-              const Center(child: Text('Coming soon')),
-              const Center(child: Text('Coming soon')),
+              Events(),
               const Center(child: Text('Coming soon')),
               const Center(child: Text('Coming soon')),
             ]));

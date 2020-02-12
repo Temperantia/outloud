@@ -1,21 +1,12 @@
-import 'dart:async';
-import 'dart:io';
 import 'dart:typed_data';
+import 'package:connectivity/connectivity.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
 class AppDataService extends ChangeNotifier {
-  static Future<bool> checkInternet() async {
-    try {
-      final List<InternetAddress> result =
-          await InternetAddress.lookup('google.com');
-      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
-        return true;
-      }
-    } on SocketException catch (_) {
-      return false;
-    }
-    return false;
+  static Future<void> checkInternetConnection() async {
+    if (await Connectivity().checkConnectivity() == ConnectivityResult.none)
+      throw Exception();
   }
 
   Future<String> saveImage(Uint8List image, String userId) async {

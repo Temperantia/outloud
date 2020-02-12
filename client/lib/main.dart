@@ -13,7 +13,10 @@ import 'package:provider_for_redux/provider_for_redux.dart';
 Store<AppState> store;
 
 void main() {
-  store = Store<AppState>(initialState: AppState.initialState());
+  store = Store<AppState>(
+    initialState: AppState.initialState(),
+    errorObserver: DevelopmentErrorObserver<dynamic>(),
+  );
   runApp(App());
 }
 
@@ -39,7 +42,7 @@ class App extends StatelessWidget {
 
                   return Loading();
                 }
-                print('not loading');
+                print('building again');
                 if (state.loginState.id == null) {
                   return LoginScreen();
                 }

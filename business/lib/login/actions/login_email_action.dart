@@ -5,7 +5,7 @@ class LoginEmailAction extends ReduxAction<AppState> {
   LoginEmailAction();
 
   @override
-  Future<AppState> reduce() async {
+  AppState reduce() {
     return state.copy(loginState: state.loginState.copy(connected: true));
   }
 }

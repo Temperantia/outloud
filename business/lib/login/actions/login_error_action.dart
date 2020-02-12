@@ -7,7 +7,7 @@ class LoginErrorAction extends ReduxAction<AppState> {
   String message;
 
   @override
-  Future<AppState> reduce() async {
+  AppState reduce() {
     return state.copy(loginState: state.loginState.copy(loginError: message));
   }
 }

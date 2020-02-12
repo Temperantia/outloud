@@ -7,6 +7,7 @@ import 'package:inclusive/theme.dart';
 import 'package:inclusive/widgets/loading.dart';
 import 'package:intl/intl.dart';
 import 'package:provider_for_redux/provider_for_redux.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class Profile extends StatefulWidget {
   @override
@@ -52,14 +53,19 @@ class _ProfileState extends State<Profile> {
                       color: pink, borderRadius: BorderRadius.circular(180.0)),
                   padding: const EdgeInsets.all(10.0),
                   child: ClipRRect(
-                    borderRadius: BorderRadius.circular(180.0),
-                    child: user.pics.isEmpty
-                        ? Image.asset(
-                            'images/default-user-profile-image-png-7.png',
-                            fit: BoxFit.fill)
-                        : Image.network(user.pics[0].toString(),
-                            fit: BoxFit.fill),
-                  )),
+                      borderRadius: BorderRadius.circular(180.0),
+                      child: user.pics.isEmpty
+                          ? Image.asset(
+                              'images/default-user-profile-image-png-7.png',
+                              fit: BoxFit.fill)
+                          : CachedNetworkImage(
+                              fit: BoxFit.fill,
+                              imageUrl: user.pics[0],
+                              placeholder: (BuildContext context, String url) =>
+                                  const CircularProgressIndicator(),
+                              errorWidget: (BuildContext context, String url,
+                                      Object error) =>
+                                  Icon(Icons.error)))),
               Text(user.name,
                   style: TextStyle(
                       color: pink,
@@ -104,8 +110,18 @@ class _ProfileState extends State<Profile> {
                                               height: 50.0,
                                               margin: const EdgeInsets.only(
                                                   right: 10.0),
-                                              child: Image.network(
-                                                  'https://firebasestorage.googleapis.com/v0/b/incl-9b378.appspot.com/o/images%2Finterests%2F${interest.name}.png?alt=media')),
+                                              child: CachedNetworkImage(
+                                                  imageUrl:
+                                                      'https://firebasestorage.googleapis.com/v0/b/incl-9b378.appspot.com/o/images%2Finterests%2F${interest.name}.png?alt=media',
+                                                  placeholder: (BuildContext
+                                                              context,
+                                                          String url) =>
+                                                      const CircularProgressIndicator(),
+                                                  errorWidget:
+                                                      (BuildContext context,
+                                                              String url,
+                                                              Object error) =>
+                                                          Icon(Icons.error))),
                                           Expanded(
                                               child: Column(
                                                   crossAxisAlignment:

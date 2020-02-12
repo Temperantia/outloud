@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:inclusive/theme.dart';
 
 final Widget Function(String) _buildIcon = (String image) => Container(
-      width: 50.0,
-      height: 50.0,
+      width: 40.0,
+      height: 40.0,
       child: Image.asset(image),
     );
 
@@ -28,6 +28,8 @@ final BottomNavigationBarItem Function(String) _buildItem =
 final List<BottomNavigationBarItem> Function(BuildContext, int) bubbleBar =
     (BuildContext context, int pings) => <BottomNavigationBarItem>[
           _buildItem('images/usuario.png'),
+          _buildItem('images/evento.png'),
+          _buildItem('images/lista.png'),
           BottomNavigationBarItem(
             icon: Container(
                 margin: const EdgeInsets.only(bottom: 10.0),
@@ -46,7 +48,4 @@ final List<BottomNavigationBarItem> Function(BuildContext, int) bubbleBar =
                 child: _buildIcon('images/charla.png')),
             title: Container(),
           ),
-          _buildItem('images/lista.png'),
-          _buildItem('images/evento.png'),
-          _buildItem('images/grupo.png'),
         ];

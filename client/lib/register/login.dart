@@ -2,21 +2,25 @@ import 'package:async_redux/async_redux.dart';
 import 'package:business/app_state.dart';
 import 'package:business/login/actions/login_google_action.dart';
 import 'package:business/login/actions/login_facebook_action.dart';
+import 'package:business/login/actions/login_phone_action.dart';
 import 'package:business/user/actions/user_listen_stream_action.dart';
+import 'package:country_code_picker/country_code.dart';
+import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_auth_buttons/flutter_auth_buttons.dart';
 import 'package:inclusive/home.dart';
+import 'package:inclusive/widgets/background.dart';
 import 'package:inclusive/widgets/view.dart';
 
 import 'package:provider_for_redux/provider_for_redux.dart';
 
 class LoginScreen extends StatelessWidget {
   static const String id = 'Login';
-  //final TextEditingController _controllerPhone = TextEditingController();
+  final TextEditingController _controllerPhone = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    //CountryCode selectedCountry = CountryCode(code: 'FR', dialCode: '+33');
+    CountryCode selectedCountry = CountryCode(code: 'FR', dialCode: '+33');
     print('build login');
 
     return ReduxConsumer<AppState>(
@@ -25,10 +29,11 @@ class LoginScreen extends StatelessWidget {
             View(
                 showAppBar: false,
                 showNavBar: false,
-                child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      /*
+                child: Container(
+                    decoration: background,
+                    child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
                           Row(
                             children: <Widget>[
                               Flexible(
@@ -57,39 +62,38 @@ class LoginScreen extends StatelessWidget {
                             ],
                           ),
                           const SizedBox(height: 50.0),
-                          */
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Container(
-                              width: 270.0,
-                              child: GoogleSignInButton(
-                                  borderRadius: 50.0,
-                                  darkMode: true,
-                                  onPressed: () {
-                                    dispatch(LoginGoogleAction());
-                                    dispatch(UserListenStreamAction(
-                                        state.loginState.id));
-                                  })),
-                        ],
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Container(
-                              width: 270.0,
-                              child: FacebookSignInButton(
-                                  borderRadius: 50.0,
-                                  onPressed: () {
-                                    dispatch(LoginFacebookAction());
-                                    dispatch(UserListenStreamAction(
-                                        state.loginState.id));
-                                    Navigator.pushReplacementNamed(
-                                        context, HomeScreen.id);
-                                  })),
-                        ],
-                      ),
-                      Text(state.loginState.loginError),
-                    ])));
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Container(
+                                  width: 300.0,
+                                  child: GoogleSignInButton(
+                                      borderRadius: 50.0,
+                                      darkMode: true,
+                                      onPressed: () {
+                                        dispatch(LoginGoogleAction());
+                                        dispatch(UserListenStreamAction(
+                                            state.loginState.id));
+                                      })),
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Container(
+                                  width: 300.0,
+                                  child: FacebookSignInButton(
+                                      borderRadius: 50.0,
+                                      onPressed: () {
+                                        dispatch(LoginFacebookAction());
+                                        dispatch(UserListenStreamAction(
+                                            state.loginState.id));
+                                        Navigator.pushReplacementNamed(
+                                            context, HomeScreen.id);
+                                      })),
+                            ],
+                          ),
+                          Text(state.loginState.loginError),
+                        ]))));
   }
 }

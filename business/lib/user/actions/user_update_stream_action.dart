@@ -8,7 +8,7 @@ class UserUpdateStreamAction extends ReduxAction<AppState> {
   final User user;
 
   @override
-  Future<AppState> reduce() async {
+  AppState reduce() {
     return state.copy(userState: state.userState.copy(user: user));
   }
 }

@@ -49,11 +49,14 @@ class View extends StatelessWidget {
                           dispatch(AppNavigateAction(index));
                           if (showAppBar) {
                             Navigator.of(context).pushNamedAndRemoveUntil(
-                                HomeScreen.id,
-                                (Route<dynamic> route) => route.isCurrent &&
-                                        route.settings.name == HomeScreen.id
-                                    ? false
-                                    : true);
+                                HomeScreen.id, (Route<dynamic> route) {
+                              if (route.isCurrent &&
+                                  route.settings.name == HomeScreen.id) {
+                                return false;
+                              } else {
+                                return true;
+                              }
+                            });
                           }
                         },
                       )

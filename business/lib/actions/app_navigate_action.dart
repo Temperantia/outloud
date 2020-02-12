@@ -7,7 +7,7 @@ class AppNavigateAction extends ReduxAction<AppState> {
   final int index;
 
   @override
-  Future<AppState> reduce() async {
+  AppState reduce() {
     return state.copy(homePageIndex: index);
   }
 }

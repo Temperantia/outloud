@@ -11,10 +11,10 @@ class UserListenStreamAction extends ReduxAction<AppState> {
   final String id;
 
   @override
-  Future<AppState> reduce() async {
+  AppState reduce() {
     UserState.userStream = streamUser(id);
     UserState.userStream
         .listen((User user) => dispatch(UserUpdateStreamAction(user)));
-    return state;
+    return null;
   }
 }

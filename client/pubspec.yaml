@@ -11,26 +11,13 @@ dependencies:
     path: ../business/
   flutter:
     sdk: flutter
-  firebase_core: ^0.4.0+9
-  firebase_storage: ^3.1.1
-  cloud_firestore: ^0.12.9+6
-  firestore_helpers: ^3.2.1+1
-  google_sign_in: ^4.1.1
-  firebase_auth: ^0.15.4
-  flutter_facebook_login: ^3.0.0
 
   provider: ^4.0.1
   validate: ^1.7.0
   timeago: ^2.0.24
-  intl: ^0.16.1
   async_redux: ^2.5.2
   provider_for_redux: ^1.1.0
-
-  device_info: ^0.4.1+4
-  shared_preferences: ^0.5.6
-  location_permissions: ^2.0.3
-  geolocator: ^5.1.5
-  geocoder: ^0.2.1
+  connectivity: ^0.4.6+2
 
   badges: ^1.1.0
   bubble_bottom_bar: ^1.2.0
@@ -53,6 +40,7 @@ dependencies:
   flutter_auth_buttons: ^0.6.0
   enum_to_string: ^1.0.8
   country_code_picker: ^1.2.4
+  cached_network_image: ^2.0.0
 
 flutter:
   uses-material-design: true
