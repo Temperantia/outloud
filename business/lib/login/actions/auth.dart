@@ -1,4 +1,5 @@
 // Firebase User login (Email, Phone, Facebook, Google)
+import 'package:async_redux/async_redux.dart';
 import 'package:business/classes/user.dart';
 import 'package:business/models/user.dart';
 
@@ -6,7 +7,6 @@ import 'package:enum_to_string/enum_to_string.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
 final FacebookLogin facebookSignIn = FacebookLogin();
@@ -14,6 +14,7 @@ final GoogleSignIn googleSignIn = GoogleSignIn(scopes: <String>[
   'email',
   'https://www.googleapis.com/auth/user.birthday.read',
 ]);
+final LocalPersist persistRegisterPreferences = LocalPersist('registerPreferences');
 
 enum AuthMode {
   Facebook,
@@ -33,17 +34,22 @@ Future<String> register(
     await createUser(User(id: id, name: name, birthDate: birthdate));
   }
 
-  final SharedPreferences sharedPreferences =
-      await SharedPreferences.getInstance();
-  await sharedPreferences.setString('authMode', EnumToString.parse(mode));
+  final Map<String, dynamic> registerPreferencesMap = {
+    'authMode': EnumToString.parse(mode)
+  };
+  final List<Object> registerPreferences = [
+    registerPreferencesMap
+  ];
+  await persistRegisterPreferences.save(registerPreferences);
   return id;
 }
 
 Future<String> login() async {
-  final SharedPreferences sharedPreferences =
-      await SharedPreferences.getInstance();
+  final List<Object> registerPreferences = await persistRegisterPreferences.load();
+  final Map<String, dynamic> registerPreferencesMap = registerPreferences.first as Map<String, dynamic>;
+  
   final AuthMode authMode = EnumToString.fromString(
-      AuthMode.values, sharedPreferences.getString('authMode'));
+      AuthMode.values, registerPreferencesMap['authMode']) as AuthMode;
 
   if (authMode == null) {
     return null;
