@@ -23,15 +23,17 @@ class RegisterScreen extends StatelessWidget {
                           onPressed: () {
                             Navigator.of(context).pushNamed(LoginScreen.id);
                           },
-                          child: Text('LOGIN',
-                              style: Theme.of(context).textTheme.title)),
+                          child: const Text(
+                            'LOGIN',
+                          )),
                       const SizedBox(height: 20.0),
                       RaisedButton(
                           onPressed: () {
                             Navigator.of(context).pushNamed(Register1Screen.id);
                           },
-                          child: Text('GET STARTED',
-                              style: Theme.of(context).textTheme.title)),
+                          child: const Text(
+                            'GET STARTED',
+                          )),
                     ]))));
   }
 }

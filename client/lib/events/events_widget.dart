@@ -2,14 +2,32 @@ import 'package:async_redux/async_redux.dart' as redux;
 import 'package:business/app_state.dart';
 import 'package:business/classes/event.dart';
 import 'package:business/events/actions/events_get_action.dart';
+import 'package:business/events/actions/events_select_action.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:inclusive/events/event_screen.dart';
 import 'package:inclusive/theme.dart';
 import 'package:inclusive/widgets/button.dart';
+import 'package:inclusive/widgets/loading.dart';
+import 'package:intl/intl.dart';
 import 'package:provider_for_redux/provider_for_redux.dart';
 
-class Events extends StatelessWidget {
-  Widget _buildEvent(Event event) {
+class EventsWidget extends StatefulWidget {
+  @override
+  _EventsWidgetState createState() => _EventsWidgetState();
+}
+
+class _EventsWidgetState extends State<EventsWidget>
+    with AutomaticKeepAliveClientMixin<EventsWidget> {
+  @override
+  bool get wantKeepAlive => true;
+
+  Widget _buildEvent(
+      Event event,
+      void Function(redux.ReduxAction<AppState>) dispatch,
+      Future<void> Function(redux.ReduxAction<AppState>) dispatchFuture) {
+    final String date = DateFormat('dd.MM').format(event.date);
+    final String time = DateFormat('Hm').format(event.date);
     return Column(children: <Widget>[
       const Divider(
         thickness: 3.0,
@@ -36,15 +54,17 @@ class Events extends StatelessWidget {
                     child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          Text(event.name,
-                              style: TextStyle(fontWeight: FontWeight.bold)),
+                          Text(event.name, style: textStyleListItemTitle),
                           Text(event.description,
                               maxLines: 3, overflow: TextOverflow.ellipsis),
                           Button(
-                              text: Text('view',
-                                  style: TextStyle(
-                                      color: white,
-                                      fontWeight: FontWeight.bold))),
+                            text: 'view',
+                            onPressed: () async {
+                              await dispatchFuture(EventsSelectAction(event));
+                              dispatch(redux.NavigateAction<AppState>.pushNamed(
+                                  EventScreen.id));
+                            },
+                          ),
                         ]))),
             Flexible(
                 child: Container(
@@ -56,69 +76,64 @@ class Events extends StatelessWidget {
                     child: Column(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: <Widget>[
-                          Text('25.02',
-                              style: TextStyle(fontWeight: FontWeight.bold)),
-                          Text('20:00',
-                              style: TextStyle(
+                          Text(date,
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.bold)),
+                          Text(time,
+                              style: const TextStyle(
                                   color: grey,
                                   fontWeight: FontWeight.bold,
                                   fontSize: 10.0))
-                        ])))
+                        ]))),
           ])),
     ]);
   }
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return ReduxConsumer<AppState>(builder: (BuildContext context,
         redux.Store<AppState> store,
         AppState state,
         void Function(redux.ReduxAction<dynamic>) dispatch,
         Widget child) {
       final List<Event> events = state.eventsState.events;
+      if (events == null) {
+        return Loading();
+      }
+
       return RefreshIndicator(
           onRefresh: () => store.dispatchFuture(EventsGetAction()),
           child: Column(children: <Widget>[
             // TODO(robin): Google map here above the list of events
-            Flexible(flex: 1, child: Container()),
-            Flexible(
+            Expanded(
+                child: Center(
+                    child: Container(child: const Text('google map here')))),
+            Expanded(
                 flex: 2,
                 child: Container(
-                  decoration: BoxDecoration(color: white),
+                  decoration: const BoxDecoration(color: white),
                   padding: const EdgeInsets.all(10.0),
                   child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Text('Events',
-                            style: TextStyle(
-                                color: pink,
-                                fontSize: 24.0,
-                                fontWeight: FontWeight.bold)),
-                        Row(children: <Widget>[
-                          const Spacer(flex: 1),
+                        const Text('Events', style: textStyleTitle),
+                        Row(children: const <Widget>[
+                          Spacer(flex: 1),
+                          Flexible(flex: 6, child: Button(text: 'Create')),
+                          Spacer(flex: 2),
                           Flexible(
                               flex: 6,
                               child: Button(
-                                  text: Text('Create',
-                                      style: TextStyle(
-                                          color: white,
-                                          fontWeight: FontWeight.bold)))),
-                          const Spacer(flex: 2),
-                          Flexible(
-                              flex: 6,
-                              child: Button(
-                                  text: Text('Discover',
-                                      style: TextStyle(
-                                          color: white,
-                                          fontWeight: FontWeight.bold)))),
-                          const Spacer(flex: 1),
+                                text: 'Discover',
+                              )),
+                          Spacer(flex: 1),
                         ]),
                         Flexible(
-                            child: ListView.builder(
-                                itemCount: events.length,
-                                itemBuilder:
-                                    (BuildContext context, int index) =>
-                                        _buildEvent(events[index]))),
+                            child: ListView(children: <Widget>[
+                          for (final Event event in events)
+                            _buildEvent(event, dispatch, store.dispatchFuture)
+                        ])),
                       ]),
                 )),
           ]));

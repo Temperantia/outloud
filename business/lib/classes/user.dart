@@ -27,7 +27,9 @@ class User extends Entity {
   User.fromMap(Map<String, dynamic> snapshot, String id)
       : email = snapshot['email'] as String ?? '',
         home = snapshot['home'] as String ?? '',
-        birthDate = (snapshot['birthDate'] as Timestamp).toDate(),
+        birthDate = snapshot['birthDate'] == null
+            ? null
+            : (snapshot['birthDate'] as Timestamp).toDate(),
         pics = snapshot['pics'] == null
             ? <String>[]
             : snapshot['pics'].cast<String>() as List<String>,

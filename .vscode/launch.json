@@ -5,10 +5,11 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Dart",
+      "name": "Flutter",
       "program": "client/lib/main.dart",
       "request": "launch",
-      "type": "dart"
+      "type": "dart",
+      "args": ["--enable-software-rendering"]
     }
   ]
 }

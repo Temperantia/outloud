@@ -1,7 +1,7 @@
 import 'package:async_redux/async_redux.dart';
 import 'package:flutter/material.dart';
 import 'package:business/app_state.dart';
-import 'package:inclusive/home.dart';
+import 'package:inclusive/home_screen.dart';
 import 'package:inclusive/register/login.dart';
 import 'package:business/login/actions/login_action.dart';
 import 'package:inclusive/routes.dart';
@@ -11,12 +11,17 @@ import 'package:inclusive/widgets/loading.dart';
 import 'package:provider_for_redux/provider_for_redux.dart';
 
 Store<AppState> store;
+GlobalKey<NavigatorState> navigatorKey;
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   store = Store<AppState>(
     initialState: AppState.initialState(),
-    errorObserver: DevelopmentErrorObserver<dynamic>(),
+    errorObserver: DevelopmentErrorObserver<AppState>(),
   );
+  navigatorKey = GlobalKey<NavigatorState>();
+  NavigateAction.setNavigatorKey(navigatorKey);
+
   runApp(App());
 }
 
@@ -25,16 +30,16 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return AsyncReduxProvider<AppState>.value(
         value: store,
-        child: MaterialApp(
-            debugShowCheckedModeBanner: false,
-            theme: theme,
-            title: 'Inc•lusive',
-            home: ReduxConsumer<AppState>(
-              builder: (BuildContext context,
-                  Store<AppState> store,
-                  AppState state,
-                  void Function(ReduxAction<dynamic>) dispatch,
-                  Widget child) {
+        child: ReduxConsumer<AppState>(builder: (BuildContext context,
+            Store<AppState> store,
+            AppState state,
+            void Function(ReduxAction<dynamic>) dispatch,
+            Widget child) {
+          return MaterialApp(
+              debugShowCheckedModeBanner: false,
+              theme: theme,
+              title: 'Inc•lusive',
+              home: Builder(builder: (BuildContext context) {
                 if (state.loading) {
                   print('loading');
                   // init state
@@ -47,11 +52,13 @@ class App extends StatelessWidget {
                   return LoginScreen();
                 }
                 return HomeScreen();
-              },
-            ),
-            onGenerateRoute: (RouteSettings settings) =>
-                MaterialPageRoute<dynamic>(
+              }),
+              navigatorKey: navigatorKey,
+              onGenerateRoute: (RouteSettings settings) {
+                return MaterialPageRoute<dynamic>(
                   builder: (BuildContext context) => routes[settings.name],
-                )));
+                );
+              });
+        }));
   }
 }

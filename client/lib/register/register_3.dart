@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 import 'package:inclusive/theme.dart';
 import 'package:business/classes/user.dart';
-import 'package:inclusive/home.dart';
+import 'package:inclusive/home_screen.dart';
 import 'package:inclusive/widgets/birthdate_picker.dart';
 import 'package:inclusive/widgets/background.dart';
 
@@ -38,10 +38,9 @@ class _Register3ScreenState extends State<Register3Screen> {
 
     return Scaffold(
         appBar: AppBar(
-            iconTheme: IconThemeData(color: white),
+            iconTheme: const IconThemeData(color: white),
             centerTitle: true,
-            title: Text('Select your birthdate',
-                style: Theme.of(context).textTheme.title)),
+            title: const Text('Select your birthdate')),
         body: Container(
             decoration: background,
             child: Column(

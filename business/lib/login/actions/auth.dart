@@ -14,7 +14,8 @@ final GoogleSignIn googleSignIn = GoogleSignIn(scopes: <String>[
   'email',
   'https://www.googleapis.com/auth/user.birthday.read',
 ]);
-final LocalPersist persistRegisterPreferences = LocalPersist('registerPreferences');
+final LocalPersist persistRegisterPreferences =
+    LocalPersist('registerPreferences');
 
 enum AuthMode {
   Facebook,
@@ -34,20 +35,23 @@ Future<String> register(
     await createUser(User(id: id, name: name, birthDate: birthdate));
   }
 
-  final Map<String, dynamic> registerPreferencesMap = {
+  final Map<String, dynamic> registerPreferencesMap = <String, dynamic>{
     'authMode': EnumToString.parse(mode)
   };
-  final List<Object> registerPreferences = [
-    registerPreferencesMap
-  ];
+  final List<Object> registerPreferences = <Object>[registerPreferencesMap];
   await persistRegisterPreferences.save(registerPreferences);
   return id;
 }
 
 Future<String> login() async {
-  final List<Object> registerPreferences = await persistRegisterPreferences.load();
-  final Map<String, dynamic> registerPreferencesMap = registerPreferences.first as Map<String, dynamic>;
-  
+  final List<Object> registerPreferences =
+      await persistRegisterPreferences.load();
+  if (registerPreferences == null) {
+    return null;
+  }
+  final Map<String, dynamic> registerPreferencesMap =
+      registerPreferences.first as Map<String, dynamic>;
+
   final AuthMode authMode = EnumToString.fromString(
       AuthMode.values, registerPreferencesMap['authMode'] as String);
 

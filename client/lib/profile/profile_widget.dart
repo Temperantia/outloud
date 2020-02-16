@@ -9,12 +9,16 @@ import 'package:intl/intl.dart';
 import 'package:provider_for_redux/provider_for_redux.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
-class Profile extends StatefulWidget {
+class ProfileWidget extends StatefulWidget {
   @override
-  _ProfileState createState() => _ProfileState();
+  _ProfileWidgetState createState() => _ProfileWidgetState();
 }
 
-class _ProfileState extends State<Profile> {
+class _ProfileWidgetState extends State<ProfileWidget>
+    with AutomaticKeepAliveClientMixin<ProfileWidget> {
+  @override
+  bool get wantKeepAlive => true;
+
   Widget _buildAboutBloc(String title, String content) {
     return Padding(
         padding: const EdgeInsets.symmetric(vertical: 10.0),
@@ -22,8 +26,7 @@ class _ProfileState extends State<Profile> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Text(title,
-                  style: TextStyle(color: grey, fontWeight: FontWeight.bold)),
+              Text(title, style: textStyleCardItemTitle),
               Text(content),
             ],
           ),
@@ -32,6 +35,8 @@ class _ProfileState extends State<Profile> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
+
     return ReduxConsumer<AppState>(builder: (BuildContext context,
         Store<AppState> store,
         AppState state,
@@ -66,21 +71,17 @@ class _ProfileState extends State<Profile> {
                               errorWidget: (BuildContext context, String url,
                                       Object error) =>
                                   Icon(Icons.error)))),
-              Text(user.name,
-                  style: TextStyle(
-                      color: pink,
-                      fontSize: 24.0,
-                      fontWeight: FontWeight.bold)),
+              Text(user.name, style: textStyleTitle),
               Container(
                   decoration: BoxDecoration(
                       color: white, borderRadius: BorderRadius.circular(20.0)),
                   margin: const EdgeInsets.all(10.0),
-                  child: TabBar(
-                    indicator: const BoxDecoration(),
-                    unselectedLabelStyle: const TextStyle(),
+                  child: const TabBar(
+                    indicator: BoxDecoration(),
+                    unselectedLabelStyle: TextStyle(),
                     labelStyle: TextStyle(fontWeight: FontWeight.bold),
                     indicatorColor: pink,
-                    tabs: const <Widget>[
+                    tabs: <Widget>[
                       Tab(text: 'INTERESTS'),
                       Tab(text: 'ABOUT'),
                     ],
@@ -128,10 +129,8 @@ class _ProfileState extends State<Profile> {
                                                       CrossAxisAlignment.start,
                                                   children: <Widget>[
                                                 Text(interest.name,
-                                                    style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        fontSize: 20.0)),
+                                                    style:
+                                                        textStyleListItemTitle),
                                                 Text(
                                                   interest.comment,
                                                   overflow:

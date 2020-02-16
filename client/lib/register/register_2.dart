@@ -37,10 +37,11 @@ class _Register2ScreenState extends State<Register2Screen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-            iconTheme: IconThemeData(color: white),
+            iconTheme: const IconThemeData(color: white),
             centerTitle: true,
-            title: Text('Choose an email',
-                style: Theme.of(context).textTheme.title)),
+            title: const Text(
+              'Choose an email',
+            )),
         body: Container(
             decoration: background,
             child: Column(
@@ -57,7 +58,8 @@ class _Register2ScreenState extends State<Register2Screen> {
                     Row(children: <Widget>[
                       Container(
                           padding: const EdgeInsets.only(left: 10.0),
-                          child: Text(_error, style: TextStyle(color: red)))
+                          child:
+                              Text(_error, style: const TextStyle(color: red)))
                     ]),
                   Padding(
                       padding: const EdgeInsets.symmetric(vertical: 16.0),

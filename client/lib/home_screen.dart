@@ -1,8 +1,8 @@
 import 'package:async_redux/async_redux.dart';
 import 'package:business/app_state.dart';
 import 'package:flutter/material.dart';
-import 'package:inclusive/events/events.dart';
-import 'package:inclusive/profile/profile.dart';
+import 'package:inclusive/events/events_widget.dart';
+import 'package:inclusive/profile/profile_widget.dart';
 import 'package:inclusive/theme.dart';
 import 'package:inclusive/widgets/view.dart';
 import 'package:provider_for_redux/provider_for_redux.dart';
@@ -47,13 +47,13 @@ class _HomeScreenState extends State<HomeScreen>
 
   Widget _buildBody() {
     return Container(
-        decoration: BoxDecoration(gradient: gradient),
+        decoration: const BoxDecoration(gradient: gradient),
         child: TabBarView(
             physics: const NeverScrollableScrollPhysics(),
             controller: _tabController,
             children: <Widget>[
-              Profile(),
-              Events(),
+              ProfileWidget(),
+              EventsWidget(),
               const Center(child: Text('Coming soon')),
               const Center(child: Text('Coming soon')),
             ]));

@@ -1,8 +1,9 @@
 import 'package:async_redux/async_redux.dart';
 import 'package:business/app_state.dart';
 import 'package:business/actions/app_navigate_action.dart';
+import 'package:business/events/actions/events_get_action.dart';
 import 'package:flutter/material.dart';
-import 'package:inclusive/home.dart';
+import 'package:inclusive/home_screen.dart';
 
 import 'package:inclusive/theme.dart';
 import 'package:inclusive/widgets/bubble_bar.dart';
@@ -45,8 +46,11 @@ class View extends StatelessWidget {
                         showUnselectedLabels: false,
                         currentIndex: state.homePageIndex,
                         items: bubbleBar(context, 0),
-                        onTap: (int index) {
+                        onTap: (int index) async {
                           dispatch(AppNavigateAction(index));
+                          if (index == 1) {
+                            dispatch(EventsGetAction());
+                          }
                           if (showAppBar) {
                             Navigator.of(context).pushNamedAndRemoveUntil(
                                 HomeScreen.id, (Route<dynamic> route) {

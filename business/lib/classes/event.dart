@@ -10,6 +10,7 @@ class Event extends Entity {
     String description = '',
     GeoPoint location,
     List<Interest> interests = const <Interest>[],
+    this.date,
     this.owner = '',
     this.adminIds = const <String>[],
     this.memberIds = const <String>[],
@@ -23,7 +24,7 @@ class Event extends Entity {
         );
 
   Event.fromMap(Map<String, dynamic> snapshot, String id)
-      : owner = snapshot['owner'] as String ?? '',
+      : date = (snapshot['date'] as Timestamp).toDate(),
         adminIds = snapshot['adminIds'] == null
             ? <String>[]
             : snapshot['adminIds'].cast<String>() as List<String>,
@@ -45,6 +46,7 @@ class Event extends Entity {
                   .toList(),
         );
 
+  DateTime date;
   String owner;
   List<String> adminIds;
   List<String> memberIds;
@@ -58,6 +60,7 @@ class Event extends Entity {
       'interests': interests
           .map<Map<String, String>>((Interest interest) => interest.toJson())
           .toList(),
+      'date': Timestamp.fromDate(date),
       'owner': owner,
       'adminIds': adminIds,
       'memberIds': memberIds,

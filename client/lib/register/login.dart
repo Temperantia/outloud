@@ -8,7 +8,7 @@ import 'package:country_code_picker/country_code.dart';
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_auth_buttons/flutter_auth_buttons.dart';
-import 'package:inclusive/home.dart';
+import 'package:inclusive/home_screen.dart';
 import 'package:inclusive/widgets/background.dart';
 import 'package:inclusive/widgets/view.dart';
 

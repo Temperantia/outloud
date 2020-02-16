@@ -8,8 +8,7 @@ final Widget Function(BuildContext) logo =
           ),
           Container(
               padding: const EdgeInsets.all(10.0),
-              child: Text(
+              child: const Text(
                 'Let\'s include today',
-                style: Theme.of(context).textTheme.subhead,
               ))
         ]);
