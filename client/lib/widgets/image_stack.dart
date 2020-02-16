@@ -1,5 +1,5 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:inclusive/widgets/circular_image.dart';
 
 class ImageStack extends StatelessWidget {
   const ImageStack({
@@ -36,7 +36,8 @@ class ImageStack extends StatelessWidget {
     final List<Widget> images = <Widget>[];
     int _size = imageCount;
     if (imageList.isNotEmpty) {
-      images.add(circularImage(imageList[0]));
+      images
+          .add(CircularImage(imageRadius: imageRadius, imageUrl: imageList[0]));
     }
 
     if (imageList.length > 1) {
@@ -50,7 +51,8 @@ class ImageStack extends StatelessWidget {
                 index,
                 Positioned(
                   right: 0.8 * imageRadius * (index + 1.0),
-                  child: circularImage(image),
+                  child:
+                      CircularImage(imageRadius: imageRadius, imageUrl: image),
                 ),
               ))
           .values
@@ -90,30 +92,6 @@ class ImageStack extends StatelessWidget {
                 : const SizedBox(),
           ),
         ],
-      ),
-    );
-  }
-
-  Widget circularImage(String imageUrl) {
-    return Container(
-      height: imageRadius,
-      width: imageRadius,
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        border: Border.all(
-          color: Colors.white,
-          width: imageBorderWidth,
-        ),
-      ),
-      child: Container(
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          color: Colors.white,
-          image: DecorationImage(
-            image: CachedNetworkImageProvider(imageUrl),
-            fit: BoxFit.cover,
-          ),
-        ),
       ),
     );
   }

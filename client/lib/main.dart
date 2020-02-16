@@ -14,7 +14,6 @@ Store<AppState> store;
 GlobalKey<NavigatorState> navigatorKey;
 
 void main() {
-  WidgetsFlutterBinding.ensureInitialized();
   store = Store<AppState>(
     initialState: AppState.initialState(),
     errorObserver: DevelopmentErrorObserver<AppState>(),

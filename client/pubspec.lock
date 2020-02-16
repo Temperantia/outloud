@@ -46,7 +46,7 @@ packages:
   business:
     dependency: "direct main"
     description:
-      path: "../business"
+      path: "..\\business"
       relative: true
     source: path
     version: "0.0.0"
@@ -135,7 +135,7 @@ packages:
     source: hosted
     version: "7.2.1"
   firebase_auth:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: firebase_auth
       url: "https://pub.dartlang.org"
@@ -195,13 +195,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  flutter_advanced_networkimage:
-    dependency: "direct main"
-    description:
-      name: flutter_advanced_networkimage
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.7.0"
   flutter_auth_buttons:
     dependency: "direct main"
     description:
@@ -216,13 +209,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.1.3"
-  flutter_cached:
-    dependency: "direct main"
-    description:
-      name: flutter_cached
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "4.1.1"
   flutter_calendar_carousel:
     dependency: "direct main"
     description:
@@ -251,13 +237,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.2.3"
-  flutter_image_compress:
-    dependency: "direct main"
-    description:
-      name: flutter_image_compress
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.6.5+1"
   flutter_keyboard_visibility:
     dependency: transitive
     description:
@@ -286,13 +265,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.2.5"
-  flutter_svg:
-    dependency: transitive
-    description:
-      name: flutter_svg
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.17.1"
   flutter_swiper:
     dependency: "direct main"
     description:
@@ -326,13 +298,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.1.3"
-  geocoder:
-    dependency: transitive
-    description:
-      name: geocoder
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.2.1"
   geolocator:
     dependency: transitive
     description:
@@ -466,20 +431,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.6.4"
-  path_drawing:
-    dependency: transitive
-    description:
-      name: path_drawing
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.4.1"
-  path_parsing:
-    dependency: transitive
-    description:
-      name: path_parsing
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.1.4"
   path_provider:
     dependency: transitive
     description:
@@ -494,13 +445,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.9.0"
-  petitparser:
-    dependency: transitive
-    description:
-      name: petitparser
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "3.0.1"
   platform:
     dependency: transitive
     description:
@@ -522,13 +466,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.1.0"
-  pull_to_refresh:
-    dependency: transitive
-    description:
-      name: pull_to_refresh
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.5.8"
   quiver:
     dependency: transitive
     description:
@@ -646,13 +583,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.8"
-  xml:
-    dependency: transitive
-    description:
-      name: xml
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "3.7.0"
 sdks:
   dart: ">=2.7.0 <3.0.0"
   flutter: ">=1.12.13+hotfix.5 <2.0.0"

@@ -9,7 +9,7 @@
       "program": "client/lib/main.dart",
       "request": "launch",
       "type": "dart",
-      "args": ["--enable-software-rendering"]
+      "args": ["enable-software-rendering"]
     }
   ]
 }

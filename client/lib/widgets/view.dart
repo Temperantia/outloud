@@ -2,6 +2,7 @@ import 'package:async_redux/async_redux.dart';
 import 'package:business/app_state.dart';
 import 'package:business/actions/app_navigate_action.dart';
 import 'package:business/events/actions/events_get_action.dart';
+import 'package:business/people/actions/people_get_action.dart';
 import 'package:flutter/material.dart';
 import 'package:inclusive/home_screen.dart';
 
@@ -50,6 +51,8 @@ class View extends StatelessWidget {
                           dispatch(AppNavigateAction(index));
                           if (index == 1) {
                             dispatch(EventsGetAction());
+                          } else if (index == 2) {
+                            dispatch(PeopleGetAction());
                           }
                           if (showAppBar) {
                             Navigator.of(context).pushNamedAndRemoveUntil(

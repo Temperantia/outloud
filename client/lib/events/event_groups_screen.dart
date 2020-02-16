@@ -8,6 +8,7 @@ import 'package:business/events/actions/event_group_select_action.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:inclusive/theme.dart';
+import 'package:inclusive/widgets/circular_image.dart';
 import 'package:inclusive/widgets/image_stack.dart';
 import 'package:inclusive/widgets/view.dart';
 import 'package:provider_for_redux/provider_for_redux.dart';
@@ -110,7 +111,10 @@ class EventGroupsScreen extends StatelessWidget {
                             Row(children: <Widget>[
                               Container(
                                   margin: const EdgeInsets.all(5.0),
-                                  child: _buildAvatar(member.pics[0])),
+                                  child: CircularImage(
+                                    imageUrl: member.pics[0],
+                                    imageRadius: 50.0,
+                                  )),
                               Text(member.name),
                             ])
                       ])),
@@ -135,23 +139,6 @@ class EventGroupsScreen extends StatelessWidget {
                 ],
               ))
             ])));
-  }
-
-  Widget _buildAvatar(String imageUrl) {
-    return Container(
-      height: 50.0,
-      width: 50.0,
-      child: Container(
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          color: Colors.white,
-          image: DecorationImage(
-            image: CachedNetworkImageProvider(imageUrl),
-            fit: BoxFit.cover,
-          ),
-        ),
-      ),
-    );
   }
 
   @override

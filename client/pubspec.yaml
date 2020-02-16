@@ -19,6 +19,7 @@ dependencies:
   provider_for_redux: ^1.1.0
   connectivity: ^0.4.6+2
   intl: ^0.16.1
+  firebase_auth: ^0.15.4
 
   badges: ^1.1.0
   bubble_bottom_bar: ^1.2.0
@@ -43,9 +44,6 @@ dependencies:
   country_code_picker: ^1.2.4
   cached_network_image: ^2.0.0
   image_stack: ^1.1.0
-  flutter_cached: ^4.1.1
-  flutter_image_compress: ^0.6.5+1
-  flutter_advanced_networkimage: ^0.7.0
 
 flutter:
   uses-material-design: true

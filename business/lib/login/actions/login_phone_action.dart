@@ -1,6 +1,6 @@
 import 'package:async_redux/async_redux.dart';
 import 'package:business/app_state.dart';
-import 'package:business/login/actions/auth.dart';
+import 'package:business/login/auth.dart';
 import 'package:business/login/actions/login_error_action.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';

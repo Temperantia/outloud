@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:async_redux/async_redux.dart';
 import 'package:business/app_state.dart';
-import 'package:business/login/actions/auth.dart';
+import 'package:business/login/auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:intl/intl.dart';
