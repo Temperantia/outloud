@@ -2,7 +2,7 @@ import 'package:async_redux/async_redux.dart';
 import 'package:business/app_state.dart';
 import 'package:business/classes/chat.dart';
 
-class AppInitStateAction extends ReduxAction<AppState> {
+class ChatsListenAction extends ReduxAction<AppState> {
   @override
   AppState reduce() {
     final List<Chat> chats = <Chat>[];

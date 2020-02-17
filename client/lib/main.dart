@@ -1,9 +1,11 @@
 import 'package:async_redux/async_redux.dart';
 import 'package:flutter/material.dart';
+import 'package:business/app_persistor.dart';
 import 'package:business/app_state.dart';
 import 'package:inclusive/home_screen.dart';
 import 'package:inclusive/register/login.dart';
 import 'package:business/login/actions/login_action.dart';
+import 'package:business/chats/actions/chats_listen_action.dart';
 import 'package:inclusive/routes.dart';
 
 import 'package:inclusive/theme.dart';
@@ -13,11 +15,25 @@ import 'package:provider_for_redux/provider_for_redux.dart';
 Store<AppState> store;
 GlobalKey<NavigatorState> navigatorKey;
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final AppPersistor persistor = AppPersistor();
+  AppState initialState = await persistor.readState();
+
+  if (initialState == null) {
+    initialState = AppState.initialState();
+    await persistor.saveInitialState(initialState);
+  }
+
   store = Store<AppState>(
-    initialState: AppState.initialState(),
+    persistor: persistor,
+    initialState: initialState,
     errorObserver: DevelopmentErrorObserver<AppState>(),
   );
+
+  await store.dispatchFuture(LoginAction());
+  store.dispatch(ChatsListenAction());
+
   navigatorKey = GlobalKey<NavigatorState>();
   NavigateAction.setNavigatorKey(navigatorKey);
 
@@ -40,13 +56,9 @@ class App extends StatelessWidget {
               title: 'Inc•lusive',
               home: Builder(builder: (BuildContext context) {
                 if (state.loading) {
-                  print('loading');
                   // init state
-                  dispatch(LoginAction());
-
                   return Loading();
                 }
-                print('building again');
                 if (state.loginState.id == null) {
                   return LoginScreen();
                 }

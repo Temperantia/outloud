@@ -6,7 +6,7 @@ import 'package:business/models/user.dart';
 import 'package:business/user/actions/user_update_stream_action.dart';
 import 'package:business/user/models/user_state.dart';
 
-// actually initiating the state
+// actually initiating the app state
 class LoginAction extends ReduxAction<AppState> {
   @override
   Future<AppState> reduce() async {
