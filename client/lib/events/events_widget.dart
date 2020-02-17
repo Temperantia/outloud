@@ -32,60 +32,56 @@ class _EventsWidgetState extends State<EventsWidget>
       const Divider(
         thickness: 3.0,
       ),
-      Container(
-          child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-            Flexible(
-                child: event.pic.isEmpty
-                    ? Image.asset('images/default-user-profile-image-png-7.png')
-                    : CachedNetworkImage(
-                        imageUrl: event.pic,
-                        placeholder: (BuildContext context, String url) =>
-                            const CircularProgressIndicator(),
-                        errorWidget:
-                            (BuildContext context, String url, Object error) =>
-                                Icon(Icons.error),
-                      )),
-            Flexible(
-                flex: 2,
-                child: Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Text(event.name, style: textStyleListItemTitle),
-                          Text(event.description,
-                              maxLines: 3, overflow: TextOverflow.ellipsis),
-                          Button(
-                            text: 'view',
-                            onPressed: () async {
-                              await dispatchFuture(EventsSelectAction(event));
-                              dispatch(redux.NavigateAction<AppState>.pushNamed(
-                                  EventScreen.id));
-                            },
-                          ),
-                        ]))),
-            Flexible(
-                child: Container(
-                    decoration: BoxDecoration(
-                        border: Border.all(color: grey, width: 2.0),
-                        borderRadius: BorderRadius.circular(5.0)),
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 10.0, horizontal: 5.0),
-                    child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: <Widget>[
-                          Text(date,
-                              style:
-                                  const TextStyle(fontWeight: FontWeight.bold)),
-                          Text(time,
-                              style: const TextStyle(
-                                  color: grey,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 10.0))
-                        ]))),
-          ])),
+      GestureDetector(
+          onTap: () async {
+            await dispatchFuture(EventsSelectAction(event));
+            dispatch(redux.NavigateAction<AppState>.pushNamed(EventScreen.id));
+          },
+          child: Container(
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                if (event.pic.isNotEmpty)
+                  Flexible(
+                      child: CachedNetworkImage(
+                    imageUrl: event.pic,
+                    placeholder: (BuildContext context, String url) =>
+                        const CircularProgressIndicator(),
+                    errorWidget:
+                        (BuildContext context, String url, Object error) =>
+                            Icon(Icons.error),
+                  )),
+                Flexible(
+                    flex: 2,
+                    child: Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Text(event.name, style: textStyleListItemTitle),
+                              Text(event.description,
+                                  maxLines: 3, overflow: TextOverflow.ellipsis),
+                            ]))),
+                Flexible(
+                    child: Container(
+                        decoration: BoxDecoration(
+                            border: Border.all(color: grey, width: 2.0),
+                            borderRadius: BorderRadius.circular(5.0)),
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 10.0, horizontal: 5.0),
+                        child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: <Widget>[
+                              Text(date,
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold)),
+                              Text(time,
+                                  style: const TextStyle(
+                                      color: grey,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 10.0))
+                            ]))),
+              ]))),
     ]);
   }
 
@@ -104,38 +100,32 @@ class _EventsWidgetState extends State<EventsWidget>
 
       return RefreshIndicator(
           onRefresh: () => store.dispatchFuture(EventsGetAction()),
-          child: Column(children: <Widget>[
+          child: ListView(children: <Widget>[
             // TODO(robin): Google map here above the list of events
-            Expanded(
-                child: Center(
-                    child: Container(child: const Text('google map here')))),
-            Expanded(
-                flex: 2,
+            SizedBox(
+                height: 300.0,
                 child: Container(
-                  decoration: const BoxDecoration(color: white),
-                  padding: const EdgeInsets.all(10.0),
-                  child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        const Text('Events', style: textStyleTitle),
-                        Row(children: const <Widget>[
-                          Spacer(flex: 1),
-                          Flexible(flex: 6, child: Button(text: 'Create')),
-                          Spacer(flex: 2),
-                          Flexible(
-                              flex: 6,
-                              child: Button(
-                                text: 'Discover',
-                              )),
-                          Spacer(flex: 1),
-                        ]),
-                        Flexible(
-                            child: ListView(children: <Widget>[
-                          for (final Event event in events)
-                            _buildEvent(event, dispatch, store.dispatchFuture)
-                        ])),
-                      ]),
-                )),
+                    decoration: const BoxDecoration(color: white),
+                    child: const Center(child: Text('google map here')))),
+            Container(
+              decoration: const BoxDecoration(color: white),
+              padding: const EdgeInsets.all(10.0),
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Row(children: const <Widget>[
+                      Text('Events', style: textStyleTitle),
+                      Spacer(),
+                      Flexible(flex: 6, child: Button(text: 'Create')),
+                      Spacer(),
+                      Flexible(flex: 6, child: Button(text: 'Discover')),
+                    ]),
+                    Column(children: <Widget>[
+                      for (final Event event in events)
+                        _buildEvent(event, dispatch, store.dispatchFuture)
+                    ]),
+                  ]),
+            ),
           ]));
     });
   }

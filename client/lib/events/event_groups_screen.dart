@@ -4,7 +4,6 @@ import 'package:business/classes/event.dart';
 import 'package:business/classes/event_group.dart';
 import 'package:business/classes/interest.dart';
 import 'package:business/classes/user.dart';
-import 'package:business/events/actions/event_group_select_action.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:inclusive/theme.dart';
@@ -13,8 +12,15 @@ import 'package:inclusive/widgets/image_stack.dart';
 import 'package:inclusive/widgets/view.dart';
 import 'package:provider_for_redux/provider_for_redux.dart';
 
-class EventGroupsScreen extends StatelessWidget {
+class EventGroupsScreen extends StatefulWidget {
   static const String id = 'EventGroupsScreen';
+
+  @override
+  _EventGroupsScreenState createState() => _EventGroupsScreenState();
+}
+
+class _EventGroupsScreenState extends State<EventGroupsScreen> {
+  EventGroup group;
 
   Widget _buildGroup(EventGroup group, BuildContext context,
       void Function(redux.ReduxAction<AppState>) dispatch) {
@@ -24,7 +30,7 @@ class EventGroupsScreen extends StatelessWidget {
     final List<String> imageList =
         group.members.map<String>((User user) => user.pics[0]).toList();
     return GestureDetector(
-        onTap: () => dispatch(EventGroupSelectAction(group)),
+        onTap: () => setState(() => this.group = group),
         child: Container(
             width: MediaQuery.of(context).size.width * 0.4,
             margin: const EdgeInsets.symmetric(horizontal: 5.0),
@@ -62,6 +68,16 @@ class EventGroupsScreen extends StatelessWidget {
                                 color: white)),
                       ]),
                 ])));
+  }
+
+  Widget _buildSelectedGroup(EventGroup group) {
+    return Flexible(
+        child: SingleChildScrollView(
+            child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
+      if (group.interests.isNotEmpty) _buildInterests(group.interests),
+      if (group.members != null && group.members.isNotEmpty)
+        _buildMembers(group.members),
+    ])));
   }
 
   Widget _buildInterests(List<Interest> interests) {
@@ -150,7 +166,6 @@ class EventGroupsScreen extends StatelessWidget {
         Widget child) {
       final Event event = state.eventsState.event;
       final List<EventGroup> groups = state.eventsState.groups;
-      final EventGroup group = state.eventsState.group;
 
       return View(
           child: Padding(
@@ -170,18 +185,8 @@ class EventGroupsScreen extends StatelessWidget {
                               itemBuilder: (BuildContext context, int index) =>
                                   _buildGroup(
                                       groups[index], context, dispatch))),
-                    if (group != null)
-                      Flexible(
-                          child: SingleChildScrollView(
-                              child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: <Widget>[
-                            if (group.interests.isNotEmpty)
-                              _buildInterests(group.interests),
-                            if (group.members != null &&
-                                group.members.isNotEmpty)
-                              _buildMembers(group.members),
-                          ]))),
+                    if (groups.isNotEmpty)
+                      _buildSelectedGroup(group ?? groups[0]),
                   ])));
     });
   }

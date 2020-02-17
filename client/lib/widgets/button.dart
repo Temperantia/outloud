@@ -33,9 +33,8 @@ class Button extends StatelessWidget {
             child: Ink(
               decoration: decoration,
               child: Container(
-                  constraints: const BoxConstraints(
-                      minWidth: 88.0,
-                      minHeight: 36.0), // min sizes for Material buttons
+                  constraints:
+                      const BoxConstraints(minWidth: 88.0, minHeight: 36.0),
                   alignment: Alignment.center,
                   child: Text(text,
                       style: alt ? textStyleButtonAlt : textStyleButton)),

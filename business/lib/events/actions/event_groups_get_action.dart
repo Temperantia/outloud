@@ -14,9 +14,6 @@ class EventGroupsGetAction extends redux.ReduxAction<AppState> {
     for (final EventGroup group in groups) {
       await group.getMembers();
     }
-
-    return state.copy(
-        eventsState: state.eventsState
-            .copy(groups: groups, group: groups.isEmpty ? null : groups[0]));
+    return state.copy(eventsState: state.eventsState.copy(groups: groups));
   }
 }
