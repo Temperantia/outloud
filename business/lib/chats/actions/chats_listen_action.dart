@@ -10,6 +10,8 @@ class ChatsListenAction extends ReduxAction<AppState> {
       chats.add(Chat(chatId, state.loginState.id));
     }
 
+    //chats.sort((Chat chat1, Chat chat2) => chat1.me
+
     return state.copy(chatsState: state.chatsState.copy(chats: chats));
   }
 }

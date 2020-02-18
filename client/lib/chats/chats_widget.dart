@@ -22,26 +22,38 @@ class _ChatsWidgetState extends State<ChatsWidget>
   bool get wantKeepAlive => true;
 
   Widget _buildChat(Chat chat) {
-    final Message lastMessage = chat.messages[0];
+    final Message lastMessage = chat.messages.isEmpty ? null : chat.messages[0];
+    final String pic = (chat.entity as User).pics.isEmpty
+        ? null
+        : (chat.entity as User).pics[0];
     return Container(
         decoration: BoxDecoration(
             gradient: gradient, borderRadius: BorderRadius.circular(10.0)),
         padding: const EdgeInsets.all(10.0),
         margin: const EdgeInsets.symmetric(vertical: 10.0),
         child: Row(children: <Widget>[
-          CircularImage(
-              imageUrl: (chat.entity as User).pics[0],
-              imageRadius: 50.0),
-          Text(lastMessage.content),
-          Text(lastMessage.getTimeAgo()),
-              /*
+          CircularImage(imageUrl: pic, imageRadius: 50.0),
           Expanded(
-              flex: 3,
               child: Container(
                   padding: const EdgeInsets.symmetric(horizontal: 5.0),
-                  child: Text(user.name))),
-          if (distance != null) Expanded(child: Text(distance)),
-          Icon(Icons.add), */
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Text(chat.entity.name,
+                                  style: textStyleListItemTitle),
+                              if (lastMessage != null)
+                                Text(lastMessage.getTimeAgo(),
+                                    style: textStyleListItemSubtitle),
+                            ]),
+                        if (lastMessage != null)
+                          Row(children: <Widget>[
+                            Text(lastMessage.content,
+                                maxLines: 2, overflow: TextOverflow.ellipsis)
+                          ]),
+                      ]))),
         ]));
   }
 

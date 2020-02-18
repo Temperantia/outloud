@@ -15,8 +15,21 @@ import 'package:provider_for_redux/provider_for_redux.dart';
 Store<AppState> store;
 GlobalKey<NavigatorState> navigatorKey;
 
+class CustomImageCache extends WidgetsFlutterBinding {
+  @override
+  ImageCache createImageCache() {
+    final ImageCache imageCache = super.createImageCache();
+    // Set your image cache size
+    imageCache.maximumSizeBytes = 1024 * 1024 * 1000; // 1000 MB
+    return imageCache;
+  }
+}
+
 Future<void> main() async {
+  CustomImageCache();
+
   WidgetsFlutterBinding.ensureInitialized();
+
   final AppPersistor persistor = AppPersistor();
   AppState initialState = await persistor.readState();
 
@@ -45,31 +58,34 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return AsyncReduxProvider<AppState>.value(
         value: store,
-        child: ReduxConsumer<AppState>(builder: (BuildContext context,
-            Store<AppState> store,
-            AppState state,
-            void Function(ReduxAction<dynamic>) dispatch,
-            Widget child) {
-          return MaterialApp(
-              debugShowCheckedModeBanner: false,
-              theme: theme,
-              title: 'Inc•lusive',
-              home: Builder(builder: (BuildContext context) {
-                if (state.loading) {
-                  // init state
-                  return Loading();
-                }
-                if (state.loginState.id == null) {
-                  return LoginScreen();
-                }
-                return HomeScreen();
-              }),
-              navigatorKey: navigatorKey,
-              onGenerateRoute: (RouteSettings settings) {
-                return MaterialPageRoute<dynamic>(
-                  builder: (BuildContext context) => routes[settings.name],
-                );
-              });
-        }));
+        child: ReduxSelector<AppState, dynamic>(
+            selector: (BuildContext context, AppState state) =>
+                <dynamic>[state.loading, state.loginState.id],
+            builder: (BuildContext context,
+                Store<AppState> store,
+                AppState state,
+                void Function(ReduxAction<dynamic>) dispatch,
+                dynamic model,
+                Widget child) {
+              return MaterialApp(
+                  debugShowCheckedModeBanner: false,
+                  theme: theme,
+                  title: 'Inc•lusive',
+                  home: Builder(builder: (BuildContext context) {
+                    if (state.loading) {
+                      return Loading();
+                    }
+                    if (state.loginState.id == null) {
+                      return LoginScreen();
+                    }
+                    return HomeScreen();
+                  }),
+                  navigatorKey: navigatorKey,
+                  onGenerateRoute: (RouteSettings settings) {
+                    return MaterialPageRoute<dynamic>(
+                      builder: (BuildContext context) => routes[settings.name],
+                    );
+                  });
+            }));
   }
 }

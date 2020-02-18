@@ -20,7 +20,12 @@ class ChatsState {
 
   static ChatsState initialState({List<String> chatIds = const <String>[]}) {
     // testing purpose
-    chatIds = <String>['b-5450d22a74bb3dee'];
+    chatIds = <String>[
+      'b-5450d22a74bb3dee',
+      'b-apmbMHvueWZDLeAOxaxI',
+      'b-cx0hEmwDTLWYy3COnvPL',
+      'b-dedcf380cdad8bd4',
+    ];
 
     return ChatsState(
       chatIds: chatIds,
