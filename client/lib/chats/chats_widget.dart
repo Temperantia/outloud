@@ -2,8 +2,10 @@ import 'package:async_redux/async_redux.dart' as redux;
 import 'package:business/app_state.dart';
 import 'package:business/classes/chat.dart';
 import 'package:business/classes/message.dart';
+import 'package:business/classes/user.dart';
 import 'package:business/people/actions/people_get_action.dart';
 import 'package:flutter/material.dart';
+import 'package:inclusive/widgets/circular_image.dart';
 import 'package:inclusive/widgets/loading.dart';
 import 'package:provider_for_redux/provider_for_redux.dart';
 
@@ -20,16 +22,19 @@ class _ChatsWidgetState extends State<ChatsWidget>
   bool get wantKeepAlive => true;
 
   Widget _buildChat(Chat chat) {
+    final Message lastMessage = chat.messages[0];
     return Container(
         decoration: BoxDecoration(
             gradient: gradient, borderRadius: BorderRadius.circular(10.0)),
         padding: const EdgeInsets.all(10.0),
         margin: const EdgeInsets.symmetric(vertical: 10.0),
         child: Row(children: <Widget>[
-          Text(chat.messages[0].content),
-          /*  CircularImage(
-              imageUrl: user.pics.isEmpty ? null : user.pics[0],
+          CircularImage(
+              imageUrl: (chat.entity as User).pics[0],
               imageRadius: 50.0),
+          Text(lastMessage.content),
+          Text(lastMessage.getTimeAgo()),
+              /*
           Expanded(
               flex: 3,
               child: Container(
