@@ -1,4 +1,3 @@
-import 'package:business/chats/models/chats_state.dart';
 import 'package:business/events/models/events_state.dart';
 import 'package:business/login/models/login_state.dart';
 import 'package:business/people/models/people_state.dart';
@@ -10,7 +9,6 @@ class AppState {
     this.userState,
     this.eventsState,
     this.peopleState,
-    this.chatsState,
     this.loading,
     this.homePageIndex,
   });
@@ -20,7 +18,6 @@ class AppState {
     UserState userState,
     EventsState eventsState,
     PeopleState peopleState,
-    ChatsState chatsState,
     bool loading,
     int homePageIndex,
   }) =>
@@ -29,7 +26,6 @@ class AppState {
         userState: userState ?? this.userState,
         eventsState: eventsState ?? this.eventsState,
         peopleState: peopleState ?? this.peopleState,
-        chatsState: chatsState ?? this.chatsState,
         loading: loading ?? this.loading,
         homePageIndex: homePageIndex ?? this.homePageIndex,
       );
@@ -38,16 +34,14 @@ class AppState {
   final UserState userState;
   final EventsState eventsState;
   final PeopleState peopleState;
-  final ChatsState chatsState;
   final bool loading;
   final int homePageIndex;
 
-  static AppState initialState({ChatsState chatsState}) => AppState(
+  static AppState initialState() => AppState(
         loginState: LoginState.initialState(),
         userState: UserState.initialState(),
         eventsState: EventsState.initialState(),
         peopleState: PeopleState.initialState(),
-        chatsState: chatsState ?? ChatsState.initialState(),
         loading: true,
         homePageIndex: 0,
       );
