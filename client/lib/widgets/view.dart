@@ -48,6 +48,9 @@ class View extends StatelessWidget {
                         currentIndex: state.homePageIndex,
                         items: bubbleBar(context, 0),
                         onTap: (int index) async {
+                          if (index == state.homePageIndex) {
+                            return;
+                          }
                           dispatch(AppNavigateAction(index));
                           if (index == 1) {
                             dispatch(EventsGetAction());

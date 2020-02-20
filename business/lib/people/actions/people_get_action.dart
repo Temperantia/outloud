@@ -9,7 +9,7 @@ import 'package:geolocator/geolocator.dart';
 class PeopleGetAction extends ReduxAction<AppState> {
   @override
   Future<AppState> reduce() async {
-    final List<User> people = await getUsers(state.userState.user.id);
+    final List<User> people = await getUsers(state.loginState.id);
 
     final GeoPoint location = state.userState.user.location;
     final Map<String, String> distances = <String, String>{};

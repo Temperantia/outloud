@@ -79,6 +79,7 @@ class EventScreen extends StatelessWidget {
                                     ])))),
                       ])),
               const Button(text: 'See map', width: 200.0, alt: true),
+              // TODO(robin): link this to new view with google map
               const Button(text: 'Register me', width: 200.0, alt: true),
               Button(
                   text: 'View all subgroups',

@@ -14,11 +14,11 @@ dependencies:
 
   provider: ^4.0.1
   validate: ^1.7.0
-  timeago: ^2.0.24
   async_redux: ^2.5.2
   provider_for_redux: ^1.1.0
   connectivity: ^0.4.6+2
   intl: ^0.16.1
+  timeago: ^2.0.24
 
   badges: ^1.1.0
   carousel_slider: ^1.3.0

@@ -16,6 +16,7 @@ dependencies:
   async_redux: ^2.5.2
   enum_to_string: ^1.0.8
   intl: ^0.16.1
+  timeago: ^2.0.24
 
   location_permissions: ^2.0.3
   geolocator: ^5.1.5

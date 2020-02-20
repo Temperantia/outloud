@@ -56,7 +56,7 @@ class _HomeScreenState extends State<HomeScreen>
               ProfileWidget(),
               EventsWidget(),
               PeopleWidget(),
-              const Center(child: Text('Coming soon')),
+              const Center(child: Text('Coming soon'))
             ]));
   }
 

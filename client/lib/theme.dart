@@ -35,14 +35,20 @@ const TextStyle textStyleTitle =
     TextStyle(color: pink, fontSize: 24.0, fontWeight: FontWeight.bold);
 const TextStyle textStyleTitleAlt =
     TextStyle(color: white, fontSize: 24.0, fontWeight: FontWeight.bold);
+
 const TextStyle textStyleCardTitle =
     TextStyle(color: pink, fontSize: 20.0, fontWeight: FontWeight.bold);
 const TextStyle textStyleCardTitleAlt =
     TextStyle(color: white, fontSize: 20.0, fontWeight: FontWeight.bold);
 const TextStyle textStyleCardDescription = TextStyle(color: white);
-const TextStyle textStyleListItemTitle = TextStyle(fontWeight: FontWeight.bold);
 const TextStyle textStyleCardItemTitle =
     TextStyle(color: grey, fontWeight: FontWeight.bold);
+
+const TextStyle textStyleListItemTitle =
+    TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold);
+const TextStyle textStyleListItemSubtitle =
+    TextStyle(color: grey, fontWeight: FontWeight.bold);
+
 const TextStyle textStyleButton =
     TextStyle(color: white, fontWeight: FontWeight.bold);
 const TextStyle textStyleButtonAlt =
