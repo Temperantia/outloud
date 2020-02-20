@@ -21,7 +21,6 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     CountryCode selectedCountry = CountryCode(code: 'FR', dialCode: '+33');
-    print('build login');
 
     return ReduxConsumer<AppState>(
         builder: (BuildContext context, Store<AppState> store, AppState state,

@@ -11,7 +11,6 @@ class LoginAction extends ReduxAction<AppState> {
   @override
   Future<AppState> reduce() async {
     final String id = await login();
-    print('logged in');
     UserState.userStream = streamUser(id);
     UserState.userStream
         .listen((User user) => dispatch(UserUpdateStreamAction(user)));
