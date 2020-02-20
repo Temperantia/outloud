@@ -17,6 +17,6 @@ class LoginAction extends ReduxAction<AppState> {
         .listen((User user) => dispatch(UserUpdateStreamAction(user)));
 
     return state.copy(
-        loginState: state.loginState.copy(id: 'b'), loading: false);
+        loginState: state.loginState.copy(id: id), loading: false);
   }
 }
