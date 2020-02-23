@@ -46,6 +46,6 @@
     <key>NSCameraUsageDescription</key>
     <string>Example usage description</string>
     <key>io.flutter.embedded_views_preview</key>
-    <String>YES</string>
+    <string>YES</string>
   </dict>
 </plist>
