@@ -40,6 +40,7 @@ dependencies:
   enum_to_string: ^1.0.8
   country_code_picker: ^1.2.4
   cached_network_image: ^2.0.0
+  google_maps_flutter: ^0.5.24
 
 flutter:
   uses-material-design: true
