@@ -1,6 +1,7 @@
 import 'package:async_redux/async_redux.dart';
 import 'package:business/app_state.dart';
 import 'package:flutter/material.dart';
+import 'package:inclusive/chats/chats_widget.dart';
 import 'package:inclusive/events/events_widget.dart';
 import 'package:inclusive/people/people_widget.dart';
 import 'package:inclusive/profile/profile_widget.dart';
@@ -56,7 +57,7 @@ class _HomeScreenState extends State<HomeScreen>
               ProfileWidget(),
               EventsWidget(),
               PeopleWidget(),
-              const Center(child: Text('Coming soon'))
+              ChatsWidget(),
             ]));
   }
 

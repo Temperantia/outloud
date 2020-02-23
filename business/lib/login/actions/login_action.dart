@@ -11,11 +11,12 @@ class LoginAction extends ReduxAction<AppState> {
   @override
   Future<AppState> reduce() async {
     final String id = await login();
+    print('logged in');
     UserState.userStream = streamUser(id);
     UserState.userStream
         .listen((User user) => dispatch(UserUpdateStreamAction(user)));
 
     return state.copy(
-        loginState: state.loginState.copy(id: id), loading: false);
+        loginState: state.loginState.copy(id: 'b'), loading: false);
   }
 }
