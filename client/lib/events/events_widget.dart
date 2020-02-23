@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:async_redux/async_redux.dart' as redux;
 import 'package:business/app_state.dart';
 import 'package:business/classes/event.dart';
@@ -5,6 +7,9 @@ import 'package:business/events/actions/events_get_action.dart';
 import 'package:business/events/actions/events_select_action.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:inclusive/events/event_screen.dart';
 import 'package:inclusive/theme.dart';
 import 'package:inclusive/widgets/button.dart';
@@ -19,6 +24,15 @@ class EventsWidget extends StatefulWidget {
 
 class _EventsWidgetState extends State<EventsWidget>
     with AutomaticKeepAliveClientMixin<EventsWidget> {
+  final Completer<GoogleMapController> _controller = Completer();
+  static const CameraPosition _centerParis =
+      CameraPosition(target: LatLng(48.85902056, 2.34637398), zoom: 14);
+  final Map<String, Marker> _markers = {
+    'position1': Marker(
+        markerId: MarkerId('position1'),
+        position: const LatLng(48.85902056, 2.34637398),
+        infoWindow: const InfoWindow(title: 'la position')),
+  };
   @override
   bool get wantKeepAlive => true;
 
@@ -106,7 +120,20 @@ class _EventsWidgetState extends State<EventsWidget>
                 height: 300.0,
                 child: Container(
                     decoration: const BoxDecoration(color: white),
-                    child: const Center(child: Text('google map here')))),
+                    child: GoogleMap(
+                        mapType: MapType.normal,
+                        zoomGesturesEnabled: true,
+                        gestureRecognizers:
+                            <Factory<OneSequenceGestureRecognizer>>[
+                          Factory<OneSequenceGestureRecognizer>(
+                            () => EagerGestureRecognizer(),
+                          )
+                        ].toSet(),
+                        initialCameraPosition: _centerParis,
+                        markers: _markers.values.toSet(),
+                        onMapCreated: (GoogleMapController controller) {
+                          _controller.complete(controller);
+                        }))),
             Container(
               decoration: const BoxDecoration(color: white),
               padding: const EdgeInsets.all(10.0),
