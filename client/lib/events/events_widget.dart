@@ -9,6 +9,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:inclusive/events/event_screen.dart';
 import 'package:inclusive/theme.dart';
@@ -26,11 +27,10 @@ class _EventsWidgetState extends State<EventsWidget>
     with AutomaticKeepAliveClientMixin<EventsWidget> {
   final Completer<GoogleMapController> _controller =
       Completer<GoogleMapController>();
-  static const CameraPosition _centerParis =
-      CameraPosition(target: LatLng(48.85902056, 2.34637398), zoom: 14);
   final Map<String, Marker> _markers = <String, Marker>{};
   final ScrollController _scrollController = ScrollController();
   double _googleMapSize = 100.0;
+  CameraPosition _intialMapLocation = const CameraPosition(target: LatLng(48.85902056, 2.34637398), zoom: 14);
 
   @override
   void initState() {
@@ -40,7 +40,17 @@ class _EventsWidgetState extends State<EventsWidget>
         _googleMapSize = 100.0;
       });
     });
+    getPosition();
   }
+
+  Future<int> getPosition() async {
+    final Position position = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.best);
+    if (position != null) {
+      _intialMapLocation = CameraPosition(target: LatLng(position.latitude, position.longitude), zoom: 14);
+      return 0;
+    }
+    return 1;
+  } 
 
   @override
   bool get wantKeepAlive => true;
@@ -156,13 +166,15 @@ class _EventsWidgetState extends State<EventsWidget>
                       },
                       mapType: MapType.normal,
                       zoomGesturesEnabled: true,
+                      myLocationButtonEnabled: true,
+                      myLocationEnabled: true,
                       gestureRecognizers:
                           <Factory<OneSequenceGestureRecognizer>>[
                         Factory<OneSequenceGestureRecognizer>(
                           () => EagerGestureRecognizer(),
                         )
                       ].toSet(),
-                      initialCameraPosition: _centerParis,
+                      initialCameraPosition: _intialMapLocation,
                       markers: _markers.values.toSet(),
                       onMapCreated: (GoogleMapController controller) {
                         _controller.complete(controller);
