@@ -1,5 +1,6 @@
 import 'package:async_redux/async_redux.dart';
 import 'package:business/app_state.dart';
+import 'package:business/permissions/location_permission.dart';
 import 'package:flutter/material.dart';
 import 'package:inclusive/events/events_widget.dart';
 import 'package:inclusive/people/people_widget.dart';
@@ -23,6 +24,33 @@ class _HomeScreenState extends State<HomeScreen>
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     _tabController = TabController(vsync: this, length: 4);
+    requestLocationPermission();
+  }
+
+  Future<bool> requestLocationPermission() async {
+    final bool granted = await LocationPermissionService().requestLocationPermission();
+    if (!granted) {
+      onPermissionDenied();
+    }
+    return granted;
+  }
+
+  void onPermissionDenied() {
+    showDialog(context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: const Text('PERMISSION WARNING'),
+        content: const Text('YOU SHOULD ALLOW LOCATION PERMISSION !'),
+        actions: <Widget>[
+          FlatButton(child: const Text('NO, THANKS'), onPressed: () {
+            Navigator.pop(context);
+          },),
+          FlatButton(child: const Text('GO to settings'), onPressed: () {
+            LocationPermissionService().openAppSettings();
+          },)
+        ],
+      );
+    });
   }
 
   @override

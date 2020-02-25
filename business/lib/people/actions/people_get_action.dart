@@ -10,8 +10,13 @@ class PeopleGetAction extends ReduxAction<AppState> {
   @override
   Future<AppState> reduce() async {
     final List<User> people = await getUsers(state.loginState.id);
-
-    final GeoPoint location = state.userState.user.location;
+    GeoPoint location;
+    if (state.userState.user != null) {
+      location = state.userState.user.location;
+    } else {
+      final Position position = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.best);
+      location = GeoPoint(position.latitude, position.longitude);
+    }
     final Map<String, String> distances = <String, String>{};
     for (final User person in people) {
       if (location != null && person.location != null) {

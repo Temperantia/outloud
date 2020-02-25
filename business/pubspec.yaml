@@ -18,5 +18,5 @@ dependencies:
   intl: ^0.16.1
   timeago: ^2.0.24
 
-  location_permissions: ^2.0.3
+  location_permissions: ^2.0.4
   geolocator: ^5.1.5
