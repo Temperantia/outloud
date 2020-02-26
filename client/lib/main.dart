@@ -1,4 +1,5 @@
 import 'package:async_redux/async_redux.dart';
+import 'package:business/user/actions/user_listen_stream_action.dart';
 import 'package:flutter/material.dart';
 import 'package:business/app_persistor.dart';
 import 'package:business/app_state.dart';
@@ -43,7 +44,7 @@ Future<void> main() async {
     errorObserver: DevelopmentErrorObserver<AppState>(),
   );
 
-  await store.dispatchFuture(LoginAction());
+  store.dispatch(LoginAction());
 
   navigatorKey = GlobalKey<NavigatorState>();
   NavigateAction.setNavigatorKey(navigatorKey);

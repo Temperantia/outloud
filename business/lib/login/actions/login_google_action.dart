@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:business/user/actions/user_listen_stream_action.dart';
 import 'package:http/http.dart';
 
 import 'package:async_redux/async_redux.dart';
@@ -26,10 +27,11 @@ class LoginGoogleAction extends ReduxAction<AppState> {
           birthday['month'] as int, birthday['day'] as int);
       final AuthCredential credential = GoogleAuthProvider.getCredential(
           accessToken: auth.accessToken, idToken: auth.idToken);
-      await register(AuthMode.Google, credential, birthdate);
-      return state.copy(loginState: state.loginState.copy(connected: true));
+      final String id = await register(AuthMode.Google, credential, birthdate);
+      dispatch(UserListenStreamAction(id));
+      return state.copy(loginState: state.loginState.copy(id: id));
     } catch (error) {
-      return state.copy(loginState: state.loginState.copy(connected: false));
+      return state.copy(loginState: state.loginState.copy(loginError: ''));
     }
   }
 }
