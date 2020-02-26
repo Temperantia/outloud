@@ -43,7 +43,7 @@ Future<String> register(
   return id;
 }
 
-Future<String> login() async {
+Future<String> autoLogin() async {
   final List<Object> registerPreferences =
       await persistRegisterPreferences.load();
   if (registerPreferences == null) {
@@ -54,11 +54,11 @@ Future<String> login() async {
 
   final AuthMode authMode = EnumToString.fromString(
       AuthMode.values, registerPreferencesMap['authMode'] as String);
-
+  
+  //return null;
   if (authMode == null) {
     return null;
   }
-
   try {
     AuthCredential credentials;
     if (authMode == AuthMode.Facebook) {
