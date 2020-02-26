@@ -10,7 +10,6 @@ class UserListenStreamAction extends ReduxAction<AppState> {
   final String id;
   @override
   AppState reduce() {
-    print(id);
     UserState.userStream = streamUser(id);
     UserState.userStream
         .listen((User user) {

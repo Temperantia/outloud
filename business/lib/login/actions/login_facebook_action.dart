@@ -32,12 +32,13 @@ class LoginFacebookAction extends ReduxAction<AppState> {
 
         return state.copy(loginState: state.loginState.copy(id: id));
       case FacebookLoginStatus.cancelledByUser:
-        return null;
+        break;
       case FacebookLoginStatus.error:
         return state.copy(
             loginState: state.loginState.copy(
                 loginError: 'Something went wrong with the login process.\n'
                     'Here\'s the error Facebook gave us: ${result.errorMessage}'));
     }
+    return null;
   }
 }
