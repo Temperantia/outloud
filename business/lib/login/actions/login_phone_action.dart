@@ -25,7 +25,7 @@ class LoginPhoneAction extends ReduxAction<AppState> {
         codeSent: (String verificationId, [int code]) =>
             _smsCodeSent(verificationId, <int>[code]),
         codeAutoRetrievalTimeout: (String verificationId) {});
-    return state.copy(loginState: state.loginState.copy(connected: true));
+    return state.copy(loginState: state.loginState.copy());
   }
 
   Future<void> _verificationComplete(

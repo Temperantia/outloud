@@ -45,5 +45,15 @@
     <string>Example usage description</string>
     <key>NSCameraUsageDescription</key>
     <string>Example usage description</string>
+    <key>io.flutter.embedded_views_preview</key>
+    <string>YES</string>
+    <key>UISupportedInterfaceOrientations</key>
+    <string>UIInterfaceOrientationPortrait</string>
+    <key>UISupportedInterfaceOrientations~ipad</key>
+    <string>UIInterfaceOrientationPortrait</string>
+    <key>NSLocationAlwaysUsageDescription</key>
+    <string>This app needs access to location when in the background.</string>
+    <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+    <string>This app needs access to location when open and in the background.</string>
   </dict>
 </plist>

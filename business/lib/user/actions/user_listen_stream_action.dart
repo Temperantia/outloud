@@ -7,14 +7,14 @@ import 'package:business/user/models/user_state.dart';
 
 class UserListenStreamAction extends ReduxAction<AppState> {
   UserListenStreamAction(this.id);
-
   final String id;
-
   @override
   AppState reduce() {
     UserState.userStream = streamUser(id);
     UserState.userStream
-        .listen((User user) => dispatch(UserUpdateStreamAction(user)));
+        .listen((User user) {
+          dispatch(UserUpdateStreamAction(user));
+        });
     return null;
   }
 }

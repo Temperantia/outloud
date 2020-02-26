@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:async_redux/async_redux.dart' as redux;
 import 'package:business/app_state.dart';
 import 'package:business/classes/event.dart';
@@ -5,6 +7,10 @@ import 'package:business/events/actions/events_get_action.dart';
 import 'package:business/events/actions/events_select_action.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:inclusive/events/event_screen.dart';
 import 'package:inclusive/theme.dart';
 import 'package:inclusive/widgets/button.dart';
@@ -19,6 +25,33 @@ class EventsWidget extends StatefulWidget {
 
 class _EventsWidgetState extends State<EventsWidget>
     with AutomaticKeepAliveClientMixin<EventsWidget> {
+  final Completer<GoogleMapController> _controller =
+      Completer<GoogleMapController>();
+  final Map<String, Marker> _markers = <String, Marker>{};
+  final ScrollController _scrollController = ScrollController();
+  double _googleMapSize = 100.0;
+  CameraPosition _intialMapLocation = const CameraPosition(target: LatLng(48.85902056, 2.34637398), zoom: 14);
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(() {
+      setState(() {
+        _googleMapSize = 100.0;
+      });
+    });
+    getPosition();
+  }
+
+  Future<int> getPosition() async {
+    final Position position = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.best);
+    if (position != null) {
+      _intialMapLocation = CameraPosition(target: LatLng(position.latitude, position.longitude), zoom: 14);
+      return 0;
+    }
+    return 1;
+  } 
+
   @override
   bool get wantKeepAlive => true;
 
@@ -97,36 +130,89 @@ class _EventsWidgetState extends State<EventsWidget>
       if (events == null) {
         return Loading();
       }
+      _markers.clear();
+      for (final Event event in events) {
+        if (event.location != null) {
+          _markers[event.id] = Marker(
+              markerId: MarkerId(event.id),
+              position:
+                  LatLng(event.location.latitude, event.location.longitude),
+              infoWindow: InfoWindow(title: event.name));
+        }
+      }
 
       return RefreshIndicator(
           onRefresh: () => store.dispatchFuture(EventsGetAction()),
-          child: ListView(children: <Widget>[
-            // TODO(robin): Google map here above the list of events
-            SizedBox(
-                height: 300.0,
-                child: Container(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Container(
+                  constraints: BoxConstraints.expand(
+                    height:
+                        Theme.of(context).textTheme.display1.fontSize * 1.1 +
+                            _googleMapSize,
+                  ),
+                  decoration: const BoxDecoration(color: white),
+                  child: GoogleMap(
+                      onTap: (LatLng latlang) {
+                        setState(() {
+                          _googleMapSize = 400.0;
+                        });
+                      },
+                      onCameraMoveStarted: () {
+                        setState(() {
+                          _googleMapSize = 400.0;
+                        });
+                      },
+                      mapType: MapType.normal,
+                      zoomGesturesEnabled: true,
+                      myLocationButtonEnabled: true,
+                      myLocationEnabled: true,
+                      gestureRecognizers:
+                          <Factory<OneSequenceGestureRecognizer>>[
+                        Factory<OneSequenceGestureRecognizer>(
+                          () => EagerGestureRecognizer(),
+                        )
+                      ].toSet(),
+                      initialCameraPosition: _intialMapLocation,
+                      markers: _markers.values.toSet(),
+                      onMapCreated: (GoogleMapController controller) {
+                        _controller.complete(controller);
+                      })),
+              Container(
+                  constraints: BoxConstraints.expand(
+                    height:
+                        Theme.of(context).textTheme.display1.fontSize * 1.1 +
+                            22,
+                  ),
+                  decoration: const BoxDecoration(color: white),
+                  padding: const EdgeInsets.all(10.0),
+                  child: Row(children: const <Widget>[
+                    Text('Events', style: textStyleTitle),
+                    Spacer(),
+                    Flexible(flex: 6, child: Button(text: 'Create')),
+                    Spacer(),
+                    Flexible(flex: 6, child: Button(text: 'Discover')),
+                  ])),
+              Expanded(
+                  child: ListView(
+                children: <Widget>[
+                  Container(
                     decoration: const BoxDecoration(color: white),
-                    child: const Center(child: Text('google map here')))),
-            Container(
-              decoration: const BoxDecoration(color: white),
-              padding: const EdgeInsets.all(10.0),
-              child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Row(children: const <Widget>[
-                      Text('Events', style: textStyleTitle),
-                      Spacer(),
-                      Flexible(flex: 6, child: Button(text: 'Create')),
-                      Spacer(),
-                      Flexible(flex: 6, child: Button(text: 'Discover')),
-                    ]),
-                    Column(children: <Widget>[
-                      for (final Event event in events)
-                        _buildEvent(event, dispatch, store.dispatchFuture)
-                    ]),
-                  ]),
-            ),
-          ]));
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Column(children: <Widget>[
+                            for (final Event event in events)
+                              _buildEvent(event, dispatch, store.dispatchFuture)
+                          ]),
+                        ]),
+                  ),
+                ],
+                controller: _scrollController,
+              ))
+            ],
+          ));
     });
   }
 }

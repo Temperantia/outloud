@@ -44,8 +44,7 @@ Future<void> main() async {
     errorObserver: DevelopmentErrorObserver<AppState>(),
   );
 
-  await store.dispatchFuture(LoginAction());
-  store.dispatch(ChatsListenAction());
+  store.dispatch(LoginAction());
 
   navigatorKey = GlobalKey<NavigatorState>();
   NavigateAction.setNavigatorKey(navigatorKey);
