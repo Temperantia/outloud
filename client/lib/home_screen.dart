@@ -34,7 +34,6 @@ class _HomeScreenState extends State<HomeScreen>
                     : 'images/screenPatternPurple.png'),
                 fit: BoxFit.cover)),
         child: TabBarView(
-            //physics: const NeverScrollableScrollPhysics(),
             controller: _tabController,
             children: <Widget>[
               ProfileWidget(),
@@ -106,7 +105,6 @@ class _HomeScreenState extends State<HomeScreen>
   @override
   Widget build(BuildContext context) {
     //_authService.refreshLocation();
-    print('rebuilding home');
     return Selector<AppState, int>(
         selector: (BuildContext context, AppState state) => state.homePageIndex,
         builder: (BuildContext context, int homePageIndex, Widget child) {

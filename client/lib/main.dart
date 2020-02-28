@@ -76,7 +76,6 @@ class App extends StatelessWidget {
                     if (state.loginState.id == null) {
                       return LoginScreen();
                     }
-                    print('rebuild main');
                     return HomeScreen();
                   }),
                   navigatorKey: navigatorKey,
