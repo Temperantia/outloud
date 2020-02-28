@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:inclusive/widgets/circular_image.dart';
 import 'package:inclusive/widgets/loading.dart';
 import 'package:provider_for_redux/provider_for_redux.dart';
+import 'package:business/people/models/people_state.dart';
 
 import '../theme.dart';
 
@@ -42,33 +43,37 @@ class _PeopleWidgetState extends State<PeopleWidget>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return ReduxConsumer<AppState>(builder: (BuildContext context,
-        redux.Store<AppState> store,
-        AppState state,
-        void Function(redux.ReduxAction<AppState>) dispatch,
-        Widget child) {
-      final List<User> people = state.peopleState.people;
-      final Map<String, String> distances = state.peopleState.distances;
-      if (people == null || distances == null) {
-        return Loading();
-      }
+    return ReduxSelector<AppState, PeopleState>(
+        selector: (BuildContext context, AppState state) => state.peopleState,
+        builder: (BuildContext context,
+            redux.Store<AppState> store,
+            AppState state,
+            void Function(redux.ReduxAction<AppState>) dispatch,
+            PeopleState peopleState,
+            Widget child) {
+          final List<User> people = peopleState.people;
+          final Map<String, String> distances = peopleState.distances;
+          if (people == null || distances == null) {
+            return Loading();
+          }
 
-      return RefreshIndicator(
-          onRefresh: () => store.dispatchFuture(PeopleGetAction()),
-          child: Container(
-              decoration: const BoxDecoration(color: white),
-              padding: const EdgeInsets.all(10.0),
-              child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    const Text('People', style: textStyleTitle),
-                    Expanded(
-                        child: ListView.builder(
-                            itemCount: people.length,
-                            itemBuilder: (BuildContext context, int index) =>
-                                _buildPerson(people[index],
-                                    distances[people[index].id]))),
-                  ])));
-    });
+          return RefreshIndicator(
+              onRefresh: () => store.dispatchFuture(PeopleGetAction()),
+              child: Container(
+                  decoration: const BoxDecoration(color: white),
+                  padding: const EdgeInsets.all(10.0),
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        const Text('People', style: textStyleTitle),
+                        Expanded(
+                            child: ListView.builder(
+                                itemCount: people.length,
+                                itemBuilder:
+                                    (BuildContext context, int index) =>
+                                        _buildPerson(people[index],
+                                            distances[people[index].id]))),
+                      ])));
+        });
   }
 }
