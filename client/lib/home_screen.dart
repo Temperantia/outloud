@@ -1,3 +1,5 @@
+import 'package:async_redux/async_redux.dart';
+import 'package:business/actions/app_navigate_action.dart';
 import 'package:business/app_state.dart';
 import 'package:business/permissions/location_permission.dart';
 import 'package:flutter/material.dart';
@@ -6,7 +8,7 @@ import 'package:inclusive/events/events_widget.dart';
 import 'package:inclusive/people/people_widget.dart';
 import 'package:inclusive/profile/profile_widget.dart';
 import 'package:inclusive/widgets/view.dart';
-import 'package:provider/provider.dart';
+import 'package:provider_for_redux/provider_for_redux.dart';
 
 class HomeScreen extends StatefulWidget {
   static const String id = 'Home';
@@ -101,12 +103,27 @@ class _HomeScreenState extends State<HomeScreen>
   @override
   Widget build(BuildContext context) {
     //_authService.refreshLocation();
-    return Consumer<AppState>(
-        builder: (BuildContext context, AppState state, Widget child) {
-      _tabController.animateTo(state.homePageIndex);
-      _themeStyle = state.theme;
+    return ReduxSelector<AppState, int>(
+        selector: (BuildContext context, AppState state) => state.homePageIndex,
+        builder: (BuildContext context,
+            Store<AppState> store,
+            AppState state,
+            void Function(ReduxAction<dynamic>) dispatch,
+            int homePageIndex,
+            Widget child) {
+          if (!_tabController.hasListeners) {
+            _tabController.addListener(() {
+              if (!_tabController.indexIsChanging &&
+                  _tabController.previousIndex != _tabController.index) {
+                dispatch(AppNavigateAction(_tabController.index));
+              }
+            });
+          }
+          _tabController.animateTo(homePageIndex);
+          _tabController.animateTo(state.homePageIndex);
+          _themeStyle = state.theme;
 
-      return View(child: _buildBody());
-    });
+          return View(child: _buildBody());
+        });
   }
 }

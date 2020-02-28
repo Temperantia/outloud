@@ -21,8 +21,13 @@ class LoginGoogleAction extends ReduxAction<AppState> {
       );
       final Map<String, dynamic> data =
           json.decode(response.body) as Map<String, dynamic>;
-      final Map<String, dynamic> birthday =
-          data['birthdays'][0]['date'] as Map<String, dynamic>;
+      Map<String, dynamic> birthday;
+      for (final Map<String, dynamic> info in data['birthdays']) {
+        if (info['metadata']['source']['type'] == 'ACCOUNT') {
+          print('dasisgood');
+          birthday = info['date'] as Map<String, dynamic>;
+        }
+      }
       final DateTime birthdate = DateTime(birthday['year'] as int,
           birthday['month'] as int, birthday['day'] as int);
       final AuthCredential credential = GoogleAuthProvider.getCredential(
