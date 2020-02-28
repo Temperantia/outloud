@@ -1,8 +1,5 @@
 import 'package:business/classes/entity.dart';
 import 'package:business/classes/message.dart';
-import 'package:business/classes/user.dart';
-import 'package:business/models/message.dart';
-import 'package:business/models/user.dart';
 
 class Chat {
   factory Chat(String id, String userId,
@@ -19,17 +16,12 @@ class Chat {
   Chat.user(String idMy, this.idPeer,
       {this.lastRead = 0, this.pings = 0, this.pinned = false})
       : isGroup = false,
-        id = getUserChatId(idMy, idPeer) {
-    streamMessages(id)
-        .listen((List<Message> messages) => this.messages = messages);
-    streamUser(idPeer).listen((User user) => entity = user);
-  }
+        id = getUserChatId(idMy, idPeer),
+        messages = const <Message>[];
   Chat.group(this.id, {this.lastRead = 0, this.pings = 0, this.pinned = false})
       : isGroup = true,
-        idPeer = id {
-    streamMessages(id)
-        .listen((List<Message> messages) => this.messages = messages);
-  }
+        idPeer = id,
+        messages = const <Message>[];
 
   final bool isGroup;
   final String id;
