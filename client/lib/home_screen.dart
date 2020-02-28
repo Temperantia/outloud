@@ -5,7 +5,6 @@ import 'package:inclusive/chats/chats_widget.dart';
 import 'package:inclusive/events/events_widget.dart';
 import 'package:inclusive/people/people_widget.dart';
 import 'package:inclusive/profile/profile_widget.dart';
-import 'package:inclusive/theme.dart';
 import 'package:inclusive/widgets/view.dart';
 import 'package:provider/provider.dart';
 
@@ -18,7 +17,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen>
     with SingleTickerProviderStateMixin, WidgetsBindingObserver {
   TabController _tabController;
-  Widget _body;
+  ThemeStyle _themeStyle;
 
   @override
   void initState() {
@@ -26,22 +25,6 @@ class _HomeScreenState extends State<HomeScreen>
     WidgetsBinding.instance.addObserver(this);
     _tabController = TabController(vsync: this, length: 4);
     requestLocationPermission();
-    _body = Container(
-        decoration: const BoxDecoration(
-            image: DecorationImage(
-                image: AssetImage(themeStyle == 'orange'
-                    ? 'images/screenPattern.png'
-                    : 'images/screenPatternPurple.png'),
-                fit: BoxFit.cover)),
-        child: TabBarView(
-            //physics: const NeverScrollableScrollPhysics(),
-            controller: _tabController,
-            children: <Widget>[
-              ProfileWidget(),
-              EventsWidget(),
-              PeopleWidget(),
-              ChatsWidget(),
-            ]));
   }
 
   Future<bool> requestLocationPermission() async {
@@ -100,21 +83,30 @@ class _HomeScreenState extends State<HomeScreen>
   }
 
   Widget _buildBody() {
-    return _body;
+    return Container(
+        decoration: BoxDecoration(
+            image: DecorationImage(
+                image: AssetImage(_themeStyle == ThemeStyle.Orange
+                    ? 'images/screenPattern.png'
+                    : 'images/screenPatternPurple.png'),
+                fit: BoxFit.cover)),
+        child: TabBarView(controller: _tabController, children: <Widget>[
+          ProfileWidget(),
+          EventsWidget(),
+          PeopleWidget(),
+          ChatsWidget(),
+        ]));
   }
 
   @override
   Widget build(BuildContext context) {
     //_authService.refreshLocation();
-    print('rebuilding home');
-    return Selector<AppState, int>(
-        selector: (BuildContext context, AppState state) => state.homePageIndex,
-        builder: (BuildContext context, int homePageIndex, Widget child) {
-          _tabController.animateTo(homePageIndex);
+    return Consumer<AppState>(
+        builder: (BuildContext context, AppState state, Widget child) {
+      _tabController.animateTo(state.homePageIndex);
+      _themeStyle = state.theme;
 
-          return View(
-            child: _buildBody(),
-          );
-        });
+      return View(child: _buildBody());
+    });
   }
 }

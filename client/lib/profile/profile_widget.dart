@@ -15,6 +15,7 @@ class ProfileWidget extends StatefulWidget {
 
 class _ProfileWidgetState extends State<ProfileWidget>
     with AutomaticKeepAliveClientMixin<ProfileWidget> {
+  ThemeStyle _themeStyle;
   @override
   bool get wantKeepAlive => true;
 
@@ -26,7 +27,7 @@ class _ProfileWidgetState extends State<ProfileWidget>
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Text(title.toUpperCase(), style: textStyleCardItemTitle),
-              Text(content, style: textStyleCardItemContent),
+              Text(content, style: textStyleCardItemContent(_themeStyle)),
             ],
           ),
         ]));
@@ -45,6 +46,7 @@ class _ProfileWidgetState extends State<ProfileWidget>
       if (user == null) {
         return Loading();
       }
+      _themeStyle = state.theme;
       return DefaultTabController(
         length: 2,
         child: Column(children: <Widget>[

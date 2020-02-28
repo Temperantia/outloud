@@ -1,3 +1,4 @@
+import 'package:business/app_state.dart';
 import 'package:flutter/material.dart';
 
 const Color yellow = Color(0xFFFFEF00);
@@ -32,23 +33,22 @@ const LinearGradient gradientTopDown = LinearGradient(
       orange,
     ]);
 
-const String themeStyle = 'orange';
-
-const Color primary = themeStyle == 'orange' ? orange : purple;
+Color primary(ThemeStyle themeStyle) =>
+    themeStyle == ThemeStyle.Orange ? orange : purple;
 
 const TextStyle textStyleTitle =
     TextStyle(color: white, fontSize: 24.0, fontWeight: FontWeight.bold);
 const TextStyle textStyleTitleAlt =
     TextStyle(color: white, fontSize: 24.0, fontWeight: FontWeight.bold);
 
-const TextStyle textStyleCardTitle =
-    TextStyle(color: primary, fontSize: 20.0, fontWeight: FontWeight.bold);
+TextStyle textStyleCardTitle(ThemeStyle themeStyle) => TextStyle(
+    color: primary(themeStyle), fontSize: 20.0, fontWeight: FontWeight.bold);
 const TextStyle textStyleCardTitleAlt =
     TextStyle(color: white, fontSize: 20.0, fontWeight: FontWeight.bold);
 const TextStyle textStyleCardDescription = TextStyle(color: white);
 const TextStyle textStyleCardItemTitle = TextStyle(fontWeight: FontWeight.bold);
-const TextStyle textStyleCardItemContent =
-    TextStyle(fontWeight: FontWeight.bold, color: primary);
+TextStyle textStyleCardItemContent(ThemeStyle themeStyle) =>
+    TextStyle(fontWeight: FontWeight.bold, color: primary(themeStyle));
 
 const TextStyle textStyleListItemTitle =
     TextStyle(color: white, fontSize: 20.0, fontWeight: FontWeight.bold);
@@ -60,19 +60,19 @@ const TextStyle textStyleButton =
 const TextStyle textStyleButtonAlt =
     TextStyle(color: grey, fontWeight: FontWeight.bold);
 
-ThemeData theme = ThemeData(
-  //accentColor: white,
-  buttonTheme: ButtonThemeData(
+ThemeData theme(ThemeStyle themeStyle) => ThemeData(
+      accentColor: white,
+      /*  buttonTheme: ButtonThemeData(
     buttonColor: primary,
     minWidth: 200.0,
     padding: const EdgeInsets.all(15.0),
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(20.0),
     ),
-  ),
-  fontFamily: 'Hiragino',
-  primaryColor: primary,
-  sliderTheme: const SliderThemeData(
-    showValueIndicator: ShowValueIndicator.always,
-  ),
-);
+  ), */
+      fontFamily: 'Hiragino',
+      primaryColor: primary(themeStyle),
+      sliderTheme: const SliderThemeData(
+        showValueIndicator: ShowValueIndicator.always,
+      ),
+    );

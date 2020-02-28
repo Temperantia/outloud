@@ -21,6 +21,7 @@ class EventGroupsScreen extends StatefulWidget {
 
 class _EventGroupsScreenState extends State<EventGroupsScreen> {
   EventGroup group;
+  ThemeStyle _themeStyle;
 
   Widget _buildGroup(EventGroup group, BuildContext context,
       void Function(redux.ReduxAction<AppState>) dispatch) {
@@ -86,7 +87,7 @@ class _EventGroupsScreenState extends State<EventGroupsScreen> {
         child: Padding(
             padding: const EdgeInsets.all(20.0),
             child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
-              const Text('Interests', style: textStyleCardTitle),
+              Text('Interests', style: textStyleCardTitle(_themeStyle)),
               Flexible(
                   child: Container(
                 height: 50.0,
@@ -121,7 +122,7 @@ class _EventGroupsScreenState extends State<EventGroupsScreen> {
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        const Text('Members', style: textStyleCardTitle),
+                        Text('Members', style: textStyleCardTitle(_themeStyle)),
                         for (final User member in members)
                           if (member != null)
                             Row(children: <Widget>[
@@ -166,6 +167,7 @@ class _EventGroupsScreenState extends State<EventGroupsScreen> {
         Widget child) {
       final Event event = state.eventsState.event;
       final List<EventGroup> groups = state.eventsState.groups;
+      _themeStyle = state.theme;
 
       return View(
           child: Padding(
