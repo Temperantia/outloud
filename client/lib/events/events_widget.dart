@@ -30,7 +30,8 @@ class _EventsWidgetState extends State<EventsWidget>
   final Map<String, Marker> _markers = <String, Marker>{};
   final ScrollController _scrollController = ScrollController();
   double _googleMapSize = 100.0;
-  CameraPosition _intialMapLocation = const CameraPosition(target: LatLng(48.85902056, 2.34637398), zoom: 14);
+  CameraPosition _intialMapLocation =
+      const CameraPosition(target: LatLng(48.85902056, 2.34637398), zoom: 14);
 
   @override
   void initState() {
@@ -44,16 +45,52 @@ class _EventsWidgetState extends State<EventsWidget>
   }
 
   Future<int> getPosition() async {
-    final Position position = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.best);
+    final Position position = await Geolocator()
+        .getCurrentPosition(desiredAccuracy: LocationAccuracy.best);
     if (position != null) {
-      _intialMapLocation = CameraPosition(target: LatLng(position.latitude, position.longitude), zoom: 14);
+      _intialMapLocation = CameraPosition(
+          target: LatLng(position.latitude, position.longitude), zoom: 14);
       return 0;
     }
     return 1;
-  } 
+  }
 
   @override
   bool get wantKeepAlive => true;
+
+  Widget _buildMap() {
+    return Container(
+        constraints: BoxConstraints.expand(
+          height: Theme.of(context).textTheme.display1.fontSize * 1.1 +
+              _googleMapSize,
+        ),
+        decoration: const BoxDecoration(color: white),
+        child: GoogleMap(
+            onTap: (LatLng latlang) {
+              setState(() {
+                _googleMapSize = 400.0;
+              });
+            },
+            onCameraMoveStarted: () {
+              setState(() {
+                _googleMapSize = 400.0;
+              });
+            },
+            mapType: MapType.normal,
+            zoomGesturesEnabled: true,
+            myLocationButtonEnabled: true,
+            myLocationEnabled: true,
+            gestureRecognizers: <Factory<OneSequenceGestureRecognizer>>{
+              Factory<OneSequenceGestureRecognizer>(
+                () => EagerGestureRecognizer(),
+              )
+            },
+            initialCameraPosition: _intialMapLocation,
+            markers: _markers.values.toSet(),
+            onMapCreated: (GoogleMapController controller) {
+              _controller.complete(controller);
+            }));
+  }
 
   Widget _buildEvent(
       Event event,
@@ -146,39 +183,7 @@ class _EventsWidgetState extends State<EventsWidget>
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              Container(
-                  constraints: BoxConstraints.expand(
-                    height:
-                        Theme.of(context).textTheme.display1.fontSize * 1.1 +
-                            _googleMapSize,
-                  ),
-                  decoration: const BoxDecoration(color: white),
-                  child: GoogleMap(
-                      onTap: (LatLng latlang) {
-                        setState(() {
-                          _googleMapSize = 400.0;
-                        });
-                      },
-                      onCameraMoveStarted: () {
-                        setState(() {
-                          _googleMapSize = 400.0;
-                        });
-                      },
-                      mapType: MapType.normal,
-                      zoomGesturesEnabled: true,
-                      myLocationButtonEnabled: true,
-                      myLocationEnabled: true,
-                      gestureRecognizers:
-                          <Factory<OneSequenceGestureRecognizer>>[
-                        Factory<OneSequenceGestureRecognizer>(
-                          () => EagerGestureRecognizer(),
-                        )
-                      ].toSet(),
-                      initialCameraPosition: _intialMapLocation,
-                      markers: _markers.values.toSet(),
-                      onMapCreated: (GoogleMapController controller) {
-                        _controller.complete(controller);
-                      })),
+              //_buildMap(),
               Container(
                   constraints: BoxConstraints.expand(
                     height:
@@ -194,6 +199,7 @@ class _EventsWidgetState extends State<EventsWidget>
                     Spacer(),
                     Flexible(flex: 6, child: Button(text: 'Discover')),
                   ])),
+
               Expanded(
                   child: ListView(
                 children: <Widget>[

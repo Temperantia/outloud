@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:inclusive/theme.dart';
 
 final Widget Function(String) _buildIcon = (String image) => Container(
-      width: 40.0,
-      height: 40.0,
+      width: 30.0,
+      height: 30.0,
       child: Image.asset(image),
     );
 

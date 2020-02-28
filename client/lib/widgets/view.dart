@@ -4,7 +4,6 @@ import 'package:business/actions/app_navigate_action.dart';
 import 'package:business/events/actions/events_get_action.dart';
 import 'package:business/people/actions/people_get_action.dart';
 import 'package:flutter/material.dart';
-import 'package:inclusive/home_screen.dart';
 
 import 'package:inclusive/theme.dart';
 import 'package:inclusive/widgets/bubble_bar.dart';
@@ -16,7 +15,9 @@ class View extends StatelessWidget {
       this.showAppBar = true,
       this.showNavBar = true,
       this.title = '',
-      this.actions = const <Widget>[]});
+      this.actions = const <Widget>[
+        Icon(Icons.menu),
+      ]});
   final Widget child;
   final bool showAppBar;
   final bool showNavBar;
@@ -24,9 +25,14 @@ class View extends StatelessWidget {
   final List<Widget> actions;
   @override
   Widget build(BuildContext context) {
-    return ReduxConsumer<AppState>(
-        builder: (BuildContext context, Store<AppState> store, AppState state,
-                void Function(ReduxAction<dynamic>) dispatch, Widget w) =>
+    return ReduxSelector<AppState, int>(
+        selector: (BuildContext context, AppState state) => state.homePageIndex,
+        builder: (BuildContext context,
+                Store<AppState> store,
+                AppState state,
+                void Function(ReduxAction<dynamic>) dispatch,
+                int homePageIndex,
+                Widget w) =>
             Scaffold(
                 resizeToAvoidBottomInset: false,
                 appBar: showAppBar
@@ -34,10 +40,12 @@ class View extends StatelessWidget {
                         centerTitle: true,
                         title: Text(title,
                             style: Theme.of(context).textTheme.caption),
-                        leading: GestureDetector(
-                            onTap: () => Navigator.pop(context),
-                            child:
-                                Icon(Icons.keyboard_arrow_left, color: white)),
+                        leading: Navigator.canPop(context)
+                            ? GestureDetector(
+                                onTap: () => Navigator.pop(context),
+                                child: Icon(Icons.keyboard_arrow_left,
+                                    color: white))
+                            : null,
                         actions: actions)
                     : null,
                 bottomNavigationBar: showNavBar
@@ -45,10 +53,10 @@ class View extends StatelessWidget {
                         type: BottomNavigationBarType.fixed,
                         showSelectedLabels: false,
                         showUnselectedLabels: false,
-                        currentIndex: state.homePageIndex,
+                        currentIndex: homePageIndex,
                         items: bubbleBar(context, 0),
                         onTap: (int index) async {
-                          if (index == state.homePageIndex) {
+                          if (index == homePageIndex) {
                             return;
                           }
                           dispatch(AppNavigateAction(index));
@@ -56,17 +64,6 @@ class View extends StatelessWidget {
                             dispatch(EventsGetAction());
                           } else if (index == 2) {
                             dispatch(PeopleGetAction());
-                          }
-                          if (showAppBar) {
-                            Navigator.of(context).pushNamedAndRemoveUntil(
-                                HomeScreen.id, (Route<dynamic> route) {
-                              if (route.isCurrent &&
-                                  route.settings.name == HomeScreen.id) {
-                                return false;
-                              } else {
-                                return true;
-                              }
-                            });
                           }
                         },
                       )

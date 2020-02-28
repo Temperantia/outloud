@@ -8,8 +8,7 @@
       "name": "Flutter",
       "program": "client/lib/main.dart",
       "request": "launch",
-      "type": "dart",
-      "args": ["enable-software-rendering"]
+      "type": "dart"
     }
   ]
 }
