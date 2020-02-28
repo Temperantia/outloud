@@ -65,7 +65,7 @@ class _PeopleWidgetState extends State<PeopleWidget>
                   child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        const Text('People', style: textStyleTitle),
+                        Text('People', style: textStyleTitle(state.theme)),
                         Expanded(
                             child: ListView.builder(
                                 itemCount: people.length,

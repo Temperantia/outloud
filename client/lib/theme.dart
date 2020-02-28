@@ -36,8 +36,8 @@ const LinearGradient gradientTopDown = LinearGradient(
 Color primary(ThemeStyle themeStyle) =>
     themeStyle == ThemeStyle.Orange ? orange : purple;
 
-const TextStyle textStyleTitle =
-    TextStyle(color: white, fontSize: 24.0, fontWeight: FontWeight.bold);
+TextStyle textStyleTitle(ThemeStyle themeStyle) => TextStyle(
+    color: primary(themeStyle), fontSize: 24.0, fontWeight: FontWeight.bold);
 const TextStyle textStyleTitleAlt =
     TextStyle(color: white, fontSize: 24.0, fontWeight: FontWeight.bold);
 

@@ -78,7 +78,7 @@ class _ChatsWidgetState extends State<ChatsWidget>
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    const Text('Chats', style: textStyleTitle),
+                    Text('Chats', style: textStyleTitle(state.theme)),
                     Expanded(
                         child: ListView.builder(
                             itemCount: chats.length,

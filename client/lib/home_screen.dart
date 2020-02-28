@@ -3,10 +3,10 @@ import 'package:business/actions/app_navigate_action.dart';
 import 'package:business/app_state.dart';
 import 'package:business/permissions/location_permission.dart';
 import 'package:flutter/material.dart';
-import 'package:inclusive/chats/chats_widget.dart';
 import 'package:inclusive/events/events_widget.dart';
+import 'package:inclusive/home_widget.dart';
+import 'package:inclusive/lounges/lounges_widget.dart';
 import 'package:inclusive/people/people_widget.dart';
-import 'package:inclusive/profile/profile_widget.dart';
 import 'package:inclusive/widgets/view.dart';
 import 'package:provider_for_redux/provider_for_redux.dart';
 
@@ -92,12 +92,14 @@ class _HomeScreenState extends State<HomeScreen>
                     ? 'images/screenPattern.png'
                     : 'images/screenPatternPurple.png'),
                 fit: BoxFit.cover)),
-        child: TabBarView(controller: _tabController, children: <Widget>[
-          ProfileWidget(),
-          EventsWidget(),
-          PeopleWidget(),
-          ChatsWidget(),
-        ]));
+        child: Padding(
+            padding: const EdgeInsets.only(bottom: 50.0),
+            child: TabBarView(controller: _tabController, children: <Widget>[
+              HomeWidget(),
+              EventsWidget(),
+              LoungesWidget(),
+              PeopleWidget(),
+            ])));
   }
 
   @override
@@ -120,7 +122,6 @@ class _HomeScreenState extends State<HomeScreen>
             });
           }
           _tabController.animateTo(homePageIndex);
-          _tabController.animateTo(state.homePageIndex);
           _themeStyle = state.theme;
 
           return View(child: _buildBody());

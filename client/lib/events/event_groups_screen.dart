@@ -175,7 +175,8 @@ class _EventGroupsScreenState extends State<EventGroupsScreen> {
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Text('${event.name} Groups', style: textStyleTitle),
+                    Text('${event.name} Groups',
+                        style: textStyleTitle(state.theme)),
                     if (groups == null)
                       const CircularProgressIndicator(backgroundColor: pink)
                     else
