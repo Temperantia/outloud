@@ -25,7 +25,7 @@ class CustomImageCache extends WidgetsFlutterBinding {
 }
 
 Future<void> main() async {
-  CustomImageCache();
+  //CustomImageCache();
 
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -58,16 +58,17 @@ class App extends StatelessWidget {
         value: store,
         child: ReduxSelector<AppState, dynamic>(
             selector: (BuildContext context, AppState state) =>
-                <dynamic>[state.loading, state.loginState.id],
+                <dynamic>[state.loading, state.loginState.id, state.theme],
             builder: (BuildContext context,
                 Store<AppState> store,
                 AppState state,
                 void Function(ReduxAction<dynamic>) dispatch,
                 dynamic model,
                 Widget child) {
+              print('update');
               return MaterialApp(
                   debugShowCheckedModeBanner: false,
-                  theme: theme,
+                  theme: theme(state.theme),
                   title: 'Inc•lusive',
                   home: Builder(builder: (BuildContext context) {
                     if (state.loading) {

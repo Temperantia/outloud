@@ -4,6 +4,11 @@ import 'package:business/login/models/login_state.dart';
 import 'package:business/people/models/people_state.dart';
 import 'package:business/user/models/user_state.dart';
 
+enum ThemeStyle {
+  Orange,
+  Purple,
+}
+
 class AppState {
   AppState({
     this.loginState,
@@ -13,6 +18,7 @@ class AppState {
     this.chatsState,
     this.loading,
     this.homePageIndex,
+    this.theme,
   });
 
   AppState copy({
@@ -23,6 +29,7 @@ class AppState {
     ChatsState chatsState,
     bool loading,
     int homePageIndex,
+    ThemeStyle theme,
   }) =>
       AppState(
         loginState: loginState ?? this.loginState,
@@ -32,6 +39,7 @@ class AppState {
         chatsState: chatsState ?? this.chatsState,
         loading: loading ?? this.loading,
         homePageIndex: homePageIndex ?? this.homePageIndex,
+        theme: theme ?? this.theme,
       );
 
   final LoginState loginState;
@@ -41,6 +49,7 @@ class AppState {
   final ChatsState chatsState;
   final bool loading;
   final int homePageIndex;
+  final ThemeStyle theme;
 
   static AppState initialState({ChatsState chatsState}) => AppState(
         loginState: LoginState.initialState(),
@@ -50,5 +59,6 @@ class AppState {
         chatsState: chatsState ?? ChatsState.initialState(),
         loading: true,
         homePageIndex: 0,
+        theme: ThemeStyle.Orange,
       );
 }
