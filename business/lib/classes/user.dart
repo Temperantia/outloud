@@ -15,6 +15,9 @@ class User extends Entity {
     List<Interest> interests = const <Interest>[],
     this.pics = const <String>[],
     this.facts = const <String>[],
+    this.gender = '',
+    this.pronoun = '',
+    this.orientation = '',
     this.education = '',
     this.profession = '',
   }) : super(
@@ -36,6 +39,9 @@ class User extends Entity {
         facts = snapshot['facts'] == null
             ? <String>[]
             : snapshot['facts'].cast<String>() as List<String>,
+        gender = snapshot['gender'] as String ?? '',
+        pronoun = snapshot['pronoun'] as String ?? '',
+        orientation = snapshot['orientation'] as String ?? '',
         education = snapshot['education'] as String ?? '',
         profession = snapshot['profession'] as String ?? '',
         super(
@@ -57,6 +63,9 @@ class User extends Entity {
   DateTime birthDate;
   List<String> pics;
   List<String> facts;
+  String gender;
+  String pronoun;
+  String orientation;
   String education;
   String profession;
 
@@ -73,6 +82,9 @@ class User extends Entity {
           .toList(),
       'pics': pics,
       'facts': facts,
+      'gender': gender,
+      'pronoun': pronoun,
+      'orientation': orientation,
       'education': education,
       'profession': profession,
     };

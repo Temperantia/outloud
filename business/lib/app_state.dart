@@ -51,7 +51,8 @@ class AppState {
   final int homePageIndex;
   final ThemeStyle theme;
 
-  static AppState initialState({ChatsState chatsState}) => AppState(
+  static AppState initialState({ChatsState chatsState, ThemeStyle theme}) =>
+      AppState(
         loginState: LoginState.initialState(),
         userState: UserState.initialState(),
         eventsState: EventsState.initialState(),
@@ -59,6 +60,6 @@ class AppState {
         chatsState: chatsState ?? ChatsState.initialState(),
         loading: true,
         homePageIndex: 0,
-        theme: ThemeStyle.Orange,
+        theme: theme ?? ThemeStyle.Orange,
       );
 }

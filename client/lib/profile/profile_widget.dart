@@ -20,17 +20,18 @@ class _ProfileWidgetState extends State<ProfileWidget>
   bool get wantKeepAlive => true;
 
   Widget _buildAboutBloc(String title, String content) {
-    return Padding(
-        padding: const EdgeInsets.symmetric(vertical: 10.0),
-        child: Row(children: <Widget>[
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Text(title.toUpperCase(), style: textStyleCardItemTitle),
-              Text(content, style: textStyleCardItemContent(_themeStyle)),
-            ],
-          ),
-        ]));
+    return content == null || content.isEmpty
+        ? Container()
+        : Padding(
+            padding: const EdgeInsets.symmetric(vertical: 10.0),
+            child: Row(children: <Widget>[
+              Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(title, style: textStyleCardItemTitle),
+                    Text(content, style: textStyleCardItemContent(_themeStyle)),
+                  ]),
+            ]));
   }
 
   @override
@@ -71,7 +72,7 @@ class _ProfileWidgetState extends State<ProfileWidget>
                           errorWidget: (BuildContext context, String url,
                                   Object error) =>
                               Icon(Icons.error)))),
-          Text(user.name, style: textStyleTitle),
+          Text('${user.name} • ${user.getAge()}', style: textStyleTitle),
           Container(
               child: const TabBar(
             indicator: BoxDecoration(),
@@ -136,8 +137,13 @@ class _ProfileWidgetState extends State<ProfileWidget>
                     child: Padding(
                         padding: const EdgeInsets.all(20.0),
                         child: Column(children: <Widget>[
-                          _buildAboutBloc('Education', user.education),
-                          _buildAboutBloc('Profession', user.profession),
+                          _buildAboutBloc('LOCATION', user.home),
+                          _buildAboutBloc('GENDER', user.gender),
+                          _buildAboutBloc('PRONOUN', user.pronoun),
+                          _buildAboutBloc(
+                              'SEXUAL ORIENTATION', user.orientation),
+                          _buildAboutBloc('EDUCATION', user.education),
+                          _buildAboutBloc('OCCUPATION', user.profession),
                         ])))),
           ])),
         ]),
