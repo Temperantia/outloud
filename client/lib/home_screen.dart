@@ -1,3 +1,5 @@
+import 'package:async_redux/async_redux.dart';
+import 'package:business/actions/app_navigate_action.dart';
 import 'package:business/app_state.dart';
 import 'package:business/permissions/location_permission.dart';
 import 'package:flutter/material.dart';
@@ -7,7 +9,7 @@ import 'package:inclusive/people/people_widget.dart';
 import 'package:inclusive/profile/profile_widget.dart';
 import 'package:inclusive/theme.dart';
 import 'package:inclusive/widgets/view.dart';
-import 'package:provider/provider.dart';
+import 'package:provider_for_redux/provider_for_redux.dart';
 
 class HomeScreen extends StatefulWidget {
   static const String id = 'Home';
@@ -33,14 +35,12 @@ class _HomeScreenState extends State<HomeScreen>
                     ? 'images/screenPattern.png'
                     : 'images/screenPatternPurple.png'),
                 fit: BoxFit.cover)),
-        child: TabBarView(
-            controller: _tabController,
-            children: <Widget>[
-              ProfileWidget(),
-              EventsWidget(),
-              PeopleWidget(),
-              ChatsWidget(),
-            ]));
+        child: TabBarView(controller: _tabController, children: <Widget>[
+          ProfileWidget(),
+          EventsWidget(),
+          PeopleWidget(),
+          ChatsWidget(),
+        ]));
   }
 
   Future<bool> requestLocationPermission() async {
@@ -105,9 +105,22 @@ class _HomeScreenState extends State<HomeScreen>
   @override
   Widget build(BuildContext context) {
     //_authService.refreshLocation();
-    return Selector<AppState, int>(
+    return ReduxSelector<AppState, int>(
         selector: (BuildContext context, AppState state) => state.homePageIndex,
-        builder: (BuildContext context, int homePageIndex, Widget child) {
+        builder: (BuildContext context,
+            Store<AppState> store,
+            AppState state,
+            void Function(ReduxAction<dynamic>) dispatch,
+            int homePageIndex,
+            Widget child) {
+          if (!_tabController.hasListeners) {
+            _tabController.addListener(() {
+              if (!_tabController.indexIsChanging &&
+                  _tabController.previousIndex != _tabController.index) {
+                dispatch(AppNavigateAction(_tabController.index));
+              }
+            });
+          }
           _tabController.animateTo(homePageIndex);
 
           return View(
