@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 const Color yellow = Color(0xFFFFEF00);
 //Color orange = const Color(0xFFFF8C00);
-const Color orangeLight = Color(0x66FF8C00);
+const Color orangeLight = Color(0xFFFFD3B1);
 const Color blue = Color(0xFF185782);
 const Color blueLight = Color(0xFFBCE0FD);
 const Color blueAlt = Color(0xFF28D6C0);
@@ -35,6 +35,9 @@ const LinearGradient gradientTopDown = LinearGradient(
 
 Color primary(ThemeStyle themeStyle) =>
     themeStyle == ThemeStyle.Orange ? orange : purple;
+
+Color secondary(ThemeStyle themeStyle) =>
+    themeStyle == ThemeStyle.Orange ? orangeLight : blueLight;
 
 TextStyle textStyleTitle(ThemeStyle themeStyle) => TextStyle(
     color: primary(themeStyle), fontSize: 24.0, fontWeight: FontWeight.bold);

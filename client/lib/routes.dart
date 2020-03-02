@@ -7,6 +7,7 @@ import 'package:inclusive/register/login.dart';
 import 'package:inclusive/home_screen.dart';
 
 final Map<String, Widget> routes = <String, Widget>{
+  '/': HomeScreen(),
   LoginScreen.id: LoginScreen(),
   HomeScreen.id: HomeScreen(),
   EventScreen.id: EventScreen(),

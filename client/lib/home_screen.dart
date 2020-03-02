@@ -17,7 +17,10 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen>
-    with SingleTickerProviderStateMixin, WidgetsBindingObserver {
+    with
+        SingleTickerProviderStateMixin,
+        WidgetsBindingObserver,
+        ChangeNotifier {
   TabController _tabController;
   ThemeStyle _themeStyle;
 
@@ -43,23 +46,20 @@ class _HomeScreenState extends State<HomeScreen>
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: const Text('PERMISSION WARNING'),
-            content: const Text('YOU SHOULD ALLOW LOCATION PERMISSION !'),
-            actions: <Widget>[
-              FlatButton(
-                child: const Text('NO, THANKS'),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              ),
-              FlatButton(
-                child: const Text('GO to settings'),
-                onPressed: () {
-                  LocationPermissionService().openAppSettings();
-                },
-              )
-            ],
-          );
+              title: const Text('PERMISSION WARNING'),
+              content: const Text('YOU SHOULD ALLOW LOCATION PERMISSION !'),
+              actions: <Widget>[
+                FlatButton(
+                    child: const Text('NO, THANKS'),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    }),
+                FlatButton(
+                    child: const Text('GO to settings'),
+                    onPressed: () {
+                      LocationPermissionService().openAppSettings();
+                    }),
+              ]);
         });
   }
 
@@ -97,7 +97,8 @@ class _HomeScreenState extends State<HomeScreen>
             child: TabBarView(controller: _tabController, children: <Widget>[
               HomeWidget(),
               EventsWidget(),
-              LoungesWidget(),
+              Container(),
+              //LoungesWidget(),
               PeopleWidget(),
             ])));
   }
@@ -124,7 +125,7 @@ class _HomeScreenState extends State<HomeScreen>
           _tabController.animateTo(homePageIndex);
           _themeStyle = state.theme;
 
-          return View(child: _buildBody());
+          return _buildBody();
         });
   }
 }

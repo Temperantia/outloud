@@ -16,7 +16,7 @@ class AppPersistor extends Persistor<AppState> {
 
     return AppState.initialState(
       chatsState: ChatsState.initialState(chatIds: chatIds.cast<String>()),
-      theme: theme == null
+      theme: theme == null || theme.isEmpty
           ? null
           : EnumToString.fromString(ThemeStyle.values, theme[0].toString()),
     );

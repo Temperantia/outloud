@@ -10,6 +10,7 @@ class LoginAction extends ReduxAction<AppState> {
   @override
   Future<AppState> reduce() async {
     final String id = await autoLogin();
+
     if (id != null) {
       store.dispatch(UserListenStreamAction(id));
       store.dispatch(ChatsListenAction(id));

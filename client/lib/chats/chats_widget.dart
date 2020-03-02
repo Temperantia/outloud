@@ -60,31 +60,36 @@ class _ChatsWidgetState extends State<ChatsWidget>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return ReduxConsumer<AppState>(builder: (BuildContext context,
-        redux.Store<AppState> store,
-        AppState state,
-        void Function(redux.ReduxAction<AppState>) dispatch,
-        Widget child) {
-      final List<Chat> chats = state.chatsState.chats;
-      if (chats == null) {
-        return Loading();
-      }
+    return ReduxSelector<AppState, dynamic>(
+        selector: (BuildContext context, AppState state) =>
+            <dynamic>[state.chatsState.chats, state.theme],
+        builder: (BuildContext context,
+            redux.Store<AppState> store,
+            AppState state,
+            void Function(redux.ReduxAction<AppState>) dispatch,
+            dynamic model,
+            Widget child) {
+          final List<Chat> chats = state.chatsState.chats;
+          if (chats == null) {
+            return Loading();
+          }
 
-      return RefreshIndicator(
-          onRefresh: () => store.dispatchFuture(PeopleGetAction()),
-          child: Container(
-              decoration: const BoxDecoration(color: white),
-              padding: const EdgeInsets.all(10.0),
-              child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text('Chats', style: textStyleTitle(state.theme)),
-                    Expanded(
-                        child: ListView.builder(
-                            itemCount: chats.length,
-                            itemBuilder: (BuildContext context, int index) =>
-                                _buildChat(chats[index]))),
-                  ])));
-    });
+          return RefreshIndicator(
+              onRefresh: () => store.dispatchFuture(PeopleGetAction()),
+              child: Container(
+                  decoration: const BoxDecoration(color: white),
+                  padding: const EdgeInsets.all(10.0),
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text('Chats', style: textStyleTitle(state.theme)),
+                        Expanded(
+                            child: ListView.builder(
+                                itemCount: chats.length,
+                                itemBuilder:
+                                    (BuildContext context, int index) =>
+                                        _buildChat(chats[index]))),
+                      ])));
+        });
   }
 }

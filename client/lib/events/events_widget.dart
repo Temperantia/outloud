@@ -58,7 +58,8 @@ class _EventsWidgetState extends State<EventsWidget>
   @override
   bool get wantKeepAlive => true;
 
-  Widget _buildMap() {
+  // tmp disable
+  Widget buildMap() {
     return Container(
         constraints: BoxConstraints.expand(
           height: Theme.of(context).textTheme.display1.fontSize * 1.1 +
@@ -98,6 +99,7 @@ class _EventsWidgetState extends State<EventsWidget>
       Future<void> Function(redux.ReduxAction<AppState>) dispatchFuture) {
     final String date = DateFormat('dd.MM').format(event.date);
     final String time = DateFormat('Hm').format(event.date);
+    print('hel');
     return Column(children: <Widget>[
       const Divider(
         thickness: 3.0,
@@ -114,6 +116,8 @@ class _EventsWidgetState extends State<EventsWidget>
                 if (event.pic.isNotEmpty)
                   Flexible(
                       child: CachedNetworkImage(
+                    width: 200,
+                    height: 200,
                     imageUrl: event.pic,
                     placeholder: (BuildContext context, String url) =>
                         const CircularProgressIndicator(),

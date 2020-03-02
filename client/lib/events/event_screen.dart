@@ -23,8 +23,7 @@ class EventScreen extends StatelessWidget {
       final Event event = state.eventsState.event;
       final String date = DateFormat('ddMMM').format(event.date);
       final String time = DateFormat('Hm').format(event.date);
-      return View(
-          child: ListView(children: <Widget>[
+      return ListView(children: <Widget>[
         Row(children: <Widget>[
           if (event.pic.isNotEmpty)
             Expanded(
@@ -91,7 +90,7 @@ class EventScreen extends StatelessWidget {
                         EventGroupsScreen.id));
                   }),
             ])),
-      ]));
+      ]);
     });
   }
 }
