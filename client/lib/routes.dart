@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:inclusive/events/event_create.dart';
 import 'package:inclusive/events/event_groups_screen.dart';
 import 'package:inclusive/events/event_screen.dart';
 import 'package:inclusive/register/login.dart';
@@ -10,4 +11,5 @@ final Map<String, Widget> routes = <String, Widget>{
   HomeScreen.id: HomeScreen(),
   EventScreen.id: EventScreen(),
   EventGroupsScreen.id: EventGroupsScreen(),
+  EventCreateScreen.id: EventCreateScreen(),
 };

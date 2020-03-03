@@ -24,7 +24,9 @@ class Event extends Entity {
         );
 
   Event.fromMap(Map<String, dynamic> snapshot, String id)
-      : date = (snapshot['date'] as Timestamp).toDate(),
+      : date = snapshot['date'] == null
+            ? null
+            : (snapshot['date'] as Timestamp).toDate(),
         adminIds = snapshot['adminIds'] == null
             ? <String>[]
             : snapshot['adminIds'].cast<String>() as List<String>,
@@ -60,7 +62,7 @@ class Event extends Entity {
       'interests': interests
           .map<Map<String, String>>((Interest interest) => interest.toJson())
           .toList(),
-      'date': Timestamp.fromDate(date),
+      'date': date == null ? null : Timestamp.fromDate(date),
       'owner': owner,
       'adminIds': adminIds,
       'memberIds': memberIds,
