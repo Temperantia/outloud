@@ -21,8 +21,12 @@ Future<List<Event>> getEvents() async {
       .toList();
 }
 
-Future<void> createEvent(Event data) async {
-  return _api.createDocument(data.toJson(), data.id);
+Future<Event> createEvent() async {
+  return Event(id: (await _api.addDocument({})).documentID);
+}
+
+Future<void> updateEvent(Event event) async {
+  return _api.updateDocument(event.toJson(), event.id);
 }
 
 Future<List<EventGroup>> getEventGroups(String eventId) async {
