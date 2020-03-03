@@ -63,6 +63,19 @@ Future<List<User>> getUsers(String userId,
       .toList();
 }
 
+Future<List<User>> getFriends(String id) async {
+  final User user = await getUser(id);
+  if (user.friends.isEmpty) {
+    return <User>[];
+  }
+  Query query = _api.queryCollection();
+  query = query.where(FieldPath.documentId, whereIn: user.friends);
+
+  return (await query.getDocuments()).documents.map((DocumentSnapshot doc) {
+    return User.fromMap(doc.data, doc.documentID);
+  }).toList();
+}
+
 Future<void> removeUser(String id) async {
   return _api.removeDocument(id);
 }

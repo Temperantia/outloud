@@ -23,7 +23,8 @@ class EventScreen extends StatelessWidget {
       final Event event = state.eventsState.event;
       final String date = DateFormat('ddMMM').format(event.date);
       final String time = DateFormat('Hm').format(event.date);
-      return ListView(children: <Widget>[
+      return View(
+          child: ListView(children: <Widget>[
         Row(children: <Widget>[
           if (event.pic.isNotEmpty)
             Expanded(
@@ -38,7 +39,7 @@ class EventScreen extends StatelessWidget {
         ]),
         Container(
             padding: const EdgeInsets.all(20.0),
-            decoration: const BoxDecoration(gradient: gradientTopDown),
+            decoration: BoxDecoration(color: primary(state.theme)),
             child: Column(children: <Widget>[
               Padding(
                   padding: const EdgeInsets.only(bottom: 10.0),
@@ -90,7 +91,7 @@ class EventScreen extends StatelessWidget {
                         EventGroupsScreen.id));
                   }),
             ])),
-      ]);
+      ]));
     });
   }
 }

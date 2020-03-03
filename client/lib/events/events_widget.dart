@@ -10,7 +10,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:inclusive/events/event_create.dart';
+import 'package:inclusive/events/event_create_screen.dart';
 import 'package:inclusive/events/event_screen.dart';
 import 'package:inclusive/theme.dart';
 import 'package:inclusive/widgets/button.dart';
@@ -59,8 +59,7 @@ class _EventsWidgetState extends State<EventsWidget>
   @override
   bool get wantKeepAlive => true;
 
-  // tmp disable
-  Widget buildMap() {
+  Widget _buildMap() {
     return Container(
         constraints: BoxConstraints.expand(
           height: Theme.of(context).textTheme.display1.fontSize * 1.1 +
@@ -97,7 +96,8 @@ class _EventsWidgetState extends State<EventsWidget>
   Widget _buildEvent(
       Event event,
       void Function(redux.ReduxAction<AppState>) dispatch,
-      Future<void> Function(redux.ReduxAction<AppState>) dispatchFuture) {
+      Future<void> Function(redux.ReduxAction<AppState>) dispatchFuture,
+      ThemeStyle theme) {
     final String date =
         event.date == null ? null : DateFormat('dd.MM').format(event.date);
     final String time =
@@ -124,7 +124,8 @@ class _EventsWidgetState extends State<EventsWidget>
                         child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
-                              Text(event.name, style: textStyleListItemTitle),
+                              Text(event.name,
+                                  style: textStyleCardTitle(theme)),
                               Text(event.description,
                                   maxLines: 3, overflow: TextOverflow.ellipsis),
                             ]))),
@@ -180,7 +181,7 @@ class _EventsWidgetState extends State<EventsWidget>
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              //_buildMap(),
+              _buildMap(),
               Container(
                   constraints: BoxConstraints.expand(
                     height:
@@ -211,7 +212,8 @@ class _EventsWidgetState extends State<EventsWidget>
                         children: <Widget>[
                           Column(children: <Widget>[
                             for (final Event event in events)
-                              _buildEvent(event, dispatch, store.dispatchFuture)
+                              _buildEvent(event, dispatch, store.dispatchFuture,
+                                  state.theme)
                           ]),
                         ]),
                   ),

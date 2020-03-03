@@ -1,7 +1,9 @@
 import 'dart:convert';
 import 'package:async_redux/async_redux.dart';
 import 'package:business/app_state.dart';
+import 'package:business/chats/actions/chats_listen_action.dart';
 import 'package:business/login/auth.dart';
+import 'package:business/user/actions/user_get_friends_action.dart';
 import 'package:business/user/actions/user_listen_stream_action.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
@@ -26,9 +28,10 @@ class LoginFacebookAction extends ReduxAction<AppState> {
         final DateTime birthdate =
             DateFormat.yMd('en_US').parse(data['birthday'] as String);
 
-        final String id =
-            await register(AuthMode.Facebook, credentials, birthdate);
-        dispatch(UserListenStreamAction(state.loginState.id));
+        final String id = await register(credentials, birthdate);
+        store.dispatch(UserListenStreamAction(id));
+        store.dispatch(ChatsListenAction(id));
+        store.dispatch(UserGetFriendsAction(id));
 
         return state.copy(loginState: state.loginState.copy(id: id));
       case FacebookLoginStatus.cancelledByUser:

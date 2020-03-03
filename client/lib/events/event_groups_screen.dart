@@ -169,25 +169,23 @@ class _EventGroupsScreenState extends State<EventGroupsScreen> {
       final List<EventGroup> groups = state.eventsState.groups;
       _themeStyle = state.theme;
 
-      return Padding(
-          padding: const EdgeInsets.all(10.0),
+      return View(
           child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Text('${event.name} Groups',
-                    style: textStyleTitle(state.theme)),
-                if (groups == null)
-                  const CircularProgressIndicator(backgroundColor: pink)
-                else
-                  Container(
-                      height: MediaQuery.of(context).size.height * 0.3,
-                      child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: groups.length,
-                          itemBuilder: (BuildContext context, int index) =>
-                              _buildGroup(groups[index], context, dispatch))),
-                if (groups.isNotEmpty) _buildSelectedGroup(group ?? groups[0]),
-              ]));
+            Text('${event.name} Groups', style: textStyleTitle(state.theme)),
+            if (groups == null)
+              const CircularProgressIndicator(backgroundColor: pink)
+            else
+              Container(
+                  height: MediaQuery.of(context).size.height * 0.3,
+                  child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: groups.length,
+                      itemBuilder: (BuildContext context, int index) =>
+                          _buildGroup(groups[index], context, dispatch))),
+            if (groups.isNotEmpty) _buildSelectedGroup(group ?? groups[0]),
+          ]));
     });
   }
 }

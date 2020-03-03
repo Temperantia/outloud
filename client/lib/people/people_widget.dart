@@ -1,12 +1,16 @@
-import 'package:async_redux/async_redux.dart' as redux;
+import 'package:async_redux/async_redux.dart';
 import 'package:business/app_state.dart';
+import 'package:business/classes/chat.dart';
+import 'package:business/classes/message.dart';
 import 'package:business/classes/user.dart';
-import 'package:business/people/actions/people_get_action.dart';
 import 'package:flutter/material.dart';
+import 'package:inclusive/chats/chat_screen.dart';
+import 'package:inclusive/people/people_search_screen.dart';
+import 'package:inclusive/profile/profile_screen.dart';
+import 'package:inclusive/widgets/button.dart';
 import 'package:inclusive/widgets/circular_image.dart';
 import 'package:inclusive/widgets/loading.dart';
 import 'package:provider_for_redux/provider_for_redux.dart';
-import 'package:business/people/models/people_state.dart';
 
 import '../theme.dart';
 
@@ -20,60 +24,138 @@ class _PeopleWidgetState extends State<PeopleWidget>
   @override
   bool get wantKeepAlive => true;
 
-  Widget _buildPerson(User user, String distance) {
+  Widget _buildPerson(User user, ThemeStyle theme,
+      void Function(ReduxAction<AppState>) dispatch) {
+    return GestureDetector(
+        onTap: () => dispatch(NavigateAction<AppState>.pushNamed(
+            ProfileScreen.id,
+            arguments: user)),
+        child: Container(
+            decoration: BoxDecoration(
+                color: primary(theme),
+                borderRadius: BorderRadius.circular(10.0)),
+            padding: const EdgeInsets.all(10.0),
+            margin: const EdgeInsets.symmetric(vertical: 10.0),
+            child: Row(children: <Widget>[
+              CircularImage(
+                  imageUrl: user.pics.isEmpty ? null : user.pics[0],
+                  imageRadius: 50.0),
+              Expanded(
+                  flex: 3,
+                  child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                      child: Text(user.name))),
+            ])));
+  }
+
+  Widget _buildFriends(List<User> friends, ThemeStyle theme,
+      void Function(ReduxAction<AppState>) dispatch) {
     return Container(
-        decoration: BoxDecoration(
-            gradient: gradient, borderRadius: BorderRadius.circular(10.0)),
+        decoration: const BoxDecoration(color: white),
         padding: const EdgeInsets.all(10.0),
-        margin: const EdgeInsets.symmetric(vertical: 10.0),
-        child: Row(children: <Widget>[
-          CircularImage(
-              imageUrl: user.pics.isEmpty ? null : user.pics[0],
-              imageRadius: 50.0),
+        child: Column(children: [
           Expanded(
-              flex: 3,
-              child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 5.0),
-                  child: Text(user.name))),
-          if (distance != null) Expanded(child: Text(distance)),
-          Icon(Icons.add),
+              flex: 5,
+              child: ListView.builder(
+                  itemCount: friends.length,
+                  itemBuilder: (BuildContext context, int index) =>
+                      _buildPerson(friends[index], theme, dispatch))),
+          Expanded(
+            child: Button(
+              text: 'Find more',
+              onPressed: () => dispatch(
+                  NavigateAction<AppState>.pushNamed(PeopleSearchScreen.id)),
+            ),
+          ),
         ]));
+  }
+
+  Widget _buildChat(Chat chat, ThemeStyle theme,
+      void Function(ReduxAction<AppState>) dispatch) {
+    final Message lastMessage = chat.messages.isEmpty ? null : chat.messages[0];
+    final String pic = (chat.entity as User).pics.isEmpty
+        ? null
+        : (chat.entity as User).pics[0];
+    return GestureDetector(
+        onTap: () => dispatch(
+            NavigateAction<AppState>.pushNamed(ChatScreen.id, arguments: chat)),
+        child: Container(
+            decoration: BoxDecoration(
+                color: primary(theme),
+                borderRadius: BorderRadius.circular(10.0)),
+            padding: const EdgeInsets.all(10.0),
+            margin: const EdgeInsets.symmetric(vertical: 10.0),
+            child: Row(children: <Widget>[
+              CircularImage(imageUrl: pic, imageRadius: 50.0),
+              Expanded(
+                  child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                      child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: <Widget>[
+                                  Text(chat.entity.name,
+                                      style: textStyleListItemTitle),
+                                  if (lastMessage != null)
+                                    Text(lastMessage.getTimeAgo(),
+                                        style: textStyleListItemSubtitle),
+                                ]),
+                            if (lastMessage != null)
+                              Row(children: <Widget>[
+                                Text(lastMessage.content,
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis)
+                              ]),
+                          ]))),
+            ])));
+  }
+
+  Widget _buildChats(List<Chat> chats, ThemeStyle theme,
+      void Function(ReduxAction<AppState>) dispatch) {
+    return ListView.builder(
+        itemCount: chats.length,
+        itemBuilder: (BuildContext context, int index) =>
+            _buildChat(chats[index], theme, dispatch));
   }
 
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return ReduxSelector<AppState, PeopleState>(
-        selector: (BuildContext context, AppState state) => state.peopleState,
-        builder: (BuildContext context,
-            redux.Store<AppState> store,
-            AppState state,
-            void Function(redux.ReduxAction<AppState>) dispatch,
-            PeopleState peopleState,
-            Widget child) {
-          final List<User> people = peopleState.people;
-          final Map<String, String> distances = peopleState.distances;
-          if (people == null || distances == null) {
-            return Loading();
-          }
-
-          return RefreshIndicator(
-              onRefresh: () => store.dispatchFuture(PeopleGetAction()),
-              child: Container(
-                  decoration: const BoxDecoration(color: white),
-                  padding: const EdgeInsets.all(10.0),
-                  child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Text('People', style: textStyleTitle(state.theme)),
-                        Expanded(
-                            child: ListView.builder(
-                                itemCount: people.length,
-                                itemBuilder:
-                                    (BuildContext context, int index) =>
-                                        _buildPerson(people[index],
-                                            distances[people[index].id]))),
-                      ])));
-        });
+    return ReduxConsumer<AppState>(builder: (BuildContext context,
+        Store<AppState> store,
+        AppState state,
+        void Function(ReduxAction<AppState>) dispatch,
+        Widget child) {
+      final User user = state.userState.user;
+      final List<User> friends = state.userState.friends;
+      final List<Chat> chats = state.chatsState.chats;
+      if (user == null || friends == null || chats == null) {
+        return Loading();
+      }
+      return DefaultTabController(
+          length: 2,
+          child: Column(
+            children: <Widget>[
+              Expanded(
+                  child: TabBar(
+                tabs: <Widget>[
+                  Tab(text: 'Friends'),
+                  Tab(text: 'Chats'),
+                ],
+              )),
+              Expanded(
+                  flex: 6,
+                  child: TabBarView(
+                    children: <Widget>[
+                      _buildFriends(friends, state.theme, dispatch),
+                      _buildChats(chats, state.theme, dispatch),
+                    ],
+                  ))
+            ],
+          ));
+    });
   }
 }

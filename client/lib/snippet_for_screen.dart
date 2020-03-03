@@ -1,4 +1,4 @@
-import 'package:async_redux/async_redux.dart' as redux;
+import 'package:async_redux/async_redux.dart';
 import 'package:business/app_state.dart';
 import 'package:flutter/material.dart';
 import 'package:inclusive/widgets/view.dart';
@@ -8,11 +8,14 @@ class SnippetScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ReduxConsumer<AppState>(builder: (BuildContext context,
-        redux.Store<AppState> store,
+        Store<AppState> store,
         AppState state,
-        void Function(redux.ReduxAction<AppState>) dispatch,
+        void Function(ReduxAction<AppState>) dispatch,
         Widget child) {
-      return View(child: Container());
+      return View(
+          child: Padding(
+              padding: const EdgeInsets.only(bottom: 50.0),
+              child: Container()));
     });
   }
 }

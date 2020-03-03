@@ -95,7 +95,7 @@ class _AppState extends State<App> {
                   onGenerateRoute: (RouteSettings settings) =>
                       MaterialPageRoute<dynamic>(
                           builder: (BuildContext context) =>
-                              routes[settings.name]));
+                              routes[settings.name](settings.arguments)));
             }));
   }
 }

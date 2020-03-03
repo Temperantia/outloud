@@ -20,6 +20,7 @@ class User extends Entity {
     this.orientation = '',
     this.education = '',
     this.profession = '',
+    this.friends = const <String>[],
   }) : super(
             id: id,
             name: name,
@@ -44,6 +45,9 @@ class User extends Entity {
         orientation = snapshot['orientation'] as String ?? '',
         education = snapshot['education'] as String ?? '',
         profession = snapshot['profession'] as String ?? '',
+        friends = snapshot['friends'] == null
+            ? <String>[]
+            : snapshot['friends'].cast<String>() as List<String>,
         super(
           id: id ?? '',
           name: snapshot['name'] as String,
@@ -68,6 +72,7 @@ class User extends Entity {
   String orientation;
   String education;
   String profession;
+  List<String> friends;
 
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
@@ -87,6 +92,7 @@ class User extends Entity {
       'orientation': orientation,
       'education': education,
       'profession': profession,
+      'friends': friends,
     };
   }
 

@@ -5,10 +5,10 @@ import 'package:business/app_state.dart';
 import 'package:business/classes/event.dart';
 import 'package:business/events/actions/events_get_action.dart';
 import 'package:business/events/actions/events_select_action.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:inclusive/events/event_screen.dart';
 import 'package:inclusive/theme.dart';
+import 'package:inclusive/widgets/cached_image.dart';
 import 'package:inclusive/widgets/loading.dart';
 import 'package:intl/intl.dart';
 import 'package:provider_for_redux/provider_for_redux.dart';
@@ -28,7 +28,8 @@ class _LoungesWidgetState extends State<LoungesWidget>
   Widget _buildEvent(
       Event event,
       void Function(redux.ReduxAction<AppState>) dispatch,
-      Future<void> Function(redux.ReduxAction<AppState>) dispatchFuture) {
+      Future<void> Function(redux.ReduxAction<AppState>) dispatchFuture,
+      ThemeStyle theme) {
     final String date = DateFormat('dd.MM').format(event.date);
     final String time = DateFormat('Hm').format(event.date);
     return Column(children: <Widget>[
@@ -46,13 +47,8 @@ class _LoungesWidgetState extends State<LoungesWidget>
                   children: <Widget>[
                 if (event.pic.isNotEmpty)
                   Flexible(
-                      child: CachedNetworkImage(
-                    imageUrl: event.pic,
-                    placeholder: (BuildContext context, String url) =>
-                        const CircularProgressIndicator(),
-                    errorWidget:
-                        (BuildContext context, String url, Object error) =>
-                            Icon(Icons.error),
+                      child: CachedImage(
+                    event.pic,
                   )),
                 Flexible(
                     flex: 2,
@@ -127,8 +123,8 @@ class _LoungesWidgetState extends State<LoungesWidget>
                           children: <Widget>[
                             Column(children: <Widget>[
                               for (final Event event in events)
-                                _buildEvent(
-                                    event, dispatch, store.dispatchFuture)
+                                _buildEvent(event, dispatch,
+                                    store.dispatchFuture, state.theme)
                             ]),
                           ])),
                 ],

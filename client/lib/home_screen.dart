@@ -22,7 +22,6 @@ class _HomeScreenState extends State<HomeScreen>
         WidgetsBindingObserver,
         ChangeNotifier {
   TabController _tabController;
-  ThemeStyle _themeStyle;
 
   @override
   void initState() {
@@ -79,27 +78,18 @@ class _HomeScreenState extends State<HomeScreen>
 
   @override
   void dispose() {
+    super.dispose();
     _tabController.dispose();
     WidgetsBinding.instance.removeObserver(this);
-    super.dispose();
   }
 
   Widget _buildBody() {
-    return Container(
-        decoration: BoxDecoration(
-            image: DecorationImage(
-                image: AssetImage(_themeStyle == ThemeStyle.Orange
-                    ? 'images/screenPattern.png'
-                    : 'images/screenPatternPurple.png'),
-                fit: BoxFit.cover)),
-        child: Padding(
-            padding: const EdgeInsets.only(bottom: 50.0),
-            child: TabBarView(controller: _tabController, children: <Widget>[
-              HomeWidget(),
-              EventsWidget(),
-              LoungesWidget(),
-              PeopleWidget(),
-            ])));
+    return TabBarView(controller: _tabController, children: <Widget>[
+      HomeWidget(),
+      EventsWidget(),
+      LoungesWidget(),
+      PeopleWidget(),
+    ]);
   }
 
   @override
@@ -122,7 +112,6 @@ class _HomeScreenState extends State<HomeScreen>
             });
           }
           _tabController.animateTo(homePageIndex);
-          _themeStyle = state.theme;
 
           return View(child: _buildBody());
         });

@@ -19,7 +19,7 @@ class ProfileEditionScreen extends StatelessWidget {
   var orientation = TextEditingController();
   var education = TextEditingController();
   var occupation = TextEditingController();
-  GlobalKey<ProfileInterestsState> key = GlobalKey<ProfileInterestsState>();
+  GlobalKey<ProfileInterestsState> prokey = GlobalKey<ProfileInterestsState>();
 
   Future<void> onSave(User user) async {
     user.name = name.text;
@@ -29,7 +29,7 @@ class ProfileEditionScreen extends StatelessWidget {
     user.orientation = orientation.text;
     user.education = education.text;
     user.profession = occupation.text;
-    user.interests = key.currentState.onSave();
+    user.interests = prokey.currentState.onSave();
     updateUser(user);
   }
 
@@ -73,10 +73,13 @@ class ProfileEditionScreen extends StatelessWidget {
           TextField(
               controller: occupation,
               decoration: InputDecoration(labelText: 'Occupation')),
-          ProfileInterests(user.interests, key: key),
+          ProfileInterests(user.interests, key: prokey),
           Button(
             text: 'Update',
-            onPressed: () => onSave(user),
+            onPressed: () {
+              onSave(user);
+              dispatch(redux.NavigateAction<AppState>.pop());
+            },
           )
         ],
       ));

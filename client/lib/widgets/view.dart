@@ -4,7 +4,9 @@ import 'package:business/actions/app_navigate_action.dart';
 import 'package:business/classes/user.dart';
 import 'package:business/events/actions/events_get_action.dart';
 import 'package:business/actions/app_update_theme_action.dart';
+import 'package:business/actions/app_disconnect_action.dart';
 import 'package:flutter/material.dart';
+import 'package:inclusive/profile/profile_edition_screen.dart';
 import 'package:inclusive/profile/profile_screen.dart';
 
 import 'package:inclusive/theme.dart';
@@ -66,7 +68,16 @@ class _ViewState extends State<View> {
   Widget _buildBody(
       AppState state, void Function(ReduxAction<dynamic>) dispatch) {
     return Stack(children: <Widget>[
-      SafeArea(child: widget.child),
+      Container(
+          decoration: BoxDecoration(
+              image: DecorationImage(
+                  image: AssetImage(state.theme == ThemeStyle.Orange
+                      ? 'images/screenPattern.png'
+                      : 'images/screenPatternPurple.png'),
+                  fit: BoxFit.cover)),
+          child: Container(
+              margin: const EdgeInsets.only(bottom: 50.0),
+              child: SafeArea(child: widget.child))),
       Align(
           alignment: Alignment.bottomCenter,
           child: widget.showNavBar
@@ -88,20 +99,36 @@ class _ViewState extends State<View> {
                       if (index == 1) {
                         dispatch(EventsGetAction());
                       }
+                      Navigator.of(context)
+                          .popUntil((Route<dynamic> route) => route.isFirst);
                     },
                   ))
               : null),
       if (_showUserSettings)
         Column(
           children: <Widget>[
-            const Button(
+            Button(
               text: 'Edit my profile',
-              //onPressed: () => dispatch(NavigateAction()),
+              onPressed: () {
+                dispatch(NavigateAction<AppState>.pushNamed(
+                    ProfileEditionScreen.id));
+                setState(() => _showUserSettings = false);
+              },
             ),
             Button(
               text: 'View my profile',
               onPressed: () {
-                dispatch(NavigateAction<AppState>.pushNamed(ProfileScreen.id));
+                dispatch(NavigateAction<AppState>.pushNamed(ProfileScreen.id,
+                    arguments: state.userState.user));
+                setState(() => _showUserSettings = false);
+              },
+            ),
+            Button(
+              text: 'Disconnect',
+              onPressed: () {
+                Navigator.of(context)
+                    .popUntil((Route<dynamic> route) => route.isFirst);
+                dispatch(AppDisconnectAction());
                 setState(() => _showUserSettings = false);
               },
             ),

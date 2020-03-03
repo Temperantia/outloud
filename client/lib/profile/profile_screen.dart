@@ -5,12 +5,14 @@ import 'package:business/classes/user.dart';
 import 'package:flutter/material.dart';
 import 'package:inclusive/theme.dart';
 import 'package:inclusive/widgets/circular_image.dart';
-import 'package:inclusive/widgets/loading.dart';
 import 'package:inclusive/widgets/view.dart';
 import 'package:provider_for_redux/provider_for_redux.dart';
 
 class ProfileScreen extends StatefulWidget {
+  const ProfileScreen(this.user);
   static const String id = 'Profile';
+  final User user;
+
   @override
   _ProfileScreenState createState() => _ProfileScreenState();
 }
@@ -18,7 +20,7 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   ThemeStyle _themeStyle;
 
-  Widget _buildTabBarView(User user) {
+  Widget _buildTabBarView() {
     return Expanded(
         child: TabBarView(children: <Widget>[
       SingleChildScrollView(
@@ -27,7 +29,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20.0),
                   child: Column(children: <Widget>[
-                    for (final Interest interest in user.interests)
+                    for (final Interest interest in widget.user.interests)
                       _buildInterest(interest)
                   ])))),
       SingleChildScrollView(
@@ -36,12 +38,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
               child: Padding(
                   padding: const EdgeInsets.all(20.0),
                   child: Column(children: <Widget>[
-                    _buildAboutBloc('LOCATION', user.home),
-                    _buildAboutBloc('GENDER', user.gender),
-                    _buildAboutBloc('PRONOUN', user.pronoun),
-                    _buildAboutBloc('SEXUAL ORIENTATION', user.orientation),
-                    _buildAboutBloc('EDUCATION', user.education),
-                    _buildAboutBloc('OCCUPATION', user.profession),
+                    _buildAboutBloc('LOCATION', widget.user.home),
+                    _buildAboutBloc('GENDER', widget.user.gender),
+                    _buildAboutBloc('PRONOUN', widget.user.pronoun),
+                    _buildAboutBloc(
+                        'SEXUAL ORIENTATION', widget.user.orientation),
+                    _buildAboutBloc('EDUCATION', widget.user.education),
+                    _buildAboutBloc('OCCUPATION', widget.user.profession),
                   ])))),
     ]));
   }
@@ -94,10 +97,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
         AppState state,
         void Function(ReduxAction<dynamic>) dispatch,
         Widget child) {
-      final User user = state.userState.user;
-      if (user == null) {
-        return Loading();
-      }
       _themeStyle = state.theme;
       return View(
           child: Container(
@@ -112,10 +111,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   child: Column(children: <Widget>[
                     const SizedBox(height: 20.0),
                     CircularImage(
-                      imageUrl: user.pics.isEmpty ? null : user.pics[0],
+                      imageUrl:
+                          widget.user.pics.isEmpty ? null : widget.user.pics[0],
                       imageRadius: 150.0,
                     ),
-                    Text('${user.name} • ${user.getAge()}',
+                    Text('${widget.user.name} • ${widget.user.getAge()}',
                         style: textStyleTitle(state.theme)),
                     const TabBar(
                         indicator: BoxDecoration(),
@@ -125,7 +125,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           Tab(text: 'INTERESTS'),
                           Tab(text: 'ABOUT'),
                         ]),
-                    _buildTabBarView(user),
+                    _buildTabBarView(),
                   ]))));
     });
   }
