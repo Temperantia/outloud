@@ -65,82 +65,6 @@ class App extends StatefulWidget {
 }
 
 class _AppState extends State<App> {
-  bool _isSwitched = false;
-
-  bool _showUserSettings = false;
-
-  AppBar _buildAppBar(User user, void Function(ReduxAction<dynamic>) dispatch) {
-    return AppBar(
-        centerTitle: true,
-        title: user == null
-            ? const CircularProgressIndicator()
-            : GestureDetector(
-                onTap: () =>
-                    setState(() => _showUserSettings = !_showUserSettings),
-                child: CircularImage(
-                    imageRadius: 40.0,
-                    imageUrl: user.pics.isEmpty ? null : user.pics[0])),
-        leading: Navigator.canPop(context)
-            ? GestureDetector(
-                onTap: () => Navigator.pop(context),
-                child: Icon(Icons.keyboard_arrow_left, color: white))
-            : null,
-        actions: <Widget>[
-          Switch(
-            value: _isSwitched,
-            onChanged: (bool value) {
-              setState(() {
-                dispatch(AppUpdateThemeAction(
-                    _isSwitched ? ThemeStyle.Orange : ThemeStyle.Purple));
-                _isSwitched = value;
-              });
-            },
-          ),
-          Icon(Icons.menu),
-        ]);
-  }
-
-  Widget _buildBody(Widget child, AppState state,
-      void Function(ReduxAction<dynamic>) dispatch) {
-    return Stack(children: <Widget>[
-      SafeArea(child: child),
-      Align(
-          alignment: Alignment.bottomCenter,
-          child: Theme(
-              data: Theme.of(context).copyWith(canvasColor: Colors.transparent),
-              child: BottomNavigationBar(
-                elevation: 0,
-                type: BottomNavigationBarType.fixed,
-                showSelectedLabels: false,
-                showUnselectedLabels: false,
-                currentIndex: state.homePageIndex,
-                items: bubbleBar(context, 0, state.theme),
-                onTap: (int index) async {
-                  if (index == state.homePageIndex) {
-                    return;
-                  }
-                  dispatch(AppNavigateAction(index));
-                  if (index == 1) {
-                    dispatch(EventsGetAction());
-                  }
-                },
-              ))),
-      if (_showUserSettings)
-        Column(children: <Widget>[
-          const Button(
-            text: 'Edit my profile',
-            //onPressed: () => dispatch(NavigateAction()),
-          ),
-          Button(
-              text: 'View my profile',
-              onPressed: () {
-                dispatch(NavigateAction<AppState>.pushNamed(ProfileScreen.id));
-                setState(() => _showUserSettings = false);
-              }),
-        ])
-    ]);
-  }
-
   @override
   Widget build(BuildContext context) {
     return AsyncReduxProvider<AppState>.value(
@@ -154,38 +78,24 @@ class _AppState extends State<App> {
                 void Function(ReduxAction<dynamic>) dispatch,
                 dynamic model,
                 Widget child) {
-              final User user = state.userState.user;
-
               return MaterialApp(
                   debugShowCheckedModeBanner: false,
                   theme: theme(state.theme),
                   title: 'Inc•lusive',
-                  /*
                   home: Builder(builder: (BuildContext context) {
-                    print('build');
                     if (state.loading) {
                       return Loading();
                     }
                     if (state.loginState.id == null) {
                       return LoginScreen();
                     }
-                    return Scaffold(
-                      resizeToAvoidBottomInset: false,
-                      appBar: _buildAppBar(user, dispatch),
-                      body: _buildBody(HomeScreen(), state, dispatch),
-                    );
                     return HomeScreen();
                   }),
-                  */
                   navigatorKey: navigatorKey,
                   onGenerateRoute: (RouteSettings settings) =>
                       MaterialPageRoute<dynamic>(
-                          builder: (BuildContext context) => Scaffold(
-                                resizeToAvoidBottomInset: false,
-                                appBar: _buildAppBar(user, dispatch),
-                                body: _buildBody(
-                                    routes[settings.name], state, dispatch),
-                              )));
+                          builder: (BuildContext context) =>
+                              routes[settings.name]));
             }));
   }
 }

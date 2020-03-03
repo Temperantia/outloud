@@ -122,7 +122,6 @@ class _ViewState extends State<View> {
             dynamic model,
             Widget w) {
           final User user = state.userState.user;
-          return widget.child;
           return Scaffold(
               resizeToAvoidBottomInset: false,
               appBar: widget.showAppBar ? _buildAppBar(user, dispatch) : null,

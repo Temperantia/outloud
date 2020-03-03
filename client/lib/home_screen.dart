@@ -97,8 +97,7 @@ class _HomeScreenState extends State<HomeScreen>
             child: TabBarView(controller: _tabController, children: <Widget>[
               HomeWidget(),
               EventsWidget(),
-              Container(),
-              //LoungesWidget(),
+              LoungesWidget(),
               PeopleWidget(),
             ])));
   }
@@ -125,7 +124,7 @@ class _HomeScreenState extends State<HomeScreen>
           _tabController.animateTo(homePageIndex);
           _themeStyle = state.theme;
 
-          return _buildBody();
+          return View(child: _buildBody());
         });
   }
 }
