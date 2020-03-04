@@ -35,34 +35,7 @@ class _ViewState extends State<View> {
   bool _showUserSettings = false;
 
   AppBar _buildAppBar(User user, void Function(ReduxAction<dynamic>) dispatch) {
-    return AppBar(
-        centerTitle: true,
-        title: user == null
-            ? const CircularProgressIndicator()
-            : GestureDetector(
-                onTap: () =>
-                    setState(() => _showUserSettings = !_showUserSettings),
-                child: CircularImage(
-                    imageRadius: 40.0,
-                    imageUrl: user.pics.isEmpty ? null : user.pics[0])),
-        leading: Navigator.canPop(context)
-            ? GestureDetector(
-                onTap: () => Navigator.pop(context),
-                child: Icon(Icons.keyboard_arrow_left, color: white))
-            : null,
-        actions: <Widget>[
-          Switch(
-            value: _isSwitched,
-            onChanged: (bool value) {
-              setState(() {
-                dispatch(AppUpdateThemeAction(
-                    _isSwitched ? ThemeStyle.Orange : ThemeStyle.Purple));
-                _isSwitched = value;
-              });
-            },
-          ),
-          Icon(Icons.menu),
-        ]);
+    return null;
   }
 
   Widget _buildBody(
@@ -76,7 +49,7 @@ class _ViewState extends State<View> {
                       : 'images/screenPatternPurple.png'),
                   fit: BoxFit.cover)),
           child: Container(
-              margin: const EdgeInsets.only(bottom: 50.0),
+              margin: const EdgeInsets.symmetric(vertical: 50.0),
               child: SafeArea(child: widget.child))),
       Align(
           alignment: Alignment.bottomCenter,
@@ -104,36 +77,70 @@ class _ViewState extends State<View> {
                     },
                   ))
               : null),
-      if (_showUserSettings)
-        Column(
-          children: <Widget>[
-            Button(
-              text: 'Edit my profile',
-              onPressed: () {
-                dispatch(NavigateAction<AppState>.pushNamed(
-                    ProfileEditionScreen.id));
-                setState(() => _showUserSettings = false);
-              },
-            ),
-            Button(
-              text: 'View my profile',
-              onPressed: () {
-                dispatch(NavigateAction<AppState>.pushNamed(ProfileScreen.id,
-                    arguments: state.userState.user));
-                setState(() => _showUserSettings = false);
-              },
-            ),
-            Button(
-              text: 'Disconnect',
-              onPressed: () {
-                Navigator.of(context)
-                    .popUntil((Route<dynamic> route) => route.isFirst);
-                dispatch(AppDisconnectAction());
-                setState(() => _showUserSettings = false);
-              },
-            ),
-          ],
-        )
+      Column(children: <Widget>[
+        AppBar(
+            backgroundColor: Colors.transparent,
+            elevation: 0.0,
+            centerTitle: true,
+            title: state.userState.user == null
+                ? const CircularProgressIndicator()
+                : GestureDetector(
+                    onTap: () =>
+                        setState(() => _showUserSettings = !_showUserSettings),
+                    child: CircularImage(
+                        imageRadius: 40.0,
+                        imageUrl: state.userState.user.pics.isEmpty
+                            ? null
+                            : state.userState.user.pics[0])),
+            leading: Navigator.canPop(context)
+                ? GestureDetector(
+                    onTap: () => Navigator.pop(context),
+                    child: Icon(Icons.keyboard_arrow_left, color: white))
+                : null,
+            actions: <Widget>[
+              Switch(
+                value: _isSwitched,
+                onChanged: (bool value) {
+                  setState(() {
+                    dispatch(AppUpdateThemeAction(
+                        _isSwitched ? ThemeStyle.Orange : ThemeStyle.Purple));
+                    _isSwitched = value;
+                  });
+                },
+              ),
+              Icon(Icons.menu),
+            ]),
+        if (_showUserSettings)
+          Column(
+            children: <Widget>[
+              Button(
+                text: 'Edit my profile',
+                onPressed: () {
+                  dispatch(NavigateAction<AppState>.pushNamed(
+                      ProfileEditionScreen.id));
+                  setState(() => _showUserSettings = false);
+                },
+              ),
+              Button(
+                text: 'View my profile',
+                onPressed: () {
+                  dispatch(NavigateAction<AppState>.pushNamed(ProfileScreen.id,
+                      arguments: state.userState.user));
+                  setState(() => _showUserSettings = false);
+                },
+              ),
+              Button(
+                text: 'Disconnect',
+                onPressed: () {
+                  Navigator.of(context)
+                      .popUntil((Route<dynamic> route) => route.isFirst);
+                  dispatch(AppDisconnectAction());
+                  setState(() => _showUserSettings = false);
+                },
+              ),
+            ],
+          ),
+      ])
     ]);
   }
 
@@ -150,7 +157,6 @@ class _ViewState extends State<View> {
             Widget w) {
           final User user = state.userState.user;
           return Scaffold(
-              resizeToAvoidBottomInset: false,
               appBar: widget.showAppBar ? _buildAppBar(user, dispatch) : null,
               body: _buildBody(state, dispatch));
         });

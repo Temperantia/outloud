@@ -1,4 +1,7 @@
+import 'package:business/classes/event.dart';
+import 'package:business/classes/user_event_state.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:enum_to_string/enum_to_string.dart';
 
 import 'entity.dart';
 import 'interest.dart';
@@ -21,6 +24,8 @@ class User extends Entity {
     this.education = '',
     this.profession = '',
     this.friends = const <String>[],
+    this.events = const <String, UserEventState>{},
+    this.lounges = const <String>[],
   }) : super(
             id: id,
             name: name,
@@ -48,6 +53,16 @@ class User extends Entity {
         friends = snapshot['friends'] == null
             ? <String>[]
             : snapshot['friends'].cast<String>() as List<String>,
+        events = snapshot['events'] == null
+            ? <String, UserEventState>{}
+            : Map<String, String>.from(
+                    snapshot['events'] as Map<dynamic, dynamic>)
+                .map<String, UserEventState>((String key, String value) =>
+                    MapEntry<String, UserEventState>(key,
+                        EnumToString.fromString(UserEventState.values, value))),
+        lounges = snapshot['lounges'] == null
+            ? <String>[]
+            : snapshot['lounges'].cast<String>() as List<String>,
         super(
           id: id ?? '',
           name: snapshot['name'] as String,
@@ -73,6 +88,8 @@ class User extends Entity {
   String education;
   String profession;
   List<String> friends;
+  Map<String, UserEventState> events;
+  List<String> lounges;
 
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
@@ -93,6 +110,10 @@ class User extends Entity {
       'education': education,
       'profession': profession,
       'friends': friends,
+      'events': events.map<String, String>((String key, UserEventState value) {
+        return MapEntry<String, String>(key, EnumToString.parse(value));
+      }),
+      'lounges': lounges,
     };
   }
 
@@ -112,5 +133,9 @@ class User extends Entity {
       }
     }
     return age;
+  }
+
+  bool isAttendingEvent(String id) {
+    return events.containsKey(id) && events[id] == UserEventState.Attending;
   }
 }

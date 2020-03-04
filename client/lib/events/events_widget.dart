@@ -181,7 +181,7 @@ class _EventsWidgetState extends State<EventsWidget>
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              _buildMap(),
+              // _buildMap(),
               Container(
                   constraints: BoxConstraints.expand(
                     height:

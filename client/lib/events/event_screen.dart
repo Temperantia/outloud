@@ -2,11 +2,12 @@ import 'package:business/app_state.dart';
 import 'package:async_redux/async_redux.dart' as redux;
 import 'package:business/classes/event.dart';
 import 'package:business/events/actions/event_groups_get_action.dart';
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:business/events/actions/event_register_action.dart';
 import 'package:flutter/material.dart';
 import 'package:inclusive/events/event_groups_screen.dart';
 import 'package:inclusive/theme.dart';
 import 'package:inclusive/widgets/button.dart';
+import 'package:inclusive/widgets/cached_image.dart';
 import 'package:inclusive/widgets/view.dart';
 import 'package:intl/intl.dart';
 import 'package:provider_for_redux/provider_for_redux.dart';
@@ -26,16 +27,7 @@ class EventScreen extends StatelessWidget {
       return View(
           child: ListView(children: <Widget>[
         Row(children: <Widget>[
-          if (event.pic.isNotEmpty)
-            Expanded(
-                child: CachedNetworkImage(
-              fit: BoxFit.cover,
-              imageUrl: event.pic,
-              placeholder: (BuildContext context, String url) =>
-                  const CircularProgressIndicator(),
-              errorWidget: (BuildContext context, String url, Object error) =>
-                  Icon(Icons.error),
-            )),
+          if (event.pic.isNotEmpty) Expanded(child: CachedImage(event.pic)),
         ]),
         Container(
             padding: const EdgeInsets.all(20.0),
@@ -78,12 +70,20 @@ class EventScreen extends StatelessWidget {
                                               fontWeight: FontWeight.bold)),
                                     ])))),
                       ])),
-              const Button(text: 'See map', width: 200.0, alt: true),
-              const Button(text: 'Register me', width: 200.0, alt: true),
+              const Button(text: 'See map', width: 200.0),
+              if (state.userState.user.isAttendingEvent(event.id))
+                Button(text: 'Registered', width: 200.0)
+              else
+                Button(
+                  text: 'Register me',
+                  width: 200.0,
+                  onPressed: () {
+                    dispatch(EventRegisterAction(event.id));
+                  },
+                ),
               Button(
                   text: 'View all subgroups',
                   width: 200.0,
-                  alt: true,
                   onPressed: () async {
                     await store.dispatchFuture(
                         EventGroupsGetAction(state.eventsState.event.id));

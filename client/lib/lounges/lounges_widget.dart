@@ -20,12 +20,10 @@ class LoungesWidget extends StatefulWidget {
 
 class _LoungesWidgetState extends State<LoungesWidget>
     with AutomaticKeepAliveClientMixin<LoungesWidget> {
-  final ScrollController _scrollController = ScrollController();
-
   @override
   bool get wantKeepAlive => true;
 
-  Widget _buildEvent(
+  Widget _buildLounge(
       Event event,
       void Function(redux.ReduxAction<AppState>) dispatch,
       Future<void> Function(redux.ReduxAction<AppState>) dispatchFuture,
@@ -114,21 +112,18 @@ class _LoungesWidgetState extends State<LoungesWidget>
                     Text('Lounges', style: textStyleTitle(state.theme)),
                   ])),
               Expanded(
-                  child: ListView(
-                children: <Widget>[
-                  Container(
-                      decoration: const BoxDecoration(color: white),
-                      child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Column(children: <Widget>[
-                              for (final Event event in events)
-                                _buildEvent(event, dispatch,
-                                    store.dispatchFuture, state.theme)
-                            ]),
-                          ])),
-                ],
-                controller: _scrollController,
+                  child: ListView.builder(
+                itemCount: events.length,
+                itemBuilder: (context, index) => Container(
+                    decoration: const BoxDecoration(color: white),
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Column(children: <Widget>[
+                            _buildLounge(events[index], dispatch,
+                                store.dispatchFuture, state.theme)
+                          ]),
+                        ])),
               ))
             ],
           ));
