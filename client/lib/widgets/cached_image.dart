@@ -1,6 +1,6 @@
 import 'dart:io';
-import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
+import 'package:network_to_file_image/network_to_file_image.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart';
 
@@ -21,22 +21,14 @@ class _CachedImageState extends State<CachedImage>
   Future<Widget> loadImage() async {
     final Directory documentsDirectory =
         await getApplicationDocumentsDirectory();
-    final String path = widget.url.replaceAll('/', '-') +
-        '.png'; // TODO(me): not sure it's necessary
+    final String path = widget.url.replaceAll('/', '-');
     final File file = File(join(documentsDirectory.path, path));
 
-    /*  if (file.existsSync()) {
-      return Image.memory(file.readAsBytesSync());
-    } */
-
-    http.Response response;
-    response = await http.get(widget.url);
-    if (response.statusCode != 200) {
-      return Icon(Icons.close);
+    if (file.existsSync()) {
+      return Image.file(file);
     }
-    file.writeAsBytesSync(response.bodyBytes);
 
-    return Image.memory(response.bodyBytes);
+    return Image(image: NetworkToFileImage(url: widget.url, file: file));
   }
 
   @override
@@ -45,9 +37,7 @@ class _CachedImageState extends State<CachedImage>
     return FutureBuilder<Widget>(
       future: loadImage(),
       builder: (BuildContext context, AsyncSnapshot<Widget> future) {
-        return future.connectionState == ConnectionState.waiting
-            ? const CircularProgressIndicator()
-            : future.data;
+        return future.hasData ? future.data : Container();
       },
     );
   }
