@@ -43,6 +43,7 @@ dependencies:
   cached_network_image: ^2.0.0
   google_maps_flutter: ^0.5.24
   path_provider: ^1.6.4
+  network_to_file_image: ^2.2.8
 
 flutter:
   uses-material-design: true
