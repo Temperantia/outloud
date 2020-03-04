@@ -36,6 +36,8 @@ class _ViewState extends State<View> {
 
   AppBar _buildAppBar(User user, void Function(ReduxAction<dynamic>) dispatch) {
     return AppBar(
+      elevation: 0.0,
+      backgroundColor: Colors.transparent,
         centerTitle: true,
         title: user == null
             ? const CircularProgressIndicator()
@@ -150,6 +152,7 @@ class _ViewState extends State<View> {
             Widget w) {
           final User user = state.userState.user;
           return Scaffold(
+            extendBodyBehindAppBar: true,
               resizeToAvoidBottomInset: false,
               appBar: widget.showAppBar ? _buildAppBar(user, dispatch) : null,
               body: _buildBody(state, dispatch));
