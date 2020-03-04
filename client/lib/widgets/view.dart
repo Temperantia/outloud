@@ -35,7 +35,36 @@ class _ViewState extends State<View> {
   bool _showUserSettings = false;
 
   AppBar _buildAppBar(User user, void Function(ReduxAction<dynamic>) dispatch) {
-    return null;
+    return AppBar(
+        elevation: 0.0,
+        backgroundColor: Colors.transparent,
+        centerTitle: true,
+        title: user == null
+            ? const CircularProgressIndicator()
+            : GestureDetector(
+                onTap: () =>
+                    setState(() => _showUserSettings = !_showUserSettings),
+                child: CircularImage(
+                    imageRadius: 40.0,
+                    imageUrl: user.pics.isEmpty ? null : user.pics[0])),
+        leading: Navigator.canPop(context)
+            ? GestureDetector(
+                onTap: () => Navigator.pop(context),
+                child: Icon(Icons.keyboard_arrow_left, color: white))
+            : null,
+        actions: <Widget>[
+          Switch(
+            value: _isSwitched,
+            onChanged: (bool value) {
+              setState(() {
+                dispatch(AppUpdateThemeAction(
+                    _isSwitched ? ThemeStyle.Orange : ThemeStyle.Purple));
+                _isSwitched = value;
+              });
+            },
+          ),
+          Icon(Icons.menu),
+        ]);
   }
 
   Widget _buildBody(
@@ -78,38 +107,7 @@ class _ViewState extends State<View> {
                   ))
               : null),
       Column(children: <Widget>[
-        AppBar(
-            backgroundColor: Colors.transparent,
-            elevation: 0.0,
-            centerTitle: true,
-            title: state.userState.user == null
-                ? const CircularProgressIndicator()
-                : GestureDetector(
-                    onTap: () =>
-                        setState(() => _showUserSettings = !_showUserSettings),
-                    child: CircularImage(
-                        imageRadius: 40.0,
-                        imageUrl: state.userState.user.pics.isEmpty
-                            ? null
-                            : state.userState.user.pics[0])),
-            leading: Navigator.canPop(context)
-                ? GestureDetector(
-                    onTap: () => Navigator.pop(context),
-                    child: Icon(Icons.keyboard_arrow_left, color: white))
-                : null,
-            actions: <Widget>[
-              Switch(
-                value: _isSwitched,
-                onChanged: (bool value) {
-                  setState(() {
-                    dispatch(AppUpdateThemeAction(
-                        _isSwitched ? ThemeStyle.Orange : ThemeStyle.Purple));
-                    _isSwitched = value;
-                  });
-                },
-              ),
-              Icon(Icons.menu),
-            ]),
+        _buildAppBar(state.userState.user, dispatch),
         if (_showUserSettings)
           Column(
             children: <Widget>[
@@ -155,10 +153,7 @@ class _ViewState extends State<View> {
             void Function(ReduxAction<dynamic>) dispatch,
             dynamic model,
             Widget w) {
-          final User user = state.userState.user;
-          return Scaffold(
-              appBar: widget.showAppBar ? _buildAppBar(user, dispatch) : null,
-              body: _buildBody(state, dispatch));
+          return Scaffold(body: _buildBody(state, dispatch));
         });
   }
 }

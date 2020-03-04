@@ -33,7 +33,7 @@ class CustomImageCache extends WidgetsFlutterBinding {
 }
 
 Future<void> main() async {
-  CustomImageCache();
+  //CustomImageCache();
 
   WidgetsFlutterBinding.ensureInitialized();
 
