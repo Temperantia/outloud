@@ -2,6 +2,7 @@ import 'package:async_redux/async_redux.dart' as redux;
 import 'package:business/app_state.dart';
 import 'package:business/classes/event.dart';
 import 'package:business/classes/lounge.dart';
+import 'package:business/lounges/actions/lounge_create_action.dart';
 import 'package:business/models/events.dart';
 import 'package:flutter/material.dart';
 import 'package:inclusive/lounges/lounge_create_detail_screen.dart';
@@ -44,39 +45,37 @@ class _LoungeCreateScreenState extends State<LoungeCreateScreen> {
         Widget child) {
       final List<Event> userEvents = state.userState.events;
       return View(
+          title: 'CREATE LOUNGE',
           child: Column(
-        children: <Widget>[
-          Row(
-            children: <Widget>[Text('CREATE LOUNGE')],
-          ),
-          Expanded(
-              child: Container(
-                  color: white,
-                  padding: EdgeInsets.all(20.0),
-                  child: Column(
-                    children: <Widget>[
-                      Text('CHOOSE AN EVENT FOR THIS LOUNGE'),
-                      Expanded(
-                          child: ListView.builder(
-                        itemCount: userEvents.length,
-                        itemBuilder: (context, index) =>
-                            _buildUserEvent(userEvents[index], state.theme),
-                      ))
-                    ],
-                  ))),
-          if (_selected != null)
-            Expanded(
-              child: Button(
-                  text: 'NEXT',
-                  onPressed: () {
-                    dispatch(redux.NavigateAction<AppState>.pushNamed(
-                        LoungeCreateDetailScreen.id,
-                        arguments:
+            children: <Widget>[
+              Expanded(
+                  child: Container(
+                      color: white,
+                      padding: EdgeInsets.all(20.0),
+                      child: Column(
+                        children: <Widget>[
+                          Text('CHOOSE AN EVENT FOR THIS LOUNGE'),
+                          Expanded(
+                              child: ListView.builder(
+                            itemCount: userEvents.length,
+                            itemBuilder: (context, index) =>
+                                _buildUserEvent(userEvents[index], state.theme),
+                          ))
+                        ],
+                      ))),
+              if (_selected != null)
+                Expanded(
+                  child: Button(
+                      text: 'NEXT',
+                      onPressed: () {
+                        dispatch(LoungeCreateAction(
                             Lounge(eventRef: getEventReference(_selected.id))));
-                  }),
-            )
-        ],
-      ));
+                        dispatch(redux.NavigateAction<AppState>.pushNamed(
+                            LoungeCreateDetailScreen.id));
+                      }),
+                )
+            ],
+          ));
     });
   }
 }

@@ -85,7 +85,7 @@ class LoungeScreen extends StatelessWidget {
                     dispatch(EventRegisterAction(event.id));
                   },
                 ),
-              Button(
+              /* Button(
                   text: 'View all subgroups',
                   width: 200.0,
                   onPressed: () async {
@@ -93,7 +93,7 @@ class LoungeScreen extends StatelessWidget {
                         EventGroupsGetAction(state.eventsState.event.id));
                     dispatch(redux.NavigateAction<AppState>.pushNamed(
                         EventGroupsScreen.id));
-                  }),
+                  }), */
             ])),
       ]));
     });

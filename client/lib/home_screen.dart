@@ -113,7 +113,7 @@ class _HomeScreenState extends State<HomeScreen>
           }
           _tabController.animateTo(homePageIndex);
 
-          return View(child: _buildBody());
+          return View(child: _buildBody(), isRoot: true);
         });
   }
 }

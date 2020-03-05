@@ -25,10 +25,8 @@ final Map<String, Widget Function(Object)> routes = {
   EventGroupsScreen.id: (_) => EventGroupsScreen(),
   LoungeScreen.id: (dynamic lounge) => LoungeScreen(lounge as Lounge),
   LoungeCreateScreen.id: (_) => LoungeCreateScreen(),
-  LoungeCreateDetailScreen.id: (dynamic lounge) =>
-      LoungeCreateDetailScreen(lounge as Lounge),
-  LoungeCreateMeetupScreen.id: (dynamic lounge) =>
-      LoungeCreateMeetupScreen(lounge as Lounge),
+  LoungeCreateDetailScreen.id: (_) => LoungeCreateDetailScreen(),
+  LoungeCreateMeetupScreen.id: (_) => LoungeCreateMeetupScreen(),
   ProfileScreen.id: (dynamic user) => ProfileScreen(user as User),
   EventCreateScreen.id: (_) => EventCreateScreen(),
   ChatScreen.id: (dynamic chat) => ChatScreen(chat as Chat),

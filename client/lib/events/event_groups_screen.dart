@@ -7,6 +7,7 @@ import 'package:business/classes/user.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:inclusive/theme.dart';
+import 'package:inclusive/widgets/cached_image.dart';
 import 'package:inclusive/widgets/circular_image.dart';
 import 'package:inclusive/widgets/image_stack.dart';
 import 'package:inclusive/widgets/view.dart';
@@ -98,14 +99,9 @@ class _EventGroupsScreenState extends State<EventGroupsScreen> {
                         width: 50.0,
                         height: 50.0,
                         margin: const EdgeInsets.only(right: 10.0),
-                        child: CachedNetworkImage(
-                            imageUrl:
-                                'https://firebasestorage.googleapis.com/v0/b/incl-9b378.appspot.com/o/images%2Finterests%2F${interests[index].name}.png?alt=media',
-                            placeholder: (BuildContext context, String url) =>
-                                const CircularProgressIndicator(),
-                            errorWidget: (BuildContext context, String url,
-                                    Object error) =>
-                                Icon(Icons.error)))),
+                        child: CachedImage(
+                          'https://firebasestorage.googleapis.com/v0/b/incl-9b378.appspot.com/o/images%2Finterests%2F${interests[index].name}.png?alt=media',
+                        ))),
               ))
             ])));
   }

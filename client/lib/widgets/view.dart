@@ -20,12 +20,17 @@ class View extends StatefulWidget {
       {@required this.child,
       this.showAppBar = true,
       this.showNavBar = true,
-      this.title = ''});
+      this.title = '',
+      this.isRoot = false,
+      this.onBack});
 
   final Widget child;
   final bool showAppBar;
   final bool showNavBar;
+  final bool isRoot;
   final String title;
+  final void Function() onBack;
+
   @override
   _ViewState createState() => _ViewState();
 }
@@ -34,41 +39,17 @@ class _ViewState extends State<View> {
   bool _isSwitched = false;
   bool _showUserSettings = false;
 
-  AppBar _buildAppBar(User user, void Function(ReduxAction<dynamic>) dispatch) {
-    return AppBar(
-        elevation: 0.0,
-        backgroundColor: Colors.transparent,
-        centerTitle: true,
-        title: user == null
-            ? const CircularProgressIndicator()
-            : GestureDetector(
-                onTap: () =>
-                    setState(() => _showUserSettings = !_showUserSettings),
-                child: CircularImage(
-                    imageRadius: 40.0,
-                    imageUrl: user.pics.isEmpty ? null : user.pics[0])),
-        leading: Navigator.canPop(context)
-            ? GestureDetector(
-                onTap: () => Navigator.pop(context),
-                child: Icon(Icons.keyboard_arrow_left, color: white))
-            : null,
-        actions: <Widget>[
-          Switch(
-            value: _isSwitched,
-            onChanged: (bool value) {
-              setState(() {
-                dispatch(AppUpdateThemeAction(
-                    _isSwitched ? ThemeStyle.Orange : ThemeStyle.Purple));
-                _isSwitched = value;
-              });
-            },
-          ),
-          Icon(Icons.menu),
-        ]);
-  }
-
   Widget _buildBody(
       AppState state, void Function(ReduxAction<dynamic>) dispatch) {
+    EdgeInsetsGeometry margin;
+    if (widget.showAppBar && widget.showNavBar) {
+      margin = const EdgeInsets.fromLTRB(0.0, 100.0, 0.0, 50.0);
+    } else if (widget.showAppBar) {
+      margin = const EdgeInsets.only(top: 100.0);
+    } else if (widget.showNavBar) {
+      margin = const EdgeInsets.only(bottom: 50.0);
+    }
+
     return Stack(children: <Widget>[
       Container(
           decoration: BoxDecoration(
@@ -77,69 +58,126 @@ class _ViewState extends State<View> {
                       ? 'images/screenPattern.png'
                       : 'images/screenPatternPurple.png'),
                   fit: BoxFit.cover)),
-          child: Container(
-              margin: const EdgeInsets.symmetric(vertical: 50.0),
-              child: SafeArea(child: widget.child))),
-      Align(
-          alignment: Alignment.bottomCenter,
-          child: widget.showNavBar
-              ? Theme(
-                  data: Theme.of(context)
-                      .copyWith(canvasColor: Colors.transparent),
-                  child: BottomNavigationBar(
-                    elevation: 0,
-                    type: BottomNavigationBarType.fixed,
-                    showSelectedLabels: false,
-                    showUnselectedLabels: false,
-                    currentIndex: state.homePageIndex,
-                    items: bubbleBar(context, 0, state.theme),
-                    onTap: (int index) async {
-                      if (index == state.homePageIndex) {
-                        return;
-                      }
-                      dispatch(AppNavigateAction(index));
-                      if (index == 1) {
-                        dispatch(EventsGetAction());
-                      }
-                      Navigator.of(context)
-                          .popUntil((Route<dynamic> route) => route.isFirst);
-                    },
-                  ))
-              : null),
-      Column(children: <Widget>[
-        _buildAppBar(state.userState.user, dispatch),
-        if (_showUserSettings)
-          Column(
-            children: <Widget>[
-              Button(
-                text: 'Edit my profile',
-                onPressed: () {
-                  dispatch(NavigateAction<AppState>.pushNamed(
-                      ProfileEditionScreen.id));
-                  setState(() => _showUserSettings = false);
-                },
-              ),
-              Button(
-                text: 'View my profile',
-                onPressed: () {
-                  dispatch(NavigateAction<AppState>.pushNamed(ProfileScreen.id,
-                      arguments: state.userState.user));
-                  setState(() => _showUserSettings = false);
-                },
-              ),
-              Button(
-                text: 'Disconnect',
-                onPressed: () {
-                  Navigator.of(context)
-                      .popUntil((Route<dynamic> route) => route.isFirst);
-                  dispatch(AppDisconnectAction());
-                  setState(() => _showUserSettings = false);
-                },
-              ),
-            ],
-          ),
-      ])
+          child:
+              Container(margin: margin, child: SafeArea(child: widget.child))),
+      if (widget.showNavBar) _buildNavBar(state, dispatch),
+      if (widget.showAppBar) _buildAppBar(state.userState.user, dispatch),
     ]);
+  }
+
+  Widget _buildAppBar(User user, void Function(ReduxAction<dynamic>) dispatch) {
+    return Column(children: <Widget>[
+      AppBar(
+          elevation: 0.0,
+          backgroundColor: Colors.transparent,
+          centerTitle: true,
+          leading: Container(),
+          title: user == null
+              ? const CircularProgressIndicator()
+              : GestureDetector(
+                  onTap: () =>
+                      setState(() => _showUserSettings = !_showUserSettings),
+                  child: CircularImage(
+                      imageRadius: 40.0,
+                      imageUrl: user.pics.isEmpty ? null : user.pics[0])),
+          actions: <Widget>[
+            /*
+            Switch(
+              value: _isSwitched,
+              onChanged: (bool value) {
+                setState(() {
+                  dispatch(AppUpdateThemeAction(
+                      _isSwitched ? ThemeStyle.Orange : ThemeStyle.Purple));
+                  _isSwitched = value;
+                });
+              },
+            ),
+            */
+            Icon(Icons.menu),
+          ]),
+      if (_showUserSettings || !widget.isRoot)
+        Stack(
+          children: <Widget>[
+            if (_showUserSettings) _buildUserSettings(user, dispatch),
+            if (!widget.isRoot)
+              Stack(
+                children: <Widget>[
+                  GestureDetector(
+                      onTap: widget.onBack ??
+                          () => dispatch(NavigateAction<AppState>.pop()),
+                      child: Icon(Icons.keyboard_arrow_left, color: white)),
+                  Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Text(
+                          widget.title,
+                          textAlign: TextAlign.center,
+                          style: textStyleTitleAlt,
+                        )
+                      ]),
+                ],
+              )
+          ],
+        )
+    ]);
+  }
+
+  Widget _buildUserSettings(
+      User user, void Function(ReduxAction<dynamic>) dispatch) {
+    return Column(children: <Widget>[
+      Button(
+        text: 'Edit my profile',
+        onPressed: () {
+          dispatch(NavigateAction<AppState>.pushNamed(ProfileEditionScreen.id));
+          setState(() => _showUserSettings = false);
+        },
+      ),
+      Button(
+          text: 'View my profile',
+          onPressed: () {
+            dispatch(NavigateAction<AppState>.pushNamed(ProfileScreen.id,
+                arguments: user));
+            setState(() => _showUserSettings = false);
+          }),
+      Button(
+          text: 'Disconnect',
+          onPressed: () {
+            Navigator.of(context)
+                .popUntil((Route<dynamic> route) => route.isFirst);
+            dispatch(AppDisconnectAction());
+            setState(() => _showUserSettings = false);
+          }),
+    ]);
+  }
+
+  Widget _buildNavBar(
+      AppState state, void Function(ReduxAction<dynamic>) dispatch) {
+    return Align(
+        alignment: Alignment.bottomCenter,
+        child: widget.showNavBar
+            ? Theme(
+                data:
+                    Theme.of(context).copyWith(canvasColor: Colors.transparent),
+                child: BottomNavigationBar(
+                  elevation: 0,
+                  type: BottomNavigationBarType.fixed,
+                  showSelectedLabels: false,
+                  showUnselectedLabels: false,
+                  currentIndex: state.homePageIndex,
+                  items: bubbleBar(context, 0, state.theme),
+                  onTap: (int index) async {
+                    if (index == state.homePageIndex) {
+                      return;
+                    }
+                    dispatch(AppNavigateAction(index));
+                    if (index == 1) {
+                      dispatch(EventsGetAction());
+                    }
+                    Navigator.of(context)
+                        .popUntil((Route<dynamic> route) => route.isFirst);
+                  },
+                ))
+            : null);
   }
 
   @override

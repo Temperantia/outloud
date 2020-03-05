@@ -1,0 +1,4 @@
+enum LoungeVisibility {
+  Public,
+  InviteOnly,
+}
