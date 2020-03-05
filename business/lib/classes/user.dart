@@ -1,4 +1,3 @@
-import 'package:business/classes/event.dart';
 import 'package:business/classes/user_event_state.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:enum_to_string/enum_to_string.dart';

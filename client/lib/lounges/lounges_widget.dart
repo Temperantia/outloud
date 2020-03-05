@@ -3,14 +3,17 @@ import 'dart:async';
 import 'package:async_redux/async_redux.dart' as redux;
 import 'package:business/app_state.dart';
 import 'package:business/classes/event.dart';
+import 'package:business/classes/lounge.dart';
 import 'package:business/events/actions/events_get_action.dart';
 import 'package:business/events/actions/events_select_action.dart';
 import 'package:flutter/material.dart';
 import 'package:inclusive/events/event_screen.dart';
+import 'package:inclusive/lounges/lounge_create_screen.dart';
+import 'package:inclusive/lounges/lounge_screen.dart';
 import 'package:inclusive/theme.dart';
+import 'package:inclusive/widgets/button.dart';
 import 'package:inclusive/widgets/cached_image.dart';
 import 'package:inclusive/widgets/loading.dart';
-import 'package:intl/intl.dart';
 import 'package:provider_for_redux/provider_for_redux.dart';
 
 class LoungesWidget extends StatefulWidget {
@@ -23,63 +26,51 @@ class _LoungesWidgetState extends State<LoungesWidget>
   @override
   bool get wantKeepAlive => true;
 
-  Widget _buildLounge(
-      Event event,
+  Widget _buildLounge(Lounge lounge,
+      void Function(redux.ReduxAction<AppState>) dispatch, ThemeStyle theme) {
+    return GestureDetector(
+        onTap: () {
+          dispatch(redux.NavigateAction<AppState>.pushNamed(LoungeScreen.id,
+              arguments: lounge));
+        },
+        child: Container(
+            child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+              if (lounge.event.pic.isNotEmpty)
+                Flexible(
+                    child: CachedImage(
+                  lounge.event.pic,
+                )),
+              Flexible(
+                  flex: 2,
+                  child: Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text(lounge.name, style: textStyleListItemTitle),
+                            Text(lounge.description,
+                                maxLines: 3, overflow: TextOverflow.ellipsis),
+                          ]))),
+            ])));
+  }
+
+  Widget _buildLounges(
+      List<Lounge> lounges,
       void Function(redux.ReduxAction<AppState>) dispatch,
-      Future<void> Function(redux.ReduxAction<AppState>) dispatchFuture,
-      ThemeStyle theme) {
-    final String date = DateFormat('dd.MM').format(event.date);
-    final String time = DateFormat('Hm').format(event.date);
-    return Column(children: <Widget>[
-      const Divider(
-        thickness: 3.0,
+      ThemeStyle themeStyle) {
+    return ListView.builder(
+      itemCount: lounges.length,
+      itemBuilder: (context, index) => Container(
+        decoration: const BoxDecoration(color: white),
+        child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              _buildLounge(lounges[index], dispatch, themeStyle)
+            ]),
       ),
-      GestureDetector(
-          onTap: () async {
-            await dispatchFuture(EventsSelectAction(event));
-            dispatch(redux.NavigateAction<AppState>.pushNamed(EventScreen.id));
-          },
-          child: Container(
-              child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                if (event.pic.isNotEmpty)
-                  Flexible(
-                      child: CachedImage(
-                    event.pic,
-                  )),
-                Flexible(
-                    flex: 2,
-                    child: Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Text(event.name, style: textStyleListItemTitle),
-                              Text(event.description,
-                                  maxLines: 3, overflow: TextOverflow.ellipsis),
-                            ]))),
-                Flexible(
-                    child: Container(
-                        decoration: BoxDecoration(
-                            border: Border.all(color: grey, width: 2.0),
-                            borderRadius: BorderRadius.circular(5.0)),
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 10.0, horizontal: 5.0),
-                        child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: <Widget>[
-                              Text(date,
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.bold)),
-                              Text(time,
-                                  style: const TextStyle(
-                                      color: grey,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 10.0))
-                            ]))),
-              ]))),
-    ]);
+    );
   }
 
   @override
@@ -90,41 +81,41 @@ class _LoungesWidgetState extends State<LoungesWidget>
         AppState state,
         void Function(redux.ReduxAction<dynamic>) dispatch,
         Widget child) {
-      final List<Event> events = state.eventsState.events;
-      if (events == null) {
+      final ThemeStyle themeStyle = state.theme;
+      final List<Lounge> userLounges = state.userState.lounges;
+      final List<Lounge> lounges = state.loungesState.lounges;
+      if (lounges == null || userLounges == null) {
         return Loading();
       }
 
-      return RefreshIndicator(
-          onRefresh: () => store.dispatchFuture(EventsGetAction()),
+      return DefaultTabController(
+          length: 2,
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              Container(
-                  constraints: BoxConstraints.expand(
-                    height:
-                        Theme.of(context).textTheme.display1.fontSize * 1.1 +
-                            22,
-                  ),
-                  decoration: const BoxDecoration(color: white),
-                  padding: const EdgeInsets.all(10.0),
-                  child: Row(children: <Widget>[
-                    Text('Lounges', style: textStyleTitle(state.theme)),
-                  ])),
               Expanded(
-                  child: ListView.builder(
-                itemCount: events.length,
-                itemBuilder: (context, index) => Container(
-                    decoration: const BoxDecoration(color: white),
-                    child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Column(children: <Widget>[
-                            _buildLounge(events[index], dispatch,
-                                store.dispatchFuture, state.theme)
-                          ]),
-                        ])),
-              ))
+                  child: TabBar(
+                tabs: <Widget>[
+                  Tab(text: 'MY LOUNGES'),
+                  Tab(text: 'FIND LOUNGES'),
+                ],
+              )),
+              Expanded(
+                  flex: 6,
+                  child: TabBarView(
+                    physics: NeverScrollableScrollPhysics(),
+                    children: <Widget>[
+                      _buildLounges(userLounges, dispatch, themeStyle),
+                      _buildLounges(lounges, dispatch, themeStyle),
+                    ],
+                  )),
+              Expanded(
+                child: Button(
+                  text: 'CREATE LOUNGE',
+                  onPressed: () => dispatch(
+                      redux.NavigateAction<AppState>.pushNamed(
+                          LoungeCreateScreen.id)),
+                ),
+              )
             ],
           ));
     });

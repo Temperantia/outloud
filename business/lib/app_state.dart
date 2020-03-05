@@ -1,6 +1,7 @@
 import 'package:business/chats/models/chats_state.dart';
 import 'package:business/events/models/events_state.dart';
 import 'package:business/login/models/login_state.dart';
+import 'package:business/lounges/models/lounges_state.dart';
 import 'package:business/people/models/people_state.dart';
 import 'package:business/user/models/user_state.dart';
 
@@ -14,6 +15,7 @@ class AppState {
     this.loginState,
     this.userState,
     this.eventsState,
+    this.loungesState,
     this.peopleState,
     this.chatsState,
     this.loading,
@@ -25,6 +27,7 @@ class AppState {
     LoginState loginState,
     UserState userState,
     EventsState eventsState,
+    LoungesState loungesState,
     PeopleState peopleState,
     ChatsState chatsState,
     bool loading,
@@ -35,6 +38,7 @@ class AppState {
         loginState: loginState ?? this.loginState,
         userState: userState ?? this.userState,
         eventsState: eventsState ?? this.eventsState,
+        loungesState: loungesState ?? this.loungesState,
         peopleState: peopleState ?? this.peopleState,
         chatsState: chatsState ?? this.chatsState,
         loading: loading ?? this.loading,
@@ -45,6 +49,7 @@ class AppState {
   final LoginState loginState;
   final UserState userState;
   final EventsState eventsState;
+  final LoungesState loungesState;
   final PeopleState peopleState;
   final ChatsState chatsState;
   final bool loading;
@@ -56,6 +61,7 @@ class AppState {
         loginState: LoginState.initialState(),
         userState: UserState.initialState(),
         eventsState: EventsState.initialState(),
+        loungesState: LoungesState.initialState(),
         peopleState: PeopleState.initialState(),
         chatsState: chatsState ?? ChatsState.initialState(),
         loading: true,

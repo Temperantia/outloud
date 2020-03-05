@@ -93,6 +93,25 @@ class _EventsWidgetState extends State<EventsWidget>
             }));
   }
 
+  Widget _buildEvents(
+      List<Event> events,
+      ThemeStyle themeStyle,
+      void Function(redux.ReduxAction<AppState>) dispatch,
+      Future<void> Function(redux.ReduxAction<AppState>) dispatchFuture) {
+    return ListView.builder(
+      itemCount: events.length,
+      itemBuilder: (context, index) => Container(
+        decoration: const BoxDecoration(color: white),
+        child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              _buildEvent(events[index], dispatch, dispatchFuture, themeStyle)
+            ]),
+      ),
+      controller: _scrollController,
+    );
+  }
+
   Widget _buildEvent(
       Event event,
       void Function(redux.ReduxAction<AppState>) dispatch,
@@ -162,7 +181,9 @@ class _EventsWidgetState extends State<EventsWidget>
         void Function(redux.ReduxAction<dynamic>) dispatch,
         Widget child) {
       final List<Event> events = state.eventsState.events;
-      if (events == null) {
+      final List<Event> userEvents = state.userState.events;
+      final ThemeStyle themeStyle = state.theme;
+      if (events == null || userEvents == null) {
         return Loading();
       }
       _markers.clear();
@@ -175,51 +196,33 @@ class _EventsWidgetState extends State<EventsWidget>
               infoWindow: InfoWindow(title: event.name));
         }
       }
-
-      return RefreshIndicator(
-          onRefresh: () => store.dispatchFuture(EventsGetAction()),
+      return DefaultTabController(
+          length: 2,
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              // _buildMap(),
-              Container(
-                  constraints: BoxConstraints.expand(
-                    height:
-                        Theme.of(context).textTheme.display1.fontSize * 1.1 +
-                            22,
-                  ),
-                  decoration: const BoxDecoration(color: white),
-                  padding: const EdgeInsets.all(10.0),
-                  child: Row(children: <Widget>[
-                    Text('Events', style: textStyleTitle(state.theme)),
-                    Spacer(),
-                    Flexible(
-                        flex: 6,
-                        child: Button(
-                          text: 'Create',
-                          onPressed: () => dispatch(
-                              redux.NavigateAction<AppState>.pushNamed(
-                                  EventCreateScreen.id)),
-                        )),
-                  ])),
               Expanded(
-                  child: ListView(
-                children: <Widget>[
-                  Container(
-                    decoration: const BoxDecoration(color: white),
-                    child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Column(children: <Widget>[
-                            for (final Event event in events)
-                              _buildEvent(event, dispatch, store.dispatchFuture,
-                                  state.theme)
-                          ]),
-                        ]),
-                  ),
+                  child: TabBar(
+                labelStyle: textStyleButton,
+                tabs: <Widget>[
+                  Tab(text: 'MY EVENTS'),
+                  Tab(text: 'FIND EVENTS'),
                 ],
-                controller: _scrollController,
-              ))
+              )),
+              Expanded(
+                  flex: 6,
+                  child: TabBarView(
+                    physics: NeverScrollableScrollPhysics(),
+                    children: <Widget>[
+                      _buildEvents(userEvents, themeStyle, dispatch,
+                          store.dispatchFuture),
+                      RefreshIndicator(
+                        onRefresh: () =>
+                            store.dispatchFuture(EventsGetAction()),
+                        child: _buildEvents(
+                            events, themeStyle, dispatch, store.dispatchFuture),
+                      ),
+                    ],
+                  ))
             ],
           ));
     });

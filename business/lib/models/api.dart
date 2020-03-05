@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firestore_helpers/firestore_helpers.dart';
+import 'package:flutter/material.dart';
 
 class Api {
   Api(this.path) {
@@ -13,8 +14,14 @@ class Api {
 
   Query queryCollection(
       {List<QueryConstraint> where = const <QueryConstraint>[],
-      List<OrderConstraint> orderBy = const <OrderConstraint>[]}) {
-    return buildQuery(collection: ref, constraints: where, orderBy: orderBy);
+      List<OrderConstraint> orderBy = const <OrderConstraint>[],
+      List<String> whereIn}) {
+    return buildQuery(
+        collection: whereIn == null
+            ? ref
+            : ref.where(FieldPath.documentId, whereIn: whereIn),
+        constraints: where,
+        orderBy: orderBy);
   }
 
   Query querySubCollection(String id, String idCollection,

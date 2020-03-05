@@ -1,9 +1,15 @@
 import 'package:business/classes/chat.dart';
+import 'package:business/classes/lounge.dart';
 import 'package:business/classes/user.dart';
+import 'package:flutter/src/widgets/framework.dart';
 import 'package:inclusive/chats/chat_screen.dart';
 import 'package:inclusive/events/event_create_screen.dart';
 import 'package:inclusive/events/event_groups_screen.dart';
 import 'package:inclusive/events/event_screen.dart';
+import 'package:inclusive/lounges/lounge_create_detail_screen.dart';
+import 'package:inclusive/lounges/lounge_create_meetup_screen.dart';
+import 'package:inclusive/lounges/lounge_create_screen.dart';
+import 'package:inclusive/lounges/lounge_screen.dart';
 import 'package:inclusive/people/people_search_screen.dart';
 import 'package:inclusive/profile/profile_screen.dart';
 import 'package:inclusive/profile/profile_edition_screen.dart';
@@ -11,14 +17,20 @@ import 'package:inclusive/register/login.dart';
 
 import 'package:inclusive/home_screen.dart';
 
-final routes = {
-  LoginScreen.id: (arguments) => LoginScreen(),
-  HomeScreen.id: (arguments) => HomeScreen(),
-  ProfileEditionScreen.id: (arguments) => ProfileEditionScreen(),
-  EventScreen.id: (arguments) => EventScreen(),
-  EventGroupsScreen.id: (arguments) => EventGroupsScreen(),
-  ProfileScreen.id: (arguments) => ProfileScreen(arguments as User),
-  EventCreateScreen.id: (arguments) => EventCreateScreen(),
-  ChatScreen.id: (arguments) => ChatScreen(arguments as Chat),
-  PeopleSearchScreen.id: (arguments) => PeopleSearchScreen(),
+final Map<String, Widget Function(Object)> routes = {
+  LoginScreen.id: (_) => LoginScreen(),
+  HomeScreen.id: (_) => HomeScreen(),
+  ProfileEditionScreen.id: (_) => ProfileEditionScreen(),
+  EventScreen.id: (_) => EventScreen(),
+  EventGroupsScreen.id: (_) => EventGroupsScreen(),
+  LoungeScreen.id: (dynamic lounge) => LoungeScreen(lounge as Lounge),
+  LoungeCreateScreen.id: (_) => LoungeCreateScreen(),
+  LoungeCreateDetailScreen.id: (dynamic lounge) =>
+      LoungeCreateDetailScreen(lounge as Lounge),
+  LoungeCreateMeetupScreen.id: (dynamic lounge) =>
+      LoungeCreateMeetupScreen(lounge as Lounge),
+  ProfileScreen.id: (dynamic user) => ProfileScreen(user as User),
+  EventCreateScreen.id: (_) => EventCreateScreen(),
+  ChatScreen.id: (dynamic chat) => ChatScreen(chat as Chat),
+  PeopleSearchScreen.id: (_) => PeopleSearchScreen(),
 };

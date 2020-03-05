@@ -149,6 +149,7 @@ class _PeopleWidgetState extends State<PeopleWidget>
               Expanded(
                   flex: 6,
                   child: TabBarView(
+                    physics: NeverScrollableScrollPhysics(),
                     children: <Widget>[
                       _buildFriends(friends, state.theme, dispatch),
                       _buildChats(chats, state.theme, dispatch),

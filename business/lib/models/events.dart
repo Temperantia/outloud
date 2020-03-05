@@ -11,6 +11,21 @@ Stream<Event> streamEvent(String id) {
       .map((DocumentSnapshot doc) => Event.fromMap(doc.data, doc.documentID));
 }
 
+Stream<List<Event>> streamEvents(List<String> ids) {
+  return _api
+      .queryCollection(whereIn: ids)
+      .snapshots()
+      .map<List<Event>>((QuerySnapshot querySnapshot) {
+    return querySnapshot.documents.map<Event>((DocumentSnapshot doc) {
+      return Event.fromMap(doc.data, doc.documentID);
+    }).toList();
+  });
+}
+
+DocumentReference getEventReference(String id) {
+  return _api.ref.document(id);
+}
+
 Future<List<Event>> getEvents() async {
   final Query query = _api.queryCollection();
 
