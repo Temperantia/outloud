@@ -4,11 +4,8 @@ import 'package:async_redux/async_redux.dart';
 import 'package:business/app_state.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
-import 'package:flutter_google_places/flutter_google_places.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_webservice/places.dart';
-import 'package:google_maps_webservice/geocoding.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:inclusive/widgets/view.dart';
 import 'package:provider_for_redux/provider_for_redux.dart';
@@ -85,13 +82,6 @@ class _LoungeCreateMeetupScreenState extends State<LoungeCreateMeetupScreen> {
         _overlayInserted = false;
       });
     }
-
-    // }
-
-    // final String placeId = p.placeId;
-    // final double lat = detail.result.geometry.location.lat;
-    // final double lng = detail.result.geometry.location.lng;
-    // var address = await Geocoder.local.findAddressesFromQuery(p.description);
     return 0;
   }
 
