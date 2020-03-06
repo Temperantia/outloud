@@ -89,7 +89,9 @@ class _EventsWidgetState extends State<EventsWidget>
             initialCameraPosition: _intialMapLocation,
             markers: _markers.values.toSet(),
             onMapCreated: (GoogleMapController controller) {
-              _controller.complete(controller);
+              if (!_controller.isCompleted) {
+                _controller.complete(controller);
+              }
             }));
   }
 
