@@ -3,6 +3,7 @@ import 'package:business/app_state.dart';
 import 'package:business/classes/lounge.dart';
 import 'package:business/classes/lounge_visibility.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:inclusive/lounges/lounge_create_meetup_screen.dart';
 import 'package:inclusive/theme.dart';
 import 'package:inclusive/widgets/button.dart';
@@ -19,6 +20,9 @@ class LoungeCreateDetailScreen extends StatefulWidget {
 
 class _LoungeCreateDetailScreenState extends State<LoungeCreateDetailScreen> {
   LoungeVisibility _visibility = LoungeVisibility.Public;
+  double _limit = 2;
+  TextEditingController _descriptionController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return ReduxConsumer<AppState>(builder: (BuildContext context,
@@ -26,7 +30,6 @@ class _LoungeCreateDetailScreenState extends State<LoungeCreateDetailScreen> {
         AppState state,
         void Function(ReduxAction<AppState>) dispatch,
         Widget child) {
-      var loungeCreation = state.loungesState.loungeCreation;
       return View(
           title: 'CREATE LOUNGE',
           onBack: () => Navigator.popUntil(
@@ -54,6 +57,41 @@ class _LoungeCreateDetailScreenState extends State<LoungeCreateDetailScreen> {
                                   Text('PUBLIC',
                                       style: textStyleCardTitle(state.theme))
                                 ],
+                              ),
+                              Text('MAX MEMBER COUNT'),
+                              Slider(
+                                  value: _limit,
+                                  label: _limit.toInt().toString(),
+                                  min: 2,
+                                  max: 5,
+                                  activeColor: orange,
+                                  inactiveColor: orangeLight,
+                                  divisions: 3,
+                                  onChanged: (double value) {
+                                    setState(() {
+                                      _limit = value;
+                                    });
+                                  }),
+                              Container(
+                                  color: pink,
+                                  child: Column(
+                                    children: <Widget>[
+                                      Text(
+                                          'Upgrade your lounge for more members, bigger reach, and featured spolight'),
+                                      Button(
+                                        text: 'UPGRADE >',
+                                      )
+                                    ],
+                                  )),
+                              Text('LOUNGE DESCRIPTION'),
+                              TextField(
+                                controller: _descriptionController,
+                                inputFormatters: [
+                                  LengthLimitingTextInputFormatter(100),
+                                ],
+                                decoration: InputDecoration(
+                                    hintText:
+                                        'Brief description of your group.'),
                               )
                             ],
                           )
@@ -68,6 +106,8 @@ class _LoungeCreateDetailScreenState extends State<LoungeCreateDetailScreen> {
                 Button(
                     text: 'NEXT',
                     onPressed: () {
+                      dispatch(LoungeUpdateDetailAction(
+                          _visibility, _limit, _descriptionController.text));
                       dispatch(NavigateAction<AppState>.pushNamed(
                         LoungeCreateMeetupScreen.id,
                       ));

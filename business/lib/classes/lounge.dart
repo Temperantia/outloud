@@ -1,5 +1,7 @@
 import 'package:business/classes/event.dart';
+import 'package:business/classes/lounge_visibility.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:enum_to_string/enum_to_string.dart';
 
 class Lounge {
   Lounge({
@@ -7,7 +9,7 @@ class Lounge {
     this.eventRef,
     this.name = '',
     this.description = '',
-    this.isPublic = true,
+    this.visibility = LoungeVisibility.Public,
     this.location,
     this.date,
     this.owner = '',
@@ -24,7 +26,10 @@ class Lounge {
         eventRef = snapshot['eventRef'] as DocumentReference,
         name = snapshot['name'] as String ?? '',
         description = snapshot['description'] as String ?? '',
-        isPublic = snapshot['isPublic'] as bool ?? true,
+        visibility = snapshot['visibility'] == null
+            ? LoungeVisibility.Public
+            : EnumToString.fromString(
+                LoungeVisibility.values, snapshot['visibility'] as String),
         location = snapshot['location'] as GeoPoint,
         date = snapshot['date'] == null
             ? null
@@ -44,7 +49,7 @@ class Lounge {
   Event event;
   String name;
   String description;
-  bool isPublic;
+  LoungeVisibility visibility;
   GeoPoint location;
   DateTime date;
   String owner;
@@ -56,7 +61,7 @@ class Lounge {
       'eventRef': eventRef,
       'name': name,
       'description': description,
-      'isPublic': isPublic,
+      'visibility': EnumToString.parse(visibility),
       'location': location,
       'date': date == null ? null : Timestamp.fromDate(date),
       'owner': owner,
