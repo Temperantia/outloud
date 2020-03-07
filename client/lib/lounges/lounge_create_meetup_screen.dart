@@ -130,7 +130,6 @@ class _LoungeCreateMeetupScreenState extends State<LoungeCreateMeetupScreen> {
             duration: const Duration(seconds: 1), curve: Curves.ease);
       }
     });
-    _adressChoosen = false;
     return 0;
   }
 
@@ -173,6 +172,8 @@ class _LoungeCreateMeetupScreenState extends State<LoungeCreateMeetupScreen> {
                                 _markers.clear();
                                 _markers[_positionOfPlace.markerId.toString()] =
                                     _positionOfPlace;
+                              } else {
+                                _markers.clear();
                               }
                               _moovingMarker = false;
                               _movingCamera = false;
@@ -362,7 +363,9 @@ class _LoungeCreateMeetupScreenState extends State<LoungeCreateMeetupScreen> {
                                     zoom: _zoom)))
                             .then((void value) {
                           setState(() {
-                            _savedMarker = tmpMarker;
+                            if (tmpMarker != null) {
+                                _savedMarker = tmpMarker;
+                            }
                             _markers.clear();
                             _markers[_positionOfPlace.markerId.toString()] =
                                 _positionOfPlace;
