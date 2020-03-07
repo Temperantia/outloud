@@ -6,6 +6,7 @@ import 'package:enum_to_string/enum_to_string.dart';
 class Lounge {
   Lounge({
     this.id = '',
+    this.eventId = '',
     this.eventRef,
     this.name = '',
     this.description = '',
@@ -23,6 +24,7 @@ class Lounge {
 
   Lounge.fromMap(Map<String, dynamic> snapshot, String id)
       : id = id ?? '',
+        eventId = snapshot['eventId'] as String,
         eventRef = snapshot['eventRef'] as DocumentReference,
         name = snapshot['name'] as String ?? '',
         description = snapshot['description'] as String ?? '',
@@ -45,6 +47,7 @@ class Lounge {
   }
 
   String id;
+  String eventId;
   DocumentReference eventRef;
   Event event;
   String name;
@@ -58,6 +61,7 @@ class Lounge {
 
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
+      'eventId': eventId,
       'eventRef': eventRef,
       'name': name,
       'description': description,

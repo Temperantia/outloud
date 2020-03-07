@@ -10,9 +10,23 @@ Stream<Lounge> streamLounge(String id) {
       .map((DocumentSnapshot doc) => Lounge.fromMap(doc.data, doc.documentID));
 }
 
-Stream<List<Lounge>> streamLounges({List<String> ids}) {
+Stream<List<Lounge>> streamEventLounges({List<String> ids}) {
   return _api.queryCollection(whereIn: ids).snapshots().map<List<Lounge>>(
       (QuerySnapshot querySnapshot) => querySnapshot.documents
+          .map<Lounge>((DocumentSnapshot doc) =>
+              Lounge.fromMap(doc.data, doc.documentID))
+          .toList());
+}
+
+Stream<List<Lounge>> streamLounges({List<String> ids, List<String> eventIds}) {
+  Query query = _api.queryCollection();
+  if (ids != null) {
+    query = _api.queryCollection(field: FieldPath.documentId, whereIn: ids);
+  } else if (eventIds != null) {
+    query = _api.queryCollection(field: 'eventId', whereIn: eventIds);
+  }
+  return query.snapshots().map<List<Lounge>>((QuerySnapshot querySnapshot) =>
+      querySnapshot.documents
           .map<Lounge>((DocumentSnapshot doc) =>
               Lounge.fromMap(doc.data, doc.documentID))
           .toList());

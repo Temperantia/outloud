@@ -42,8 +42,8 @@ class _ViewState extends State<View> {
   Widget _buildBody(
       AppState state, void Function(ReduxAction<dynamic>) dispatch) {
     EdgeInsetsGeometry margin;
-    if (widget.showAppBar && widget.showNavBar) {
-      margin = const EdgeInsets.fromLTRB(0.0, 100.0, 0.0, 50.0);
+    if (widget.isRoot) {
+      margin = const EdgeInsets.fromLTRB(0.0, 50.0, 0.0, 50.0);
     } else if (widget.showAppBar) {
       margin = const EdgeInsets.only(top: 100.0);
     } else if (widget.showNavBar) {
