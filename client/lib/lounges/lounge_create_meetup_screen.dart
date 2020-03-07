@@ -9,6 +9,7 @@ import 'package:google_maps_webservice/places.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:inclusive/widgets/view.dart';
 import 'package:provider_for_redux/provider_for_redux.dart';
+import 'package:geolocator/geolocator.dart';
 
 import '../theme.dart';
 
@@ -29,18 +30,32 @@ class _LoungeCreateMeetupScreenState extends State<LoungeCreateMeetupScreen> {
   GoogleMapsPlaces _googleMapsPlaces;
   PlacesSearchResult _choosenPlace;
 
+  final ScrollController _scrollController = ScrollController();
+
   final Map<String, Marker> _markers = <String, Marker>{};
   Marker _positionOfPlace;
+  Marker _savedMarker;
+
+  LatLng _referencePosition;
 
   bool _adressChoosen;
+
+  bool _firstMove;
+  bool _moovingMarker;
 
   List<PlacesSearchResult> _resultPlaces = <PlacesSearchResult>[];
   final FocusNode _focusNodeAdress = FocusNode();
   OverlayEntry _suggestionsOverlay;
+  OverlayEntry _mapButtonsOverlay;
+
   final LayerLink _layerLink = LayerLink();
+  final LayerLink _mapLink = LayerLink();
   final GlobalKey _keySearch = GlobalKey();
+  final GlobalKey _keyMap = GlobalKey();
   final TextEditingController _searchTextController = TextEditingController();
   Timer _throttle;
+  Timer _moveDelay;
+  bool _movingCamera;
 
   bool _overlayInserted;
 
@@ -63,7 +78,6 @@ class _LoungeCreateMeetupScreenState extends State<LoungeCreateMeetupScreen> {
   }
 
   Future<int> _displayPrediction() async {
-    // if (_suggestionsOverlay != null) {
     final PlacesSearchResponse response =
         await _googleMapsPlaces.searchByText(_searchTextController.text);
     if (response.results.isNotEmpty) {
@@ -92,6 +106,10 @@ class _LoungeCreateMeetupScreenState extends State<LoungeCreateMeetupScreen> {
     _googleMapsPlaces = GoogleMapsPlaces(apiKey: googleApiKey);
     _overlayInserted = false;
     _searchTextController.addListener(_onSearchChanged);
+    _firstMove = true;
+    _moovingMarker = false;
+    _movingCamera = false;
+    _adressChoosen = true;
 
     _focusNodeAdress.addListener(() {
       if (_focusNodeAdress.hasFocus) {
@@ -108,6 +126,8 @@ class _LoungeCreateMeetupScreenState extends State<LoungeCreateMeetupScreen> {
         if (_suggestionsOverlay != null && _overlayInserted) {
           _suggestionsOverlay.remove();
         }
+        _scrollController.animateTo(0,
+            duration: const Duration(seconds: 1), curve: Curves.ease);
       }
     });
     _adressChoosen = false;
@@ -119,6 +139,106 @@ class _LoungeCreateMeetupScreenState extends State<LoungeCreateMeetupScreen> {
     _searchTextController.removeListener(_onSearchChanged);
     _searchTextController.dispose();
     super.dispose();
+  }
+
+  OverlayEntry _createOverlayButtons() {
+    final RenderBox renderBox =
+        _keyMap.currentContext.findRenderObject() as RenderBox;
+    final Size sizeMap = renderBox.size;
+    final Offset positionMap = renderBox.localToGlobal(Offset.zero);
+
+    return OverlayEntry(
+        builder: (BuildContext context) => Positioned(
+              left: positionMap.dx,
+              height: 60,
+              width: sizeMap.width / 1.5,
+              child: CompositedTransformFollower(
+                link: _mapLink,
+                showWhenUnlinked: false,
+                offset: Offset(30, sizeMap.height - 100),
+                child: Material(
+                    color: grey,
+                    elevation: 4.0,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: <Widget>[
+                        FlatButton(
+                          color: white,
+                          // padding: const EdgeInsets.all(5),
+                          onPressed: () async {
+                            setState(() {
+                              _firstMove = true;
+                              if (_savedMarker != null) {
+                                _positionOfPlace = _savedMarker;
+                                _markers.clear();
+                                _markers[_positionOfPlace.markerId.toString()] =
+                                    _positionOfPlace;
+                              }
+                              _moovingMarker = false;
+                              _movingCamera = false;
+                            });
+                            final GoogleMapController controller =
+                                await _controller.future;
+                            controller.animateCamera(
+                                CameraUpdate.newCameraPosition(CameraPosition(
+                                    target: _positionOfPlace.position,
+                                    zoom: 15)));
+                            _mapButtonsOverlay.remove();
+                          },
+                          child: const Text('Cancel'),
+                        ),
+                        FlatButton(
+                          color: white,
+                          // padding: const EdgeInsets.all(5),
+                          onPressed: () async {
+                            setState(() {
+                              _firstMove = true;
+                              // if (_savedMarker != null) {
+                              //   _positionOfPlace = _savedMarker;
+                              //   _markers.clear();
+                              //   _markers[_positionOfPlace.markerId.toString()] =
+                              //       _positionOfPlace;
+                              // }
+                              _moovingMarker = false;
+                              _movingCamera = false;
+                            });
+                            final List<Placemark> placemark = await Geolocator()
+                                .placemarkFromCoordinates(
+                                    _positionOfPlace.position.latitude,
+                                    _positionOfPlace.position.longitude);
+                            print('loook he places : ' + placemark.toString());
+                            if (placemark.isNotEmpty) {
+                              final Placemark _place = placemark.first;
+                              final String _address = _place.subThoroughfare +' ' +
+                                  _place.thoroughfare + ' ' + 
+                                  _place.postalCode.toString() + ' ' +
+                                  _place.locality;
+                              print('_place adress : ' + _address);
+                              setState(() {
+                                _positionOfPlace = Marker(
+                                  markerId: _positionOfPlace.markerId, 
+                                  position: _positionOfPlace.position,
+                                  infoWindow:InfoWindow(title: 'meeting point', snippet: _address) );
+                                _markers.clear();
+                                _markers[_positionOfPlace.markerId.toString()] = _positionOfPlace;
+                                _searchTextController.text = _address;
+                              });
+                            }
+
+                            final GoogleMapController controller =
+                                await _controller.future;
+                            controller.animateCamera(
+                                CameraUpdate.newCameraPosition(CameraPosition(
+                                    target: _positionOfPlace.position,
+                                    zoom: 15)));
+                            _mapButtonsOverlay.remove();
+                          },
+                          child: const Text('Ok'),
+                        )
+                      ],
+                    )),
+              ),
+            ));
   }
 
   OverlayEntry _createOverlayEntry() {
@@ -162,13 +282,12 @@ class _LoungeCreateMeetupScreenState extends State<LoungeCreateMeetupScreen> {
                 infoWindow: InfoWindow(
                     title: _choosenPlace.name,
                     snippet: _choosenPlace.formattedAddress));
-
           });
           _markers.clear();
           _markers[_positionOfPlace.markerId.toString()] = _positionOfPlace;
           final GoogleMapController controller = await _controller.future;
           controller.animateCamera(CameraUpdate.newCameraPosition(
-              CameraPosition(target: _positionOfPlace.position, zoom: 20)));
+              CameraPosition(target: _positionOfPlace.position, zoom: 15)));
           _suggestionsOverlay.remove();
           _focusNodeAdress.unfocus();
         });
@@ -180,7 +299,8 @@ class _LoungeCreateMeetupScreenState extends State<LoungeCreateMeetupScreen> {
           height: Theme.of(context).textTheme.display1.fontSize * 1.1 + 300,
         ),
         decoration: const BoxDecoration(color: white),
-        padding: const EdgeInsets.all(15),
+        key: _keyMap,
+        padding: const EdgeInsets.all(5),
         child: Column(children: <Widget>[
           Container(
               constraints: BoxConstraints.expand(
@@ -196,23 +316,108 @@ class _LoungeCreateMeetupScreenState extends State<LoungeCreateMeetupScreen> {
                 ),
               )),
           Expanded(
-              child: GoogleMap(
-                  mapType: MapType.normal,
-                  zoomGesturesEnabled: true,
-                  myLocationButtonEnabled: true,
-                  myLocationEnabled: true,
-                  gestureRecognizers: <Factory<OneSequenceGestureRecognizer>>{
-                    Factory<OneSequenceGestureRecognizer>(
-                      () => EagerGestureRecognizer(),
-                    )
-                  },
-                  markers: _markers.values.toSet(),
-                  initialCameraPosition: _intialMapLocation,
-                  onMapCreated: (GoogleMapController controller) {
-                    if (!_controller.isCompleted) {
-                      _controller.complete(controller);
-                    }
-                  }))
+              child: CompositedTransformTarget(
+                  link: _mapLink,
+                  child: GoogleMap(
+                      mapType: MapType.normal,
+                      zoomGesturesEnabled: true,
+                      myLocationButtonEnabled: true,
+                      myLocationEnabled: true,
+                      gestureRecognizers: <
+                          Factory<OneSequenceGestureRecognizer>>{
+                        Factory<OneSequenceGestureRecognizer>(
+                          () => EagerGestureRecognizer(),
+                        )
+                      },
+                      onLongPress: (LatLng position) async {
+                        print('start selecting a place at position ' +
+                            position.toString());
+                        if (_moovingMarker) {
+                          print('on est deja en train de positioner le truc');
+                          return;
+                        }
+                        Marker tmpMarker;
+                        if (_positionOfPlace != null) {
+                          tmpMarker = _positionOfPlace.clone();
+                        }
+                        _positionOfPlace = Marker(
+                            markerId: MarkerId(position.toString()),
+                            position:
+                                LatLng(position.latitude, position.longitude),
+                            infoWindow: InfoWindow(
+                                snippet: position.toString(),
+                                title: 'meeting point'));
+
+                        final GoogleMapController controller =
+                            await _controller.future;
+                        final double _zoom = await controller.getZoomLevel();
+                        setState(() {
+                          _moovingMarker = false;
+                          _movingCamera = true;
+                        });
+                        controller
+                            .animateCamera(CameraUpdate.newCameraPosition(
+                                CameraPosition(
+                                    target: _positionOfPlace.position,
+                                    zoom: _zoom)))
+                            .then((void value) {
+                          setState(() {
+                            _savedMarker = tmpMarker;
+                            _markers.clear();
+                            _markers[_positionOfPlace.markerId.toString()] =
+                                _positionOfPlace;
+                            _mapButtonsOverlay = _createOverlayButtons();
+                          });
+                          Overlay.of(context).insert(_mapButtonsOverlay);
+                          _moveDelay =
+                              Timer(const Duration(milliseconds: 1200), () {
+                            setState(() {
+                              _moovingMarker = true;
+                              _movingCamera = false;
+                            });
+                          });
+                        });
+                      },
+                      onCameraMoveStarted: () {
+                        print('on commence a bouger');
+                      },
+                      onCameraIdle: () {
+                        print('stop moving camera ');
+                      },
+                      onCameraMove: (CameraPosition position) {
+                        if (!_moovingMarker) {
+                          return;
+                        }
+                        if (_firstMove) {
+                          print('first real move');
+                          setState(() {
+                            _referencePosition = position.target;
+                            _firstMove = false;
+                          });
+                          return;
+                        }
+
+                        _positionOfPlace = Marker(
+                            markerId: MarkerId('meeting point'),
+                            position: LatLng(position.target.latitude,
+                                position.target.longitude),
+                            infoWindow: InfoWindow(
+                                snippet: position.toString(),
+                                title: 'meeting point'));
+                        setState(() {
+                          _referencePosition = position.target;
+                          _markers.clear();
+                          _markers[_positionOfPlace.markerId.toString()] =
+                              _positionOfPlace;
+                        });
+                      },
+                      markers: _markers.values.toSet(),
+                      initialCameraPosition: _intialMapLocation,
+                      onMapCreated: (GoogleMapController controller) {
+                        if (!_controller.isCompleted) {
+                          _controller.complete(controller);
+                        }
+                      })))
         ]));
   }
 
@@ -276,6 +481,7 @@ class _LoungeCreateMeetupScreenState extends State<LoungeCreateMeetupScreen> {
                   color: white,
                   child: Scrollbar(
                       child: ListView(
+                          controller: _scrollController,
                           padding: const EdgeInsets.all(10),
                           children: <Widget>[
                         _buildMap(context),

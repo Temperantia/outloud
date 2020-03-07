@@ -106,8 +106,8 @@ class _LoungeCreateDetailScreenState extends State<LoungeCreateDetailScreen> {
                 Button(
                     text: 'NEXT',
                     onPressed: () {
-                      dispatch(LoungeUpdateDetailAction(
-                          _visibility, _limit, _descriptionController.text));
+                      // dispatch(LoungeUpdateDetailAction(
+                      //     _visibility, _limit, _descriptionController.text));
                       dispatch(NavigateAction<AppState>.pushNamed(
                         LoungeCreateMeetupScreen.id,
                       ));
