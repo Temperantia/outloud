@@ -26,37 +26,28 @@ class LoungeCreateMeetupScreen extends StatefulWidget {
 class _LoungeCreateMeetupScreenState extends State<LoungeCreateMeetupScreen> {
   final Completer<GoogleMapController> _controller =
       Completer<GoogleMapController>();
-  CameraPosition _intialMapLocation;
-  GoogleMapsPlaces _googleMapsPlaces;
-  PlacesSearchResult _choosenPlace;
-
   final ScrollController _scrollController = ScrollController();
-
   final Map<String, Marker> _markers = <String, Marker>{};
-  Marker _positionOfPlace;
-  Marker _savedMarker;
-
-  LatLng _referencePosition;
-
-  bool _adressChoosen;
-
-  bool _firstMove;
-  bool _moovingMarker;
-
-  List<PlacesSearchResult> _resultPlaces = <PlacesSearchResult>[];
   final FocusNode _focusNodeAdress = FocusNode();
-  OverlayEntry _suggestionsOverlay;
-  OverlayEntry _mapButtonsOverlay;
-
   final LayerLink _layerLink = LayerLink();
   final LayerLink _mapLink = LayerLink();
   final GlobalKey _keySearch = GlobalKey();
   final GlobalKey _keyMap = GlobalKey();
   final TextEditingController _searchTextController = TextEditingController();
-  Timer _throttle;
-  Timer _moveDelay;
-  bool _movingCamera;
 
+  List<PlacesSearchResult> _resultPlaces = <PlacesSearchResult>[];
+  CameraPosition _intialMapLocation;
+  GoogleMapsPlaces _googleMapsPlaces;
+  PlacesSearchResult _choosenPlace;
+
+  OverlayEntry _suggestionsOverlay;
+  OverlayEntry _mapButtonsOverlay;
+
+  Timer _throttle;
+  Marker _positionOfPlace;
+  Marker _savedMarker;
+  bool _adressChoosen;
+  bool _moovingMarker;
   bool _overlayInserted;
 
   @override
@@ -65,7 +56,7 @@ class _LoungeCreateMeetupScreenState extends State<LoungeCreateMeetupScreen> {
     _initVariables();
   }
 
-  Future<Null> _onSearchChanged() async {
+  Future<int> _onSearchChanged() async {
     if (_throttle?.isActive ?? false) {
       _throttle.cancel();
     }
@@ -75,6 +66,32 @@ class _LoungeCreateMeetupScreenState extends State<LoungeCreateMeetupScreen> {
         _displayPrediction();
       }
     });
+    return 0;
+  }
+
+  Future<String> _getAdressFromCoordinates(
+      double latitude, double longitude) async {
+    final List<Placemark> placemark =
+        await Geolocator().placemarkFromCoordinates(latitude, longitude);
+    String _address = '';
+    if (placemark.isNotEmpty) {
+      final Placemark _place = placemark.first;
+      _address = _place.subThoroughfare +
+          ' ' +
+          _place.thoroughfare +
+          ' ' +
+          _place.postalCode.toString() +
+          ' ' +
+          _place.locality;
+    }
+    return _address;
+  }
+
+  Future<int> _moveCameraToPosition(LatLng position, double zoom) async {
+    final GoogleMapController controller = await _controller.future;
+    controller.animateCamera(CameraUpdate.newCameraPosition(
+        CameraPosition(target: position, zoom: zoom)));
+    return 0;
   }
 
   Future<int> _displayPrediction() async {
@@ -106,9 +123,7 @@ class _LoungeCreateMeetupScreenState extends State<LoungeCreateMeetupScreen> {
     _googleMapsPlaces = GoogleMapsPlaces(apiKey: googleApiKey);
     _overlayInserted = false;
     _searchTextController.addListener(_onSearchChanged);
-    _firstMove = true;
     _moovingMarker = false;
-    _movingCamera = false;
     _adressChoosen = true;
 
     _focusNodeAdress.addListener(() {
@@ -165,25 +180,30 @@ class _LoungeCreateMeetupScreenState extends State<LoungeCreateMeetupScreen> {
                           color: white,
                           // padding: const EdgeInsets.all(5),
                           onPressed: () async {
-                            setState(() {
-                              _firstMove = true;
-                              if (_savedMarker != null) {
+                            if (_savedMarker != null) {
+                              final String _previousAdress =
+                                  await _getAdressFromCoordinates(
+                                      _savedMarker.position.latitude,
+                                      _savedMarker.position.longitude);
+                              setState(() {
                                 _positionOfPlace = _savedMarker;
                                 _markers.clear();
                                 _markers[_positionOfPlace.markerId.toString()] =
                                     _positionOfPlace;
-                              } else {
+                                _searchTextController.text = _previousAdress;
+                              });
+                              _moveCameraToPosition(
+                                  _positionOfPlace.position, 15);
+                            } else {
+                              setState(() {
                                 _markers.clear();
-                              }
+                                _searchTextController.text = '';
+                                _positionOfPlace = null;
+                              });
+                            }
+                            setState(() {
                               _moovingMarker = false;
-                              _movingCamera = false;
                             });
-                            final GoogleMapController controller =
-                                await _controller.future;
-                            controller.animateCamera(
-                                CameraUpdate.newCameraPosition(CameraPosition(
-                                    target: _positionOfPlace.position,
-                                    zoom: 15)));
                             _mapButtonsOverlay.remove();
                           },
                           child: const Text('Cancel'),
@@ -192,46 +212,25 @@ class _LoungeCreateMeetupScreenState extends State<LoungeCreateMeetupScreen> {
                           color: white,
                           // padding: const EdgeInsets.all(5),
                           onPressed: () async {
-                            setState(() {
-                              _firstMove = true;
-                              // if (_savedMarker != null) {
-                              //   _positionOfPlace = _savedMarker;
-                              //   _markers.clear();
-                              //   _markers[_positionOfPlace.markerId.toString()] =
-                              //       _positionOfPlace;
-                              // }
-                              _moovingMarker = false;
-                              _movingCamera = false;
-                            });
-                            final List<Placemark> placemark = await Geolocator()
-                                .placemarkFromCoordinates(
+                            final String _address =
+                                await _getAdressFromCoordinates(
                                     _positionOfPlace.position.latitude,
                                     _positionOfPlace.position.longitude);
-                            print('loook he places : ' + placemark.toString());
-                            if (placemark.isNotEmpty) {
-                              final Placemark _place = placemark.first;
-                              final String _address = _place.subThoroughfare +' ' +
-                                  _place.thoroughfare + ' ' + 
-                                  _place.postalCode.toString() + ' ' +
-                                  _place.locality;
-                              print('_place adress : ' + _address);
-                              setState(() {
-                                _positionOfPlace = Marker(
-                                  markerId: _positionOfPlace.markerId, 
+                            setState(() {
+                              _moovingMarker = false;
+                              _positionOfPlace = Marker(
+                                  markerId: _positionOfPlace.markerId,
                                   position: _positionOfPlace.position,
-                                  infoWindow:InfoWindow(title: 'meeting point', snippet: _address) );
-                                _markers.clear();
-                                _markers[_positionOfPlace.markerId.toString()] = _positionOfPlace;
-                                _searchTextController.text = _address;
-                              });
-                            }
-
-                            final GoogleMapController controller =
-                                await _controller.future;
-                            controller.animateCamera(
-                                CameraUpdate.newCameraPosition(CameraPosition(
-                                    target: _positionOfPlace.position,
-                                    zoom: 15)));
+                                  infoWindow: InfoWindow(
+                                      title: 'meeting point',
+                                      snippet: _address));
+                              _markers.clear();
+                              _markers[_positionOfPlace.markerId.toString()] =
+                                  _positionOfPlace;
+                              _searchTextController.text = _address;
+                            });
+                            _moveCameraToPosition(
+                                _positionOfPlace.position, 15);
                             _mapButtonsOverlay.remove();
                           },
                           child: const Text('Ok'),
@@ -281,7 +280,7 @@ class _LoungeCreateMeetupScreenState extends State<LoungeCreateMeetupScreen> {
                 position: LatLng(_choosenPlace.geometry.location.lat,
                     _choosenPlace.geometry.location.lng),
                 infoWindow: InfoWindow(
-                    title: _choosenPlace.name,
+                    title: 'Meeting point',
                     snippet: _choosenPlace.formattedAddress));
           });
           _markers.clear();
@@ -354,61 +353,62 @@ class _LoungeCreateMeetupScreenState extends State<LoungeCreateMeetupScreen> {
                         final double _zoom = await controller.getZoomLevel();
                         setState(() {
                           _moovingMarker = false;
-                          _movingCamera = true;
                         });
                         controller
                             .animateCamera(CameraUpdate.newCameraPosition(
                                 CameraPosition(
                                     target: _positionOfPlace.position,
                                     zoom: _zoom)))
-                            .then((void value) {
+                            .then((void value) async {
+                          final String _address =
+                              await _getAdressFromCoordinates(
+                                  _positionOfPlace.position.latitude,
+                                  _positionOfPlace.position.longitude);
                           setState(() {
                             if (tmpMarker != null) {
-                                _savedMarker = tmpMarker;
+                              _savedMarker = tmpMarker;
                             }
                             _markers.clear();
                             _markers[_positionOfPlace.markerId.toString()] =
                                 _positionOfPlace;
                             _mapButtonsOverlay = _createOverlayButtons();
+                            _searchTextController.text = _address;
                           });
                           Overlay.of(context).insert(_mapButtonsOverlay);
-                          _moveDelay =
-                              Timer(const Duration(milliseconds: 1200), () {
+                          Timer(const Duration(milliseconds: 1200), () {
                             setState(() {
                               _moovingMarker = true;
-                              _movingCamera = false;
                             });
                           });
                         });
                       },
                       onCameraMoveStarted: () {
-                        print('on commence a bouger');
+                        print('start moving camera');
                       },
-                      onCameraIdle: () {
-                        print('stop moving camera ');
+                      onCameraIdle: () async {
+                        print('stop moving camera');
+                        if (_positionOfPlace == null || !_moovingMarker) {
+                          return;
+                        }
+                        final String _address = await _getAdressFromCoordinates(
+                            _positionOfPlace.position.latitude,
+                            _positionOfPlace.position.longitude);
+                        setState(() {
+                          _searchTextController.text = _address;
+                        });
                       },
                       onCameraMove: (CameraPosition position) {
                         if (!_moovingMarker) {
                           return;
                         }
-                        if (_firstMove) {
-                          print('first real move');
-                          setState(() {
-                            _referencePosition = position.target;
-                            _firstMove = false;
-                          });
-                          return;
-                        }
-
                         _positionOfPlace = Marker(
-                            markerId: MarkerId('meeting point'),
+                            markerId: MarkerId('Meeting point'),
                             position: LatLng(position.target.latitude,
                                 position.target.longitude),
                             infoWindow: InfoWindow(
                                 snippet: position.toString(),
-                                title: 'meeting point'));
+                                title: 'Meeting point'));
                         setState(() {
-                          _referencePosition = position.target;
                           _markers.clear();
                           _markers[_positionOfPlace.markerId.toString()] =
                               _positionOfPlace;
