@@ -185,6 +185,10 @@ class _LoungeCreateMeetupScreenState extends State<LoungeCreateMeetupScreen> {
     super.dispose();
   }
 
+  void _dismissDialog() {
+    Navigator.pop(context);
+  }
+
   OverlayEntry _createOverlayButtons() {
     final RenderBox renderBox =
         _keyMap.currentContext.findRenderObject() as RenderBox;
@@ -665,7 +669,7 @@ class _LoungeCreateMeetupScreenState extends State<LoungeCreateMeetupScreen> {
                                               actions: <Widget>[
                                                 FlatButton(
                                                     onPressed: () {
-                                                      Navigator.pop(context);
+                                                      _dismissDialog();
                                                       _scrollController
                                                           .animateTo(0,
                                                               duration:
