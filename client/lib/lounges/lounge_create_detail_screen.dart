@@ -34,6 +34,7 @@ class _LoungeCreateDetailScreenState extends State<LoungeCreateDetailScreen> {
           title: 'CREATE LOUNGE',
           onBack: () => Navigator.popUntil(
               context, (Route<dynamic> route) => route.isFirst),
+          backIcon: Icons.close,
           child: Column(
             children: <Widget>[
               Expanded(

@@ -12,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:inclusive/events/event_screen.dart';
 import 'package:inclusive/lounges/lounge_create_screen.dart';
 import 'package:inclusive/lounges/lounge_screen.dart';
+import 'package:inclusive/lounges/lounges_screen.dart';
 import 'package:inclusive/theme.dart';
 import 'package:inclusive/widgets/button.dart';
 import 'package:inclusive/widgets/cached_image.dart';
@@ -112,7 +113,7 @@ class _LoungesWidgetState extends State<LoungesWidget>
 
     return GestureDetector(
         onTap: () {
-          dispatch(redux.NavigateAction<AppState>.pushNamed(LoungeScreen.id,
+          dispatch(redux.NavigateAction<AppState>.pushNamed(LoungesScreen.id,
               arguments: event));
         },
         child: Container(

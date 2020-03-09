@@ -31,8 +31,6 @@ class UserState {
   final List<Event> events;
   final Map<String, List<Lounge>> eventLounges;
   final List<Lounge> lounges;
-  static Stream<User> userStream;
-  static Stream<List<Event>> eventsStream;
 
   static UserState initialState() => UserState();
 }

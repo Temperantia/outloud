@@ -1,4 +1,5 @@
 import 'package:business/classes/chat.dart';
+import 'package:business/classes/event.dart';
 import 'package:business/classes/lounge.dart';
 import 'package:business/classes/user.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -10,6 +11,7 @@ import 'package:inclusive/lounges/lounge_create_detail_screen.dart';
 import 'package:inclusive/lounges/lounge_create_meetup_screen.dart';
 import 'package:inclusive/lounges/lounge_create_screen.dart';
 import 'package:inclusive/lounges/lounge_screen.dart';
+import 'package:inclusive/lounges/lounges_screen.dart';
 import 'package:inclusive/people/people_search_screen.dart';
 import 'package:inclusive/profile/profile_screen.dart';
 import 'package:inclusive/profile/profile_edition_screen.dart';
@@ -23,6 +25,7 @@ final Map<String, Widget Function(Object)> routes = {
   ProfileEditionScreen.id: (_) => ProfileEditionScreen(),
   EventScreen.id: (_) => EventScreen(),
   EventGroupsScreen.id: (_) => EventGroupsScreen(),
+  LoungesScreen.id: (dynamic event) => LoungesScreen(event as Event),
   LoungeScreen.id: (dynamic lounge) => LoungeScreen(lounge as Lounge),
   LoungeCreateScreen.id: (_) => LoungeCreateScreen(),
   LoungeCreateDetailScreen.id: (_) => LoungeCreateDetailScreen(),

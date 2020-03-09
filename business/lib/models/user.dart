@@ -63,6 +63,16 @@ Future<List<User>> getUsers(String userId,
       .toList();
 }
 
+Stream<List<User>> streamUsers({List<String> ids}) {
+  Query query = _api.queryCollection(field: FieldPath.documentId, whereIn: ids);
+
+  return query.snapshots().map((QuerySnapshot querySnapshot) => querySnapshot
+      .documents
+      .map<User>(
+          (DocumentSnapshot doc) => User.fromMap(doc.data, doc.documentID))
+      .toList());
+}
+
 Future<List<User>> getFriends(String id) async {
   final User user = await getUser(id);
   if (user.friends.isEmpty) {

@@ -1,5 +1,6 @@
 import 'package:business/classes/event.dart';
 import 'package:business/classes/lounge_visibility.dart';
+import 'package:business/classes/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:enum_to_string/enum_to_string.dart';
 
@@ -16,10 +17,18 @@ class Lounge {
     this.owner = '',
     this.memberLimit = 5,
     this.memberIds = const <String>[],
+    this.memberRefs,
+    this.members = const [],
   }) {
     if (eventRef != null)
       eventRef.snapshots().listen((DocumentSnapshot doc) =>
           event = Event.fromMap(doc.data, doc.documentID));
+    if (memberRefs != null) {
+      for (var memberRef in memberRefs) {
+        memberRef.snapshots().listen((DocumentSnapshot doc) =>
+            members.add(User.fromMap(doc.data, doc.documentID)));
+      }
+    }
   }
 
   Lounge.fromMap(Map<String, dynamic> snapshot, String id)
@@ -40,10 +49,21 @@ class Lounge {
         memberLimit = snapshot['memberLimit'] as int ?? 5,
         memberIds = snapshot['memberIds'] == null
             ? <String>[]
-            : snapshot['memberIds'].cast<String>() as List<String> {
+            : snapshot['memberIds'].cast<String>() as List<String>,
+        memberRefs = snapshot['memberRefs'] == null
+            ? []
+            : snapshot['memberRefs'].cast<DocumentReference>()
+                as List<DocumentReference>,
+        members = [] {
     if (eventRef != null)
       eventRef.snapshots().listen((DocumentSnapshot doc) =>
           event = Event.fromMap(doc.data, doc.documentID));
+    if (memberRefs != null) {
+      for (var memberRef in memberRefs) {
+        memberRef.snapshots().listen((DocumentSnapshot doc) =>
+            members.add(User.fromMap(doc.data, doc.documentID)));
+      }
+    }
   }
 
   String id;
@@ -58,6 +78,8 @@ class Lounge {
   String owner;
   int memberLimit;
   List<String> memberIds;
+  List<DocumentReference> memberRefs;
+  List<User> members;
 
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
@@ -71,6 +93,7 @@ class Lounge {
       'owner': owner,
       'memberLimit': memberLimit,
       'memberIds': memberIds,
+      'memberRefs': memberRefs,
     };
   }
 

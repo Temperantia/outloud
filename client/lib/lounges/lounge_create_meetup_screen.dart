@@ -210,18 +210,24 @@ class _LoungeCreateMeetupScreenState extends State<LoungeCreateMeetupScreen> {
                             print('loook he places : ' + placemark.toString());
                             if (placemark.isNotEmpty) {
                               final Placemark _place = placemark.first;
-                              final String _address = _place.subThoroughfare +' ' +
-                                  _place.thoroughfare + ' ' + 
-                                  _place.postalCode.toString() + ' ' +
+                              final String _address = _place.subThoroughfare +
+                                  ' ' +
+                                  _place.thoroughfare +
+                                  ' ' +
+                                  _place.postalCode.toString() +
+                                  ' ' +
                                   _place.locality;
                               print('_place adress : ' + _address);
                               setState(() {
                                 _positionOfPlace = Marker(
-                                  markerId: _positionOfPlace.markerId, 
-                                  position: _positionOfPlace.position,
-                                  infoWindow:InfoWindow(title: 'meeting point', snippet: _address) );
+                                    markerId: _positionOfPlace.markerId,
+                                    position: _positionOfPlace.position,
+                                    infoWindow: InfoWindow(
+                                        title: 'meeting point',
+                                        snippet: _address));
                                 _markers.clear();
-                                _markers[_positionOfPlace.markerId.toString()] = _positionOfPlace;
+                                _markers[_positionOfPlace.markerId.toString()] =
+                                    _positionOfPlace;
                                 _searchTextController.text = _address;
                               });
                             }
@@ -364,7 +370,7 @@ class _LoungeCreateMeetupScreenState extends State<LoungeCreateMeetupScreen> {
                             .then((void value) {
                           setState(() {
                             if (tmpMarker != null) {
-                                _savedMarker = tmpMarker;
+                              _savedMarker = tmpMarker;
                             }
                             _markers.clear();
                             _markers[_positionOfPlace.markerId.toString()] =
@@ -476,6 +482,10 @@ class _LoungeCreateMeetupScreenState extends State<LoungeCreateMeetupScreen> {
         void Function(ReduxAction<AppState>) dispatch,
         Widget child) {
       return View(
+          title: 'CREATE LOUNGE',
+          onBack: () => Navigator.popUntil(
+              context, (Route<dynamic> route) => route.isFirst),
+          backIcon: Icons.close,
           child: Container(
               constraints: const BoxConstraints.expand(
                   // width: MediaQuery.of(context).size.width
