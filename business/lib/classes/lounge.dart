@@ -16,6 +16,7 @@ class Lounge {
     this.date,
     this.owner = '',
     this.memberLimit = 5,
+    this.notes,
     this.memberIds = const <String>[],
     this.memberRefs,
     this.members = const [],
@@ -77,6 +78,7 @@ class Lounge {
   DateTime date;
   String owner;
   int memberLimit;
+  String notes;
   List<String> memberIds;
   List<DocumentReference> memberRefs;
   List<User> members;
