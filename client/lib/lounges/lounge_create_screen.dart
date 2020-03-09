@@ -47,6 +47,9 @@ class _LoungeCreateScreenState extends State<LoungeCreateScreen> {
       final List<Event> userEvents = state.userState.events;
       return View(
           title: 'CREATE LOUNGE',
+          onBack: () => Navigator.popUntil(
+              context, (Route<dynamic> route) => route.isFirst),
+          backIcon: Icons.close,
           child: Column(
             children: <Widget>[
               Expanded(

@@ -13,7 +13,7 @@ Stream<Event> streamEvent(String id) {
 
 Stream<List<Event>> streamEvents(List<String> ids) {
   return _api
-      .queryCollection(whereIn: ids)
+      .queryCollection(field: FieldPath.documentId, whereIn: ids)
       .snapshots()
       .map<List<Event>>((QuerySnapshot querySnapshot) {
     return querySnapshot.documents.map<Event>((DocumentSnapshot doc) {

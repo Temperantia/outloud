@@ -1,5 +1,6 @@
 import 'package:business/classes/lounge.dart';
 
+// TODO(me): only user lounges and lounges from events the user attends get fetched, so getting all of them is superfluous here
 class LoungesState {
   LoungesState({
     this.lounges,

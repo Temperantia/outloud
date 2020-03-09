@@ -222,7 +222,7 @@ class _LoungeCreateMeetupScreenState extends State<LoungeCreateMeetupScreen> {
                                   markerId: _positionOfPlace.markerId,
                                   position: _positionOfPlace.position,
                                   infoWindow: InfoWindow(
-                                      title: 'meeting point',
+                                      title: 'Meeting point',
                                       snippet: _address));
                               _markers.clear();
                               _markers[_positionOfPlace.markerId.toString()] =
@@ -346,7 +346,7 @@ class _LoungeCreateMeetupScreenState extends State<LoungeCreateMeetupScreen> {
                                 LatLng(position.latitude, position.longitude),
                             infoWindow: InfoWindow(
                                 snippet: position.toString(),
-                                title: 'meeting point'));
+                                title: 'Meeting point'));
 
                         final GoogleMapController controller =
                             await _controller.future;
@@ -476,6 +476,10 @@ class _LoungeCreateMeetupScreenState extends State<LoungeCreateMeetupScreen> {
         void Function(ReduxAction<AppState>) dispatch,
         Widget child) {
       return View(
+          title: 'CREATE LOUNGE',
+          onBack: () => Navigator.popUntil(
+              context, (Route<dynamic> route) => route.isFirst),
+          backIcon: Icons.close,
           child: Container(
               constraints: const BoxConstraints.expand(
                   // width: MediaQuery.of(context).size.width

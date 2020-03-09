@@ -22,7 +22,8 @@ class View extends StatefulWidget {
       this.showNavBar = true,
       this.title = '',
       this.isRoot = false,
-      this.onBack});
+      this.onBack,
+      this.backIcon = Icons.keyboard_arrow_left});
 
   final Widget child;
   final bool showAppBar;
@@ -30,6 +31,7 @@ class View extends StatefulWidget {
   final bool isRoot;
   final String title;
   final void Function() onBack;
+  final IconData backIcon;
 
   @override
   _ViewState createState() => _ViewState();
@@ -42,7 +44,9 @@ class _ViewState extends State<View> {
   Widget _buildBody(
       AppState state, void Function(ReduxAction<dynamic>) dispatch) {
     EdgeInsetsGeometry margin;
-    if (widget.showAppBar && widget.showNavBar) {
+    if (widget.isRoot) {
+      margin = const EdgeInsets.fromLTRB(0.0, 50.0, 0.0, 50.0);
+    } else if (widget.showAppBar && widget.showNavBar) {
       margin = const EdgeInsets.fromLTRB(0.0, 100.0, 0.0, 50.0);
     } else if (widget.showAppBar) {
       margin = const EdgeInsets.only(top: 100.0);
@@ -105,7 +109,7 @@ class _ViewState extends State<View> {
                   GestureDetector(
                       onTap: widget.onBack ??
                           () => dispatch(NavigateAction<AppState>.pop()),
-                      child: Icon(Icons.keyboard_arrow_left, color: white)),
+                      child: Icon(widget.backIcon, color: white)),
                   Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[

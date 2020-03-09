@@ -1,6 +1,6 @@
 import 'package:async_redux/async_redux.dart';
 import 'package:business/app_state.dart';
-import 'package:business/classes/lounge.dart';
+import 'package:business/lounges/actions/lounge_create_detail_action.dart';
 import 'package:business/classes/lounge_visibility.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -34,6 +34,7 @@ class _LoungeCreateDetailScreenState extends State<LoungeCreateDetailScreen> {
           title: 'CREATE LOUNGE',
           onBack: () => Navigator.popUntil(
               context, (Route<dynamic> route) => route.isFirst),
+          backIcon: Icons.close,
           child: Column(
             children: <Widget>[
               Expanded(
@@ -106,8 +107,8 @@ class _LoungeCreateDetailScreenState extends State<LoungeCreateDetailScreen> {
                 Button(
                     text: 'NEXT',
                     onPressed: () {
-                      // dispatch(LoungeUpdateDetailAction(
-                      //     _visibility, _limit, _descriptionController.text));
+                      dispatch(LoungeCreateDetailAction(_visibility,
+                          _limit.toInt(), _descriptionController.text));
                       dispatch(NavigateAction<AppState>.pushNamed(
                         LoungeCreateMeetupScreen.id,
                       ));
