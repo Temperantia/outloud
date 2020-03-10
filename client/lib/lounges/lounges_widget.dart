@@ -173,20 +173,36 @@ class _LoungesWidgetState extends State<LoungesWidget>
               )),
               Expanded(
                   flex: 6,
-                  child: TabBarView(
-                    physics: NeverScrollableScrollPhysics(),
-                    children: <Widget>[
-                      _buildLounges(userLounges, dispatch, themeStyle),
-                      _buildEvents(userEvents, userEventStates,
-                          userEventLounges, dispatch, themeStyle),
-                    ],
-                  )),
+                  child: Container(
+                      color: white,
+                      child: TabBarView(
+                        physics: NeverScrollableScrollPhysics(),
+                        children: <Widget>[
+                          _buildLounges(userLounges, dispatch, themeStyle),
+                          _buildEvents(userEvents, userEventStates,
+                              userEventLounges, dispatch, themeStyle),
+                        ],
+                      ))),
               Expanded(
-                child: Button(
-                  text: 'CREATE LOUNGE',
-                  onPressed: () => dispatch(
-                      redux.NavigateAction<AppState>.pushNamed(
-                          LoungeCreateScreen.id)),
+                child: Container(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Container(
+                        height: 45,
+                        width: 200,
+                        margin: const EdgeInsets.all(10.0),
+                        child: RaisedButton.icon(
+                            color: orangeLight.withOpacity(0.5),
+                            textColor: white,
+                            onPressed: () => dispatch(
+                                redux.NavigateAction<AppState>.pushNamed(
+                                    LoungeCreateScreen.id)),
+                            icon: Icon(Icons.add),
+                            label: const Text('CREATE LOUNGE')),
+                      )
+                    ],
+                  ),
                 ),
               )
             ],

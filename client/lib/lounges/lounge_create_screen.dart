@@ -53,6 +53,7 @@ class _LoungeCreateScreenState extends State<LoungeCreateScreen> {
           child: Column(
             children: <Widget>[
               Expanded(
+                  flex: 6,
                   child: Container(
                       color: white,
                       padding: EdgeInsets.all(20.0),
@@ -69,14 +70,25 @@ class _LoungeCreateScreenState extends State<LoungeCreateScreen> {
                       ))),
               if (_selected != null)
                 Expanded(
-                  child: Button(
-                      text: 'NEXT',
-                      onPressed: () {
-                        dispatch(LoungeCreateAction(
-                            Lounge(eventRef: getEventReference(_selected.id))));
-                        dispatch(redux.NavigateAction<AppState>.pushNamed(
-                            LoungeCreateDetailScreen.id));
-                      }),
+                  child: Container(
+                      child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Container(
+                          width: 160,
+                          margin: const EdgeInsets.all(20.0),
+                          child: Button(
+                              text: 'NEXT',
+                              onPressed: () {
+                                dispatch(LoungeCreateAction(Lounge(
+                                    eventRef:
+                                        getEventReference(_selected.id))));
+                                dispatch(
+                                    redux.NavigateAction<AppState>.pushNamed(
+                                        LoungeCreateDetailScreen.id));
+                              }))
+                    ],
+                  )),
                 )
             ],
           ));

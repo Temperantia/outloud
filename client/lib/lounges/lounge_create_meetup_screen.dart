@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:async_redux/async_redux.dart';
+import 'package:business/actions/app_navigate_action.dart';
 import 'package:business/app_state.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
@@ -9,6 +10,7 @@ import 'package:business/lounges/actions/lounge_create_meetup_action.dart';
 import 'package:google_maps_webservice/places.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:inclusive/lounges/lounge_create_screen.dart';
+import 'package:inclusive/lounges/lounges_screen.dart';
 import 'package:inclusive/widgets/button.dart';
 import 'package:inclusive/widgets/view.dart';
 import 'package:intl/intl.dart';
@@ -701,15 +703,18 @@ class _LoungeCreateMeetupScreenState extends State<LoungeCreateMeetupScreen> {
                                     final GeoPoint _location = GeoPoint(
                                         _positionOfPlace.position.latitude,
                                         _positionOfPlace.position.longitude);
-                                    print('what an idiot time is : ' +
-                                        _dateOfEvent.toIso8601String());
                                     dispatch(LoungeCreateMeetupAction(
                                         _location,
                                         _dateOfEvent,
                                         _notesTextController.text));
-                                    dispatch(NavigateAction<AppState>.pushNamed(
-                                      LoungeCreateScreen.id,
-                                    ));
+                                    // dispatch(NavigateAction<AppState>.pushNamed(
+                                    //   LoungesScreen.id,
+                                    // ));
+                                    // dispatch(AppNavigateAction(2));
+                                    Navigator.popUntil(
+                                        context,
+                                        (Route<dynamic> route) =>
+                                            route.isFirst);
                                   }))
                         ],
                       ))
