@@ -34,6 +34,7 @@ class _LoungeCreateMeetupScreenState extends State<LoungeCreateMeetupScreen> {
   final ScrollController _scrollController = ScrollController();
   final Map<String, Marker> _markers = <String, Marker>{};
   final FocusNode _focusNodeAdress = FocusNode();
+  final FocusNode _focusNodeNotes = FocusNode();
   final LayerLink _layerLink = LayerLink();
   final LayerLink _mapLink = LayerLink();
   final LayerLink _dateLink = LayerLink();
@@ -214,6 +215,9 @@ class _LoungeCreateMeetupScreenState extends State<LoungeCreateMeetupScreen> {
                           color: white,
                           // padding: const EdgeInsets.all(5),
                           onPressed: () async {
+                            setState(() {
+                              _moovingMarker = false;
+                            });
                             if (_savedMarker != null) {
                               final String _previousAdress =
                                   await _getAdressFromCoordinates(
@@ -235,9 +239,6 @@ class _LoungeCreateMeetupScreenState extends State<LoungeCreateMeetupScreen> {
                                 _positionOfPlace = null;
                               });
                             }
-                            setState(() {
-                              _moovingMarker = false;
-                            });
                             _mapButtonsOverlay.remove();
                           },
                           child: const Text('Cancel'),
@@ -246,12 +247,14 @@ class _LoungeCreateMeetupScreenState extends State<LoungeCreateMeetupScreen> {
                           color: white,
                           // padding: const EdgeInsets.all(5),
                           onPressed: () async {
+                            setState(() {
+                              _moovingMarker = false;
+                            });
                             final String _address =
                                 await _getAdressFromCoordinates(
                                     _positionOfPlace.position.latitude,
                                     _positionOfPlace.position.longitude);
                             setState(() {
-                              _moovingMarker = false;
                               _positionOfPlace = Marker(
                                   markerId: _positionOfPlace.markerId,
                                   position: _positionOfPlace.position,
@@ -263,8 +266,8 @@ class _LoungeCreateMeetupScreenState extends State<LoungeCreateMeetupScreen> {
                                   _positionOfPlace;
                               _searchTextController.text = _address;
                             });
-                            _moveCameraToPosition(
-                                _positionOfPlace.position, 15);
+                            // _moveCameraToPosition(
+                            //     _positionOfPlace.position, 15);
                             _mapButtonsOverlay.remove();
                           },
                           child: const Text('Ok'),
@@ -332,7 +335,7 @@ class _LoungeCreateMeetupScreenState extends State<LoungeCreateMeetupScreen> {
         constraints: BoxConstraints.expand(
           height: Theme.of(context).textTheme.display1.fontSize * 1.1 + 240,
         ),
-        decoration: const BoxDecoration(color: white),
+        // decoration: const BoxDecoration(color: white),
         key: _keyMap,
         padding: const EdgeInsets.all(15),
         child: Column(children: <Widget>[
@@ -365,6 +368,7 @@ class _LoungeCreateMeetupScreenState extends State<LoungeCreateMeetupScreen> {
                       },
                       onLongPress: (LatLng position) async {
                         if (_moovingMarker) {
+                          print('mooving marker ?  weird ');
                           return;
                         }
                         Marker tmpMarker;
@@ -405,11 +409,11 @@ class _LoungeCreateMeetupScreenState extends State<LoungeCreateMeetupScreen> {
                             _mapButtonsOverlay = _createOverlayButtons();
                             _searchTextController.text = _address;
                           });
-                          Overlay.of(context).insert(_mapButtonsOverlay);
-                          Timer(const Duration(milliseconds: 1200), () {
+                          Timer(const Duration(milliseconds: 800), () {
                             setState(() {
                               _moovingMarker = true;
                             });
+                            Overlay.of(context).insert(_mapButtonsOverlay);
                           });
                         });
                       },
@@ -453,25 +457,26 @@ class _LoungeCreateMeetupScreenState extends State<LoungeCreateMeetupScreen> {
 
   Widget _buildAdressField(BuildContext context) {
     return Container(
-        // constraints: BoxConstraints.expand(
-        //   height: Theme.of(context).textTheme.display1.fontSize * 1.1 + 30,
-        // ),
-        // padding: const EdgeInsets.all(15),
-        color: orangeLight,
+        constraints: BoxConstraints.expand(
+          height: Theme.of(context).textTheme.display1.fontSize * 1.1 + 40,
+        ),
+        padding: const EdgeInsets.all(15),
         child: CompositedTransformTarget(
-          child: TextFormField(
-            key: _keySearch,
-            cursorColor: Colors.black,
-            keyboardType: TextInputType.text,
-            textInputAction: TextInputAction.go,
-            focusNode: _focusNodeAdress,
-            controller: _searchTextController,
-            decoration: InputDecoration(
-              border: InputBorder.none,
-              prefixIcon: Icon(Icons.location_on),
-              hintText: 'Select place...',
-            ),
-          ),
+          child: Container(
+              color: orangeLight,
+              child: TextFormField(
+                key: _keySearch,
+                cursorColor: Colors.black,
+                keyboardType: TextInputType.text,
+                textInputAction: TextInputAction.go,
+                focusNode: _focusNodeAdress,
+                controller: _searchTextController,
+                decoration: InputDecoration(
+                  border: InputBorder.none,
+                  prefixIcon: Icon(Icons.location_on),
+                  hintText: 'Select place...',
+                ),
+              )),
           link: _layerLink,
         ));
   }
@@ -479,7 +484,7 @@ class _LoungeCreateMeetupScreenState extends State<LoungeCreateMeetupScreen> {
   Widget _buildTimeField(BuildContext context) {
     return Container(
       constraints: BoxConstraints.expand(
-        height: Theme.of(context).textTheme.display1.fontSize * 1.1 + 100,
+        height: Theme.of(context).textTheme.display1.fontSize * 1.1 + 70,
       ),
       padding: const EdgeInsets.all(15.0),
       child: Column(
@@ -502,71 +507,75 @@ class _LoungeCreateMeetupScreenState extends State<LoungeCreateMeetupScreen> {
                   key: _keyDate,
                   link: _dateLink,
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       Container(
                         width: 180,
                         child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
-                            Container(
-                              color: orangeLight,
-                              height: 40,
-                              padding: const EdgeInsets.all(10.0),
-                              child: GestureDetector(
-                                  onTap: () async {
-                                    _updateTimeOfEvent();
-                                  },
-                                  child:
-                                      Text(_timeEvent.hourOfPeriod.toString())),
-                            ),
-                            Container(child: const Text(':')),
-                            Container(
+                            GestureDetector(
+                              onTap: () {
+                                _updateTimeOfEvent();
+                              },
+                              child: Container(
                                 color: orangeLight,
                                 height: 40,
                                 padding: const EdgeInsets.all(10.0),
-                                child: GestureDetector(
-                                    onTap: () {
-                                      _updateTimeOfEvent();
-                                    },
-                                    child: Text(_timeEvent.minute.toString()))),
-                            Container(
-                              color: orangeLight,
-                              height: 40,
-                              padding: const EdgeInsets.all(10.0),
-                              child: GestureDetector(
-                                  onTap: () {
-                                    _updateTimeOfEvent();
-                                  },
-                                  child: Text(_timeEvent.period == DayPeriod.am
-                                      ? 'AM'
-                                      : 'PM')),
-                            )
+                                child: Text(_timeEvent.hourOfPeriod.toString()),
+                              ),
+                            ),
+                            Container(child: const Text(':')),
+                            GestureDetector(
+                              onTap: () {
+                                _updateTimeOfEvent();
+                              },
+                              child: Container(
+                                color: orangeLight,
+                                height: 40,
+                                padding: const EdgeInsets.all(10.0),
+                                child: Text(_timeEvent.minute.toString()),
+                              ),
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                _updateTimeOfEvent();
+                              },
+                              child: Container(
+                                color: orangeLight,
+                                height: 40,
+                                padding: const EdgeInsets.all(10.0),
+                                child: Text(_timeEvent.period == DayPeriod.am
+                                    ? 'AM'
+                                    : 'PM'),
+                              ),
+                            ),
                           ],
                         ),
                       ),
-                      Container(
+                      GestureDetector(
+                        onTap: () async {
+                          final DateTime dateSelected = await showDatePicker(
+                              context: context,
+                              initialDate:
+                                  DateTime.now().add(const Duration(days: 1)),
+                              firstDate: DateTime.now(),
+                              lastDate: DateTime.now()
+                                  .add(const Duration(days: 100)));
+                          if (dateSelected != null) {
+                            setState(() {
+                              _dateEvent = dateSelected;
+                            });
+                          }
+                        },
+                        child: Container(
                           color: orangeLight,
                           height: 40,
                           padding: const EdgeInsets.all(10.0),
-                          child: GestureDetector(
-                              onTap: () async {
-                                final DateTime dateSelected =
-                                    await showDatePicker(
-                                        context: context,
-                                        initialDate: DateTime.now()
-                                            .add(const Duration(days: 1)),
-                                        firstDate: DateTime.now(),
-                                        lastDate: DateTime.now()
-                                            .add(const Duration(days: 100)));
-                                if (dateSelected != null) {
-                                  setState(() {
-                                    _dateEvent = dateSelected;
-                                  });
-                                }
-                              },
-                              child: Text(
-                                  DateFormat('dd-MM-yyyy').format(_dateEvent))))
+                          child:
+                              Text(DateFormat('dd-MM-yyyy').format(_dateEvent)),
+                        ),
+                      )
                     ],
                   )))
         ],
@@ -579,6 +588,7 @@ class _LoungeCreateMeetupScreenState extends State<LoungeCreateMeetupScreen> {
       constraints: BoxConstraints.expand(
         height: Theme.of(context).textTheme.display1.fontSize * 1.1 + 300,
       ),
+      padding: const EdgeInsets.all(15),
       child: Column(children: <Widget>[
         Container(
             constraints: BoxConstraints.expand(
@@ -599,6 +609,7 @@ class _LoungeCreateMeetupScreenState extends State<LoungeCreateMeetupScreen> {
                 color: orangeLight,
                 child: TextField(
                   controller: _notesTextController,
+                  focusNode: _focusNodeNotes,
                   keyboardType: TextInputType.text,
                   decoration: InputDecoration(
                       border: InputBorder.none,
@@ -651,6 +662,8 @@ class _LoungeCreateMeetupScreenState extends State<LoungeCreateMeetupScreen> {
                               child: Button(
                                   text: 'CREATE',
                                   onPressed: () {
+                                    _focusNodeNotes.unfocus();
+                                    _focusNodeAdress.unfocus();
                                     final DateTime _dateOfEvent = DateTime(
                                         _dateEvent.year,
                                         _dateEvent.month,
