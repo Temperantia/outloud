@@ -11,14 +11,14 @@ import 'package:inclusive/widgets/view.dart';
 import 'package:provider_for_redux/provider_for_redux.dart';
 
 class LoungesScreen extends StatelessWidget {
-  LoungesScreen(this.event);
+  const LoungesScreen(this.event);
   final Event event;
   static const String id = 'LoungesScreen';
 
   Widget _buildLounge(Lounge lounge) {
-    User owner =
+    final User owner =
         lounge.members.firstWhere((User member) => member.id == lounge.owner);
-    int availableSlots = lounge.memberLimit - lounge.members.length;
+    final int availableSlots = lounge.memberLimit - lounge.members.length;
     return Row(
       children: <Widget>[
         CircularImage(
@@ -31,7 +31,7 @@ class LoungesScreen extends StatelessWidget {
               children: <Widget>[
                 Text(lounge.name),
                 GestureDetector(
-                  child: Text('> JOIN'),
+                  child: const Text('> JOIN'),
                 )
               ],
             ),
@@ -63,12 +63,12 @@ class LoungesScreen extends StatelessWidget {
         AppState state,
         void Function(redux.ReduxAction<AppState>) dispatch,
         Widget child) {
-      List<Lounge> lounges = state.userState.eventLounges[event.id];
+      final List<Lounge> lounges = state.userState.eventLounges[event.id];
       return View(
           title: 'BROWSING LOUNGES',
           child: Column(
             children: <Widget>[
-              Text('FOR THE EVENT'),
+              const Text('FOR THE EVENT'),
               Row(
                 children: <Widget>[
                   if (event.pic.isNotEmpty)
@@ -79,11 +79,12 @@ class LoungesScreen extends StatelessWidget {
                   Text(event.name),
                 ],
               ),
-              Divider(),
+              const Divider(),
               Expanded(
                   child: ListView.builder(
                 itemCount: lounges.length,
-                itemBuilder: (context, index) => _buildLounge(lounges[index]),
+                itemBuilder: (BuildContext context, int index) =>
+                    _buildLounge(lounges[index]),
               )),
             ],
           ));

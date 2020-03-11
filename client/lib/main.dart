@@ -1,21 +1,13 @@
 import 'package:async_redux/async_redux.dart';
-import 'package:business/actions/app_navigate_action.dart';
-import 'package:business/actions/app_update_theme_action.dart';
-import 'package:business/classes/user.dart';
-import 'package:business/events/actions/events_get_action.dart';
 import 'package:flutter/material.dart';
 import 'package:business/app_persistor.dart';
 import 'package:business/app_state.dart';
 import 'package:inclusive/home_screen.dart';
-import 'package:inclusive/profile/profile_screen.dart';
 import 'package:inclusive/register/login.dart';
 import 'package:business/login/actions/login_action.dart';
 import 'package:inclusive/routes.dart';
 
 import 'package:inclusive/theme.dart';
-import 'package:inclusive/widgets/bubble_bar.dart';
-import 'package:inclusive/widgets/button.dart';
-import 'package:inclusive/widgets/circular_image.dart';
 import 'package:inclusive/widgets/loading.dart';
 import 'package:provider_for_redux/provider_for_redux.dart';
 

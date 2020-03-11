@@ -3,7 +3,6 @@ import 'package:business/app_state.dart';
 import 'package:business/actions/app_navigate_action.dart';
 import 'package:business/classes/user.dart';
 import 'package:business/events/actions/events_get_action.dart';
-import 'package:business/actions/app_update_theme_action.dart';
 import 'package:business/actions/app_disconnect_action.dart';
 import 'package:flutter/material.dart';
 import 'package:inclusive/profile/profile_edition_screen.dart';
@@ -38,7 +37,7 @@ class View extends StatefulWidget {
 }
 
 class _ViewState extends State<View> {
-  bool _isSwitched = false;
+  // bool _isSwitched = false;
   bool _showUserSettings = false;
 
   Widget _buildBody(

@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:async_redux/async_redux.dart';
-import 'package:business/actions/app_navigate_action.dart';
 import 'package:business/app_state.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
@@ -9,8 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:business/lounges/actions/lounge_create_meetup_action.dart';
 import 'package:google_maps_webservice/places.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:inclusive/lounges/lounge_create_screen.dart';
-import 'package:inclusive/lounges/lounges_screen.dart';
 import 'package:inclusive/widgets/button.dart';
 import 'package:inclusive/widgets/view.dart';
 import 'package:intl/intl.dart';

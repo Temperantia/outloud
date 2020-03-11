@@ -19,9 +19,9 @@ class EventCreateScreen extends StatefulWidget {
 }
 
 class _EventCreateScreenState extends State<EventCreateScreen> {
-  var name = TextEditingController();
+  TextEditingController name = TextEditingController();
   Uint8List _picture;
-  var description = TextEditingController();
+  TextEditingController description = TextEditingController();
 
   Future<void> onSave(
       void Function(redux.ReduxAction<AppState>) dispatch) async {
@@ -74,11 +74,11 @@ class _EventCreateScreenState extends State<EventCreateScreen> {
               children: <Widget>[
             TextField(
               controller: name,
-              decoration: InputDecoration(labelText: 'Name'),
+              decoration: const InputDecoration(labelText: 'Name'),
             ),
             TextField(
                 controller: description,
-                decoration: InputDecoration(labelText: 'Description')),
+                decoration: const InputDecoration(labelText: 'Description')),
             Stack(alignment: AlignmentDirectional.bottomEnd, children: <Widget>[
               if (_picture == null)
                 Container(

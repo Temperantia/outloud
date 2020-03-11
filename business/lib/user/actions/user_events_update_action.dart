@@ -12,7 +12,8 @@ class UserEventsUpdateAction extends redux.ReduxAction<AppState> {
 
   @override
   AppState reduce() {
-    List<String> eventIds = events.map((event) => event.id).toList();
+    final List<String> eventIds =
+        events.map((Event event) => event.id).toList();
 
     streamLounges(eventIds: eventIds).listen((List<Lounge> lounges) =>
         dispatch(UserEventLoungesUpdateAction(lounges)));

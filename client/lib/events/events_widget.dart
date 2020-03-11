@@ -6,14 +6,10 @@ import 'package:business/classes/event.dart';
 import 'package:business/events/actions/events_get_action.dart';
 import 'package:business/events/actions/events_select_action.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/gestures.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:inclusive/events/event_create_screen.dart';
+/* import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart'; */
 import 'package:inclusive/events/event_screen.dart';
 import 'package:inclusive/theme.dart';
-import 'package:inclusive/widgets/button.dart';
 import 'package:inclusive/widgets/cached_image.dart';
 import 'package:inclusive/widgets/loading.dart';
 import 'package:intl/intl.dart';
@@ -26,26 +22,26 @@ class EventsWidget extends StatefulWidget {
 
 class _EventsWidgetState extends State<EventsWidget>
     with AutomaticKeepAliveClientMixin<EventsWidget> {
-  final Completer<GoogleMapController> _controller =
+/*   final Completer<GoogleMapController> _controller =
       Completer<GoogleMapController>();
   final Map<String, Marker> _markers = <String, Marker>{};
   final ScrollController _scrollController = ScrollController();
   double _googleMapSize = 100.0;
   CameraPosition _intialMapLocation =
-      const CameraPosition(target: LatLng(48.85902056, 2.34637398), zoom: 14);
+      const CameraPosition(target: LatLng(48.85902056, 2.34637398), zoom: 14); */
 
   @override
   void initState() {
     super.initState();
-    _scrollController.addListener(() {
+/*     _scrollController.addListener(() {
       setState(() {
         _googleMapSize = 100.0;
       });
-    });
-    getPosition();
+    }); */
+    //getPosition();
   }
 
-  Future<int> getPosition() async {
+/*   Future<int> getPosition() async {
     final Position position = await Geolocator()
         .getCurrentPosition(desiredAccuracy: LocationAccuracy.best);
     if (position != null) {
@@ -54,12 +50,12 @@ class _EventsWidgetState extends State<EventsWidget>
       return 0;
     }
     return 1;
-  }
+  } */
 
   @override
   bool get wantKeepAlive => true;
 
-  Widget _buildMap() {
+/*   Widget _buildMap() {
     return Container(
         constraints: BoxConstraints.expand(
           height: Theme.of(context).textTheme.display1.fontSize * 1.1 +
@@ -93,7 +89,7 @@ class _EventsWidgetState extends State<EventsWidget>
                 _controller.complete(controller);
               }
             }));
-  }
+  } */
 
   Widget _buildEvents(
       List<Event> events,
@@ -102,7 +98,7 @@ class _EventsWidgetState extends State<EventsWidget>
       Future<void> Function(redux.ReduxAction<AppState>) dispatchFuture) {
     return ListView.builder(
       itemCount: events.length,
-      itemBuilder: (context, index) => Container(
+      itemBuilder: (BuildContext context, int index) => Container(
         decoration: const BoxDecoration(color: white),
         child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -110,7 +106,6 @@ class _EventsWidgetState extends State<EventsWidget>
               _buildEvent(events[index], dispatch, dispatchFuture, themeStyle)
             ]),
       ),
-      controller: _scrollController,
     );
   }
 
@@ -188,7 +183,7 @@ class _EventsWidgetState extends State<EventsWidget>
       if (events == null || userEvents == null) {
         return Loading();
       }
-      _markers.clear();
+      /*      _markers.clear();
       for (final Event event in events) {
         if (event.location != null) {
           _markers[event.id] = Marker(
@@ -197,12 +192,12 @@ class _EventsWidgetState extends State<EventsWidget>
                   LatLng(event.location.latitude, event.location.longitude),
               infoWindow: InfoWindow(title: event.name));
         }
-      }
+      } */
       return DefaultTabController(
           length: 2,
           child: Column(
             children: <Widget>[
-              Expanded(
+              const Expanded(
                   child: TabBar(
                 labelStyle: textStyleButton,
                 tabs: <Widget>[
@@ -213,7 +208,7 @@ class _EventsWidgetState extends State<EventsWidget>
               Expanded(
                   flex: 6,
                   child: TabBarView(
-                    physics: NeverScrollableScrollPhysics(),
+                    physics: const NeverScrollableScrollPhysics(),
                     children: <Widget>[
                       _buildEvents(userEvents, themeStyle, dispatch,
                           store.dispatchFuture),

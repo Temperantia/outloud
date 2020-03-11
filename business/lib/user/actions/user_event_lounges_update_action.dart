@@ -1,10 +1,6 @@
 import 'package:async_redux/async_redux.dart' as redux;
 import 'package:business/app_state.dart';
-import 'package:business/classes/event.dart';
 import 'package:business/classes/lounge.dart';
-import 'package:business/classes/user.dart';
-import 'package:business/models/lounges.dart';
-import 'package:business/models/user.dart';
 
 class UserEventLoungesUpdateAction extends redux.ReduxAction<AppState> {
   UserEventLoungesUpdateAction(this.lounges);
@@ -12,11 +8,11 @@ class UserEventLoungesUpdateAction extends redux.ReduxAction<AppState> {
 
   @override
   AppState reduce() {
-    Map<String, List<Lounge>> eventLounges = {};
-    for (var lounge in lounges) {
-      var eventLounge = eventLounges[lounge.eventId];
+    final Map<String, List<Lounge>> eventLounges = <String, List<Lounge>>{};
+    for (final Lounge lounge in lounges) {
+      final List<Lounge> eventLounge = eventLounges[lounge.eventId];
       if (eventLounge == null) {
-        eventLounges[lounge.eventId] = [lounge];
+        eventLounges[lounge.eventId] = <Lounge>[lounge];
       } else {
         eventLounges[lounge.eventId].add(lounge);
       }

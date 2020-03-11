@@ -4,7 +4,6 @@ import 'package:business/classes/event.dart';
 import 'package:business/classes/event_group.dart';
 import 'package:business/classes/interest.dart';
 import 'package:business/classes/user.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:inclusive/theme.dart';
 import 'package:inclusive/widgets/cached_image.dart';

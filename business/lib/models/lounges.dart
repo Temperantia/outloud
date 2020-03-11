@@ -33,7 +33,7 @@ Stream<List<Lounge>> streamLounges({List<String> ids, List<String> eventIds}) {
 }
 
 Future<Lounge> createLounge() async {
-  return Lounge(id: (await _api.addDocument({})).documentID);
+  return Lounge(id: (await _api.addDocument(<String, dynamic>{})).documentID);
 }
 
 Future<void> updateLounge(Lounge lounge) async {

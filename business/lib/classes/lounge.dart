@@ -19,13 +19,13 @@ class Lounge {
     this.notes,
     this.memberIds = const <String>[],
     this.memberRefs,
-    this.members = const [],
+    this.members = const <User>[],
   }) {
     if (eventRef != null)
       eventRef.snapshots().listen((DocumentSnapshot doc) =>
           event = Event.fromMap(doc.data, doc.documentID));
     if (memberRefs != null) {
-      for (var memberRef in memberRefs) {
+      for (final DocumentReference memberRef in memberRefs) {
         memberRef.snapshots().listen((DocumentSnapshot doc) =>
             members.add(User.fromMap(doc.data, doc.documentID)));
       }
@@ -52,15 +52,15 @@ class Lounge {
             ? <String>[]
             : snapshot['memberIds'].cast<String>() as List<String>,
         memberRefs = snapshot['memberRefs'] == null
-            ? []
+            ? <DocumentReference>[]
             : snapshot['memberRefs'].cast<DocumentReference>()
                 as List<DocumentReference>,
-        members = [] {
+        members = <User>[] {
     if (eventRef != null)
       eventRef.snapshots().listen((DocumentSnapshot doc) =>
           event = Event.fromMap(doc.data, doc.documentID));
     if (memberRefs != null) {
-      for (var memberRef in memberRefs) {
+      for (final DocumentReference memberRef in memberRefs) {
         memberRef.snapshots().listen((DocumentSnapshot doc) =>
             members.add(User.fromMap(doc.data, doc.documentID)));
       }

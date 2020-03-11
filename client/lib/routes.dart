@@ -2,7 +2,6 @@ import 'package:business/classes/chat.dart';
 import 'package:business/classes/event.dart';
 import 'package:business/classes/lounge.dart';
 import 'package:business/classes/user.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:inclusive/chats/chat_screen.dart';
 import 'package:inclusive/events/event_create_screen.dart';
 import 'package:inclusive/events/event_groups_screen.dart';
@@ -16,10 +15,11 @@ import 'package:inclusive/people/people_search_screen.dart';
 import 'package:inclusive/profile/profile_screen.dart';
 import 'package:inclusive/profile/profile_edition_screen.dart';
 import 'package:inclusive/register/login.dart';
-
+import 'package:flutter/material.dart';
 import 'package:inclusive/home_screen.dart';
 
-final Map<String, Widget Function(Object)> routes = {
+final Map<String, Widget Function(Object)> routes =
+    <String, Widget Function(Object)>{
   LoginScreen.id: (_) => LoginScreen(),
   HomeScreen.id: (_) => HomeScreen(),
   ProfileEditionScreen.id: (_) => ProfileEditionScreen(),

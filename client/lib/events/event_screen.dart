@@ -72,7 +72,7 @@ class EventScreen extends StatelessWidget {
                       ])),
               const Button(text: 'See map', width: 200.0),
               if (state.userState.user.isAttendingEvent(event.id))
-                Button(text: 'Registered', width: 200.0)
+                const Button(text: 'Registered', width: 200.0)
               else
                 Button(
                   text: 'Register me',

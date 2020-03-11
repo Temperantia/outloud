@@ -6,7 +6,6 @@ import 'package:business/lounges/actions/lounge_create_action.dart';
 import 'package:business/models/events.dart';
 import 'package:flutter/material.dart';
 import 'package:inclusive/lounges/lounge_create_detail_screen.dart';
-import 'package:inclusive/lounges/lounge_create_meetup_screen.dart';
 import 'package:inclusive/theme.dart';
 import 'package:inclusive/widgets/button.dart';
 import 'package:inclusive/widgets/cached_image.dart';
@@ -30,7 +29,7 @@ class _LoungeCreateScreenState extends State<LoungeCreateScreen> {
             color: _selected?.id == event.id
                 ? primary(themeStyle).withOpacity(0.3)
                 : null,
-            child: Row(children: [
+            child: Row(children: <Widget>[
               if (event.pic != null)
                 CachedImage(event.pic, width: 50.0, height: 50.0),
               Expanded(child: Text(event.name))
@@ -56,14 +55,14 @@ class _LoungeCreateScreenState extends State<LoungeCreateScreen> {
                   flex: 6,
                   child: Container(
                       color: white,
-                      padding: EdgeInsets.all(20.0),
+                      padding: const EdgeInsets.all(20.0),
                       child: Column(
                         children: <Widget>[
-                          Text('CHOOSE AN EVENT FOR THIS LOUNGE'),
+                          const Text('CHOOSE AN EVENT FOR THIS LOUNGE'),
                           Expanded(
                               child: ListView.builder(
                             itemCount: userEvents.length,
-                            itemBuilder: (context, index) =>
+                            itemBuilder: (BuildContext context, int index) =>
                                 _buildUserEvent(userEvents[index], state.theme),
                           ))
                         ],

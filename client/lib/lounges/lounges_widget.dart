@@ -1,20 +1,13 @@
-import 'dart:async';
-
 import 'package:async_redux/async_redux.dart' as redux;
 import 'package:business/app_state.dart';
 import 'package:business/classes/event.dart';
 import 'package:business/classes/lounge.dart';
 import 'package:business/classes/user_event_state.dart';
-import 'package:business/events/actions/events_get_action.dart';
-import 'package:business/events/actions/events_select_action.dart';
-import 'package:business/events/models/events_state.dart';
 import 'package:flutter/material.dart';
-import 'package:inclusive/events/event_screen.dart';
 import 'package:inclusive/lounges/lounge_create_screen.dart';
 import 'package:inclusive/lounges/lounge_screen.dart';
 import 'package:inclusive/lounges/lounges_screen.dart';
 import 'package:inclusive/theme.dart';
-import 'package:inclusive/widgets/button.dart';
 import 'package:inclusive/widgets/cached_image.dart';
 import 'package:inclusive/widgets/loading.dart';
 import 'package:provider_for_redux/provider_for_redux.dart';
@@ -35,7 +28,7 @@ class _LoungesWidgetState extends State<LoungesWidget>
       ThemeStyle themeStyle) {
     return ListView.builder(
       itemCount: lounges.length,
-      itemBuilder: (context, index) => Container(
+      itemBuilder: (BuildContext context, int index) => Container(
         decoration: const BoxDecoration(color: white),
         child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -84,7 +77,7 @@ class _LoungesWidgetState extends State<LoungesWidget>
       ThemeStyle themeStyle) {
     return ListView.builder(
       itemCount: userEvents.length,
-      itemBuilder: (context, index) => Container(
+      itemBuilder: (BuildContext context, int index) => Container(
         decoration: const BoxDecoration(color: white),
         child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -102,14 +95,14 @@ class _LoungesWidgetState extends State<LoungesWidget>
       Map<String, List<Lounge>> userEventLounges,
       void Function(redux.ReduxAction<AppState>) dispatch,
       ThemeStyle theme) {
-    UserEventState state = userEventStates[event.id];
+    final UserEventState state = userEventStates[event.id];
     String stateMessage;
     if (state == UserEventState.Attending) {
       stateMessage = 'You\'re attending this event';
     } else if (state == UserEventState.Liked) {
       stateMessage = 'You liked this event';
     }
-    var lounges = userEventLounges[event.id];
+    final List<Lounge> lounges = userEventLounges[event.id];
 
     return GestureDetector(
         onTap: () {
@@ -153,7 +146,8 @@ class _LoungesWidgetState extends State<LoungesWidget>
       final List<Event> userEvents = state.userState.events;
       final Map<String, UserEventState> userEventStates =
           state.userState.user.events;
-      var userEventLounges = state.userState.eventLounges;
+      final Map<String, List<Lounge>> userEventLounges =
+          state.userState.eventLounges;
       if (userEventStates == null ||
           userEvents == null ||
           userLounges == null) {
@@ -164,7 +158,7 @@ class _LoungesWidgetState extends State<LoungesWidget>
           length: 2,
           child: Column(
             children: <Widget>[
-              Expanded(
+              const Expanded(
                   child: TabBar(
                 tabs: <Widget>[
                   Tab(text: 'MY LOUNGES'),
@@ -176,7 +170,7 @@ class _LoungesWidgetState extends State<LoungesWidget>
                   child: Container(
                       color: white,
                       child: TabBarView(
-                        physics: NeverScrollableScrollPhysics(),
+                        physics: const NeverScrollableScrollPhysics(),
                         children: <Widget>[
                           _buildLounges(userLounges, dispatch, themeStyle),
                           _buildEvents(userEvents, userEventStates,

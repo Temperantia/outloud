@@ -9,16 +9,21 @@ import 'package:inclusive/widgets/loading.dart';
 import 'package:inclusive/widgets/view.dart';
 import 'package:provider_for_redux/provider_for_redux.dart';
 
-class ProfileEditionScreen extends StatelessWidget {
+class ProfileEditionScreen extends StatefulWidget {
   static const String id = 'ProfileEditionScreen';
 
-  var name = TextEditingController();
-  var home = TextEditingController();
-  var gender = TextEditingController();
-  var pronoun = TextEditingController();
-  var orientation = TextEditingController();
-  var education = TextEditingController();
-  var occupation = TextEditingController();
+  @override
+  _ProfileEditionScreenState createState() => _ProfileEditionScreenState();
+}
+
+class _ProfileEditionScreenState extends State<ProfileEditionScreen> {
+  TextEditingController name = TextEditingController();
+  TextEditingController home = TextEditingController();
+  TextEditingController gender = TextEditingController();
+  TextEditingController pronoun = TextEditingController();
+  TextEditingController orientation = TextEditingController();
+  TextEditingController education = TextEditingController();
+  TextEditingController occupation = TextEditingController();
   GlobalKey<ProfileInterestsState> prokey = GlobalKey<ProfileInterestsState>();
 
   Future<void> onSave(User user) async {
@@ -55,24 +60,27 @@ class ProfileEditionScreen extends StatelessWidget {
           child: ListView(
         children: <Widget>[
           TextField(
-              controller: name, decoration: InputDecoration(labelText: 'Name')),
+              controller: name,
+              decoration: const InputDecoration(labelText: 'Name')),
           TextField(
-              controller: home, decoration: InputDecoration(labelText: 'Home')),
+              controller: home,
+              decoration: const InputDecoration(labelText: 'Home')),
           TextField(
               controller: gender,
-              decoration: InputDecoration(labelText: 'Gender')),
+              decoration: const InputDecoration(labelText: 'Gender')),
           TextField(
               controller: pronoun,
-              decoration: InputDecoration(labelText: 'Pronoun')),
+              decoration: const InputDecoration(labelText: 'Pronoun')),
           TextField(
               controller: orientation,
-              decoration: InputDecoration(labelText: 'Sexual orientation')),
+              decoration:
+                  const InputDecoration(labelText: 'Sexual orientation')),
           TextField(
               controller: education,
-              decoration: InputDecoration(labelText: 'Education')),
+              decoration: const InputDecoration(labelText: 'Education')),
           TextField(
               controller: occupation,
-              decoration: InputDecoration(labelText: 'Occupation')),
+              decoration: const InputDecoration(labelText: 'Occupation')),
           ProfileInterests(user.interests, key: prokey),
           Button(
             text: 'Update',

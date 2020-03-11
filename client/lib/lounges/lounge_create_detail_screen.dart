@@ -35,7 +35,7 @@ class _LoungeCreateDetailScreenState extends State<LoungeCreateDetailScreen> {
                   height: Theme.of(context).textTheme.display1.fontSize * 1.1,
                 ),
                 child: RichText(
-                  text: TextSpan(
+                  text: const TextSpan(
                     text: 'LOUNGE VISIBILITY',
                     style: TextStyle(
                         color: Colors.black,
@@ -45,7 +45,7 @@ class _LoungeCreateDetailScreenState extends State<LoungeCreateDetailScreen> {
                 )),
             Row(
               children: <Widget>[
-                Radio(
+                Radio<LoungeVisibility>(
                   activeColor: primary(state.theme),
                   groupValue: _visibility,
                   value: LoungeVisibility.Public,
@@ -69,7 +69,7 @@ class _LoungeCreateDetailScreenState extends State<LoungeCreateDetailScreen> {
                   height: Theme.of(context).textTheme.display1.fontSize * 1.1,
                 ),
                 child: RichText(
-                  text: TextSpan(
+                  text: const TextSpan(
                     text: 'MAX MEMBER COUNT',
                     style: TextStyle(
                         color: Colors.black,
@@ -118,7 +118,7 @@ class _LoungeCreateDetailScreenState extends State<LoungeCreateDetailScreen> {
                 Container(
                     width: 220,
                     margin: const EdgeInsets.all(20.0),
-                    child: Button(
+                    child: const Button(
                       text: 'UPGRADE   >',
                     ))
               ],
@@ -137,7 +137,7 @@ class _LoungeCreateDetailScreenState extends State<LoungeCreateDetailScreen> {
                   height: Theme.of(context).textTheme.display1.fontSize * 1.1,
                 ),
                 child: RichText(
-                  text: TextSpan(
+                  text: const TextSpan(
                     text: 'LOUNGE DESCRIPTION',
                     style: TextStyle(
                         color: Colors.black,
@@ -150,7 +150,8 @@ class _LoungeCreateDetailScreenState extends State<LoungeCreateDetailScreen> {
                   height:
                       Theme.of(context).textTheme.display1.fontSize * 1.1 + 100,
                 ),
-                padding: const EdgeInsets.only(left: 10.0, top: 1.0, right: 10.0),
+                padding:
+                    const EdgeInsets.only(left: 10.0, top: 1.0, right: 10.0),
                 color: orangeLight,
                 child: TextField(
                   controller: _descriptionController,

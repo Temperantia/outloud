@@ -37,7 +37,7 @@ Future<List<Event>> getEvents() async {
 }
 
 Future<Event> createEvent() async {
-  return Event(id: (await _api.addDocument({})).documentID);
+  return Event(id: (await _api.addDocument(<String, dynamic>{})).documentID);
 }
 
 Future<void> updateEvent(Event event) async {

@@ -53,7 +53,7 @@ class _PeopleWidgetState extends State<PeopleWidget>
     return Container(
         decoration: const BoxDecoration(color: white),
         padding: const EdgeInsets.all(10.0),
-        child: Column(children: [
+        child: Column(children: <Widget>[
           Expanded(
               flex: 5,
               child: ListView.builder(
@@ -139,7 +139,7 @@ class _PeopleWidgetState extends State<PeopleWidget>
           length: 2,
           child: Column(
             children: <Widget>[
-              Expanded(
+              const Expanded(
                   child: TabBar(
                 tabs: <Widget>[
                   Tab(text: 'Friends'),
@@ -149,7 +149,7 @@ class _PeopleWidgetState extends State<PeopleWidget>
               Expanded(
                   flex: 6,
                   child: TabBarView(
-                    physics: NeverScrollableScrollPhysics(),
+                    physics: const NeverScrollableScrollPhysics(),
                     children: <Widget>[
                       _buildFriends(friends, state.theme, dispatch),
                       _buildChats(chats, state.theme, dispatch),

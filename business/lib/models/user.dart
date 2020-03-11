@@ -64,7 +64,8 @@ Future<List<User>> getUsers(String userId,
 }
 
 Stream<List<User>> streamUsers({List<String> ids}) {
-  Query query = _api.queryCollection(field: FieldPath.documentId, whereIn: ids);
+  final Query query =
+      _api.queryCollection(field: FieldPath.documentId, whereIn: ids);
 
   return query.snapshots().map((QuerySnapshot querySnapshot) => querySnapshot
       .documents
