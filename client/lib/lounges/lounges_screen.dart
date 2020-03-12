@@ -22,7 +22,7 @@ class LoungesScreen extends StatelessWidget {
     return Row(
       children: <Widget>[
         CircularImage(
-          imageUrl: owner.pics[0],
+          imageUrl: owner.pics.isNotEmpty ? owner.pics[0] : null,
           imageRadius: 40.0,
         ),
         Column(

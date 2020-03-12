@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:async_redux/async_redux.dart';
 import 'package:business/app_state.dart';
+import 'package:business/classes/lounge.dart';
+import 'package:business/models/lounges.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -660,7 +662,7 @@ class _LoungeCreateMeetupScreenState extends State<LoungeCreateMeetupScreen> {
                               width: 160,
                               child: Button(
                                   text: 'CREATE',
-                                  onPressed: () {
+                                  onPressed: () async {
                                     _focusNodeNotes.unfocus();
                                     _focusNodeAdress.unfocus();
                                     final DateTime _dateOfEvent = DateTime(
@@ -700,14 +702,13 @@ class _LoungeCreateMeetupScreenState extends State<LoungeCreateMeetupScreen> {
                                     final GeoPoint _location = GeoPoint(
                                         _positionOfPlace.position.latitude,
                                         _positionOfPlace.position.longitude);
+                                    final Lounge _newLounge = await createLounge();
                                     dispatch(LoungeCreateMeetupAction(
                                         _location,
                                         _dateOfEvent,
-                                        _notesTextController.text));
-                                    // dispatch(NavigateAction<AppState>.pushNamed(
-                                    //   LoungesScreen.id,
-                                    // ));
-                                    // dispatch(AppNavigateAction(2));
+                                        _notesTextController.text,
+                                        _newLounge.id));
+                                    await updateLounge(state.loungesState.loungeCreation);
                                     Navigator.popUntil(
                                         context,
                                         (Route<dynamic> route) =>

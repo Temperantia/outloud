@@ -19,7 +19,7 @@ class Lounge {
     this.notes,
     this.memberIds = const <String>[],
     this.memberRefs,
-    this.members = const <User>[],
+    this.members,
   }) {
     if (eventRef != null)
       eventRef.snapshots().listen((DocumentSnapshot doc) =>

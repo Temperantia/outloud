@@ -2,8 +2,10 @@ import 'package:async_redux/async_redux.dart' as redux;
 import 'package:business/app_state.dart';
 import 'package:business/classes/event.dart';
 import 'package:business/classes/lounge.dart';
+import 'package:business/classes/user.dart';
 import 'package:business/lounges/actions/lounge_create_action.dart';
 import 'package:business/models/events.dart';
+import 'package:business/models/user.dart';
 import 'package:flutter/material.dart';
 import 'package:inclusive/lounges/lounge_create_detail_screen.dart';
 import 'package:inclusive/theme.dart';
@@ -11,6 +13,7 @@ import 'package:inclusive/widgets/button.dart';
 import 'package:inclusive/widgets/cached_image.dart';
 import 'package:inclusive/widgets/view.dart';
 import 'package:provider_for_redux/provider_for_redux.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class LoungeCreateScreen extends StatefulWidget {
   static const String id = 'LoungeCreateScreen';
@@ -79,7 +82,14 @@ class _LoungeCreateScreenState extends State<LoungeCreateScreen> {
                           child: Button(
                               text: 'NEXT',
                               onPressed: () {
+                                 final List<DocumentReference> _membersRef= <DocumentReference>[];
+                                 final List<User> _users = <User>[];
+                                _membersRef.add(getUserReference(state.userState.user.id));
                                 dispatch(LoungeCreateAction(Lounge(
+                                    eventId: _selected.id,
+                                    memberRefs: _membersRef,
+                                    owner: state.userState.user.id,
+                                    members: _users,
                                     eventRef:
                                         getEventReference(_selected.id))));
                                 dispatch(
