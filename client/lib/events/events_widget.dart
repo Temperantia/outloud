@@ -207,19 +207,21 @@ class _EventsWidgetState extends State<EventsWidget>
               )),
               Expanded(
                   flex: 6,
-                  child: TabBarView(
-                    physics: const NeverScrollableScrollPhysics(),
-                    children: <Widget>[
-                      _buildEvents(userEvents, themeStyle, dispatch,
-                          store.dispatchFuture),
-                      RefreshIndicator(
-                        onRefresh: () =>
-                            store.dispatchFuture(EventsGetAction()),
-                        child: _buildEvents(
-                            events, themeStyle, dispatch, store.dispatchFuture),
-                      ),
-                    ],
-                  ))
+                  child: Container(
+                      color: white,
+                      child: TabBarView(
+                        physics: const NeverScrollableScrollPhysics(),
+                        children: <Widget>[
+                          _buildEvents(userEvents, themeStyle, dispatch,
+                              store.dispatchFuture),
+                          RefreshIndicator(
+                            onRefresh: () =>
+                                store.dispatchFuture(EventsGetAction()),
+                            child: _buildEvents(events, themeStyle, dispatch,
+                                store.dispatchFuture),
+                          ),
+                        ],
+                      )))
             ],
           ));
     });

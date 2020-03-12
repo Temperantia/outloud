@@ -20,6 +20,9 @@ Stream<List<Lounge>> streamEventLounges({List<String> ids}) {
 
 Stream<List<Lounge>> streamLounges({List<String> ids, List<String> eventIds}) {
   Query query = _api.queryCollection();
+  if (eventIds==null || eventIds.isEmpty)  {
+    return Stream<List<Lounge>>.value(<Lounge>[]);
+  }
   if (ids != null) {
     query = _api.queryCollection(field: FieldPath.documentId, whereIn: ids);
   } else if (eventIds != null) {

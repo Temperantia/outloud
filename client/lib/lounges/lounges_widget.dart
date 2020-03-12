@@ -1,7 +1,10 @@
+import 'dart:math' as math;
+
 import 'package:async_redux/async_redux.dart' as redux;
 import 'package:business/app_state.dart';
 import 'package:business/classes/event.dart';
 import 'package:business/classes/lounge.dart';
+import 'package:business/classes/user.dart';
 import 'package:business/classes/user_event_state.dart';
 import 'package:flutter/material.dart';
 import 'package:inclusive/lounges/lounge_create_screen.dart';
@@ -9,6 +12,7 @@ import 'package:inclusive/lounges/lounge_screen.dart';
 import 'package:inclusive/lounges/lounges_screen.dart';
 import 'package:inclusive/theme.dart';
 import 'package:inclusive/widgets/cached_image.dart';
+import 'package:inclusive/widgets/circular_image.dart';
 import 'package:inclusive/widgets/loading.dart';
 import 'package:provider_for_redux/provider_for_redux.dart';
 
@@ -24,18 +28,83 @@ class _LoungesWidgetState extends State<LoungesWidget>
 
   Widget _buildLounges(
       List<Lounge> lounges,
+      Map<String, List<Lounge>> userEventLounges,
       void Function(redux.ReduxAction<AppState>) dispatch,
       ThemeStyle themeStyle) {
+    final List<Lounge> _lounges = <Lounge>[];
+    userEventLounges.forEach((String eventKey, List<Lounge> lounges) {
+      lounges.forEach(_lounges.add);
+    });
     return ListView.builder(
-      itemCount: lounges.length,
+      itemCount: _lounges.length,
       itemBuilder: (BuildContext context, int index) => Container(
         decoration: const BoxDecoration(color: white),
         child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              _buildLounge(lounges[index], dispatch, themeStyle)
+              _buildLounge(_lounges[index], dispatch, themeStyle)
             ]),
       ),
+    );
+  }
+
+  Widget _buildInfoLoungeLayout(Lounge lounge) {
+    final User owner =
+        lounge.members.firstWhere((User member) => member.id == lounge.owner);
+    return Column(
+      children: <Widget>[
+        Container(
+            child: Row(
+          children: <Widget>[
+            Container(
+                child: CircularImage(
+              imageUrl: owner.pics.isNotEmpty ? owner.pics[0] : null,
+              imageRadius: 40.0,
+            )),
+            Container(
+                child: RichText(
+              text: TextSpan(
+                text: owner.name + '\'s Lounge',
+                style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 13,
+                    fontWeight: FontWeight.w500),
+              ),
+            )),
+          ],
+        )),
+        Container(
+            child: Row(
+          children: <Widget>[
+            Container(
+                child: RichText(
+              text: TextSpan(
+                  text: lounge.members.length.toString() +
+                      ' member' +
+                      (lounge.members.length > 1 ? 's ' : ' '),
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 13,
+                      fontWeight: FontWeight.w500),
+                  children: <TextSpan>[
+                    TextSpan(
+                        text: lounge.event.name,
+                        style: TextStyle(
+                            color: Colors.greenAccent,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w800))
+                  ]),
+            ))
+          ],
+        )),
+        Container(
+            child: GestureDetector(
+          onTap: () {
+            print('ok GO TO EVENT LISTENING');
+          },
+          child: const Text('> GO TO EVENT LISTENING'),
+        ))
+      ],
     );
   }
 
@@ -52,20 +121,45 @@ class _LoungesWidgetState extends State<LoungesWidget>
                 children: <Widget>[
               if (lounge.event.pic.isNotEmpty)
                 Flexible(
-                    child: CachedImage(
-                  lounge.event.pic,
-                )),
+                    child: Container(
+                        child: Stack(
+                  children: <Widget>[
+                    Container(
+                      child: CachedImage(
+                        lounge.event.pic,
+                      ),
+                    ),
+                    Positioned(
+                        top: 15,
+                        left: 20,
+                        child: Container(
+                            child: IconButton(
+                          iconSize: 40,
+                          icon: Icon(Icons.chat_bubble),
+                          color: white,
+                          onPressed: () {},
+                        ))),
+                    Positioned(
+                        top: 30,
+                        left: 40,
+                        child: Container(
+                            child: Transform(
+                                alignment: Alignment.center,
+                                transform: Matrix4.rotationY(math.pi),
+                                child: IconButton(
+                                  iconSize: 40,
+                                  icon: Icon(Icons.chat_bubble_outline),
+                                  color: white,
+                                  onPressed: () {},
+                                ))))
+                  ],
+                ))),
               Flexible(
                   flex: 2,
-                  child: Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Text(lounge.name, style: textStyleListItemTitle),
-                            Text(lounge.description,
-                                maxLines: 3, overflow: TextOverflow.ellipsis),
-                          ]))),
+                  child: Container(
+                    padding: const EdgeInsets.all(10.0),
+                    child: _buildInfoLoungeLayout(lounge),
+                  )),
             ])));
   }
 
@@ -153,6 +247,16 @@ class _LoungesWidgetState extends State<LoungesWidget>
           userLounges == null) {
         return Loading();
       }
+      // print('userLOUNGES : ' + userLounges.toString());
+      // userLounges.forEach((Lounge lounge)  {
+      //   print('I am a user lounge : ' + lounge.toJson().toString());
+      // });
+      // print('userEventLOunge : '+ userEventLounges.toString());
+      // userEventLounges.forEach((String key,List<Lounge> lounges ) {
+      //   lounges.forEach((Lounge lounge) {
+      //     print('for KEY : ' + key + ' I AM THE LOUNGE : ' + lounge.toJson().toString());
+      //   });
+      // });
 
       return DefaultTabController(
           length: 2,
@@ -172,7 +276,8 @@ class _LoungesWidgetState extends State<LoungesWidget>
                       child: TabBarView(
                         physics: const NeverScrollableScrollPhysics(),
                         children: <Widget>[
-                          _buildLounges(userLounges, dispatch, themeStyle),
+                          _buildLounges(userLounges, userEventLounges, dispatch,
+                              themeStyle),
                           _buildEvents(userEvents, userEventStates,
                               userEventLounges, dispatch, themeStyle),
                         ],
