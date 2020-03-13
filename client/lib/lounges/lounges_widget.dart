@@ -7,6 +7,7 @@ import 'package:business/classes/lounge.dart';
 import 'package:business/classes/user.dart';
 import 'package:business/classes/user_event_state.dart';
 import 'package:flutter/material.dart';
+import 'package:inclusive/lounges/lounge_chat_screen.dart';
 import 'package:inclusive/lounges/lounge_create_screen.dart';
 import 'package:inclusive/lounges/lounge_screen.dart';
 import 'package:inclusive/lounges/lounges_screen.dart';
@@ -98,12 +99,13 @@ class _LoungesWidgetState extends State<LoungesWidget>
           ],
         )),
         Container(
-            child: GestureDetector(
-          onTap: () {
-            print('ok GO TO EVENT LISTENING');
-          },
-          child: const Text('> GO TO EVENT LISTENING'),
-        ))
+          //   child: GestureDetector(
+          // onTap: () {
+          //   print('ok GO TO EVENT LISTENING');
+          // },
+          child: const Text('> GO TO EVENT LISTING'),
+        )
+        // )
       ],
     );
   }
@@ -112,7 +114,7 @@ class _LoungesWidgetState extends State<LoungesWidget>
       void Function(redux.ReduxAction<AppState>) dispatch, ThemeStyle theme) {
     return GestureDetector(
         onTap: () {
-          dispatch(redux.NavigateAction<AppState>.pushNamed(LoungeScreen.id,
+          dispatch(redux.NavigateAction<AppState>.pushNamed(LoungeChatScreen.id,
               arguments: lounge));
         },
         child: Container(
@@ -121,7 +123,12 @@ class _LoungesWidgetState extends State<LoungesWidget>
                 children: <Widget>[
               if (lounge.event.pic.isNotEmpty)
                 Flexible(
-                    child: Container(
+                    child: GestureDetector(
+                      onTap: () {
+                        dispatch(redux.NavigateAction<AppState>.pushNamed(LoungeChatScreen.id,
+              arguments: lounge));
+                      },
+                      child: Container(
                         child: Stack(
                   children: <Widget>[
                     Container(
@@ -137,7 +144,10 @@ class _LoungesWidgetState extends State<LoungesWidget>
                           iconSize: 40,
                           icon: Icon(Icons.chat_bubble),
                           color: white,
-                          onPressed: () {},
+                          onPressed: () {
+                            dispatch(redux.NavigateAction<AppState>.pushNamed(LoungeChatScreen.id,
+              arguments: lounge));
+                          },
                         ))),
                     Positioned(
                         top: 30,
@@ -150,10 +160,15 @@ class _LoungesWidgetState extends State<LoungesWidget>
                                   iconSize: 40,
                                   icon: Icon(Icons.chat_bubble_outline),
                                   color: white,
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    dispatch(redux.NavigateAction<AppState>.pushNamed(LoungeChatScreen.id,
+              arguments: lounge));
+                                  },
                                 ))))
                   ],
-                ))),
+                ))
+                    )
+                ),
               Flexible(
                   flex: 2,
                   child: Container(
