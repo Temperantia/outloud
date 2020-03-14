@@ -68,6 +68,9 @@ Future<List<User>> getUsers(String userId,
 }
 
 Stream<List<User>> streamUsers({List<String> ids}) {
+  if (ids.isEmpty) {
+    return Stream<List<User>>.value(<User>[]);
+  }
   final Query query =
       _api.queryCollection(field: FieldPath.documentId, whereIn: ids);
 
@@ -76,19 +79,6 @@ Stream<List<User>> streamUsers({List<String> ids}) {
       .map<User>(
           (DocumentSnapshot doc) => User.fromMap(doc.data, doc.documentID))
       .toList());
-}
-
-Future<List<User>> getFriends(String id) async {
-  final User user = await getUser(id);
-  if (user.friends.isEmpty) {
-    return <User>[];
-  }
-  Query query = _api.queryCollection();
-  query = query.where(FieldPath.documentId, whereIn: user.friends);
-
-  return (await query.getDocuments()).documents.map((DocumentSnapshot doc) {
-    return User.fromMap(doc.data, doc.documentID);
-  }).toList();
 }
 
 Future<void> removeUser(String id) async {

@@ -4,6 +4,9 @@ import 'package:flutter/widgets.dart';
 import 'package:business/app_state.dart';
 import 'package:async_redux/async_redux.dart' as redux;
 import 'package:business/classes/lounge.dart';
+import 'package:business/classes/chat.dart';
+import 'package:business/classes/message.dart';
+import 'package:business/models/message.dart';
 import 'package:flutter/material.dart';
 import 'package:inclusive/lounges/lounge_edit_screen.dart';
 import 'package:inclusive/theme.dart';
@@ -13,11 +16,13 @@ import 'package:inclusive/widgets/view.dart';
 import 'package:provider_for_redux/provider_for_redux.dart';
 
 class LoungeChatScreen extends StatelessWidget {
-  const LoungeChatScreen(this.lounge);
+  LoungeChatScreen(this.lounge);
   final Lounge lounge;
   static const String id = 'LoungeChatScreen';
+  final TextEditingController _messageController = TextEditingController();
 
-  Widget _buildHeader(BuildContext context, AppState state, void Function(ReduxAction<AppState>) dispatch) {
+  Widget _buildHeader(
+      AppState state, void Function(ReduxAction<AppState>) dispatch) {
     final User owner =
         lounge.members.firstWhere((User member) => member.id == lounge.owner);
     return Container(
@@ -86,19 +91,27 @@ class LoungeChatScreen extends StatelessWidget {
                 flex: 1,
                 child: Container(
                     child: state.userState.user.id == owner.id
-                        ? IconButton(icon: Icon(Icons.edit), onPressed: () {
-                          dispatch(redux.NavigateAction<AppState>.pushNamed(LoungeEditScreen.id,
-              arguments: lounge));
-                        })
+                        ? IconButton(
+                            icon: Icon(Icons.edit),
+                            onPressed: () {
+                              dispatch(redux.NavigateAction<AppState>.pushNamed(
+                                  LoungeEditScreen.id,
+                                  arguments: lounge));
+                            })
                         : IconButton(icon: Icon(Icons.block), onPressed: null)))
           ],
         ));
   }
 
-  Widget _buildChat(BuildContext context) {
-    return Container(
-      child: const Text('HERE GO THE CHAT'),
-    );
+  Widget _buildChat(Chat chat) {
+    return ListView.builder(
+        reverse: true,
+        itemCount: chat.messages.length,
+        itemBuilder: (context, index) => _buildMessage(chat.messages[index]));
+  }
+
+  Widget _buildMessage(Message message) {
+    return Text(message.content);
   }
 
   @override
@@ -108,6 +121,8 @@ class LoungeChatScreen extends StatelessWidget {
         AppState state,
         void Function(redux.ReduxAction<dynamic>) dispatch,
         Widget child) {
+      var chat = state.chatsState.loungeChats
+          .firstWhere((chat) => chat.id == lounge.id);
       return View(
           title: 'LOUNGE CHAT',
           child: Container(
@@ -119,11 +134,23 @@ class LoungeChatScreen extends StatelessWidget {
                       child: Container(
                           child: Column(
                         children: <Widget>[
-                          _buildHeader(context, state, dispatch),
+                          _buildHeader(state, dispatch),
                           const Divider(),
-                          Expanded(child: _buildChat(context))
+                          Expanded(child: _buildChat(chat))
                         ],
-                      ))))
+                      )))),
+              Row(
+                children: <Widget>[
+                  Expanded(child: TextField(controller: _messageController)),
+                  GestureDetector(
+                      onTap: () {
+                        addMessage(lounge.id, state.loginState.id,
+                            _messageController.text);
+                        _messageController.clear();
+                      },
+                      child: Icon(Icons.message)),
+                ],
+              )
             ],
           )));
     });

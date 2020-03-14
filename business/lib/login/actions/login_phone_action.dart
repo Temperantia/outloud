@@ -14,7 +14,6 @@ class LoginPhoneAction extends ReduxAction<AppState> {
 
   @override
   Future<AppState> reduce() async {
-    print(phone);
     await firebaseAuth.verifyPhoneNumber(
         phoneNumber: phone,
         timeout: const Duration(seconds: 60),
@@ -36,7 +35,6 @@ class LoginPhoneAction extends ReduxAction<AppState> {
   }
 
   void _smsCodeSent(String verificationId, List<int> code) {
-    print(code);
     // set the verification code so that we can use it to log the user in
     smsCode = verificationId;
   }

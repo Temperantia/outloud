@@ -17,8 +17,10 @@ class ChatsListenAction extends ReduxAction<AppState> {
     for (final String chatId in state.chatsState.chatIds) {
       final Chat chat = Chat(chatId, id);
       chats.add(chat);
+
       streamMessages(chat.id).listen((List<Message> messages) =>
           dispatch(ChatsUpdateStreamAction(messages, chat.id)));
+
       streamUser(chat.idPeer).listen(
           (User user) => dispatch(ChatsUpdateUserAction(user, chat.id)));
     }

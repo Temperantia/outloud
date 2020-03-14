@@ -13,7 +13,7 @@ Stream<Event> streamEvent(String id) {
 
 Stream<List<Event>> streamEvents(List<String> ids) {
   if (ids.isEmpty) {
-    return Stream.value([]);
+    return Stream<List<Event>>.value(<Event>[]);
   }
   return _api
       .queryCollection(field: FieldPath.documentId, whereIn: ids)

@@ -5,7 +5,6 @@ import 'package:business/events/actions/events_get_action.dart';
 import 'package:business/lounges/actions/lounges_listen_action.dart';
 import 'package:business/people/actions/people_get_action.dart';
 import 'package:business/user/actions/user_listen_stream_action.dart';
-import 'package:business/user/actions/user_get_friends_action.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class LoginAction extends ReduxAction<AppState> {
@@ -15,13 +14,13 @@ class LoginAction extends ReduxAction<AppState> {
     final String id = user == null ? null : user.uid;
 
     if (id != null) {
-      store.dispatch(UserListenStreamAction(id));
-      store.dispatch(ChatsListenAction(id));
-      store.dispatch(UserGetFriendsAction(id)); // TODO(me): a stream rather
+      dispatch(UserListenStreamAction(id));
+      dispatch(ChatsListenAction(id));
     }
-    store.dispatch(EventsGetAction());
-    store.dispatch(LoungesListenAction());
-    store.dispatch(PeopleGetAction());
+    dispatch(EventsGetAction());
+    dispatch(
+        LoungesListenAction()); // TODO(me): this will likely evolve as a future as well when the home page offers lounges based on interests
+    dispatch(PeopleGetAction());
 
     return state.copy(
         loginState: state.loginState.copy(id: id), loading: false);

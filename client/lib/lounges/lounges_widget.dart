@@ -9,7 +9,6 @@ import 'package:business/classes/user_event_state.dart';
 import 'package:flutter/material.dart';
 import 'package:inclusive/lounges/lounge_chat_screen.dart';
 import 'package:inclusive/lounges/lounge_create_screen.dart';
-import 'package:inclusive/lounges/lounge_screen.dart';
 import 'package:inclusive/lounges/lounges_screen.dart';
 import 'package:inclusive/theme.dart';
 import 'package:inclusive/widgets/cached_image.dart';
@@ -32,18 +31,14 @@ class _LoungesWidgetState extends State<LoungesWidget>
       Map<String, List<Lounge>> userEventLounges,
       void Function(redux.ReduxAction<AppState>) dispatch,
       ThemeStyle themeStyle) {
-    final List<Lounge> _lounges = <Lounge>[];
-    userEventLounges.forEach((String eventKey, List<Lounge> lounges) {
-      lounges.forEach(_lounges.add);
-    });
     return ListView.builder(
-      itemCount: _lounges.length,
+      itemCount: lounges.length,
       itemBuilder: (BuildContext context, int index) => Container(
         decoration: const BoxDecoration(color: white),
         child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              _buildLounge(_lounges[index], dispatch, themeStyle)
+              _buildLounge(lounges[index], dispatch, themeStyle)
             ]),
       ),
     );
@@ -124,51 +119,54 @@ class _LoungesWidgetState extends State<LoungesWidget>
               if (lounge.event.pic.isNotEmpty)
                 Flexible(
                     child: GestureDetector(
-                      onTap: () {
-                        dispatch(redux.NavigateAction<AppState>.pushNamed(LoungeChatScreen.id,
-              arguments: lounge));
-                      },
-                      child: Container(
-                        child: Stack(
-                  children: <Widget>[
-                    Container(
-                      child: CachedImage(
-                        lounge.event.pic,
-                      ),
-                    ),
-                    Positioned(
-                        top: 15,
-                        left: 20,
+                        onTap: () {
+                          dispatch(redux.NavigateAction<AppState>.pushNamed(
+                              LoungeChatScreen.id,
+                              arguments: lounge));
+                        },
                         child: Container(
-                            child: IconButton(
-                          iconSize: 40,
-                          icon: Icon(Icons.chat_bubble),
-                          color: white,
-                          onPressed: () {
-                            dispatch(redux.NavigateAction<AppState>.pushNamed(LoungeChatScreen.id,
-              arguments: lounge));
-                          },
-                        ))),
-                    Positioned(
-                        top: 30,
-                        left: 40,
-                        child: Container(
-                            child: Transform(
-                                alignment: Alignment.center,
-                                transform: Matrix4.rotationY(math.pi),
-                                child: IconButton(
+                            child: Stack(
+                          children: <Widget>[
+                            Container(
+                              child: CachedImage(
+                                lounge.event.pic,
+                              ),
+                            ),
+                            Positioned(
+                                top: 15,
+                                left: 20,
+                                child: Container(
+                                    child: IconButton(
                                   iconSize: 40,
-                                  icon: Icon(Icons.chat_bubble_outline),
+                                  icon: Icon(Icons.chat_bubble),
                                   color: white,
                                   onPressed: () {
-                                    dispatch(redux.NavigateAction<AppState>.pushNamed(LoungeChatScreen.id,
-              arguments: lounge));
+                                    dispatch(redux
+                                            .NavigateAction<AppState>.pushNamed(
+                                        LoungeChatScreen.id,
+                                        arguments: lounge));
                                   },
-                                ))))
-                  ],
-                ))
-                    )
-                ),
+                                ))),
+                            Positioned(
+                                top: 30,
+                                left: 40,
+                                child: Container(
+                                    child: Transform(
+                                        alignment: Alignment.center,
+                                        transform: Matrix4.rotationY(math.pi),
+                                        child: IconButton(
+                                          iconSize: 40,
+                                          icon: Icon(Icons.chat_bubble_outline),
+                                          color: white,
+                                          onPressed: () {
+                                            dispatch(redux.NavigateAction<
+                                                    AppState>.pushNamed(
+                                                LoungeChatScreen.id,
+                                                arguments: lounge));
+                                          },
+                                        ))))
+                          ],
+                        )))),
               Flexible(
                   flex: 2,
                   child: Container(

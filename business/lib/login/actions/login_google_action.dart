@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:business/chats/actions/chats_listen_action.dart';
-import 'package:business/user/actions/user_get_friends_action.dart';
 import 'package:business/user/actions/user_listen_stream_action.dart';
 import 'package:http/http.dart';
 
@@ -36,7 +35,6 @@ class LoginGoogleAction extends ReduxAction<AppState> {
       final String id = await register(credential, birthdate);
       store.dispatch(UserListenStreamAction(id));
       store.dispatch(ChatsListenAction(id));
-      store.dispatch(UserGetFriendsAction(id));
       return state.copy(loginState: state.loginState.copy(id: id));
     } catch (error) {
       return state.copy(loginState: state.loginState.copy(loginError: ''));
