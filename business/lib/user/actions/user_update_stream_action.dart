@@ -17,7 +17,6 @@ class UserUpdateStreamAction extends redux.ReduxAction<AppState> {
 
   @override
   AppState reduce() {
-    print(user.lounges);
     streamUsers(ids: user.friends).listen(
         (List<User> friends) => dispatch(UserFriendsUpdateAction(friends)));
     streamEvents(user.events.keys.toList()).listen(

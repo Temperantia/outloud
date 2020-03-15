@@ -21,6 +21,7 @@ class Lounge {
     this.memberRefs,
     this.members,
   }) {
+    members = <User>[];
     if (eventRef != null)
       eventRef.snapshots().listen((DocumentSnapshot doc) =>
           event = Event.fromMap(doc.data, doc.documentID));
@@ -48,6 +49,7 @@ class Lounge {
             : (snapshot['date'] as Timestamp).toDate(),
         owner = snapshot['owner'] as String ?? '',
         memberLimit = snapshot['memberLimit'] as int ?? 5,
+        notes = snapshot['notes'] as String ?? '',
         memberIds = snapshot['memberIds'] == null
             ? <String>[]
             : snapshot['memberIds'].cast<String>() as List<String>,
@@ -94,6 +96,7 @@ class Lounge {
       'date': date == null ? null : Timestamp.fromDate(date),
       'owner': owner,
       'memberLimit': memberLimit,
+      'notes': notes,
       'memberIds': memberIds,
       'memberRefs': memberRefs,
     };

@@ -702,15 +702,10 @@ class _LoungeCreateMeetupScreenState extends State<LoungeCreateMeetupScreen> {
                                     final GeoPoint _location = GeoPoint(
                                         _positionOfPlace.position.latitude,
                                         _positionOfPlace.position.longitude);
-                                    final Lounge _newLounge =
-                                        await createLounge();
                                     dispatch(LoungeCreateMeetupAction(
                                         _location,
                                         _dateOfEvent,
-                                        _notesTextController.text,
-                                        _newLounge.id));
-                                    await updateLounge(
-                                        state.loungesState.loungeCreation);
+                                        _notesTextController.text));
                                     Navigator.popUntil(
                                         context,
                                         (Route<dynamic> route) =>

@@ -82,16 +82,9 @@ class _LoungeCreateScreenState extends State<LoungeCreateScreen> {
                           child: Button(
                               text: 'NEXT',
                               onPressed: () {
-                                 final List<DocumentReference> _membersRef= <DocumentReference>[];
-                                 final List<User> _users = <User>[];
-                                _membersRef.add(getUserReference(state.userState.user.id));
-                                dispatch(LoungeCreateAction(Lounge(
-                                    eventId: _selected.id,
-                                    memberRefs: _membersRef,
-                                    owner: state.userState.user.id,
-                                    members: _users,
-                                    eventRef:
-                                        getEventReference(_selected.id))));
+                                dispatch(LoungeCreateAction(
+                                  _selected.id,
+                                ));
                                 dispatch(
                                     redux.NavigateAction<AppState>.pushNamed(
                                         LoungeCreateDetailScreen.id));
