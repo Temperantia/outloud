@@ -4,7 +4,6 @@ import 'package:business/classes/lounge.dart';
 import 'package:business/classes/user.dart';
 import 'package:inclusive/chats/chat_screen.dart';
 import 'package:inclusive/events/event_create_screen.dart';
-import 'package:inclusive/events/event_groups_screen.dart';
 import 'package:inclusive/events/event_screen.dart';
 import 'package:inclusive/lounges/lounge_chat_screen.dart';
 import 'package:inclusive/lounges/lounge_create_detail_screen.dart';
@@ -25,8 +24,7 @@ final Map<String, Widget Function(Object)> routes =
   LoginScreen.id: (_) => LoginScreen(),
   HomeScreen.id: (_) => HomeScreen(),
   ProfileEditionScreen.id: (_) => ProfileEditionScreen(),
-  EventScreen.id: (_) => EventScreen(),
-  EventGroupsScreen.id: (_) => EventGroupsScreen(),
+  EventScreen.id: (dynamic event) => EventScreen(event as Event),
   LoungesScreen.id: (dynamic event) => LoungesScreen(event as Event),
   LoungeScreen.id: (dynamic lounge) => LoungeScreen(lounge as Lounge),
   LoungeChatScreen.id: (dynamic lounge) => LoungeChatScreen(lounge as Lounge),

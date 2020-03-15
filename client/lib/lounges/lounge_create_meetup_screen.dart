@@ -345,7 +345,7 @@ class _LoungeCreateMeetupScreenState extends State<LoungeCreateMeetupScreen> {
                 height: Theme.of(context).textTheme.display1.fontSize * 1.1,
               ),
               child: RichText(
-                text: TextSpan(
+                text: const TextSpan(
                   text: 'LOUNGE DESIGNATED MEETUP',
                   style: TextStyle(
                       color: Colors.black,
@@ -495,7 +495,7 @@ class _LoungeCreateMeetupScreenState extends State<LoungeCreateMeetupScreen> {
                 height: Theme.of(context).textTheme.display1.fontSize * 1.1,
               ),
               child: RichText(
-                text: TextSpan(
+                text: const TextSpan(
                   text: 'MEETUP TIME',
                   style: TextStyle(
                       color: Colors.black,
@@ -596,7 +596,7 @@ class _LoungeCreateMeetupScreenState extends State<LoungeCreateMeetupScreen> {
               height: Theme.of(context).textTheme.display1.fontSize * 1.1,
             ),
             child: RichText(
-              text: TextSpan(
+              text: const TextSpan(
                 text: 'MEETUP TIME',
                 style: TextStyle(
                     color: Colors.black,

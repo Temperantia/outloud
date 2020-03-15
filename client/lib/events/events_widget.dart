@@ -4,7 +4,6 @@ import 'package:async_redux/async_redux.dart' as redux;
 import 'package:business/app_state.dart';
 import 'package:business/classes/event.dart';
 import 'package:business/events/actions/events_get_action.dart';
-import 'package:business/events/actions/events_select_action.dart';
 import 'package:flutter/material.dart';
 /* import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart'; */
@@ -91,11 +90,8 @@ class _EventsWidgetState extends State<EventsWidget>
             }));
   } */
 
-  Widget _buildEvents(
-      List<Event> events,
-      ThemeStyle themeStyle,
-      void Function(redux.ReduxAction<AppState>) dispatch,
-      Future<void> Function(redux.ReduxAction<AppState>) dispatchFuture) {
+  Widget _buildUserEvents(List<Event> events, ThemeStyle themeStyle,
+      void Function(redux.ReduxAction<AppState>) dispatch) {
     return ListView.builder(
       itemCount: events.length,
       itemBuilder: (BuildContext context, int index) => Container(
@@ -103,17 +99,50 @@ class _EventsWidgetState extends State<EventsWidget>
         child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              _buildEvent(events[index], dispatch, dispatchFuture, themeStyle)
+              _buildEvent(events[index], dispatch, themeStyle)
             ]),
       ),
     );
   }
 
-  Widget _buildEvent(
-      Event event,
+  Widget _buildFindEvents(
+      List<Event> events,
+      ThemeStyle themeStyle,
       void Function(redux.ReduxAction<AppState>) dispatch,
-      Future<void> Function(redux.ReduxAction<AppState>) dispatchFuture,
-      ThemeStyle theme) {
+      Future<void> Function(redux.ReduxAction<AppState>) dispatchFuture) {
+    return RefreshIndicator(
+      onRefresh: () => dispatchFuture(EventsGetAction()),
+      child: ListView.builder(
+        itemCount: events.length,
+        itemBuilder: (BuildContext context, int index) => Container(
+          decoration: const BoxDecoration(color: white),
+          child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                _buildEvent(events[index], dispatch, themeStyle)
+              ]),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildEvents(List<Event> events, ThemeStyle themeStyle,
+      void Function(redux.ReduxAction<AppState>) dispatch) {
+    return ListView.builder(
+      itemCount: events.length,
+      itemBuilder: (BuildContext context, int index) => Container(
+        decoration: const BoxDecoration(color: white),
+        child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              _buildEvent(events[index], dispatch, themeStyle)
+            ]),
+      ),
+    );
+  }
+
+  Widget _buildEvent(Event event,
+      void Function(redux.ReduxAction<AppState>) dispatch, ThemeStyle theme) {
     final String date =
         event.date == null ? null : DateFormat('dd.MM').format(event.date);
     final String time =
@@ -124,8 +153,8 @@ class _EventsWidgetState extends State<EventsWidget>
       ),
       GestureDetector(
           onTap: () async {
-            await dispatchFuture(EventsSelectAction(event));
-            dispatch(redux.NavigateAction<AppState>.pushNamed(EventScreen.id));
+            dispatch(redux.NavigateAction<AppState>.pushNamed(EventScreen.id,
+                arguments: event));
           },
           child: Container(
               child: Row(
@@ -212,14 +241,9 @@ class _EventsWidgetState extends State<EventsWidget>
                       child: TabBarView(
                         physics: const NeverScrollableScrollPhysics(),
                         children: <Widget>[
-                          _buildEvents(userEvents, themeStyle, dispatch,
+                          _buildUserEvents(userEvents, themeStyle, dispatch),
+                          _buildFindEvents(events, themeStyle, dispatch,
                               store.dispatchFuture),
-                          RefreshIndicator(
-                            onRefresh: () =>
-                                store.dispatchFuture(EventsGetAction()),
-                            child: _buildEvents(events, themeStyle, dispatch,
-                                store.dispatchFuture),
-                          ),
                         ],
                       )))
             ],

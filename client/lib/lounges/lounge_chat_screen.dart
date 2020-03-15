@@ -107,7 +107,8 @@ class LoungeChatScreen extends StatelessWidget {
     return ListView.builder(
         reverse: true,
         itemCount: chat.messages.length,
-        itemBuilder: (context, index) => _buildMessage(chat.messages[index]));
+        itemBuilder: (BuildContext context, int index) =>
+            _buildMessage(chat.messages[index]));
   }
 
   Widget _buildMessage(Message message) {
@@ -121,8 +122,8 @@ class LoungeChatScreen extends StatelessWidget {
         AppState state,
         void Function(redux.ReduxAction<dynamic>) dispatch,
         Widget child) {
-      var chat = state.chatsState.loungeChats
-          .firstWhere((chat) => chat.id == lounge.id);
+      final Chat chat = state.chatsState.loungeChats
+          .firstWhere((Chat chat) => chat.id == lounge.id);
       return View(
           title: 'LOUNGE CHAT',
           child: Container(
