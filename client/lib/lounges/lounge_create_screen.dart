@@ -1,11 +1,7 @@
 import 'package:async_redux/async_redux.dart' as redux;
 import 'package:business/app_state.dart';
 import 'package:business/classes/event.dart';
-import 'package:business/classes/lounge.dart';
-import 'package:business/classes/user.dart';
 import 'package:business/lounges/actions/lounge_create_action.dart';
-import 'package:business/models/events.dart';
-import 'package:business/models/user.dart';
 import 'package:flutter/material.dart';
 import 'package:inclusive/lounges/lounge_create_detail_screen.dart';
 import 'package:inclusive/theme.dart';
@@ -13,7 +9,6 @@ import 'package:inclusive/widgets/button.dart';
 import 'package:inclusive/widgets/cached_image.dart';
 import 'package:inclusive/widgets/view.dart';
 import 'package:provider_for_redux/provider_for_redux.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 class LoungeCreateScreen extends StatefulWidget {
   static const String id = 'LoungeCreateScreen';
@@ -76,19 +71,15 @@ class _LoungeCreateScreenState extends State<LoungeCreateScreen> {
                       child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      Container(
-                          width: 160,
-                          margin: const EdgeInsets.all(20.0),
-                          child: Button(
-                              text: 'NEXT',
-                              onPressed: () {
-                                dispatch(LoungeCreateAction(
-                                  _selected.id,
-                                ));
-                                dispatch(
-                                    redux.NavigateAction<AppState>.pushNamed(
-                                        LoungeCreateDetailScreen.id));
-                              }))
+                      Button(
+                          text: 'NEXT',
+                          onPressed: () {
+                            dispatch(LoungeCreateAction(
+                              _selected.id,
+                            ));
+                            dispatch(redux.NavigateAction<AppState>.pushNamed(
+                                LoungeCreateDetailScreen.id));
+                          }),
                     ],
                   )),
                 )

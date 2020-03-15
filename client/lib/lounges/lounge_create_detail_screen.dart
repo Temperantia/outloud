@@ -115,12 +115,10 @@ class _LoungeCreateDetailScreenState extends State<LoungeCreateDetailScreen> {
                             fontWeight: FontWeight.w400),
                       ),
                     )),
-                Container(
-                    width: 220,
-                    margin: const EdgeInsets.all(20.0),
-                    child: const Button(
-                      text: 'UPGRADE   >',
-                    ))
+                const Button(
+                  text: 'UPGRADE   >',
+                  width: 220,
+                ),
               ],
             ))
       ],
@@ -206,26 +204,20 @@ class _LoungeCreateDetailScreenState extends State<LoungeCreateDetailScreen> {
                       child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
-                    Container(
-                        margin: const EdgeInsets.all(15.0),
-                        width: 140,
-                        child: Button(
-                            text: 'BACK',
-                            onPressed: () {
-                              dispatch(NavigateAction<AppState>.pop());
-                            })),
-                    Container(
-                        margin: const EdgeInsets.all(15.0),
-                        width: 140,
-                        child: Button(
-                            text: 'NEXT',
-                            onPressed: () {
-                              dispatch(LoungeCreateDetailAction(_visibility,
-                                  _limit.toInt(), _descriptionController.text));
-                              dispatch(NavigateAction<AppState>.pushNamed(
-                                LoungeCreateMeetupScreen.id,
-                              ));
-                            })),
+                    Button(
+                        text: 'BACK',
+                        onPressed: () {
+                          dispatch(NavigateAction<AppState>.pop());
+                        }),
+                    Button(
+                        text: 'NEXT',
+                        onPressed: () {
+                          dispatch(LoungeCreateDetailAction(_visibility,
+                              _limit.toInt(), _descriptionController.text));
+                          dispatch(NavigateAction<AppState>.pushNamed(
+                            LoungeCreateMeetupScreen.id,
+                          ));
+                        }),
                   ])))
             ],
           ));

@@ -2,8 +2,6 @@ import 'dart:async';
 
 import 'package:async_redux/async_redux.dart';
 import 'package:business/app_state.dart';
-import 'package:business/classes/lounge.dart';
-import 'package:business/models/lounges.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -658,59 +656,50 @@ class _LoungeCreateMeetupScreenState extends State<LoungeCreateMeetupScreen> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
-                          Container(
+                          Button(
+                              text: 'CREATE',
                               width: 160,
-                              child: Button(
-                                  text: 'CREATE',
-                                  onPressed: () async {
-                                    _focusNodeNotes.unfocus();
-                                    _focusNodeAdress.unfocus();
-                                    final DateTime _dateOfEvent = DateTime(
-                                        _dateEvent.year,
-                                        _dateEvent.month,
-                                        _dateEvent.day,
-                                        _timeEvent.hour,
-                                        _timeEvent.minute);
-                                    if (_positionOfPlace == null) {
-                                      showDialog(
-                                          context: context,
-                                          builder: (BuildContext context) {
-                                            return AlertDialog(
-                                              title: const Text(
-                                                  'MISSING INFORMATION'),
-                                              content: const Text(
-                                                  'PLEASE PROVIDE A POSITION TO YOUR LOUNGE'),
-                                              actions: <Widget>[
-                                                FlatButton(
-                                                    onPressed: () {
-                                                      _dismissDialog();
-                                                      _scrollController
-                                                          .animateTo(0,
-                                                              duration:
-                                                                  const Duration(
-                                                                      seconds:
-                                                                          1),
-                                                              curve:
-                                                                  Curves.ease);
-                                                    },
-                                                    child: const Text('OK'))
-                                              ],
-                                            );
-                                          });
-                                      return;
-                                    }
-                                    final GeoPoint _location = GeoPoint(
-                                        _positionOfPlace.position.latitude,
-                                        _positionOfPlace.position.longitude);
-                                    dispatch(LoungeCreateMeetupAction(
-                                        _location,
-                                        _dateOfEvent,
-                                        _notesTextController.text));
-                                    Navigator.popUntil(
-                                        context,
-                                        (Route<dynamic> route) =>
-                                            route.isFirst);
-                                  }))
+                              onPressed: () async {
+                                _focusNodeNotes.unfocus();
+                                _focusNodeAdress.unfocus();
+                                final DateTime _dateOfEvent = DateTime(
+                                    _dateEvent.year,
+                                    _dateEvent.month,
+                                    _dateEvent.day,
+                                    _timeEvent.hour,
+                                    _timeEvent.minute);
+                                if (_positionOfPlace == null) {
+                                  showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return AlertDialog(
+                                          title:
+                                              const Text('MISSING INFORMATION'),
+                                          content: const Text(
+                                              'PLEASE PROVIDE A POSITION TO YOUR LOUNGE'),
+                                          actions: <Widget>[
+                                            FlatButton(
+                                                onPressed: () {
+                                                  _dismissDialog();
+                                                  _scrollController.animateTo(0,
+                                                      duration: const Duration(
+                                                          seconds: 1),
+                                                      curve: Curves.ease);
+                                                },
+                                                child: const Text('OK'))
+                                          ],
+                                        );
+                                      });
+                                  return;
+                                }
+                                final GeoPoint _location = GeoPoint(
+                                    _positionOfPlace.position.latitude,
+                                    _positionOfPlace.position.longitude);
+                                dispatch(LoungeCreateMeetupAction(_location,
+                                    _dateOfEvent, _notesTextController.text));
+                                Navigator.popUntil(context,
+                                    (Route<dynamic> route) => route.isFirst);
+                              }),
                         ],
                       ))
                 ],

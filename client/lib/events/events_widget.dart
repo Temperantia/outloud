@@ -126,21 +126,6 @@ class _EventsWidgetState extends State<EventsWidget>
     );
   }
 
-  Widget _buildEvents(List<Event> events, ThemeStyle themeStyle,
-      void Function(redux.ReduxAction<AppState>) dispatch) {
-    return ListView.builder(
-      itemCount: events.length,
-      itemBuilder: (BuildContext context, int index) => Container(
-        decoration: const BoxDecoration(color: white),
-        child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              _buildEvent(events[index], dispatch, themeStyle)
-            ]),
-      ),
-    );
-  }
-
   Widget _buildEvent(Event event,
       void Function(redux.ReduxAction<AppState>) dispatch, ThemeStyle theme) {
     final String date =

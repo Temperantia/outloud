@@ -11,6 +11,7 @@ import 'package:inclusive/lounges/lounge_chat_screen.dart';
 import 'package:inclusive/lounges/lounge_create_screen.dart';
 import 'package:inclusive/lounges/lounges_screen.dart';
 import 'package:inclusive/theme.dart';
+import 'package:inclusive/widgets/button.dart';
 import 'package:inclusive/widgets/cached_image.dart';
 import 'package:inclusive/widgets/circular_image.dart';
 import 'package:inclusive/widgets/loading.dart';
@@ -300,19 +301,13 @@ class _LoungesWidgetState extends State<LoungesWidget>
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      Container(
-                        height: 45,
-                        width: 200,
-                        margin: const EdgeInsets.all(10.0),
-                        child: RaisedButton.icon(
-                            color: orangeLight.withOpacity(0.5),
-                            textColor: white,
-                            onPressed: () => dispatch(
-                                redux.NavigateAction<AppState>.pushNamed(
-                                    LoungeCreateScreen.id)),
-                            icon: Icon(Icons.add),
-                            label: const Text('CREATE LOUNGE')),
-                      )
+                      Button(
+                          text: 'CREATE LOUNGE',
+                          width: 200,
+                          icon: Icon(Icons.add),
+                          onPressed: () => dispatch(
+                              redux.NavigateAction<AppState>.pushNamed(
+                                  LoungeCreateScreen.id))),
                     ],
                   ),
                 ),
