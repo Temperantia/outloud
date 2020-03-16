@@ -9,6 +9,7 @@ class UserEventLoungesUpdateAction extends redux.ReduxAction<AppState> {
 
   @override
   AppState reduce() {
+    // TODO(robin): do not add a lounge to the event lounges if there is no room left for new people
     final Map<String, List<Lounge>> eventLounges = <String, List<Lounge>>{};
     for (final Lounge lounge in lounges) {
       final List<Lounge> eventLounge = eventLounges[lounge.eventId];

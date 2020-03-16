@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:async_redux/async_redux.dart' as redux;
 import 'package:business/app_state.dart';
 import 'package:business/classes/event.dart';
@@ -10,13 +12,21 @@ class UserEventsUpdateAction extends redux.ReduxAction<AppState> {
 
   final List<Event> events;
 
+  static StreamSubscription<List<Lounge>> eventLoungesSub;
+
   @override
   AppState reduce() {
     final List<String> eventIds =
         events.map((Event event) => event.id).toList();
 
-    streamLounges(eventIds: eventIds).listen((List<Lounge> lounges) =>
-        dispatch(UserEventLoungesUpdateAction(lounges)));
+    if (eventLoungesSub != null) {
+      eventLoungesSub.cancel();
+    }
+
+    eventLoungesSub = streamLounges(eventIds: eventIds).listen(
+        // TODO(me): actually it's a future lol
+        (List<Lounge> lounges) =>
+            dispatch(UserEventLoungesUpdateAction(lounges)));
     return state.copy(userState: state.userState.copy(events: events));
   }
 }

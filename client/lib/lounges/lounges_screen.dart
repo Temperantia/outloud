@@ -57,7 +57,8 @@ class LoungesScreen extends StatelessWidget {
                 Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
-                      Text('$availableSlots slots available'),
+                      Text(
+                          '$availableSlots slots available'), // TODO(robin): conjugate this if 1
                       Container(
                           child: Row(children: <Widget>[
                         for (User member in lounge.members)
@@ -155,7 +156,7 @@ class LoungesScreen extends StatelessWidget {
                           ),
                         ])))),
               ])
-
+// TODO(robin): remove this dead code please
               // child: Column(
               //   children: <Widget>[
               //     const Text('FOR THE EVENT'),
