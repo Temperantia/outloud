@@ -3,7 +3,6 @@ import 'package:business/classes/event.dart';
 import 'package:business/classes/lounge.dart';
 import 'package:business/classes/user.dart';
 import 'package:inclusive/chats/chat_screen.dart';
-import 'package:inclusive/events/event_create_screen.dart';
 import 'package:inclusive/events/event_screen.dart';
 import 'package:inclusive/lounges/lounge_chat_screen.dart';
 import 'package:inclusive/lounges/lounge_create_detail_screen.dart';

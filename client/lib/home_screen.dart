@@ -1,8 +1,12 @@
 import 'package:async_redux/async_redux.dart';
 import 'package:business/actions/app_navigate_action.dart';
 import 'package:business/app_state.dart';
+import 'package:business/classes/user.dart';
+import 'package:business/models/user.dart';
 import 'package:business/permissions/location_permission.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:inclusive/events/events_widget.dart';
 import 'package:inclusive/home_widget.dart';
 import 'package:inclusive/lounges/lounges_widget.dart';
@@ -22,6 +26,7 @@ class _HomeScreenState extends State<HomeScreen>
         WidgetsBindingObserver,
         ChangeNotifier {
   TabController _tabController;
+  User _user;
 
   @override
   void initState() {
@@ -72,8 +77,19 @@ class _HomeScreenState extends State<HomeScreen>
       case AppLifecycleState.paused:
         break;
       case AppLifecycleState.resumed:
+        _refreshLocation();
         break;
     }
+  }
+
+  Future<void> _refreshLocation() async {
+    if (_user != null) {
+      return;
+    }
+    final Position position = await Geolocator()
+        .getCurrentPosition(desiredAccuracy: LocationAccuracy.best);
+    _user.location = GeoPoint(position.latitude, position.longitude);
+    updateUser(_user);
   }
 
   @override
@@ -94,15 +110,18 @@ class _HomeScreenState extends State<HomeScreen>
 
   @override
   Widget build(BuildContext context) {
-    //_authService.refreshLocation();
-    return ReduxSelector<AppState, int>(
-        selector: (BuildContext context, AppState state) => state.homePageIndex,
+    return ReduxSelector<AppState, dynamic>(
+        selector: (BuildContext context, AppState state) =>
+            <dynamic>[state.userState.user, state.homePageIndex],
         builder: (BuildContext context,
             Store<AppState> store,
             AppState state,
             void Function(ReduxAction<dynamic>) dispatch,
-            int homePageIndex,
+            dynamic model,
             Widget child) {
+          _user = state.userState.user;
+          _refreshLocation();
+
           if (!_tabController.hasListeners) {
             _tabController.addListener(() {
               if (!_tabController.indexIsChanging &&
@@ -111,7 +130,7 @@ class _HomeScreenState extends State<HomeScreen>
               }
             });
           }
-          _tabController.animateTo(homePageIndex);
+          _tabController.animateTo(state.homePageIndex);
 
           return View(child: _buildBody(), isRoot: true);
         });
