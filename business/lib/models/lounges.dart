@@ -32,3 +32,7 @@ Future<Lounge> createLounge(Lounge lounge) async {
       await (await _api.addDocument(lounge.toJson())).get();
   return Lounge.fromMap(doc.data, doc.documentID);
 }
+
+Future<void> updateLounge(Lounge lounge) async {
+  return _api.updateDocument(lounge.toJson(), lounge.id);
+}

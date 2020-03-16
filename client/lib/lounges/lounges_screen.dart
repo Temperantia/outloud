@@ -4,6 +4,7 @@ import 'package:business/classes/event.dart';
 import 'package:business/classes/lounge.dart';
 import 'package:business/classes/user.dart';
 import 'package:flutter/material.dart';
+import 'package:business/lounges/actions/lounge_join_action.dart';
 import 'package:inclusive/theme.dart';
 import 'package:inclusive/widgets/cached_image.dart';
 import 'package:inclusive/widgets/circular_image.dart';
@@ -17,7 +18,7 @@ class LoungesScreen extends StatelessWidget {
 
   static const String id = 'LoungesScreen';
 
-  Widget _buildLounge(Lounge lounge) {
+  Widget _buildLounge(Lounge lounge, void Function(redux.ReduxAction<AppState>) dispatch, AppState state) {
     final User owner =
         lounge.members.firstWhere((User member) => member.id == lounge.owner);
     final int availableSlots = lounge.memberLimit - lounge.members.length;
@@ -45,6 +46,12 @@ class LoungesScreen extends StatelessWidget {
                                       fontSize: 13,
                                       fontWeight: FontWeight.w500)))),
                       GestureDetector(
+                          onTap: () {
+                            if (lounge.owner == state.userState.user.id) {
+                              return;
+                            }
+                            dispatch(LoungeJoinAction(state.userState.user.id, lounge));
+                          },
                           child: Container(
                               child: RichText(
                                   text: TextSpan(
@@ -64,7 +71,7 @@ class LoungesScreen extends StatelessWidget {
                         for (User member in lounge.members)
                           if (member.id != lounge.owner)
                             CircularImage(
-                                imageRadius: 20.0, imageUrl: member.pics[0]),
+                                imageRadius: 20.0, imageUrl: member.pics.isNotEmpty ? member.pics[0] : null),
                         for (int index = 0; index < availableSlots; index++)
                           Container(
                               width: 20.0,
@@ -118,7 +125,7 @@ class LoungesScreen extends StatelessWidget {
         ]));
   }
 
-  Widget _buildListLounges(List<Lounge> lounges) {
+  Widget _buildListLounges(List<Lounge> lounges, void Function(redux.ReduxAction<AppState>) dispatch, AppState state) {
     return Container(
         child: Container(
             padding: const EdgeInsets.only(left: 10, right: 30),
@@ -126,7 +133,7 @@ class LoungesScreen extends StatelessWidget {
                 itemCount: lounges.length,
                 itemBuilder: (BuildContext context, int index) => Container(
                     padding: const EdgeInsets.all(10.0),
-                    child: _buildLounge(lounges[index])))));
+                    child: _buildLounge(lounges[index], dispatch, state)))));
   }
 
   @override
@@ -152,7 +159,7 @@ class LoungesScreen extends StatelessWidget {
                           _buildHeader(context),
                           const Divider(),
                           Expanded(
-                            child: _buildListLounges(lounges),
+                            child: _buildListLounges(lounges, dispatch, state),
                           ),
                         ])))),
               ])
