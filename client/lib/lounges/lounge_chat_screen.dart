@@ -65,7 +65,7 @@ class _LoungeChatScreenState extends State<LoungeChatScreen> {
                                     text: state.userState.user.id == owner.id
                                         ? 'Your Lounge'
                                         : owner.name + '\'s Lounge',
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                         color: Colors.black,
                                         fontSize: 13,
                                         fontWeight: FontWeight.w500),
@@ -85,7 +85,7 @@ class _LoungeChatScreenState extends State<LoungeChatScreen> {
                                           (widget.lounge.members.length > 1
                                               ? 's '
                                               : ' '),
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       color: Colors.black,
                                       fontSize: 13,
                                       fontWeight: FontWeight.w500),

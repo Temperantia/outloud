@@ -12,7 +12,8 @@ const Color black = Color(0xFF000000);
 
 const Color grey = Color(0xFF898989);
 const Color red = Color(0xFFFF0000);
-const Color pink = Color(0xFFF38181);
+const Color pink = Color(0xFFFF706F);
+
 const Color pinkLight = Color(0xCCF38181);
 const Color orange = Color(0xFFFF6000);
 const Color purple = Color(0xFF6324CA);

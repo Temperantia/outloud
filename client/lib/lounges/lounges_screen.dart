@@ -40,7 +40,7 @@ class LoungesScreen extends StatelessWidget {
                           child: RichText(
                               text: TextSpan(
                                   text: owner.name + '\'s Lounge',
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       color: Colors.black,
                                       fontSize: 13,
                                       fontWeight: FontWeight.w500)))),
@@ -88,7 +88,7 @@ class LoungesScreen extends StatelessWidget {
               ),
               child: RichText(
                   textAlign: TextAlign.left,
-                  text: TextSpan(
+                  text: const TextSpan(
                       text: 'FOR THE EVENT',
                       style: TextStyle(
                           color: Colors.black,

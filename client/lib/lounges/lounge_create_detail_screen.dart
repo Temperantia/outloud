@@ -113,7 +113,7 @@ class _LoungeCreateDetailScreenState extends State<LoungeCreateDetailScreen> {
                     padding: const EdgeInsets.all(10.0),
                     child: RichText(
                       textAlign: TextAlign.center,
-                      text: TextSpan(
+                      text: const TextSpan(
                         text:
                             'Upgrade your lounge for more members, bigger reach, and featured spolight',
                         style: TextStyle(
@@ -211,21 +211,23 @@ class _LoungeCreateDetailScreenState extends State<LoungeCreateDetailScreen> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
                     Button(
-                        text: 'BACK',
-                        onPressed: () {
-                          dispatch(NavigateAction<AppState>.pop());
-                        },
-                        paddingRight: 5,),
+                      text: 'BACK',
+                      onPressed: () {
+                        dispatch(NavigateAction<AppState>.pop());
+                      },
+                      paddingRight: 5,
+                    ),
                     Button(
-                        text: 'NEXT',
-                        onPressed: () {
-                          dispatch(LoungeCreateDetailAction(_visibility,
-                              _limit.toInt(), _descriptionController.text));
-                          dispatch(NavigateAction<AppState>.pushNamed(
-                            LoungeCreateMeetupScreen.id,
-                          ));
-                        },
-                        paddingLeft: 5,),
+                      text: 'NEXT',
+                      onPressed: () {
+                        dispatch(LoungeCreateDetailAction(_visibility,
+                            _limit.toInt(), _descriptionController.text));
+                        dispatch(NavigateAction<AppState>.pushNamed(
+                          LoungeCreateMeetupScreen.id,
+                        ));
+                      },
+                      paddingLeft: 5,
+                    ),
                   ])))
             ],
           ));

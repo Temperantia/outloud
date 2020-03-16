@@ -61,7 +61,7 @@ class _LoungesWidgetState extends State<LoungesWidget>
               child: RichText(
                   text: TextSpan(
             text: owner.name + '\'s Lounge',
-            style: TextStyle(
+            style: const TextStyle(
                 color: Colors.black, fontSize: 13, fontWeight: FontWeight.w500),
           ))),
         ])),
@@ -73,7 +73,7 @@ class _LoungesWidgetState extends State<LoungesWidget>
                       text: lounge.members.length.toString() +
                           ' member' +
                           (lounge.members.length > 1 ? 's ' : ' '),
-                      style: TextStyle(
+                      style: const TextStyle(
                           color: Colors.black,
                           fontSize: 13,
                           fontWeight: FontWeight.w500),
