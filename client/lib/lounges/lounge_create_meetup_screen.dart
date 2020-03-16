@@ -66,6 +66,15 @@ class _LoungeCreateMeetupScreenState extends State<LoungeCreateMeetupScreen> {
     _initVariables();
   }
 
+  @override
+  void dispose() {
+    _searchTextController.removeListener(_onSearchChanged);
+    _searchTextController.dispose();
+    // TODO(me): dispose time
+
+    super.dispose();
+  }
+
   Future<int> _onSearchChanged() async {
     if (_throttle?.isActive ?? false) {
       _throttle.cancel();
@@ -176,13 +185,6 @@ class _LoungeCreateMeetupScreenState extends State<LoungeCreateMeetupScreen> {
       }
     });
     return 0;
-  }
-
-  @override
-  void dispose() {
-    _searchTextController.removeListener(_onSearchChanged);
-    _searchTextController.dispose();
-    super.dispose();
   }
 
   void _dismissDialog() {

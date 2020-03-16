@@ -12,8 +12,11 @@ import 'package:provider_for_redux/provider_for_redux.dart';
 
 class EventScreen extends StatelessWidget {
   const EventScreen(this.event);
+
   final Event event;
+
   static const String id = 'EventScreen';
+
   @override
   Widget build(BuildContext context) {
     return ReduxConsumer<AppState>(builder: (BuildContext context,
@@ -23,6 +26,7 @@ class EventScreen extends StatelessWidget {
         Widget child) {
       final String date = DateFormat('ddMMM').format(event.date);
       final String time = DateFormat('Hm').format(event.date);
+
       return View(
           child: ListView(children: <Widget>[
         Row(children: <Widget>[
@@ -74,12 +78,11 @@ class EventScreen extends StatelessWidget {
                 const Button(text: 'Registered', width: 200.0)
               else
                 Button(
-                  text: 'Register me',
-                  width: 200.0,
-                  onPressed: () {
-                    dispatch(EventRegisterAction(event.id));
-                  },
-                ),
+                    text: 'Register me',
+                    width: 200.0,
+                    onPressed: () {
+                      dispatch(EventRegisterAction(event.id));
+                    }),
             ])),
       ]));
     });

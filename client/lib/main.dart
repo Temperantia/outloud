@@ -5,6 +5,7 @@ import 'package:business/app_state.dart';
 import 'package:inclusive/home_screen.dart';
 import 'package:inclusive/register/login.dart';
 import 'package:business/login/actions/login_action.dart';
+
 import 'package:inclusive/routes.dart';
 
 import 'package:inclusive/theme.dart';
@@ -14,19 +15,7 @@ import 'package:provider_for_redux/provider_for_redux.dart';
 Store<AppState> store;
 GlobalKey<NavigatorState> navigatorKey;
 
-class CustomImageCache extends WidgetsFlutterBinding {
-  @override
-  ImageCache createImageCache() {
-    final ImageCache imageCache = super.createImageCache();
-    // Set your image cache size
-    imageCache.maximumSizeBytes = 1024 * 1024 * 1000; // 1000 MB
-    return imageCache;
-  }
-}
-
 Future<void> main() async {
-  //CustomImageCache();
-
   WidgetsFlutterBinding.ensureInitialized();
 
   final AppPersistor persistor = AppPersistor();
@@ -40,7 +29,8 @@ Future<void> main() async {
   store = Store<AppState>(
     persistor: persistor,
     initialState: initialState,
-    errorObserver: DevelopmentErrorObserver<AppState>(),
+    errorObserver: DevelopmentErrorObserver<
+        AppState>(), // TODO(me): change this for release
   );
 
   store.dispatch(LoginAction());

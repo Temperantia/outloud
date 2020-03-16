@@ -61,12 +61,10 @@ class _PeopleWidgetState extends State<PeopleWidget>
                   itemBuilder: (BuildContext context, int index) =>
                       _buildPerson(friends[index], theme, dispatch))),
           Expanded(
-            child: Button(
-              text: 'Find more',
-              onPressed: () => dispatch(
-                  NavigateAction<AppState>.pushNamed(PeopleSearchScreen.id)),
-            ),
-          ),
+              child: Button(
+                  text: 'Find more',
+                  onPressed: () => dispatch(NavigateAction<AppState>.pushNamed(
+                      PeopleSearchScreen.id)))),
         ]));
   }
 
@@ -137,26 +135,21 @@ class _PeopleWidgetState extends State<PeopleWidget>
       }
       return DefaultTabController(
           length: 2,
-          child: Column(
-            children: <Widget>[
-              const Expanded(
-                  child: TabBar(
-                tabs: <Widget>[
-                  Tab(text: 'Friends'),
-                  Tab(text: 'Chats'),
-                ],
-              )),
-              Expanded(
-                  flex: 6,
-                  child: TabBarView(
+          child: Column(children: <Widget>[
+            const Expanded(
+                child: TabBar(tabs: <Widget>[
+              Tab(text: 'Friends'),
+              Tab(text: 'Chats'),
+            ])),
+            Expanded(
+                flex: 6,
+                child: TabBarView(
                     physics: const NeverScrollableScrollPhysics(),
                     children: <Widget>[
                       _buildFriends(friends, state.theme, dispatch),
                       _buildChats(chats, state.theme, dispatch),
-                    ],
-                  ))
-            ],
-          ));
+                    ])),
+          ]));
     });
   }
 }

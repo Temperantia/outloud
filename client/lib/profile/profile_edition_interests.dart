@@ -43,12 +43,11 @@ class ProfileInterestsState extends State<ProfileInterests>
 
   @override
   void dispose() {
-    super.dispose();
-
     for (int index = 0; index < _controllersLeft.length; index++) {
       _removeControllers();
     }
     _removeControllers();
+    super.dispose();
   }
 
   List<Interest> onSave() {
@@ -104,6 +103,7 @@ class ProfileInterestsState extends State<ProfileInterests>
   }
 
   void _removeControllers({int index = -1}) {
+    // TODO(me): dispose time
     if (index == -1) {
       _controllersLeft.removeLast();
       _controllersRight.removeLast();

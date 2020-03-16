@@ -3,7 +3,7 @@ import 'package:async_redux/async_redux.dart';
 import 'package:business/app_state.dart';
 import 'package:business/chats/actions/chats_listen_action.dart';
 import 'package:business/login/auth.dart';
-import 'package:business/user/actions/user_listen_stream_action.dart';
+import 'package:business/user/actions/user_listen_action.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:intl/intl.dart';
@@ -28,7 +28,7 @@ class LoginFacebookAction extends ReduxAction<AppState> {
             DateFormat.yMd('en_US').parse(data['birthday'] as String);
 
         final String id = await register(credentials, birthdate);
-        dispatch(UserListenStreamAction(id));
+        dispatch(UserListenAction(id));
         dispatch(ChatsListenAction(id));
 
         return state.copy(loginState: state.loginState.copy(id: id));

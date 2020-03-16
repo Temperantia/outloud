@@ -90,19 +90,23 @@ class _EventsWidgetState extends State<EventsWidget>
             }));
   } */
 
+  @override
+  void dispose() {
+    // TODO(me): dispose time
+    super.dispose();
+  }
+
   Widget _buildUserEvents(List<Event> events, ThemeStyle themeStyle,
       void Function(redux.ReduxAction<AppState>) dispatch) {
     return ListView.builder(
-      itemCount: events.length,
-      itemBuilder: (BuildContext context, int index) => Container(
-        decoration: const BoxDecoration(color: white),
-        child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              _buildEvent(events[index], dispatch, themeStyle)
-            ]),
-      ),
-    );
+        itemCount: events.length,
+        itemBuilder: (BuildContext context, int index) => Container(
+            decoration: const BoxDecoration(color: white),
+            child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  _buildEvent(events[index], dispatch, themeStyle),
+                ])));
   }
 
   Widget _buildFindEvents(
@@ -111,19 +115,16 @@ class _EventsWidgetState extends State<EventsWidget>
       void Function(redux.ReduxAction<AppState>) dispatch,
       Future<void> Function(redux.ReduxAction<AppState>) dispatchFuture) {
     return RefreshIndicator(
-      onRefresh: () => dispatchFuture(EventsGetAction()),
-      child: ListView.builder(
-        itemCount: events.length,
-        itemBuilder: (BuildContext context, int index) => Container(
-          decoration: const BoxDecoration(color: white),
-          child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                _buildEvent(events[index], dispatch, themeStyle)
-              ]),
-        ),
-      ),
-    );
+        onRefresh: () => dispatchFuture(EventsGetAction()),
+        child: ListView.builder(
+            itemCount: events.length,
+            itemBuilder: (BuildContext context, int index) => Container(
+                decoration: const BoxDecoration(color: white),
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      _buildEvent(events[index], dispatch, themeStyle),
+                    ]))));
   }
 
   Widget _buildEvent(Event event,
@@ -209,30 +210,27 @@ class _EventsWidgetState extends State<EventsWidget>
       } */
       return DefaultTabController(
           length: 2,
-          child: Column(
-            children: <Widget>[
-              const Expanded(
-                  child: TabBar(
-                labelStyle: textStyleButton,
-                tabs: <Widget>[
-                  Tab(text: 'MY EVENTS'),
-                  Tab(text: 'FIND EVENTS'),
-                ],
-              )),
-              Expanded(
-                  flex: 6,
-                  child: Container(
-                      color: white,
-                      child: TabBarView(
+          child: Column(children: <Widget>[
+            const Expanded(
+                child: TabBar(
+              labelStyle: textStyleButton,
+              tabs: <Widget>[
+                Tab(text: 'MY EVENTS'),
+                Tab(text: 'FIND EVENTS'),
+              ],
+            )),
+            Expanded(
+                flex: 6,
+                child: Container(
+                    color: white,
+                    child: TabBarView(
                         physics: const NeverScrollableScrollPhysics(),
                         children: <Widget>[
                           _buildUserEvents(userEvents, themeStyle, dispatch),
                           _buildFindEvents(events, themeStyle, dispatch,
                               store.dispatchFuture),
-                        ],
-                      )))
-            ],
-          ));
+                        ]))),
+          ]));
     });
   }
 }

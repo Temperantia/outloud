@@ -78,9 +78,9 @@ class _HomeScreenState extends State<HomeScreen>
 
   @override
   void dispose() {
-    super.dispose();
     _tabController.dispose();
     WidgetsBinding.instance.removeObserver(this);
+    super.dispose(); // TODO(me): this thing bugs
   }
 
   Widget _buildBody() {

@@ -27,37 +27,36 @@ class LoginScreen extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
                           Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Container(
-                                  width: 300.0,
-                                  child: GoogleSignInButton(
-                                      borderRadius: 50.0,
-                                      darkMode: true,
-                                      onPressed: () async {
-                                        await store.dispatchFuture(LoginGoogleAction());
-                                        dispatch(
-                                            NavigateAction<AppState>.pushNamed(
-                                                HomeScreen.id));
-                                      })),
-                            ],
-                          ),
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                Container(
+                                    width: 300.0,
+                                    child: GoogleSignInButton(
+                                        borderRadius: 50.0,
+                                        darkMode: true,
+                                        onPressed: () async {
+                                          await store.dispatchFuture(
+                                              LoginGoogleAction());
+                                          dispatch(NavigateAction<
+                                                  AppState>.pushNamed(
+                                              HomeScreen.id));
+                                        })),
+                              ]),
                           Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Container(
-                                  width: 300.0,
-                                  child: FacebookSignInButton(
-                                      borderRadius: 50.0,
-                                      onPressed: () async {
-                                        await store.dispatchFuture(
-                                            LoginFacebookAction());
-                                        dispatch(
-                                            NavigateAction<AppState>.pushNamed(
-                                                HomeScreen.id));
-                                      })),
-                            ],
-                          ),
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                Container(
+                                    width: 300.0,
+                                    child: FacebookSignInButton(
+                                        borderRadius: 50.0,
+                                        onPressed: () async {
+                                          await store.dispatchFuture(
+                                              LoginFacebookAction());
+                                          dispatch(NavigateAction<
+                                                  AppState>.pushNamed(
+                                              HomeScreen.id));
+                                        })),
+                              ]),
                           Text(state.loginState.loginError),
                         ]))));
   }

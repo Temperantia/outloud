@@ -26,6 +26,12 @@ class _ProfileEditionScreenState extends State<ProfileEditionScreen> {
   TextEditingController occupation = TextEditingController();
   GlobalKey<ProfileInterestsState> prokey = GlobalKey<ProfileInterestsState>();
 
+  @override
+  void dispose() {
+    // TODO(me): dispose time
+    super.dispose();
+  }
+
   Future<void> onSave(User user) async {
     user.name = name.text;
     user.home = home.text;

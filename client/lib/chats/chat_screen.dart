@@ -25,13 +25,19 @@ class _ChatScreenState extends State<ChatScreen> {
   final TextEditingController _textController = TextEditingController();
   final ScrollController _listScrollController = ScrollController();
 
+  @override
+  void dispose() {
+    _textController.dispose();
+    _listScrollController.dispose();
+    super.dispose();
+  }
+
   void _onSendMessage(String text, String userId) {
     if (text.trim().isEmpty) {
       Fluttertoast.showToast(msg: 'Nothing to send');
     } else {
       _textController.clear();
-      addMessage(widget.chat.id, userId,
-          text.trim()); //suprression des espaces avant et apres le message
+      addMessage(widget.chat.id, userId, text.trim());
       _listScrollController.animateTo(0.0,
           duration: const Duration(milliseconds: 300), curve: Curves.linear);
     }

@@ -13,8 +13,11 @@ import 'package:provider_for_redux/provider_for_redux.dart';
 
 class LoungeScreen extends StatelessWidget {
   const LoungeScreen(this.lounge);
+
   final Lounge lounge;
+
   static const String id = 'LoungeScreen';
+
   @override
   Widget build(BuildContext context) {
     return ReduxConsumer<AppState>(builder: (BuildContext context,
@@ -25,6 +28,7 @@ class LoungeScreen extends StatelessWidget {
       final Event event = state.eventsState.event;
       final String date = DateFormat('ddMMM').format(event.date);
       final String time = DateFormat('Hm').format(event.date);
+
       return View(
           child: ListView(children: <Widget>[
         Row(children: <Widget>[
@@ -45,14 +49,14 @@ class LoungeScreen extends StatelessWidget {
                             child: Padding(
                                 padding: const EdgeInsets.only(right: 10.0),
                                 child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: <Widget>[
-                                    Text(event.name,
-                                        style: textStyleCardTitleAlt),
-                                    Text(event.description,
-                                        style: textStyleCardDescription),
-                                  ],
-                                ))),
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: <Widget>[
+                                      Text(event.name,
+                                          style: textStyleCardTitleAlt),
+                                      Text(event.description,
+                                          style: textStyleCardDescription),
+                                    ]))),
                         Expanded(
                             child: Card(
                                 color: white,
@@ -77,21 +81,11 @@ class LoungeScreen extends StatelessWidget {
                 const Button(text: 'Registered', width: 200.0)
               else
                 Button(
-                  text: 'Register me',
-                  width: 200.0,
-                  onPressed: () {
-                    dispatch(EventRegisterAction(event.id));
-                  },
-                ),
-              /* Button(
-                  text: 'View all subgroups',
-                  width: 200.0,
-                  onPressed: () async {
-                    await store.dispatchFuture(
-                        EventGroupsGetAction(state.eventsState.event.id));
-                    dispatch(redux.NavigateAction<AppState>.pushNamed(
-                        EventGroupsScreen.id));
-                  }), */
+                    text: 'Register me',
+                    width: 200.0,
+                    onPressed: () {
+                      dispatch(EventRegisterAction(event.id));
+                    }),
             ])),
       ]));
     });

@@ -51,56 +51,48 @@ class _LoungesWidgetState extends State<LoungesWidget>
     return Column(
       children: <Widget>[
         Container(
-            child: Row(
-          children: <Widget>[
-            Container(
-                child: CircularImage(
-              imageUrl: owner.pics.isNotEmpty ? owner.pics[0] : null,
-              imageRadius: 40.0,
-            )),
-            Container(
-                child: RichText(
-              text: TextSpan(
-                text: owner.name + '\'s Lounge',
-                style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 13,
-                    fontWeight: FontWeight.w500),
-              ),
-            )),
-          ],
-        )),
+            child: Row(children: <Widget>[
+          Container(
+              child: CircularImage(
+            imageUrl: owner.pics.isNotEmpty ? owner.pics[0] : null,
+            imageRadius: 40.0,
+          )),
+          Container(
+              child: RichText(
+                  text: TextSpan(
+            text: owner.name + '\'s Lounge',
+            style: TextStyle(
+                color: Colors.black, fontSize: 13, fontWeight: FontWeight.w500),
+          ))),
+        ])),
         Container(
-            child: Row(
-          children: <Widget>[
-            Container(
-                child: RichText(
-              text: TextSpan(
-                  text: lounge.members.length.toString() +
-                      ' member' +
-                      (lounge.members.length > 1 ? 's ' : ' '),
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 13,
-                      fontWeight: FontWeight.w500),
-                  children: <TextSpan>[
-                    TextSpan(
-                        text: lounge.event.name,
-                        style: TextStyle(
-                            color: Colors.greenAccent,
-                            fontSize: 14,
-                            fontWeight: FontWeight.w800))
-                  ]),
-            ))
-          ],
-        )),
+            child: Row(children: <Widget>[
+          Container(
+              child: RichText(
+                  text: TextSpan(
+                      text: lounge.members.length.toString() +
+                          ' member' +
+                          (lounge.members.length > 1 ? 's ' : ' '),
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 13,
+                          fontWeight: FontWeight.w500),
+                      children: <TextSpan>[
+                TextSpan(
+                    text: lounge.event.name,
+                    style: TextStyle(
+                        color: Colors.greenAccent,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w800)),
+              ]))),
+        ])),
         Container(
           //   child: GestureDetector(
           // onTap: () {
           //   print('ok GO TO EVENT LISTENING');
           // },
           child: const Text('> GO TO EVENT LISTING'),
-        )
+        ),
         // )
       ],
     );
@@ -126,36 +118,33 @@ class _LoungesWidgetState extends State<LoungesWidget>
                               arguments: lounge));
                         },
                         child: Container(
-                            child: Stack(
-                          children: <Widget>[
-                            Container(
+                            child: Stack(children: <Widget>[
+                          Container(
                               child: CachedImage(
-                                lounge.event.pic,
-                              ),
-                            ),
-                            Positioned(
-                                top: 15,
-                                left: 20,
-                                child: Container(
-                                    child: IconButton(
-                                  iconSize: 40,
-                                  icon: Icon(Icons.chat_bubble),
-                                  color: white,
-                                  onPressed: () {
-                                    dispatch(redux
-                                            .NavigateAction<AppState>.pushNamed(
-                                        LoungeChatScreen.id,
-                                        arguments: lounge));
-                                  },
-                                ))),
-                            Positioned(
-                                top: 30,
-                                left: 40,
-                                child: Container(
-                                    child: Transform(
-                                        alignment: Alignment.center,
-                                        transform: Matrix4.rotationY(math.pi),
-                                        child: IconButton(
+                            lounge.event.pic,
+                          )),
+                          Positioned(
+                              top: 15,
+                              left: 20,
+                              child: Container(
+                                  child: IconButton(
+                                      iconSize: 40,
+                                      icon: Icon(Icons.chat_bubble),
+                                      color: white,
+                                      onPressed: () {
+                                        dispatch(redux.NavigateAction<
+                                                AppState>.pushNamed(
+                                            LoungeChatScreen.id,
+                                            arguments: lounge));
+                                      }))),
+                          Positioned(
+                              top: 30,
+                              left: 40,
+                              child: Container(
+                                  child: Transform(
+                                      alignment: Alignment.center,
+                                      transform: Matrix4.rotationY(math.pi),
+                                      child: IconButton(
                                           iconSize: 40,
                                           icon: Icon(Icons.chat_bubble_outline),
                                           color: white,
@@ -164,16 +153,13 @@ class _LoungesWidgetState extends State<LoungesWidget>
                                                     AppState>.pushNamed(
                                                 LoungeChatScreen.id,
                                                 arguments: lounge));
-                                          },
-                                        ))))
-                          ],
-                        )))),
+                                          })))),
+                        ])))),
               Flexible(
                   flex: 2,
                   child: Container(
-                    padding: const EdgeInsets.all(10.0),
-                    child: _buildInfoLoungeLayout(lounge),
-                  )),
+                      padding: const EdgeInsets.all(10.0),
+                      child: _buildInfoLoungeLayout(lounge))),
             ])));
   }
 
@@ -184,17 +170,15 @@ class _LoungesWidgetState extends State<LoungesWidget>
       void Function(redux.ReduxAction<AppState>) dispatch,
       ThemeStyle themeStyle) {
     return ListView.builder(
-      itemCount: userEvents.length,
-      itemBuilder: (BuildContext context, int index) => Container(
-        decoration: const BoxDecoration(color: white),
-        child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              _buildEvent(userEvents[index], userEventStates, userEventLounges,
-                  dispatch, themeStyle)
-            ]),
-      ),
-    );
+        itemCount: userEvents.length,
+        itemBuilder: (BuildContext context, int index) => Container(
+            decoration: const BoxDecoration(color: white),
+            child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  _buildEvent(userEvents[index], userEventStates,
+                      userEventLounges, dispatch, themeStyle),
+                ])));
   }
 
   Widget _buildEvent(
@@ -274,46 +258,38 @@ class _LoungesWidgetState extends State<LoungesWidget>
 
       return DefaultTabController(
           length: 2,
-          child: Column(
-            children: <Widget>[
-              const Expanded(
-                  child: TabBar(
-                tabs: <Widget>[
-                  Tab(text: 'MY LOUNGES'),
-                  Tab(text: 'FIND LOUNGES'),
-                ],
-              )),
-              Expanded(
-                  flex: 6,
-                  child: Container(
-                      color: white,
-                      child: TabBarView(
+          child: Column(children: <Widget>[
+            const Expanded(
+                child: TabBar(tabs: <Widget>[
+              Tab(text: 'MY LOUNGES'),
+              Tab(text: 'FIND LOUNGES'),
+            ])),
+            Expanded(
+                flex: 6,
+                child: Container(
+                    color: white,
+                    child: TabBarView(
                         physics: const NeverScrollableScrollPhysics(),
                         children: <Widget>[
                           _buildLounges(userLounges, userEventLounges, dispatch,
                               themeStyle),
                           _buildEvents(userEvents, userEventStates,
                               userEventLounges, dispatch, themeStyle),
-                        ],
-                      ))),
-              Expanded(
+                        ]))),
+            Expanded(
                 child: Container(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Button(
-                          text: 'CREATE LOUNGE',
-                          width: 200,
-                          icon: Icon(Icons.add),
-                          onPressed: () => dispatch(
-                              redux.NavigateAction<AppState>.pushNamed(
-                                  LoungeCreateScreen.id))),
-                    ],
-                  ),
-                ),
-              )
-            ],
-          ));
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                  Button(
+                      text: 'CREATE LOUNGE',
+                      width: 200,
+                      icon: Icon(Icons.add),
+                      onPressed: () => dispatch(
+                          redux.NavigateAction<AppState>.pushNamed(
+                              LoungeCreateScreen.id))),
+                ]))),
+          ]));
     });
   }
 }

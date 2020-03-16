@@ -25,6 +25,13 @@ class _LoungeCreateDetailScreenState extends State<LoungeCreateDetailScreen> {
   LoungeVisibility _visibility = LoungeVisibility.Public;
   double _limit = 2;
 
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    _descriptionController.dispose();
+    super.dispose();
+  }
+
   Widget _buildLoungeVisibility(AppState state) {
     return Container(
         padding: const EdgeInsets.all(15),
@@ -183,7 +190,6 @@ class _LoungeCreateDetailScreenState extends State<LoungeCreateDetailScreen> {
                   flex: 6,
                   child: Container(
                       color: white,
-                      // padding: const EdgeInsets.all(10.0),
                       child: Scrollbar(
                           controller: _scrollController,
                           child: ListView(

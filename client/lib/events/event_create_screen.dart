@@ -11,6 +11,7 @@ import 'package:inclusive/widgets/view.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:provider_for_redux/provider_for_redux.dart';
 
+// TODO(me): DEAD CODE
 class EventCreateScreen extends StatefulWidget {
   static const String id = 'EventCreate';
 
@@ -19,15 +20,22 @@ class EventCreateScreen extends StatefulWidget {
 }
 
 class _EventCreateScreenState extends State<EventCreateScreen> {
-  TextEditingController name = TextEditingController();
+  final TextEditingController _name = TextEditingController();
+  final TextEditingController _description = TextEditingController();
   Uint8List _picture;
-  TextEditingController description = TextEditingController();
+
+  @override
+  void dispose() {
+    _name.dispose();
+    _description.dispose();
+    super.dispose();
+  }
 
   Future<void> onSave(
       void Function(redux.ReduxAction<AppState>) dispatch) async {
     final Event event = await createEvent()
-      ..name = name.text
-      ..description = description.text
+      ..name = _name.text
+      ..description = _description.text
       ..date = DateTime.now();
     //final String url = await saveImage(_picture, event.id);
     //event..pic = url;
@@ -73,11 +81,11 @@ class _EventCreateScreenState extends State<EventCreateScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
             TextField(
-              controller: name,
+              controller: _name,
               decoration: const InputDecoration(labelText: 'Name'),
             ),
             TextField(
-                controller: description,
+                controller: _description,
                 decoration: const InputDecoration(labelText: 'Description')),
             Stack(alignment: AlignmentDirectional.bottomEnd, children: <Widget>[
               if (_picture == null)

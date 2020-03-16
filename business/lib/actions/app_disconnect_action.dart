@@ -8,7 +8,7 @@ class AppDisconnectAction extends ReduxAction<AppState> {
   @override
   Future<AppState> reduce() async {
     await FirebaseAuth.instance.signOut();
-    // TODO(me): stop listening streams like user
+
     return state.copy(
         loginState: LoginState.initialState(),
         userState: UserState.initialState());

@@ -15,22 +15,34 @@ import 'package:inclusive/widgets/circular_image.dart';
 import 'package:inclusive/widgets/view.dart';
 import 'package:provider_for_redux/provider_for_redux.dart';
 
-class LoungeChatScreen extends StatelessWidget {
-  LoungeChatScreen(this.lounge);
+class LoungeChatScreen extends StatefulWidget {
+  const LoungeChatScreen(this.lounge);
   final Lounge lounge;
   static const String id = 'LoungeChatScreen';
+
+  @override
+  _LoungeChatScreenState createState() => _LoungeChatScreenState();
+}
+
+class _LoungeChatScreenState extends State<LoungeChatScreen> {
   final TextEditingController _messageController = TextEditingController();
+
+  @override
+  void dispose() {
+    _messageController.dispose();
+    super.dispose();
+  }
 
   Widget _buildHeader(
       AppState state, void Function(ReduxAction<AppState>) dispatch) {
-    final User owner =
-        lounge.members.firstWhere((User member) => member.id == lounge.owner);
+    final User owner = widget.lounge.members
+        .firstWhere((User member) => member.id == widget.lounge.owner);
     return Container(
         padding: const EdgeInsets.all(15.0),
         child: Row(
           children: <Widget>[
-            if (lounge.event.pic.isNotEmpty)
-              Flexible(flex: 2, child: CachedImage(lounge.event.pic)),
+            if (widget.lounge.event.pic.isNotEmpty)
+              Flexible(flex: 2, child: CachedImage(widget.lounge.event.pic)),
             Flexible(
                 flex: 8,
                 child: Container(
@@ -67,16 +79,19 @@ class LoungeChatScreen extends StatelessWidget {
                             Container(
                                 child: RichText(
                               text: TextSpan(
-                                  text: lounge.members.length.toString() +
-                                      ' member' +
-                                      (lounge.members.length > 1 ? 's ' : ' '),
+                                  text:
+                                      widget.lounge.members.length.toString() +
+                                          ' member' +
+                                          (widget.lounge.members.length > 1
+                                              ? 's '
+                                              : ' '),
                                   style: TextStyle(
                                       color: Colors.black,
                                       fontSize: 13,
                                       fontWeight: FontWeight.w500),
                                   children: <TextSpan>[
                                     TextSpan(
-                                        text: lounge.event.name,
+                                        text: widget.lounge.event.name,
                                         style: TextStyle(
                                             color: Colors.greenAccent,
                                             fontSize: 14,
@@ -96,7 +111,7 @@ class LoungeChatScreen extends StatelessWidget {
                             onPressed: () {
                               dispatch(redux.NavigateAction<AppState>.pushNamed(
                                   LoungeEditScreen.id,
-                                  arguments: lounge));
+                                  arguments: widget.lounge));
                             })
                         : IconButton(icon: Icon(Icons.block), onPressed: null)))
           ],
@@ -123,7 +138,7 @@ class LoungeChatScreen extends StatelessWidget {
         void Function(redux.ReduxAction<dynamic>) dispatch,
         Widget child) {
       final Chat chat = state.chatsState.loungeChats
-          .firstWhere((Chat chat) => chat.id == lounge.id);
+          .firstWhere((Chat chat) => chat.id == widget.lounge.id);
       return View(
           title: 'LOUNGE CHAT',
           child: Container(
@@ -145,7 +160,7 @@ class LoungeChatScreen extends StatelessWidget {
                   Expanded(child: TextField(controller: _messageController)),
                   GestureDetector(
                       onTap: () {
-                        addMessage(lounge.id, state.loginState.id,
+                        addMessage(widget.lounge.id, state.loginState.id,
                             _messageController.text);
                         _messageController.clear();
                       },

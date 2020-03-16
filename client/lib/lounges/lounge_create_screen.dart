@@ -30,7 +30,7 @@ class _LoungeCreateScreenState extends State<LoungeCreateScreen> {
             child: Row(children: <Widget>[
               if (event.pic != null)
                 CachedImage(event.pic, width: 50.0, height: 50.0),
-              Expanded(child: Text(event.name))
+              Expanded(child: Text(event.name)),
             ])));
   }
 
@@ -47,44 +47,40 @@ class _LoungeCreateScreenState extends State<LoungeCreateScreen> {
           onBack: () => Navigator.popUntil(
               context, (Route<dynamic> route) => route.isFirst),
           backIcon: Icons.close,
-          child: Column(
-            children: <Widget>[
+          child: Column(children: <Widget>[
+            Expanded(
+                flex: 6,
+                child: Container(
+                    color: white,
+                    padding: const EdgeInsets.all(20.0),
+                    child: Column(
+                      children: <Widget>[
+                        const Text('CHOOSE AN EVENT FOR THIS LOUNGE'),
+                        Expanded(
+                            child: ListView.builder(
+                          itemCount: userEvents.length,
+                          itemBuilder: (BuildContext context, int index) =>
+                              _buildUserEvent(userEvents[index], state.theme),
+                        ))
+                      ],
+                    ))),
+            if (_selected != null)
               Expanded(
-                  flex: 6,
-                  child: Container(
-                      color: white,
-                      padding: const EdgeInsets.all(20.0),
-                      child: Column(
-                        children: <Widget>[
-                          const Text('CHOOSE AN EVENT FOR THIS LOUNGE'),
-                          Expanded(
-                              child: ListView.builder(
-                            itemCount: userEvents.length,
-                            itemBuilder: (BuildContext context, int index) =>
-                                _buildUserEvent(userEvents[index], state.theme),
-                          ))
-                        ],
-                      ))),
-              if (_selected != null)
-                Expanded(
                   child: Container(
                       child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Button(
-                          text: 'NEXT',
-                          onPressed: () {
-                            dispatch(LoungeCreateAction(
-                              _selected.id,
-                            ));
-                            dispatch(redux.NavigateAction<AppState>.pushNamed(
-                                LoungeCreateDetailScreen.id));
-                          }),
-                    ],
-                  )),
-                )
-            ],
-          ));
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                    Button(
+                        text: 'NEXT',
+                        onPressed: () {
+                          dispatch(LoungeCreateAction(
+                            _selected.id,
+                          ));
+                          dispatch(redux.NavigateAction<AppState>.pushNamed(
+                              LoungeCreateDetailScreen.id));
+                        }),
+                  ]))),
+          ]));
     });
   }
 }

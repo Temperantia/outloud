@@ -21,7 +21,6 @@ class Button extends StatelessWidget {
     return Container(
       width: width,
       height: height ?? 50,
-      margin: const EdgeInsets.all(10.0),
       child: RaisedButton.icon(
           elevation: 0.0,
           color: orangeLight.withOpacity(0.5),

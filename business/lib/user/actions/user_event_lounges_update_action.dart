@@ -4,6 +4,7 @@ import 'package:business/classes/lounge.dart';
 
 class UserEventLoungesUpdateAction extends redux.ReduxAction<AppState> {
   UserEventLoungesUpdateAction(this.lounges);
+
   final List<Lounge> lounges;
 
   @override

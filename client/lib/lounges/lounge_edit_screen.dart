@@ -28,45 +28,38 @@ class _LoungeEditScreenState extends State<LoungeEditScreen> {
         lounge.members.firstWhere((User member) => member.id == lounge.owner);
     return Container(
         padding: const EdgeInsets.all(15.0),
-        child: Row(
-          children: <Widget>[
-            if (lounge.event.pic.isNotEmpty)
-              Flexible(flex: 2, child: CachedImage(lounge.event.pic)),
-            Flexible(
-                flex: 8,
-                child: Container(
-                    padding: const EdgeInsets.only(left: 20),
-                    child: Column(
-                      children: <Widget>[
-                        Container(
-                            child: Row(
-                          children: <Widget>[
-                            Container(
-                                child: CircularImage(
-                              imageUrl:
-                                  owner.pics.isNotEmpty ? owner.pics[0] : null,
-                              imageRadius: 40.0,
-                            )),
-                            Container(
-                                padding: const EdgeInsets.only(left: 10),
-                                child: RichText(
-                                  text: TextSpan(
-                                    text: state.userState.user.id == owner.id
-                                        ? 'Your Lounge'
-                                        : owner.name + '\'s Lounge',
-                                    style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 13,
-                                        fontWeight: FontWeight.w500),
-                                  ),
-                                ))
-                          ],
-                        )),
-                        Container(
-                            child: Row(
-                          children: <Widget>[
-                            Container(
-                                child: RichText(
+        child: Row(children: <Widget>[
+          if (lounge.event.pic.isNotEmpty)
+            Flexible(flex: 2, child: CachedImage(lounge.event.pic)),
+          Flexible(
+              flex: 8,
+              child: Container(
+                  padding: const EdgeInsets.only(left: 20),
+                  child: Column(children: <Widget>[
+                    Container(
+                        child: Row(children: <Widget>[
+                      Container(
+                          child: CircularImage(
+                        imageUrl: owner.pics.isNotEmpty ? owner.pics[0] : null,
+                        imageRadius: 40.0,
+                      )),
+                      Container(
+                          padding: const EdgeInsets.only(left: 10),
+                          child: RichText(
+                              text: TextSpan(
+                            text: state.userState.user.id == owner.id
+                                ? 'Your Lounge'
+                                : owner.name + '\'s Lounge',
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 13,
+                                fontWeight: FontWeight.w500),
+                          ))),
+                    ])),
+                    Container(
+                        child: Row(children: <Widget>[
+                      Container(
+                          child: RichText(
                               text: TextSpan(
                                   text: lounge.members.length.toString() +
                                       ' member' +
@@ -76,20 +69,16 @@ class _LoungeEditScreenState extends State<LoungeEditScreen> {
                                       fontSize: 13,
                                       fontWeight: FontWeight.w500),
                                   children: <TextSpan>[
-                                    TextSpan(
-                                        text: lounge.event.name,
-                                        style: TextStyle(
-                                            color: Colors.greenAccent,
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.w800))
-                                  ]),
-                            ))
-                          ],
-                        ))
-                      ],
-                    ))),
-          ],
-        ));
+                            TextSpan(
+                                text: lounge.event.name,
+                                style: TextStyle(
+                                    color: Colors.greenAccent,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w800)),
+                          ]))),
+                    ])),
+                  ]))),
+        ]));
   }
 
   @override
@@ -102,20 +91,16 @@ class _LoungeEditScreenState extends State<LoungeEditScreen> {
       return View(
           title: 'EDIT LOUNGE',
           child: Container(
-              child: Column(
-            children: <Widget>[
-              Expanded(
-                  child: Container(
-                      color: white,
-                      child: Container(
-                          child: Column(
-                        children: <Widget>[
-                          _buildHeader(context, state),
-                          const Divider(),
-                        ],
-                      ))))
-            ],
-          )));
+              child: Column(children: <Widget>[
+            Expanded(
+                child: Container(
+                    color: white,
+                    child: Container(
+                        child: Column(children: <Widget>[
+                      _buildHeader(context, state),
+                      const Divider(),
+                    ])))),
+          ])));
     });
   }
 }
