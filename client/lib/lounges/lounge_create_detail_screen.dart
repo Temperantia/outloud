@@ -214,7 +214,8 @@ class _LoungeCreateDetailScreenState extends State<LoungeCreateDetailScreen> {
                         text: 'BACK',
                         onPressed: () {
                           dispatch(NavigateAction<AppState>.pop());
-                        }),
+                        },
+                        paddingRight: 5,),
                     Button(
                         text: 'NEXT',
                         onPressed: () {
@@ -223,7 +224,8 @@ class _LoungeCreateDetailScreenState extends State<LoungeCreateDetailScreen> {
                           dispatch(NavigateAction<AppState>.pushNamed(
                             LoungeCreateMeetupScreen.id,
                           ));
-                        }),
+                        },
+                        paddingLeft: 5,),
                   ])))
             ],
           ));
