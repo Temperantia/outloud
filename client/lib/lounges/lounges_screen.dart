@@ -22,6 +22,7 @@ class LoungesScreen extends StatelessWidget {
     final User owner =
         lounge.members.firstWhere((User member) => member.id == lounge.owner);
     final int availableSlots = lounge.memberLimit - lounge.members.length;
+    final String s = availableSlots <= 1 ? 's' : '';
 
     return Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -65,7 +66,7 @@ class LoungesScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       Text(
-                          '$availableSlots slots available'), // TODO(robin): conjugate this if 1
+                          '$availableSlots slot$s available'),
                       Container(
                           child: Row(children: <Widget>[
                         for (User member in lounge.members)

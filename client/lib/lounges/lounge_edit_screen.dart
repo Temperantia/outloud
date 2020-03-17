@@ -1,7 +1,11 @@
+import 'package:async_redux/async_redux.dart';
+import 'package:business/classes/lounge_visibility.dart';
 import 'package:business/classes/user.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:business/app_state.dart';
+import 'package:business/lounges/actions/lounge_edit_details_action.dart';
+import 'package:business/lounges/actions/lounge_edit_meetup_action.dart';
 import 'package:async_redux/async_redux.dart' as redux;
 import 'package:business/classes/lounge.dart';
 import 'package:flutter/material.dart';
@@ -9,8 +13,10 @@ import 'package:inclusive/theme.dart';
 import 'package:inclusive/widgets/button.dart';
 import 'package:inclusive/widgets/cached_image.dart';
 import 'package:inclusive/widgets/circular_image.dart';
+import 'package:inclusive/widgets/meetup_widget.dart';
 import 'package:inclusive/widgets/view.dart';
 import 'package:provider_for_redux/provider_for_redux.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class LoungeEditScreen extends StatefulWidget {
   const LoungeEditScreen(this.lounge);
@@ -24,13 +30,33 @@ class LoungeEditScreen extends StatefulWidget {
 class _LoungeEditScreenState extends State<LoungeEditScreen> {
   _LoungeEditScreenState(this.lounge);
   final Lounge lounge;
+  final ScrollController _scrollController = ScrollController();
   final TextEditingController _descriptionController = TextEditingController();
-  double _limit = 2;
+  double _limit;
+  LoungeVisibility _visibility;
+  LoungeMeetupWidget _meetupWidget;
+
+  @override
+  void initState() {
+    super.initState();
+    _limit = lounge.memberLimit.toDouble();
+    _visibility = lounge.visibility;
+    _meetupWidget = LoungeMeetupWidget(lounge);
+    _descriptionController.text = lounge.description;
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    _descriptionController.dispose();
+    super.dispose();
+  }
 
   Widget _buildHeader(BuildContext context, AppState state) {
     final User owner =
         lounge.members.firstWhere((User member) => member.id == lounge.owner);
     return Container(
+        color: white,
         padding: const EdgeInsets.all(15.0),
         child: Row(children: <Widget>[
           if (lounge.event.pic.isNotEmpty)
@@ -324,26 +350,51 @@ class _LoungeEditScreenState extends State<LoungeEditScreen> {
               child: Column(children: <Widget>[
             Expanded(
                 child: Container(
-                    color: white,
                     child: Container(
                         child: Column(children: <Widget>[
-                      _buildHeader(context, state),
-                      const Divider(),
-                      Expanded(
-                          child: Container(
-                              child: Scrollbar(
-                                  child: ListView(
+              _buildHeader(context, state),
+              Container(color: white, child: const Divider()),
+              Expanded(
+                  flex: 6,
+                  child: Container(
+                      color: white,
+                      child: Scrollbar(
+                          child: ListView(
+                        controller: _scrollController,
                         children: <Widget>[
                           Column(
                             children: <Widget>[
                               _buildMembers(context, state),
                               _buildLoungeMaxMemberCount(context, state),
-                              _buildLoungeDescription(context, state)
+                              _buildLoungeDescription(context, state),
+                              Container(child: _meetupWidget)
                             ],
                           )
                         ],
-                      ))))
-                    ])))),
+                      )))),
+              Expanded(
+                  child: Container(
+                      child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                    Button(
+                      text: 'SAVE CHANGES',
+                      onPressed: () {
+                        final Map<String, dynamic> _meetupEdits =
+                            _meetupWidget.saveMeetupOptions();
+                        dispatch(LoungeEditMeetupAction(
+                            lounge,
+                            _meetupEdits['date'] as DateTime,
+                            _meetupEdits['location'] as GeoPoint,
+                            _meetupEdits['notes'] as String));
+                        dispatch(LoungeEditDetailsAction(lounge, _visibility,
+                            _limit.toInt(), _descriptionController.text));
+                        dispatch(NavigateAction<AppState>.pop());
+                      },
+                      paddingLeft: 5,
+                    ),
+                  ])))
+            ])))),
           ])));
     });
   }
