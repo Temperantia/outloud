@@ -5,12 +5,15 @@ import 'package:business/app_state.dart';
 import 'package:business/classes/event.dart';
 import 'package:business/events/actions/events_get_action.dart';
 import 'package:flutter/material.dart';
+import 'package:inclusive/events/event_create_screen.dart';
 /* import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart'; */
 import 'package:inclusive/events/event_screen.dart';
 import 'package:inclusive/theme.dart';
+import 'package:inclusive/widgets/button.dart';
 import 'package:inclusive/widgets/cached_image.dart';
 import 'package:inclusive/widgets/loading.dart';
+import 'package:inclusive/widgets/multiselect_dropdown.dart';
 import 'package:intl/intl.dart';
 import 'package:provider_for_redux/provider_for_redux.dart';
 
@@ -24,19 +27,37 @@ class _EventsWidgetState extends State<EventsWidget>
 /*   final Completer<GoogleMapController> _controller =
       Completer<GoogleMapController>();
   final Map<String, Marker> _markers = <String, Marker>{};
-  final ScrollController _scrollController = ScrollController();
-  double _googleMapSize = 100.0;
+  
   CameraPosition _intialMapLocation =
       const CameraPosition(target: LatLng(48.85902056, 2.34637398), zoom: 14); */
+  final double _googleMapSize = 60.0;
+  final ScrollController _scrollController = ScrollController();
+  final GlobalKey _interestFilterKey = GlobalKey();
+  final LayerLink _interestLink = LayerLink();
+
+  int _flexFactorMap = 1;
+  int _flexFactorListEvent = 5;
+  OverlayEntry _interestsCheckBox;
+  bool _checkBoxDisplayed = false;
+  String _distanceValue;
+  String _timeValue;
+
+  final List<CheckBoxContent> _interests = <CheckBoxContent>[];
 
   @override
   void initState() {
     super.initState();
-/*     _scrollController.addListener(() {
+    _interests.add(CheckBoxContent(checked: false, name: 'Contemporary art'));
+    _interests.add(CheckBoxContent(checked: false, name: 'Techno'));
+    _interests.add(CheckBoxContent(checked: false, name: 'Food'));
+    _interests.add(CheckBoxContent(checked: false, name: 'Gay Community'));
+    _interests.add(CheckBoxContent(checked: false, name: 'Books'));
+    _scrollController.addListener(() {
       setState(() {
-        _googleMapSize = 100.0;
+        _flexFactorListEvent = 5;
+        _flexFactorMap = 1;
       });
-    }); */
+    });
     //getPosition();
   }
 
@@ -90,6 +111,132 @@ class _EventsWidgetState extends State<EventsWidget>
             }));
   } */
 
+  Widget _buildMapView() {
+    return Container(
+        constraints: const BoxConstraints.expand(
+            ),
+        decoration: const BoxDecoration(color: white),
+        child: const Text('MAPS GOES HERE'));
+  }
+
+  Widget _buildFilters() {
+    return Container(
+        color: white,
+        constraints: BoxConstraints.expand(
+            height: Theme.of(context).textTheme.display1.fontSize * 1.1),
+        padding: const EdgeInsets.only(bottom: 10),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
+            Container(
+                // padding: const EdgeInsets.all(5),
+                child: CompositedTransformTarget(
+                    link: _interestLink,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        border: Border.all(color: black, width: 1),
+                      ),
+                      key: _interestFilterKey,
+                      child: FlatButton(
+                        child: Row(
+                          children: <Widget>[
+                            const Text('Interests'),
+                            Icon(Icons.arrow_drop_down)
+                          ],
+                        ),
+                        onPressed: () {
+                          if (_checkBoxDisplayed) {
+                            _interestsCheckBox.remove();
+                            setState(() {
+                              _checkBoxDisplayed = false;
+                            });
+                          } else {
+                            setState(() {
+                              _flexFactorListEvent = 5;
+                              _flexFactorMap = 1;
+                              _interestsCheckBox = _createInterestsCheckBox();
+                              _checkBoxDisplayed = true;
+                            });
+                            Overlay.of(context).insert(_interestsCheckBox);
+                          }
+                        },
+                      ),
+                    ))),
+            Container(
+                decoration: BoxDecoration(
+                  border: Border.all(color: black, width: 1),
+                ),
+                child: DropdownButton<String>(
+                    hint: const Text('Set distance'),
+                    underline: Container(),
+                    value: _distanceValue,
+                    items: <String>[
+                      ' < 1 km',
+                      ' < 2 km',
+                      ' < 3 km',
+                      ' < 5 km',
+                      ' < 10km'
+                    ].map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                    onChanged: (String newValue) {
+                      setState(() {
+                        _distanceValue = newValue;
+                      });
+                    })),
+            Container(
+                decoration: BoxDecoration(
+                  border: Border.all(color: black, width: 1),
+                ),
+                child: DropdownButton<String>(
+                    hint: const Text('Set time'),
+                    underline: Container(),
+                    value: _timeValue,
+                    items: <String>[
+                      ' 6 pm ',
+                      ' 7 pm',
+                      ' 8 pm',
+                      ' 9 pm',
+                      ' 10 pm'
+                    ].map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                    onChanged: (String newValue) {
+                      setState(() {
+                        _timeValue = newValue;
+                      });
+                    }))
+          ],
+        ));
+  }
+
+  OverlayEntry _createInterestsCheckBox() {
+    final RenderBox renderBox =
+        _interestFilterKey.currentContext.findRenderObject() as RenderBox;
+    final Size sizeInterests = renderBox.size;
+    final Offset positionInterests = renderBox.localToGlobal(Offset.zero);
+
+    return OverlayEntry(
+        builder: (BuildContext context) => Positioned(
+            left: positionInterests.dx,
+            height: 300,
+            width: 200,
+            child: CompositedTransformFollower(
+              link: _interestLink,
+              showWhenUnlinked: false,
+              offset: Offset(0.0, sizeInterests.height + 5),
+              child: Material(
+                  elevation: 4.0,
+                  child: MyMultiCheckBoxesContent(checkboxes: _interests)),
+            )));
+  }
+
   @override
   void dispose() {
     // TODO(me): dispose time
@@ -98,15 +245,36 @@ class _EventsWidgetState extends State<EventsWidget>
 
   Widget _buildUserEvents(List<Event> events, ThemeStyle themeStyle,
       void Function(redux.ReduxAction<AppState>) dispatch) {
-    return ListView.builder(
-        itemCount: events.length,
-        itemBuilder: (BuildContext context, int index) => Container(
-            decoration: const BoxDecoration(color: white),
-            child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  _buildEvent(events[index], dispatch, themeStyle),
-                ])));
+    return Container(
+      child: Column(
+        children: <Widget>[
+          Expanded(
+            flex: 6,
+            child: ListView.builder(
+                itemCount: events.length,
+                itemBuilder: (BuildContext context, int index) => Container(
+                    decoration: const BoxDecoration(color: white),
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          _buildEvent(events[index], dispatch, themeStyle),
+                        ]))),
+          ),
+          Expanded(
+              child: Container(
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                Button(
+                    text: 'VIEW CALENDAR',
+                    width: 200,
+                    onPressed: () => dispatch(
+                        redux.NavigateAction<AppState>.pushNamed(
+                            EventCreateScreen.id))),
+              ])))
+        ],
+      ),
+    );
   }
 
   Widget _buildFindEvents(
@@ -114,17 +282,54 @@ class _EventsWidgetState extends State<EventsWidget>
       ThemeStyle themeStyle,
       void Function(redux.ReduxAction<AppState>) dispatch,
       Future<void> Function(redux.ReduxAction<AppState>) dispatchFuture) {
-    return RefreshIndicator(
-        onRefresh: () => dispatchFuture(EventsGetAction()),
-        child: ListView.builder(
-            itemCount: events.length,
-            itemBuilder: (BuildContext context, int index) => Container(
-                decoration: const BoxDecoration(color: white),
-                child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      _buildEvent(events[index], dispatch, themeStyle),
-                    ]))));
+    return Container(
+      child: Column(
+        children: <Widget>[
+          Expanded(
+              flex: _flexFactorMap,
+              child: GestureDetector(
+                onTap: () {
+                  setState(() {
+                    _flexFactorListEvent = 2;
+                    _flexFactorMap = 4;
+                  });
+                },
+                child: _buildMapView(),
+              )),
+          _buildFilters(),
+          Expanded(
+              flex: _flexFactorListEvent,
+              child: RefreshIndicator(
+                  onRefresh: () => dispatchFuture(EventsGetAction()),
+                  child: ListView.builder(
+                      controller: _scrollController,
+                      itemCount: events.length,
+                      itemBuilder: (BuildContext context, int index) =>
+                          Container(
+                              decoration: const BoxDecoration(color: white),
+                              child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    _buildEvent(
+                                        events[index], dispatch, themeStyle),
+                                  ]))))),
+          Expanded(
+              flex: 1,
+              child: Container(
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                    Button(
+                        text: 'CREATE EVENT',
+                        width: 200,
+                        icon: Icon(Icons.add),
+                        onPressed: () => dispatch(
+                            redux.NavigateAction<AppState>.pushNamed(
+                                EventCreateScreen.id))),
+                  ])))
+        ],
+      ),
+    );
   }
 
   Widget _buildEvent(Event event,
@@ -222,14 +427,14 @@ class _EventsWidgetState extends State<EventsWidget>
             Expanded(
                 flex: 6,
                 child: Container(
-                    color: white,
+                    // color: white,
                     child: TabBarView(
                         physics: const NeverScrollableScrollPhysics(),
                         children: <Widget>[
-                          _buildUserEvents(userEvents, themeStyle, dispatch),
-                          _buildFindEvents(events, themeStyle, dispatch,
-                              store.dispatchFuture),
-                        ]))),
+                      _buildUserEvents(userEvents, themeStyle, dispatch),
+                      _buildFindEvents(
+                          events, themeStyle, dispatch, store.dispatchFuture),
+                    ]))),
           ]));
     });
   }
