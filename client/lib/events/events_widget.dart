@@ -29,8 +29,8 @@ class _EventsWidgetState extends State<EventsWidget>
   final Map<String, Marker> _markers = <String, Marker>{};
   
   CameraPosition _intialMapLocation =
-      const CameraPosition(target: LatLng(48.85902056, 2.34637398), zoom: 14); */
-  final double _googleMapSize = 60.0;
+      const CameraPosition(target: LatLng(48.85902056, 2.34637398), zoom: 14);
+  final double _googleMapSize = 60.0; */
   final ScrollController _scrollController = ScrollController();
   final GlobalKey _interestFilterKey = GlobalKey();
   final LayerLink _interestLink = LayerLink();
@@ -113,8 +113,7 @@ class _EventsWidgetState extends State<EventsWidget>
 
   Widget _buildMapView() {
     return Container(
-        constraints: const BoxConstraints.expand(
-            ),
+        constraints: const BoxConstraints.expand(),
         decoration: const BoxDecoration(color: white),
         child: const Text('MAPS GOES HERE'));
   }

@@ -84,92 +84,135 @@ class _LoungeCreateDetailScreenState extends State<LoungeCreateDetailScreen> {
                         fontWeight: FontWeight.w700),
                   ),
                 )),
-            Slider(
-                value: _limit,
-                label: _limit.toInt().toString(),
-                min: 2,
-                max: 5,
-                activeColor: orange,
-                inactiveColor: orangeLight,
-                divisions: 3,
-                onChanged: (double value) {
-                  setState(() {
-                    _limit = value;
-                  });
-                })
+            Stack(alignment: Alignment.center, children: <Widget>[
+              Container(
+                  width: 400.0,
+                  height: 5.0,
+                  decoration: BoxDecoration(
+                      color: orangeLight,
+                      borderRadius: BorderRadius.circular(180.0))),
+              Align(
+                  alignment: Alignment.centerRight,
+                  child: Container(
+                      margin: const EdgeInsets.fromLTRB(50.0, 0.0, 00.0, 0.0),
+                      child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            for (int memberCount = 2;
+                                memberCount <= 5;
+                                memberCount++)
+                              if (memberCount == _limit)
+                                Stack(
+                                    alignment: Alignment.center,
+                                    children: <Widget>[
+                                      Container(
+                                          width: 30,
+                                          height: 30,
+                                          decoration: BoxDecoration(
+                                              color: orangeAlt,
+                                              borderRadius:
+                                                  BorderRadius.circular(180.0)),
+                                          child: Center(
+                                              child: Text(
+                                            memberCount.toString(),
+                                            textAlign: TextAlign.center,
+                                            style: const TextStyle(
+                                                color: white,
+                                                fontWeight: FontWeight.bold),
+                                          ))),
+                                      Container(
+                                          width: 50,
+                                          height: 50,
+                                          decoration: BoxDecoration(
+                                              color: pinkLight.withOpacity(0.7),
+                                              borderRadius:
+                                                  BorderRadius.circular(
+                                                      180.0))),
+                                    ])
+                              else
+                                GestureDetector(
+                                    onTap: () => setState(
+                                        () => _limit = memberCount.toDouble()),
+                                    child: Container(
+                                        width: 30,
+                                        height: 30,
+                                        decoration: BoxDecoration(
+                                            color: orangeAlt,
+                                            borderRadius:
+                                                BorderRadius.circular(180.0)),
+                                        child: Center(
+                                            child: Text(
+                                          memberCount.toString(),
+                                          textAlign: TextAlign.center,
+                                          style: const TextStyle(
+                                              color: white,
+                                              fontWeight: FontWeight.bold),
+                                        )))),
+                          ]))),
+            ]),
           ],
         ));
   }
 
   Widget _buildLoungeUpgradeSection(AppState state) {
     return Container(
-        child: Column(
-      children: <Widget>[
-        Container(
-            color: pink,
-            child: Column(
-              children: <Widget>[
-                Container(
-                    padding: const EdgeInsets.all(10.0),
-                    child: RichText(
-                      textAlign: TextAlign.center,
-                      text: const TextSpan(
-                        text:
-                            'Upgrade your lounge for more members, bigger reach, and featured spolight',
-                        style: TextStyle(
-                            color: Colors.black87,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w400),
-                      ),
-                    )),
-                const Button(
-                  text: 'UPGRADE   >',
-                  width: 220,
+        padding: const EdgeInsets.all(20.0),
+        color: pinkLight.withOpacity(0.5),
+        child: Column(children: <Widget>[
+          Container(
+              padding: const EdgeInsets.all(10.0),
+              child: RichText(
+                textAlign: TextAlign.center,
+                text: const TextSpan(
+                  text:
+                      'Upgrade your lounge for more members, bigger reach, and featured spolight',
+                  style: TextStyle(
+                      color: pinkBright,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w400),
                 ),
-              ],
-            ))
-      ],
-    ));
+              )),
+          const Button(
+            text: 'UPGRADE   >',
+            width: 300,
+            backgroundColor: pinkBright,
+          ),
+        ]));
   }
 
   Widget _buildLoungeDescription(AppState state) {
     return Container(
         padding: const EdgeInsets.all(15),
-        child: Column(
-          children: <Widget>[
-            Container(
-                constraints: BoxConstraints.expand(
-                  height: Theme.of(context).textTheme.display1.fontSize * 1.1,
-                ),
-                child: RichText(
+        child: Column(children: <Widget>[
+          Container(
+              constraints: BoxConstraints.expand(
+                height: Theme.of(context).textTheme.display1.fontSize * 1.1,
+              ),
+              child: RichText(
                   text: const TextSpan(
-                    text: 'LOUNGE DESCRIPTION',
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 15,
-                        fontWeight: FontWeight.w700),
-                  ),
-                )),
-            Container(
-                constraints: BoxConstraints.expand(
-                  height:
-                      Theme.of(context).textTheme.display1.fontSize * 1.1 + 100,
-                ),
-                padding:
-                    const EdgeInsets.only(left: 10.0, top: 1.0, right: 10.0),
-                color: orangeLight,
-                child: TextField(
+                      text: 'LOUNGE DESCRIPTION',
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 15,
+                          fontWeight: FontWeight.w700)))),
+          Container(
+              constraints: BoxConstraints.expand(
+                height:
+                    Theme.of(context).textTheme.display1.fontSize * 1.1 + 100,
+              ),
+              padding: const EdgeInsets.only(left: 10.0, top: 1.0, right: 10.0),
+              color: whiteAlt,
+              child: TextField(
                   controller: _descriptionController,
                   keyboardType: TextInputType.text,
                   inputFormatters: <TextInputFormatter>[
                     LengthLimitingTextInputFormatter(100),
                   ],
                   decoration: InputDecoration(
+                      hintStyle: TextStyle(color: orange),
                       border: InputBorder.none,
-                      hintText: 'Brief description of your group.'),
-                )),
-          ],
-        ));
+                      hintText: 'Brief description of your group.'))),
+        ]));
   }
 
   @override
@@ -211,23 +254,20 @@ class _LoungeCreateDetailScreenState extends State<LoungeCreateDetailScreen> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
                     Button(
-                      text: 'BACK',
-                      onPressed: () {
-                        dispatch(NavigateAction<AppState>.pop());
-                      },
-                      paddingRight: 5,
-                    ),
+                        text: 'BACK',
+                        onPressed: () {
+                          dispatch(NavigateAction<AppState>.pop());
+                        },
+                        paddingRight: 5),
                     Button(
-                      text: 'NEXT',
-                      onPressed: () {
-                        dispatch(LoungeCreateDetailAction(_visibility,
-                            _limit.toInt(), _descriptionController.text));
-                        dispatch(NavigateAction<AppState>.pushNamed(
-                          LoungeCreateMeetupScreen.id,
-                        ));
-                      },
-                      paddingLeft: 5,
-                    ),
+                        text: 'NEXT',
+                        onPressed: () {
+                          dispatch(LoungeCreateDetailAction(_visibility,
+                              _limit.toInt(), _descriptionController.text));
+                          dispatch(NavigateAction<AppState>.pushNamed(
+                              LoungeCreateMeetupScreen.id));
+                        },
+                        paddingLeft: 5),
                   ])))
             ],
           ));

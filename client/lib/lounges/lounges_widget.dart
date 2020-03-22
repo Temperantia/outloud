@@ -283,7 +283,7 @@ class _LoungesWidgetState extends State<LoungesWidget>
                         children: <Widget>[
                   Button(
                       text: 'CREATE LOUNGE',
-                      width: 200,
+                      width: 250,
                       icon: Icon(Icons.add),
                       onPressed: () => dispatch(
                           redux.NavigateAction<AppState>.pushNamed(

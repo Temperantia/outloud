@@ -90,19 +90,26 @@ class _LoungeCreateMeetupScreenState extends State<LoungeCreateMeetupScreen> {
 
   Future<String> _getAdressFromCoordinates(
       double latitude, double longitude) async {
-    final List<Placemark> placemark =
-        await Geolocator().placemarkFromCoordinates(latitude, longitude);
     String _address = '';
-    if (placemark.isNotEmpty) {
-      final Placemark _place = placemark.first;
-      _address = _place.subThoroughfare +
-          ' ' +
-          _place.thoroughfare +
-          ' ' +
-          _place.postalCode.toString() +
-          ' ' +
-          _place.locality;
+
+// TODO(robin): this is bugged if try fails, do something pls :)
+    try {
+      final List<Placemark> placemark =
+          await Geolocator().placemarkFromCoordinates(latitude, longitude);
+      if (placemark.isNotEmpty) {
+        final Placemark _place = placemark.first;
+        _address = _place.subThoroughfare +
+            ' ' +
+            _place.thoroughfare +
+            ' ' +
+            _place.postalCode.toString() +
+            ' ' +
+            _place.locality;
+      }
+    } catch (error) {
+      return _address;
     }
+
     return _address;
   }
 
@@ -199,10 +206,10 @@ class _LoungeCreateMeetupScreenState extends State<LoungeCreateMeetupScreen> {
 
     return OverlayEntry(
         builder: (BuildContext context) => Positioned(
-              left: positionMap.dx,
-              height: 60,
-              width: sizeMap.width / 1.5,
-              child: CompositedTransformFollower(
+            left: positionMap.dx,
+            height: 60,
+            width: sizeMap.width / 1.5,
+            child: CompositedTransformFollower(
                 link: _mapLink,
                 showWhenUnlinked: false,
                 offset: Offset(30, sizeMap.height - 100),
@@ -210,73 +217,70 @@ class _LoungeCreateMeetupScreenState extends State<LoungeCreateMeetupScreen> {
                     color: grey,
                     elevation: 4.0,
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: <Widget>[
-                        FlatButton(
-                          color: white,
-                          // padding: const EdgeInsets.all(5),
-                          onPressed: () async {
-                            setState(() {
-                              _moovingMarker = false;
-                            });
-                            if (_savedMarker != null) {
-                              final String _previousAdress =
-                                  await _getAdressFromCoordinates(
-                                      _savedMarker.position.latitude,
-                                      _savedMarker.position.longitude);
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: <Widget>[
+                          FlatButton(
+                            color: white,
+                            // padding: const EdgeInsets.all(5),
+                            onPressed: () async {
                               setState(() {
-                                _positionOfPlace = _savedMarker;
+                                _moovingMarker = false;
+                              });
+                              if (_savedMarker != null) {
+                                final String _previousAdress =
+                                    await _getAdressFromCoordinates(
+                                        _savedMarker.position.latitude,
+                                        _savedMarker.position.longitude);
+                                setState(() {
+                                  _positionOfPlace = _savedMarker;
+                                  _markers.clear();
+                                  _markers[_positionOfPlace.markerId
+                                      .toString()] = _positionOfPlace;
+                                  _searchTextController.text = _previousAdress;
+                                });
+                                _moveCameraToPosition(
+                                    _positionOfPlace.position, 15);
+                              } else {
+                                setState(() {
+                                  _markers.clear();
+                                  _searchTextController.text = '';
+                                  _positionOfPlace = null;
+                                });
+                              }
+                              _mapButtonsOverlay.remove();
+                            },
+                            child: const Text('Cancel'),
+                          ),
+                          FlatButton(
+                            color: white,
+                            // padding: const EdgeInsets.all(5),
+                            onPressed: () async {
+                              setState(() {
+                                _moovingMarker = false;
+                              });
+                              final String _address =
+                                  await _getAdressFromCoordinates(
+                                      _positionOfPlace.position.latitude,
+                                      _positionOfPlace.position.longitude);
+                              setState(() {
+                                _positionOfPlace = Marker(
+                                    markerId: _positionOfPlace.markerId,
+                                    position: _positionOfPlace.position,
+                                    infoWindow: InfoWindow(
+                                        title: 'Meeting point',
+                                        snippet: _address));
                                 _markers.clear();
                                 _markers[_positionOfPlace.markerId.toString()] =
                                     _positionOfPlace;
-                                _searchTextController.text = _previousAdress;
+                                _searchTextController.text = _address;
                               });
-                              _moveCameraToPosition(
-                                  _positionOfPlace.position, 15);
-                            } else {
-                              setState(() {
-                                _markers.clear();
-                                _searchTextController.text = '';
-                                _positionOfPlace = null;
-                              });
-                            }
-                            _mapButtonsOverlay.remove();
-                          },
-                          child: const Text('Cancel'),
-                        ),
-                        FlatButton(
-                          color: white,
-                          // padding: const EdgeInsets.all(5),
-                          onPressed: () async {
-                            setState(() {
-                              _moovingMarker = false;
-                            });
-                            final String _address =
-                                await _getAdressFromCoordinates(
-                                    _positionOfPlace.position.latitude,
-                                    _positionOfPlace.position.longitude);
-                            setState(() {
-                              _positionOfPlace = Marker(
-                                  markerId: _positionOfPlace.markerId,
-                                  position: _positionOfPlace.position,
-                                  infoWindow: InfoWindow(
-                                      title: 'Meeting point',
-                                      snippet: _address));
-                              _markers.clear();
-                              _markers[_positionOfPlace.markerId.toString()] =
-                                  _positionOfPlace;
-                              _searchTextController.text = _address;
-                            });
-                            // _moveCameraToPosition(
-                            //     _positionOfPlace.position, 15);
-                            _mapButtonsOverlay.remove();
-                          },
-                          child: const Text('Ok'),
-                        )
-                      ],
-                    )),
-              ),
-            ));
+                              // _moveCameraToPosition(
+                              //     _positionOfPlace.position, 15);
+                              _mapButtonsOverlay.remove();
+                            },
+                            child: const Text('Ok'),
+                          )
+                        ])))));
   }
 
   OverlayEntry _createOverlayEntry() {
@@ -345,14 +349,12 @@ class _LoungeCreateMeetupScreenState extends State<LoungeCreateMeetupScreen> {
                 height: Theme.of(context).textTheme.display1.fontSize * 1.1,
               ),
               child: RichText(
-                text: const TextSpan(
-                  text: 'LOUNGE DESIGNATED MEETUP',
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 15,
-                      fontWeight: FontWeight.w700),
-                ),
-              )),
+                  text: const TextSpan(
+                      text: 'LOUNGE DESIGNATED MEETUP',
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 15,
+                          fontWeight: FontWeight.w700)))),
           Expanded(
               child: CompositedTransformTarget(
                   link: _mapLink,
@@ -364,8 +366,7 @@ class _LoungeCreateMeetupScreenState extends State<LoungeCreateMeetupScreen> {
                       gestureRecognizers: <
                           Factory<OneSequenceGestureRecognizer>>{
                         Factory<OneSequenceGestureRecognizer>(
-                          () => EagerGestureRecognizer(),
-                        )
+                            () => EagerGestureRecognizer())
                       },
                       onLongPress: (LatLng position) async {
                         if (_moovingMarker) {
@@ -463,122 +464,130 @@ class _LoungeCreateMeetupScreenState extends State<LoungeCreateMeetupScreen> {
         ),
         padding: const EdgeInsets.all(15),
         child: CompositedTransformTarget(
-          child: Container(
-              color: orangeLight,
-              child: TextFormField(
-                key: _keySearch,
-                cursorColor: Colors.black,
-                keyboardType: TextInputType.text,
-                textInputAction: TextInputAction.go,
-                focusNode: _focusNodeAdress,
-                controller: _searchTextController,
-                decoration: InputDecoration(
-                  border: InputBorder.none,
-                  prefixIcon: Icon(Icons.location_on),
-                  hintText: 'Select place...',
-                ),
-              )),
-          link: _layerLink,
-        ));
+            child: Container(
+                color: whiteAlt,
+                child: TextFormField(
+                    key: _keySearch,
+                    cursorColor: Colors.black,
+                    keyboardType: TextInputType.text,
+                    textInputAction: TextInputAction.go,
+                    focusNode: _focusNodeAdress,
+                    controller: _searchTextController,
+                    style: const TextStyle(color: orange),
+                    decoration: InputDecoration(
+                        border: InputBorder.none,
+                        focusColor: orange,
+                        prefixIcon: Icon(Icons.location_on),
+                        hintStyle: const TextStyle(
+                            color: orange, fontWeight: FontWeight.bold),
+                        hintText: 'Select place...'))),
+            link: _layerLink));
   }
 
   Widget _buildTimeField(BuildContext context) {
     return Container(
       constraints: BoxConstraints.expand(
-        height: Theme.of(context).textTheme.display1.fontSize * 1.1 + 70,
-      ),
+          height: Theme.of(context).textTheme.display1.fontSize * 1.1 + 70),
       padding: const EdgeInsets.all(15.0),
       child: Column(
         children: <Widget>[
           Container(
               constraints: BoxConstraints.expand(
-                height: Theme.of(context).textTheme.display1.fontSize * 1.1,
-              ),
+                  height: Theme.of(context).textTheme.display1.fontSize * 1.1),
               child: RichText(
-                text: const TextSpan(
-                  text: 'MEETUP TIME',
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 15,
-                      fontWeight: FontWeight.w700),
-                ),
-              )),
+                  text: const TextSpan(
+                      text: 'MEETUP TIME',
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 15,
+                          fontWeight: FontWeight.w700)))),
           Container(
               child: CompositedTransformTarget(
                   key: _keyDate,
                   link: _dateLink,
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Container(
-                        width: 180,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            GestureDetector(
-                              onTap: () {
-                                _updateTimeOfEvent();
-                              },
-                              child: Container(
-                                color: orangeLight,
-                                height: 40,
-                                padding: const EdgeInsets.all(10.0),
-                                child: Text(_timeEvent.hourOfPeriod.toString()),
-                              ),
-                            ),
-                            Container(child: const Text(':')),
-                            GestureDetector(
-                              onTap: () {
-                                _updateTimeOfEvent();
-                              },
-                              child: Container(
-                                color: orangeLight,
-                                height: 40,
-                                padding: const EdgeInsets.all(10.0),
-                                child: Text(_timeEvent.minute.toString()),
-                              ),
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                _updateTimeOfEvent();
-                              },
-                              child: Container(
-                                color: orangeLight,
-                                height: 40,
-                                padding: const EdgeInsets.all(10.0),
-                                child: Text(_timeEvent.period == DayPeriod.am
-                                    ? 'AM'
-                                    : 'PM'),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      GestureDetector(
-                        onTap: () async {
-                          final DateTime dateSelected = await showDatePicker(
-                              context: context,
-                              initialDate:
-                                  DateTime.now().add(const Duration(days: 1)),
-                              firstDate: DateTime.now(),
-                              lastDate: DateTime.now()
-                                  .add(const Duration(days: 100)));
-                          if (dateSelected != null) {
-                            setState(() {
-                              _dateEvent = dateSelected;
-                            });
-                          }
-                        },
-                        child: Container(
-                          color: orangeLight,
-                          height: 40,
-                          padding: const EdgeInsets.all(10.0),
-                          child:
-                              Text(DateFormat('dd-MM-yyyy').format(_dateEvent)),
-                        ),
-                      )
-                    ],
-                  )))
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Container(
+                            width: 180,
+                            child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: <Widget>[
+                                  GestureDetector(
+                                      onTap: () {
+                                        _updateTimeOfEvent();
+                                      },
+                                      child: Container(
+                                          color: whiteAlt,
+                                          height: 40,
+                                          padding: const EdgeInsets.all(10.0),
+                                          child: Text(
+                                              _timeEvent.hourOfPeriod
+                                                  .toString(),
+                                              style: const TextStyle(
+                                                  color: orange,
+                                                  fontWeight:
+                                                      FontWeight.bold)))),
+                                  Container(child: const Text(':')),
+                                  GestureDetector(
+                                      onTap: () {
+                                        _updateTimeOfEvent();
+                                      },
+                                      child: Container(
+                                          color: whiteAlt,
+                                          height: 40,
+                                          padding: const EdgeInsets.all(10.0),
+                                          child: Text(
+                                              _timeEvent.minute.toString(),
+                                              style: const TextStyle(
+                                                  color: orange,
+                                                  fontWeight:
+                                                      FontWeight.bold)))),
+                                  GestureDetector(
+                                      onTap: () {
+                                        _updateTimeOfEvent();
+                                      },
+                                      child: Container(
+                                        color: whiteAlt,
+                                        height: 40,
+                                        padding: const EdgeInsets.all(10.0),
+                                        child: Text(
+                                            _timeEvent.period == DayPeriod.am
+                                                ? 'AM'
+                                                : 'PM',
+                                            style: const TextStyle(
+                                                color: orange,
+                                                fontWeight: FontWeight.bold)),
+                                      )),
+                                ])),
+                        GestureDetector(
+                            onTap: () async {
+                              final DateTime dateSelected =
+                                  await showDatePicker(
+                                      context: context,
+                                      initialDate: DateTime.now()
+                                          .add(const Duration(days: 1)),
+                                      firstDate: DateTime.now(),
+                                      lastDate: DateTime.now()
+                                          .add(const Duration(days: 100)));
+                              if (dateSelected != null) {
+                                setState(() {
+                                  _dateEvent = dateSelected;
+                                });
+                              }
+                            },
+                            child: Container(
+                              color: whiteAlt,
+                              height: 40,
+                              padding: const EdgeInsets.all(10.0),
+                              child: Text(
+                                  DateFormat('dd-MM-yyyy').format(_dateEvent),
+                                  style: const TextStyle(
+                                      color: orange,
+                                      fontWeight: FontWeight.bold)),
+                            ))
+                      ])))
         ],
       ),
     );
@@ -586,38 +595,36 @@ class _LoungeCreateMeetupScreenState extends State<LoungeCreateMeetupScreen> {
 
   Widget _buildNotesField(BuildContext context) {
     return Container(
-      constraints: BoxConstraints.expand(
-        height: Theme.of(context).textTheme.display1.fontSize * 1.1 + 300,
-      ),
-      padding: const EdgeInsets.all(15),
-      child: Column(children: <Widget>[
-        Container(
-            constraints: BoxConstraints.expand(
-              height: Theme.of(context).textTheme.display1.fontSize * 1.1,
-            ),
-            child: RichText(
-              text: const TextSpan(
-                text: 'MEETUP TIME',
-                style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 15,
-                    fontWeight: FontWeight.w700),
-              ),
-            )),
-        Expanded(
-            child: Container(
-                padding: const EdgeInsets.all(15.0),
-                color: orangeLight,
-                child: TextField(
-                  controller: _notesTextController,
-                  focusNode: _focusNodeNotes,
-                  keyboardType: TextInputType.text,
-                  decoration: InputDecoration(
-                      border: InputBorder.none,
-                      hintText: 'Notes for your group...'),
-                )))
-      ]),
-    );
+        constraints: BoxConstraints.expand(
+          height: Theme.of(context).textTheme.display1.fontSize * 1.1 + 300,
+        ),
+        padding: const EdgeInsets.all(15),
+        child: Column(children: <Widget>[
+          Container(
+              constraints: BoxConstraints.expand(
+                  height: Theme.of(context).textTheme.display1.fontSize * 1.1),
+              child: RichText(
+                  text: const TextSpan(
+                      text: 'MEETUP NOTES',
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 15,
+                          fontWeight: FontWeight.w700)))),
+          Expanded(
+              child: Container(
+                  padding: const EdgeInsets.all(15.0),
+                  color: whiteAlt,
+                  child: TextField(
+                      controller: _notesTextController,
+                      focusNode: _focusNodeNotes,
+                      keyboardType: TextInputType.text,
+                      decoration: InputDecoration(
+                          border: InputBorder.none,
+                          hintStyle: const TextStyle(color: orange),
+                          hintMaxLines: 2,
+                          hintText:
+                              'Notes for your group to easily find each other.')))),
+        ]));
   }
 
   @override
@@ -636,31 +643,37 @@ class _LoungeCreateMeetupScreenState extends State<LoungeCreateMeetupScreen> {
               constraints: const BoxConstraints.expand(
                   // width: MediaQuery.of(context).size.width
                   ),
-              child: Column(
-                children: <Widget>[
-                  Expanded(
-                      child: Container(
-                          color: white,
-                          child: Scrollbar(
-                              child: ListView(
-                                  controller: _scrollController,
-                                  padding: const EdgeInsets.all(10),
-                                  children: <Widget>[
-                                _buildMap(context),
-                                _buildAdressField(context),
-                                _buildTimeField(context),
-                                _buildNotesField(context),
-                              ])))),
-                  Container(
-                      height: 60,
-                      margin: const EdgeInsets.all(10.0),
-                      padding: const EdgeInsets.all(4.0),
-                      child: Row(
+              child: Column(children: <Widget>[
+                Expanded(
+                    child: Container(
+                        color: white,
+                        child: Scrollbar(
+                            child: ListView(
+                                controller: _scrollController,
+                                padding: const EdgeInsets.all(10),
+                                children: <Widget>[
+                              _buildMap(context),
+                              _buildAdressField(context),
+                              _buildTimeField(context),
+                              _buildNotesField(context),
+                            ])))),
+                Container(
+                    height: 60,
+                    margin: const EdgeInsets.all(10.0),
+                    padding: const EdgeInsets.all(4.0),
+                    child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
                           Button(
+                              text: 'BACK',
+                              width: 150,
+                              paddingRight: 5.0,
+                              onPressed: () {
+                                dispatch(NavigateAction<AppState>.pop());
+                              }),
+                          Button(
                               text: 'CREATE',
-                              width: 160,
+                              width: 150,
                               onPressed: () async {
                                 _focusNodeNotes.unfocus();
                                 _focusNodeAdress.unfocus();
@@ -675,22 +688,23 @@ class _LoungeCreateMeetupScreenState extends State<LoungeCreateMeetupScreen> {
                                       context: context,
                                       builder: (BuildContext context) {
                                         return AlertDialog(
-                                          title:
-                                              const Text('MISSING INFORMATION'),
-                                          content: const Text(
-                                              'PLEASE PROVIDE A POSITION TO YOUR LOUNGE'),
-                                          actions: <Widget>[
-                                            FlatButton(
-                                                onPressed: () {
-                                                  _dismissDialog();
-                                                  _scrollController.animateTo(0,
-                                                      duration: const Duration(
-                                                          seconds: 1),
-                                                      curve: Curves.ease);
-                                                },
-                                                child: const Text('OK'))
-                                          ],
-                                        );
+                                            title: const Text(
+                                                'MISSING INFORMATION'),
+                                            content: const Text(
+                                                'PLEASE PROVIDE A POSITION TO YOUR LOUNGE'),
+                                            actions: <Widget>[
+                                              FlatButton(
+                                                  onPressed: () {
+                                                    _dismissDialog();
+                                                    _scrollController.animateTo(
+                                                        0,
+                                                        duration:
+                                                            const Duration(
+                                                                seconds: 1),
+                                                        curve: Curves.ease);
+                                                  },
+                                                  child: const Text('OK'))
+                                            ]);
                                       });
                                   return;
                                 }
@@ -702,10 +716,8 @@ class _LoungeCreateMeetupScreenState extends State<LoungeCreateMeetupScreen> {
                                 Navigator.popUntil(context,
                                     (Route<dynamic> route) => route.isFirst);
                               }),
-                        ],
-                      ))
-                ],
-              )));
+                        ]))
+              ])));
     });
   }
 }

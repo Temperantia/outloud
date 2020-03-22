@@ -44,7 +44,7 @@ class _ViewState extends State<View> {
       AppState state, void Function(ReduxAction<dynamic>) dispatch) {
     EdgeInsetsGeometry margin;
     if (widget.isRoot) {
-      margin = const EdgeInsets.fromLTRB(0.0, 50.0, 0.0, 50.0);
+      margin = const EdgeInsets.fromLTRB(0.0, 20.0, 0.0, 50.0);
     } else if (widget.showAppBar && widget.showNavBar) {
       margin = const EdgeInsets.fromLTRB(0.0, 100.0, 0.0, 50.0);
     } else if (widget.showAppBar) {
@@ -53,75 +53,65 @@ class _ViewState extends State<View> {
       margin = const EdgeInsets.only(bottom: 50.0);
     }
 
-    return Stack(children: <Widget>[
-      Container(
-          decoration: BoxDecoration(
-              image: DecorationImage(
-                  image: AssetImage(state.theme == ThemeStyle.Orange
-                      ? 'images/screenPattern.png'
-                      : 'images/screenPatternPurple.png'),
-                  fit: BoxFit.cover)),
-          child:
-              Container(margin: margin, child: SafeArea(child: widget.child))),
+    return SafeArea(
+        child: Stack(children: <Widget>[
       if (widget.showNavBar) _buildNavBar(state, dispatch),
+      Container(margin: margin, child: widget.child),
       if (widget.showAppBar) _buildAppBar(state.userState.user, dispatch),
-    ]);
+    ]));
   }
 
   Widget _buildAppBar(User user, void Function(ReduxAction<dynamic>) dispatch) {
-    return Column(children: <Widget>[
-      AppBar(
-          elevation: 0.0,
-          backgroundColor: Colors.transparent,
-          centerTitle: true,
-          leading: Container(),
-          title: user == null
-              ? const CircularProgressIndicator()
-              : GestureDetector(
-                  onTap: () =>
-                      setState(() => _showUserSettings = !_showUserSettings),
-                  child: CircularImage(
-                      imageRadius: 40.0,
-                      imageUrl: user.pics.isEmpty ? null : user.pics[0])),
-          actions: <Widget>[
-            /*
-            Switch(
-              value: _isSwitched,
-              onChanged: (bool value) {
-                setState(() {
-                  dispatch(AppUpdateThemeAction(
-                      _isSwitched ? ThemeStyle.Orange : ThemeStyle.Purple));
-                  _isSwitched = value;
-                });
-              },
-            ),
-            */
-            Icon(Icons.menu),
-          ]),
-      if (_showUserSettings || !widget.isRoot)
-        Stack(
-          children: <Widget>[
+    return Stack(children: <Widget>[
+      Row(children: <Widget>[
+        Expanded(
+            child: Image.asset('images/screenTop.png', fit: BoxFit.contain))
+      ]),
+      Column(children: <Widget>[
+        Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: AppBar(
+                elevation: 0.0,
+                backgroundColor: Colors.transparent,
+                centerTitle: true,
+                leading: Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Image.asset('images/OL-draft1aWhite.png')),
+                title: user == null
+                    ? const CircularProgressIndicator()
+                    : GestureDetector(
+                        onTap: () => setState(
+                            () => _showUserSettings = !_showUserSettings),
+                        child: CircularImage(
+                            imageRadius: 50.0,
+                            imageUrl: user.pics.isEmpty ? null : user.pics[0])),
+                actions: const <Widget>[
+                  //Icon(Icons.menu),
+                ])),
+        if (_showUserSettings || !widget.isRoot)
+          Container(
+              child: Stack(children: <Widget>[
             if (_showUserSettings) _buildUserSettings(user, dispatch),
             if (!widget.isRoot)
-              Stack(
-                children: <Widget>[
-                  GestureDetector(
-                      onTap: widget.onBack ??
-                          () => dispatch(NavigateAction<AppState>.pop()),
-                      child: Icon(widget.backIcon, color: white)),
-                  Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Text(
-                          widget.title,
-                          textAlign: TextAlign.center,
-                          style: textStyleTitleAlt,
-                        )
-                      ]),
-                ],
-              )
-          ],
-        )
+              Stack(children: <Widget>[
+                GestureDetector(
+                    onTap: widget.onBack ??
+                        () => dispatch(NavigateAction<AppState>.pop()),
+                    child: Container(
+                        padding: const EdgeInsets.only(left: 30.0),
+                        child: Icon(widget.backIcon, color: white))),
+                Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Text(
+                        widget.title,
+                        textAlign: TextAlign.center,
+                        style: textStyleTitleAlt,
+                      ),
+                    ]),
+              ]),
+          ])),
+      ])
     ]);
   }
 
@@ -129,12 +119,12 @@ class _ViewState extends State<View> {
       User user, void Function(ReduxAction<dynamic>) dispatch) {
     return Column(children: <Widget>[
       Button(
-        text: 'Edit my profile',
-        onPressed: () {
-          dispatch(NavigateAction<AppState>.pushNamed(ProfileEditionScreen.id));
-          setState(() => _showUserSettings = false);
-        },
-      ),
+          text: 'Edit my profile',
+          onPressed: () {
+            dispatch(
+                NavigateAction<AppState>.pushNamed(ProfileEditionScreen.id));
+            setState(() => _showUserSettings = false);
+          }),
       Button(
           text: 'View my profile',
           onPressed: () {
@@ -155,32 +145,37 @@ class _ViewState extends State<View> {
 
   Widget _buildNavBar(
       AppState state, void Function(ReduxAction<dynamic>) dispatch) {
-    return Align(
-        alignment: Alignment.bottomCenter,
-        child: widget.showNavBar
-            ? Theme(
-                data:
-                    Theme.of(context).copyWith(canvasColor: Colors.transparent),
-                child: BottomNavigationBar(
-                  elevation: 0,
-                  type: BottomNavigationBarType.fixed,
-                  showSelectedLabels: false,
-                  showUnselectedLabels: false,
-                  currentIndex: state.homePageIndex,
-                  items: bubbleBar(context, 0, state.theme),
-                  onTap: (int index) async {
-                    if (index == state.homePageIndex) {
-                      return;
-                    }
-                    dispatch(AppNavigateAction(index));
-                    if (index == 1) {
-                      dispatch(EventsGetAction());
-                    }
-                    Navigator.of(context)
-                        .popUntil((Route<dynamic> route) => route.isFirst);
-                  },
-                ))
-            : null);
+    return Stack(alignment: Alignment.bottomCenter, children: [
+      Row(children: <Widget>[
+        Expanded(
+            child: Image.asset('images/screenBottom.png', fit: BoxFit.contain))
+      ]),
+      Align(
+          alignment: Alignment.bottomCenter,
+          child: widget.showNavBar
+              ? Theme(
+                  data: Theme.of(context)
+                      .copyWith(canvasColor: Colors.transparent),
+                  child: BottomNavigationBar(
+                      elevation: 0,
+                      type: BottomNavigationBarType.fixed,
+                      showSelectedLabels: false,
+                      showUnselectedLabels: false,
+                      currentIndex: state.homePageIndex,
+                      items: bubbleBar(context, 0, state.theme),
+                      onTap: (int index) async {
+                        if (index == state.homePageIndex) {
+                          return;
+                        }
+                        dispatch(AppNavigateAction(index));
+                        if (index == 1) {
+                          dispatch(EventsGetAction());
+                        }
+                        Navigator.of(context)
+                            .popUntil((Route<dynamic> route) => route.isFirst);
+                      }))
+              : null),
+    ]);
   }
 
   @override

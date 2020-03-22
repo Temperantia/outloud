@@ -24,13 +24,27 @@ class _LoungeCreateScreenState extends State<LoungeCreateScreen> {
     return GestureDetector(
         onTap: () => setState(() => _selected = event),
         child: Container(
-            color: _selected?.id == event.id
-                ? primary(themeStyle).withOpacity(0.3)
-                : null,
+            padding: const EdgeInsets.all(10.0),
+            margin: const EdgeInsets.symmetric(vertical: 5.0),
+            decoration: BoxDecoration(
+                color: _selected?.id == event.id
+                    ? primary(themeStyle).withOpacity(0.3)
+                    : null,
+                borderRadius: BorderRadius.circular(5.0)),
             child: Row(children: <Widget>[
               if (event.pic != null)
-                CachedImage(event.pic, width: 50.0, height: 50.0),
-              Expanded(child: Text(event.name)),
+                Padding(
+                    padding: const EdgeInsets.only(right: 10.0),
+                    child: CachedImage(
+                      event.pic,
+                      width: 40.0,
+                      height: 40.0,
+                      borderRadius: 5.0,
+                    )),
+              Expanded(
+                  child: Text(event.name,
+                      style: const TextStyle(
+                          color: orange, fontWeight: FontWeight.bold))),
             ])));
   }
 
@@ -53,17 +67,20 @@ class _LoungeCreateScreenState extends State<LoungeCreateScreen> {
                 child: Container(
                     color: white,
                     padding: const EdgeInsets.all(20.0),
-                    child: Column(
-                      children: <Widget>[
-                        const Text('CHOOSE AN EVENT FOR THIS LOUNGE'),
-                        Expanded(
-                            child: ListView.builder(
-                          itemCount: userEvents.length,
-                          itemBuilder: (BuildContext context, int index) =>
-                              _buildUserEvent(userEvents[index], state.theme),
-                        ))
-                      ],
-                    ))),
+                    child: Column(children: <Widget>[
+                      Row(children: <Widget>[
+                        Container(
+                            padding: const EdgeInsets.symmetric(vertical: 10.0),
+                            child: Text('CHOOSE AN EVENT FOR THIS LOUNGE',
+                                style: TextStyle(fontWeight: FontWeight.w900)))
+                      ]),
+                      Expanded(
+                          child: ListView.builder(
+                        itemCount: userEvents.length,
+                        itemBuilder: (BuildContext context, int index) =>
+                            _buildUserEvent(userEvents[index], state.theme),
+                      )),
+                    ]))),
             if (_selected != null)
               Expanded(
                   child: Container(
@@ -72,6 +89,7 @@ class _LoungeCreateScreenState extends State<LoungeCreateScreen> {
                           children: <Widget>[
                     Button(
                         text: 'NEXT',
+                        width: 150.0,
                         onPressed: () {
                           dispatch(LoungeCreateAction(
                             _selected.id,

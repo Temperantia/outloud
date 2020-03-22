@@ -2,22 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:inclusive/theme.dart';
 
 class Button extends StatelessWidget {
-  const Button({
-    @required this.text,
-    this.onPressed,
-    this.width,
-    this.height,
-    this.icon,
-    this.backgroundColor = orangeLight,
-    this.backgroundOpacity = 0.5,
-    this.colorText = white,
-    this.fontSize = 15,
-    this.fontWeight = FontWeight.normal,
-    this.paddingLeft = 0,
-    this.paddingRight = 0,
-    this.paddingBottom = 0,
-    this.paddingTop = 0
-  });
+  const Button(
+      {@required this.text,
+      this.onPressed,
+      this.width,
+      this.height,
+      this.icon,
+      this.backgroundColor = orangeLight,
+      this.backgroundOpacity = 0.5,
+      this.colorText = white,
+      this.fontSize = 15,
+      this.fontWeight = FontWeight.normal,
+      this.paddingLeft = 0,
+      this.paddingRight = 0,
+      this.paddingBottom = 0,
+      this.paddingTop = 0});
 
   final String text;
   final Function onPressed;
@@ -37,24 +36,25 @@ class Button extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(left: paddingLeft, right: paddingRight, top: paddingTop, bottom: paddingBottom),
-      width: width,
-      height: height ?? 50,
-      child: RaisedButton.icon(
-          elevation: 0.0,
-          color: backgroundColor.withOpacity(backgroundOpacity),
-          textColor: colorText,
-          onPressed: onPressed == null ? () {} : () => onPressed(),
-          icon: icon ?? Container(),
-          label: RichText(text: TextSpan(
-            text: text,
-            style: TextStyle(
-              color: colorText,
-              fontSize: fontSize,
-              fontWeight: fontWeight
-            )
-          ))
-        )
-    );
+        padding: EdgeInsets.only(
+            left: paddingLeft,
+            right: paddingRight,
+            top: paddingTop,
+            bottom: paddingBottom),
+        width: width,
+        height: height ?? 50,
+        child: RaisedButton.icon(
+            elevation: 0.0,
+            color: backgroundColor.withOpacity(backgroundOpacity),
+            textColor: colorText,
+            onPressed: onPressed == null ? () {} : () => onPressed(),
+            icon: icon ?? Container(),
+            label: RichText(
+                text: TextSpan(
+                    text: text,
+                    style: TextStyle(
+                        color: colorText,
+                        fontSize: 20.0,
+                        fontWeight: fontWeight)))));
   }
 }

@@ -143,9 +143,9 @@ class ProfileInterestsState extends State<ProfileInterests>
                               });
                             },
                             controller: _controllersLeft[index],
-                            decoration: InputDecoration(
+                            decoration: const InputDecoration(
                                 focusColor: orange,
-                                border: const OutlineInputBorder())),
+                                border: OutlineInputBorder())),
                         suggestionsCallback: (String pattern) async {
                           return data
                               .where((Map<String, String> elem) =>
@@ -173,10 +173,10 @@ class ProfileInterestsState extends State<ProfileInterests>
                         onChanged: (String value) => setState(() {}),
                         focusNode: _focusRight[index],
                         controller: _controllersRight[index],
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                             hintText: 'Say something about it',
                             focusColor: orange,
-                            border: const OutlineInputBorder()))),
+                            border: OutlineInputBorder()))),
                 if (_controllersLeft.length < maxInterests - 1 &&
                     _controllersLeft[index].text.isNotEmpty)
                   GestureDetector(

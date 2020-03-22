@@ -41,7 +41,7 @@ class LoungeMeetupWidget extends StatefulWidget {
 class _LoungeMeetupWidgetState extends State<LoungeMeetupWidget> {
   final Completer<GoogleMapController> _controller =
       Completer<GoogleMapController>();
-  final ScrollController _scrollController = ScrollController();
+  //final ScrollController _scrollController = ScrollController();
   final Map<String, Marker> _markers = <String, Marker>{};
   final FocusNode _focusNodeAdress = FocusNode();
   final FocusNode _focusNodeNotes = FocusNode();
@@ -53,10 +53,6 @@ class _LoungeMeetupWidgetState extends State<LoungeMeetupWidget> {
   final GlobalKey _keyDate = GlobalKey();
   final TextEditingController _searchTextController = TextEditingController();
   final TextEditingController _notesTextController = TextEditingController();
-
-  void Function(ReduxAction<AppState>) dispatch;
-  AppState state;
-  Lounge lounge;
 
   List<PlacesSearchResult> _resultPlaces = <PlacesSearchResult>[];
   CameraPosition _intialMapLocation;
@@ -223,9 +219,9 @@ class _LoungeMeetupWidgetState extends State<LoungeMeetupWidget> {
     return 0;
   }
 
-  void _dismissDialog() {
+/*   void _dismissDialog() {
     Navigator.pop(context);
-  }
+  } */
 
   OverlayEntry _createOverlayButtons() {
     final RenderBox renderBox =
@@ -668,8 +664,6 @@ class _LoungeMeetupWidgetState extends State<LoungeMeetupWidget> {
       // setState(() {
       //   dispatch = dispatch;
       // });
-      state = state;
-      dispatch = dispatch;
       return Container(
           child: Column(
         children: <Widget>[
