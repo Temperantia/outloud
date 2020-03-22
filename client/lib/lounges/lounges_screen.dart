@@ -5,6 +5,8 @@ import 'package:business/classes/lounge.dart';
 import 'package:business/classes/user.dart';
 import 'package:flutter/material.dart';
 import 'package:business/lounges/actions/lounge_join_action.dart';
+import 'package:business/lounges/actions/lounge_leave_action.dart';
+
 import 'package:inclusive/theme.dart';
 import 'package:inclusive/widgets/cached_image.dart';
 import 'package:inclusive/widgets/circular_image.dart';
@@ -21,19 +23,27 @@ class LoungesScreen extends StatelessWidget {
 // TODO(robin): if lounge is full dont show it
   Widget _buildLounge(Lounge lounge,
       void Function(redux.ReduxAction<AppState>) dispatch, AppState state) {
-    final User owner =
+    if (lounge.members.isEmpty) {
+      print('omg c vide ? ');
+      
+    } else {
+      print('non ya  :' + lounge.members.toString());
+    }
+    // state.userState.eventLounges[event.id].
+    final User owner = 
         lounge.members.firstWhere((User member) => member.id == lounge.owner);
     final int availableSlots = lounge.memberLimit - lounge.members.length;
     final String s = availableSlots <= 1 ? '' : 's';
 
     return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: <
         Widget>[
-      CachedImage(
-        owner.pics.isNotEmpty ? owner.pics[0] : null,
-        width: 40.0,
-        height: 40.0,
-        borderRadius: BorderRadius.circular(180.0),
-      ),
+      if (owner != null)
+        CachedImage(
+          owner.pics.isNotEmpty ? owner.pics[0] : null,
+          width: 40.0,
+          height: 40.0,
+          borderRadius: BorderRadius.circular(180.0),
+        ),
       Expanded(
           flex: 3,
           child: Container(
@@ -44,7 +54,9 @@ class LoungesScreen extends StatelessWidget {
                 Container(
                     child: RichText(
                         text: TextSpan(
-                            text: owner.name + '\'s Lounge',
+                            text: state.userState.user.id == owner.id
+                                ? 'Your Lounge'
+                                : owner.name + '\'s Lounge',
                             style: const TextStyle(
                                 color: Colors.black,
                                 fontSize: 13,
@@ -55,13 +67,23 @@ class LoungesScreen extends StatelessWidget {
                       if (lounge.owner == state.userState.user.id) {
                         return;
                       }
-                      dispatch(
-                          LoungeJoinAction(state.userState.user.id, lounge));
+                      if (lounge.memberIds.contains(state.userState.user.id)) {
+                        print('on part du lounge');
+                        dispatch(
+                            LoungeLeaveAction(state.userState.user.id, lounge));
+                      } else {
+                        print('on rejoint le lounge ');
+                        dispatch(
+                            LoungeJoinAction(state.userState.user.id, lounge));
+                      }
                     },
                     child: Container(
                         child: RichText(
                             text: TextSpan(
-                                text: ' > JOIN ', // TODO(me): add arrow icon
+                                text: lounge.memberIds
+                                        .contains(state.userState.user.id)
+                                    ? '< LEAVE'
+                                    : ' > JOIN ', // TODO(me): add arrow icon
                                 style: TextStyle(
                                     color: orange,
                                     fontSize: 15,

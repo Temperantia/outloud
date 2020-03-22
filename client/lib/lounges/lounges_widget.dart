@@ -28,6 +28,7 @@ class _LoungesWidgetState extends State<LoungesWidget>
   bool get wantKeepAlive => true;
 
   Widget _buildLounges(
+    AppState state,
       List<Lounge> lounges,
       Map<String, List<Lounge>> userEventLounges,
       void Function(redux.ReduxAction<AppState>) dispatch,
@@ -39,11 +40,11 @@ class _LoungesWidgetState extends State<LoungesWidget>
             itemBuilder: (BuildContext context, int index) => Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      _buildLounge(lounges[index], dispatch, themeStyle)
+                      _buildLounge(state, lounges[index], dispatch, themeStyle)
                     ])));
   }
 
-  Widget _buildInfoLoungeLayout(
+  Widget _buildInfoLoungeLayout(AppState state,
       Lounge lounge, void Function(redux.ReduxAction<AppState>) dispatch) {
     // TODO(robin): bring the state user here to compare if user.id == owner.id so you write "Your Lounge" instead
     final User owner =
@@ -62,7 +63,9 @@ class _LoungesWidgetState extends State<LoungesWidget>
                 margin: const EdgeInsets.only(left: 5.0),
                 child: RichText(
                     text: TextSpan(
-                  text: owner.name + '\'s Lounge',
+                  text: state.userState.user.id == owner.id
+                                        ? 'Your Lounge'
+                                        : owner.name + '\'s Lounge',
                   style: const TextStyle(
                       color: Colors.black,
                       fontSize: 13,
@@ -107,7 +110,7 @@ class _LoungesWidgetState extends State<LoungesWidget>
         ]);
   }
 
-  Widget _buildLounge(Lounge lounge,
+  Widget _buildLounge(AppState state, Lounge lounge,
       void Function(redux.ReduxAction<AppState>) dispatch, ThemeStyle theme) {
     return Container(
         margin: const EdgeInsets.symmetric(vertical: 10.0),
@@ -142,7 +145,7 @@ class _LoungesWidgetState extends State<LoungesWidget>
               flex: 3,
               child: Container(
                   padding: const EdgeInsets.all(10.0),
-                  child: _buildInfoLoungeLayout(lounge, dispatch))),
+                  child: _buildInfoLoungeLayout(state, lounge, dispatch))),
         ]));
   }
 
@@ -274,7 +277,7 @@ class _LoungesWidgetState extends State<LoungesWidget>
                 child: TabBarView(
                     physics: const NeverScrollableScrollPhysics(),
                     children: <Widget>[
-                      _buildLounges(
+                      _buildLounges(state,
                           userLounges, userEventLounges, dispatch, themeStyle),
                       _buildEvents(userEvents, userEventStates,
                           userEventLounges, dispatch, themeStyle),
