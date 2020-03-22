@@ -265,11 +265,7 @@ class _EventsWidgetState extends State<EventsWidget>
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                 Button(
-                    text: 'VIEW CALENDAR',
-                    width: 200,
-                    onPressed: () => dispatch(
-                        redux.NavigateAction<AppState>.pushNamed(
-                            EventCreateScreen.id))),
+                    text: 'VIEW CALENDAR', width: 200, onPressed: () => null),
               ])))
         ],
       ),
