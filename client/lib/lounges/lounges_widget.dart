@@ -5,6 +5,7 @@ import 'package:business/classes/lounge.dart';
 import 'package:business/classes/user.dart';
 import 'package:business/classes/user_event_state.dart';
 import 'package:flutter/material.dart';
+import 'package:inclusive/events/event_screen.dart';
 import 'package:inclusive/lounges/lounge_chat_screen.dart';
 import 'package:inclusive/lounges/lounge_create_screen.dart';
 import 'package:inclusive/lounges/lounges_screen.dart';
@@ -42,7 +43,8 @@ class _LoungesWidgetState extends State<LoungesWidget>
                     ])));
   }
 
-  Widget _buildInfoLoungeLayout(Lounge lounge) {
+  Widget _buildInfoLoungeLayout(
+      Lounge lounge, void Function(redux.ReduxAction<AppState>) dispatch) {
     // TODO(robin): bring the state user here to compare if user.id == owner.id so you write "Your Lounge" instead
     final User owner =
         lounge.members.firstWhere((User member) => member.id == lounge.owner);
@@ -85,12 +87,22 @@ class _LoungesWidgetState extends State<LoungesWidget>
                           fontWeight: FontWeight.w800)),
                 ]))),
           ]),
-          Row(children: <Widget>[
-            // TODO(robin): go to event listing gesture detector
-            Image.asset('images/arrowForward.png', width: 10.0, height: 10.0),
-            Text(' GO TO EVENT LISTING',
-                style: TextStyle(color: orange, fontWeight: FontWeight.bold))
-          ]),
+          Container(
+              child: GestureDetector(
+                  onTap: () {
+                    print('il doit se passer un truc');
+                    dispatch(redux.NavigateAction<AppState>.pushNamed(
+                        EventScreen.id,
+                        arguments: lounge.event));
+                  },
+                  child: Row(children: <Widget>[
+                    // TODO(robin): go to event listing gesture detector
+                    Image.asset('images/arrowForward.png',
+                        width: 10.0, height: 10.0),
+                    Text(' GO TO EVENT LISTING',
+                        style: TextStyle(
+                            color: orange, fontWeight: FontWeight.bold))
+                  ])))
         ]);
   }
 
@@ -100,7 +112,7 @@ class _LoungesWidgetState extends State<LoungesWidget>
         margin: const EdgeInsets.symmetric(vertical: 10.0),
         child: Row(children: <Widget>[
           // TODO(me): later default event pic ?
-          if (lounge.event.pic.isNotEmpty)
+          if (lounge.event != null && lounge.event.pic.isNotEmpty)
             Flexible(
                 child: Stack(alignment: Alignment.center, children: <Widget>[
               Container(
@@ -129,7 +141,7 @@ class _LoungesWidgetState extends State<LoungesWidget>
               flex: 3,
               child: Container(
                   padding: const EdgeInsets.all(10.0),
-                  child: _buildInfoLoungeLayout(lounge))),
+                  child: _buildInfoLoungeLayout(lounge, dispatch))),
         ]));
   }
 

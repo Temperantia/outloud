@@ -191,30 +191,30 @@ class _LoungeEditScreenState extends State<LoungeEditScreen> {
                             )),
                         Container(
                           child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
                               Container(
-                                  child: const Button(
-                                fontSize: 15,
-                                fontWeight: FontWeight.w700,
-                                backgroundColor: white,
-                                text: 'KICK',
-                                colorText: Colors.orange,
-                                paddingRight: 10,
-                                paddingLeft: 10,
-                                width: 90,
-                              )),
+                                  child: GestureDetector(
+                                      child: RichText(
+                                          text: const TextSpan(
+                                              text: 'vote to KICK',
+                                              style: TextStyle(
+                                                  color: Colors.orange,
+                                                  fontSize: 15,
+                                                  fontWeight:
+                                                      FontWeight.w700))))),
                               Container(
-                                  child: const Button(
-                                fontSize: 15,
-                                fontWeight: FontWeight.w700,
-                                backgroundColor: white,
-                                text: 'BAN',
-                                colorText: Colors.red,
-                                paddingRight: 10,
-                                paddingLeft: 10,
-                                width: 90,
-                              ))
+                                margin: const EdgeInsets.only(left: 20),
+                                padding: const EdgeInsets.only(left: 10, right: 10),
+                                  child: GestureDetector(
+                                      child: RichText(
+                                          text: const TextSpan(
+                                              text: 'BAN',
+                                              style: TextStyle(
+                                                  color: Colors.red,
+                                                  fontSize: 15,
+                                                  fontWeight:
+                                                      FontWeight.w700)))))
                             ],
                           ),
                         )
@@ -270,14 +270,25 @@ class _LoungeEditScreenState extends State<LoungeEditScreen> {
                       ),
                     )),
                     Container(
-                        child: const Button(
-                      fontSize: 13,
-                      fontWeight: FontWeight.w500,
-                      backgroundColor: pink,
-                      text: 'UPGRADE FOR MORE!',
-                      colorText: Colors.black87,
-                      width: 180,
-                    ))
+                      padding:  const EdgeInsets.all(10),
+                        color: pinkLight.withOpacity(0.4),
+                        child: GestureDetector(
+                            child: RichText(
+                                text: const TextSpan(
+                                    text: 'UPGRADE FOR MORE!',
+                                    style: TextStyle(
+                                        color: Colors.black87,
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.w500))))),
+                    // Container(
+                    //     child: const Button(
+                    //   fontSize: 13,
+                    //   fontWeight: FontWeight.w500,
+                    //   backgroundColor: pink,
+                    //   text: 'UPGRADE FOR MORE!',
+                    //   colorText: Colors.black87,
+                    //   width: 180,
+                    // ))
                   ],
                 )),
             Slider(

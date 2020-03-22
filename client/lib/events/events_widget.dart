@@ -4,10 +4,11 @@ import 'package:async_redux/async_redux.dart' as redux;
 import 'package:business/app_state.dart';
 import 'package:business/classes/event.dart';
 import 'package:business/events/actions/events_get_action.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:inclusive/events/event_create_screen.dart';
-/* import 'package:geolocator/geolocator.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart'; */
+import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:inclusive/events/event_screen.dart';
 import 'package:inclusive/theme.dart';
 import 'package:inclusive/widgets/button.dart';
@@ -24,13 +25,13 @@ class EventsWidget extends StatefulWidget {
 
 class _EventsWidgetState extends State<EventsWidget>
     with AutomaticKeepAliveClientMixin<EventsWidget> {
-/*   final Completer<GoogleMapController> _controller =
+  final Completer<GoogleMapController> _controller =
       Completer<GoogleMapController>();
   final Map<String, Marker> _markers = <String, Marker>{};
-  
+
   CameraPosition _intialMapLocation =
       const CameraPosition(target: LatLng(48.85902056, 2.34637398), zoom: 14);
-  final double _googleMapSize = 60.0; */
+  // double _googleMapSize = 60.0;
   final ScrollController _scrollController = ScrollController();
   final GlobalKey _interestFilterKey = GlobalKey();
   final LayerLink _interestLink = LayerLink();
@@ -58,10 +59,10 @@ class _EventsWidgetState extends State<EventsWidget>
         _flexFactorMap = 1;
       });
     });
-    //getPosition();
+    getPosition();
   }
 
-/*   Future<int> getPosition() async {
+  Future<int> getPosition() async {
     final Position position = await Geolocator()
         .getCurrentPosition(desiredAccuracy: LocationAccuracy.best);
     if (position != null) {
@@ -70,12 +71,12 @@ class _EventsWidgetState extends State<EventsWidget>
       return 0;
     }
     return 1;
-  } */
+  }
 
   @override
   bool get wantKeepAlive => true;
 
-/*   Widget _buildMap() {
+/*  Widget _buildMap() {
     return Container(
         constraints: BoxConstraints.expand(
           height: Theme.of(context).textTheme.display1.fontSize * 1.1 +
@@ -113,9 +114,38 @@ class _EventsWidgetState extends State<EventsWidget>
 
   Widget _buildMapView() {
     return Container(
-        constraints: const BoxConstraints.expand(),
+        // constraints: const BoxConstraints.expand(),
+        padding: const EdgeInsets.all(10),
         decoration: const BoxDecoration(color: white),
-        child: const Text('MAPS GOES HERE'));
+        child: GoogleMap(
+            onTap: (LatLng latlang) {
+              setState(() {
+                _flexFactorListEvent = 2;
+                _flexFactorMap = 4;
+              });
+            },
+            onCameraMoveStarted: () {
+              setState(() {
+                _flexFactorListEvent = 2;
+                _flexFactorMap = 4;
+              });
+            },
+            mapType: MapType.normal,
+            zoomGesturesEnabled: true,
+            myLocationButtonEnabled: true,
+            myLocationEnabled: true,
+            gestureRecognizers: <Factory<OneSequenceGestureRecognizer>>{
+              Factory<OneSequenceGestureRecognizer>(
+                () => EagerGestureRecognizer(),
+              )
+            },
+            initialCameraPosition: _intialMapLocation,
+            markers: _markers.values.toSet(),
+            onMapCreated: (GoogleMapController controller) {
+              if (!_controller.isCompleted) {
+                _controller.complete(controller);
+              }
+            }));
   }
 
   Widget _buildFilters() {
@@ -341,7 +371,7 @@ class _EventsWidgetState extends State<EventsWidget>
               child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                if (event.pic.isNotEmpty)
+                if (event != null && event.pic.isNotEmpty)
                   Flexible(
                       child:
                           CachedImage(event.pic, width: 100.0, height: 100.0)),
@@ -395,7 +425,7 @@ class _EventsWidgetState extends State<EventsWidget>
       if (events == null || userEvents == null) {
         return Loading();
       }
-      /*      _markers.clear();
+      _markers.clear();
       for (final Event event in events) {
         if (event.location != null) {
           _markers[event.id] = Marker(
@@ -404,7 +434,7 @@ class _EventsWidgetState extends State<EventsWidget>
                   LatLng(event.location.latitude, event.location.longitude),
               infoWindow: InfoWindow(title: event.name));
         }
-      } */
+      }
       return DefaultTabController(
           length: 2,
           child: Column(children: <Widget>[
