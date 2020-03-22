@@ -232,7 +232,6 @@ class _LoungeCreateDetailScreenState extends State<LoungeCreateDetailScreen> {
               Expanded(
                   flex: 6,
                   child: Container(
-                      color: white,
                       child: Scrollbar(
                           controller: _scrollController,
                           child: ListView(

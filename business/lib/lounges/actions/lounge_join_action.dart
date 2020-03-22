@@ -14,6 +14,7 @@ class LoungeJoinAction extends ReduxAction<AppState> {
   @override
   Future<AppState> reduce() async {
     if (lounge.memberIds.contains(userId)) {
+      // TODO(robin): this is good to check, still a lounge is displayed after the user joined it in browsing lounges = bug
       return state;
     }
     final List<String> _userIdes = lounge.memberIds + <String>[userId];

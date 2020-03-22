@@ -282,53 +282,48 @@ class _EventsWidgetState extends State<EventsWidget>
       void Function(redux.ReduxAction<AppState>) dispatch,
       Future<void> Function(redux.ReduxAction<AppState>) dispatchFuture) {
     return Container(
-      child: Column(
-        children: <Widget>[
-          Expanded(
-              flex: _flexFactorMap,
-              child: GestureDetector(
-                onTap: () {
-                  setState(() {
-                    _flexFactorListEvent = 2;
-                    _flexFactorMap = 4;
-                  });
-                },
-                child: _buildMapView(),
-              )),
-          _buildFilters(),
-          Expanded(
-              flex: _flexFactorListEvent,
-              child: RefreshIndicator(
-                  onRefresh: () => dispatchFuture(EventsGetAction()),
-                  child: ListView.builder(
-                      controller: _scrollController,
-                      itemCount: events.length,
-                      itemBuilder: (BuildContext context, int index) =>
-                          Container(
-                              decoration: const BoxDecoration(color: white),
-                              child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: <Widget>[
-                                    _buildEvent(
-                                        events[index], dispatch, themeStyle),
-                                  ]))))),
-          Expanded(
-              flex: 1,
-              child: Container(
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                    Button(
-                        text: 'CREATE EVENT',
-                        width: 200,
-                        icon: Icon(Icons.add),
-                        onPressed: () => dispatch(
-                            redux.NavigateAction<AppState>.pushNamed(
-                                EventCreateScreen.id))),
-                  ])))
-        ],
-      ),
-    );
+        child: Column(children: <Widget>[
+      Expanded(
+          flex: _flexFactorMap,
+          child: GestureDetector(
+            onTap: () {
+              setState(() {
+                _flexFactorListEvent = 2;
+                _flexFactorMap = 4;
+              });
+            },
+            child: _buildMapView(),
+          )),
+      _buildFilters(),
+      Expanded(
+          flex: _flexFactorListEvent,
+          child: RefreshIndicator(
+              onRefresh: () => dispatchFuture(EventsGetAction()),
+              child: ListView.builder(
+                  controller: _scrollController,
+                  itemCount: events.length,
+                  itemBuilder: (BuildContext context, int index) => Container(
+                      decoration: const BoxDecoration(color: white),
+                      child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            _buildEvent(events[index], dispatch, themeStyle),
+                          ]))))),
+      /*  Expanded(
+          flex: 1,
+          child: Container(
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                Button(
+                    text: 'CREATE EVENT',
+                    width: 200,
+                    icon: Icon(Icons.add),
+                    onPressed: () => dispatch(
+                        redux.NavigateAction<AppState>.pushNamed(
+                            EventCreateScreen.id))),
+              ]))) */
+    ]));
   }
 
   Widget _buildEvent(Event event,
@@ -351,7 +346,9 @@ class _EventsWidgetState extends State<EventsWidget>
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                 if (event.pic.isNotEmpty)
-                  Flexible(child: CachedImage(event.pic)),
+                  Flexible(
+                      child:
+                          CachedImage(event.pic, width: 100.0, height: 100.0)),
                 Flexible(
                     flex: 2,
                     child: Padding(
@@ -416,17 +413,14 @@ class _EventsWidgetState extends State<EventsWidget>
           length: 2,
           child: Column(children: <Widget>[
             const Expanded(
-                child: TabBar(
-              labelStyle: textStyleButton,
-              tabs: <Widget>[
-                Tab(text: 'MY EVENTS'),
-                Tab(text: 'FIND EVENTS'),
-              ],
-            )),
+                child:
+                    TabBar(indicatorColor: Colors.transparent, tabs: <Widget>[
+              Tab(text: 'MY EVENTS'),
+              Tab(text: 'FIND EVENTS'),
+            ])),
             Expanded(
-                flex: 6,
+                flex: 8,
                 child: Container(
-                    // color: white,
                     child: TabBarView(
                         physics: const NeverScrollableScrollPhysics(),
                         children: <Widget>[

@@ -39,7 +39,7 @@ class _LoungeCreateScreenState extends State<LoungeCreateScreen> {
                       event.pic,
                       width: 40.0,
                       height: 40.0,
-                      borderRadius: 5.0,
+                      borderRadius: BorderRadius.circular(5.0),
                     )),
               Expanded(
                   child: Text(event.name,
@@ -63,9 +63,8 @@ class _LoungeCreateScreenState extends State<LoungeCreateScreen> {
           backIcon: Icons.close,
           child: Column(children: <Widget>[
             Expanded(
-                flex: 6,
+                flex: 8,
                 child: Container(
-                    color: white,
                     padding: const EdgeInsets.all(20.0),
                     child: Column(children: <Widget>[
                       Row(children: <Widget>[

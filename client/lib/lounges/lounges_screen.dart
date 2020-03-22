@@ -18,72 +18,84 @@ class LoungesScreen extends StatelessWidget {
 
   static const String id = 'LoungesScreen';
 
-  Widget _buildLounge(Lounge lounge, void Function(redux.ReduxAction<AppState>) dispatch, AppState state) {
+// TODO(robin): if lounge is full dont show it
+  Widget _buildLounge(Lounge lounge,
+      void Function(redux.ReduxAction<AppState>) dispatch, AppState state) {
     final User owner =
         lounge.members.firstWhere((User member) => member.id == lounge.owner);
     final int availableSlots = lounge.memberLimit - lounge.members.length;
-    final String s = availableSlots <= 1 ? 's' : '';
+    final String s = availableSlots <= 1 ? '' : 's';
 
-    return Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          Expanded(
-              flex: 1,
-              child: CircularImage(
-                  imageUrl: owner.pics.isNotEmpty ? owner.pics[0] : null,
-                  imageRadius: 40.0)),
-          Expanded(
-              flex: 3,
-              child: Column(children: <Widget>[
-                Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Container(
-                          child: RichText(
-                              text: TextSpan(
-                                  text: owner.name + '\'s Lounge',
-                                  style: const TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 13,
-                                      fontWeight: FontWeight.w500)))),
-                      GestureDetector(
-                          onTap: () {
-                            if (lounge.owner == state.userState.user.id) {
-                              return;
-                            }
-                            dispatch(LoungeJoinAction(state.userState.user.id, lounge));
-                          },
-                          child: Container(
-                              child: RichText(
-                                  text: TextSpan(
-                                      text: ' > JOIN ',
-                                      style: TextStyle(
-                                          color: Colors.green,
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.w700))))),
-                    ]),
-                Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Text(
-                          '$availableSlots slot$s available'),
-                      Container(
-                          child: Row(children: <Widget>[
-                        for (User member in lounge.members)
-                          if (member.id != lounge.owner)
-                            CircularImage(
-                                imageRadius: 20.0, imageUrl: member.pics.isNotEmpty ? member.pics[0] : null),
-                        for (int index = 0; index < availableSlots; index++)
+    return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: <
+        Widget>[
+      CachedImage(
+        owner.pics.isNotEmpty ? owner.pics[0] : null,
+        width: 40.0,
+        height: 40.0,
+        borderRadius: BorderRadius.circular(180.0),
+      ),
+      Expanded(
+          flex: 3,
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 5.0),
+            child: Column(children: <Widget>[
+              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: <
+                  Widget>[
+                Container(
+                    child: RichText(
+                        text: TextSpan(
+                            text: owner.name + '\'s Lounge',
+                            style: const TextStyle(
+                                color: Colors.black,
+                                fontSize: 13,
+                                fontWeight: FontWeight.w500)))),
+                GestureDetector(
+                    onTap: () {
+                      // TODO(robin): this shouldnt exist, the owner shouldnt see a join button on his own lounges and maybe not even see it here (ask @nadir)
+                      if (lounge.owner == state.userState.user.id) {
+                        return;
+                      }
+                      dispatch(
+                          LoungeJoinAction(state.userState.user.id, lounge));
+                    },
+                    child: Container(
+                        child: RichText(
+                            text: TextSpan(
+                                text: ' > JOIN ', // TODO(me): add arrow icon
+                                style: TextStyle(
+                                    color: orange,
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w700))))),
+              ]),
+              Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Text('$availableSlots slot$s available'),
+                    Row(children: <Widget>[
+                      for (User member in lounge.members)
+                        if (member.id != lounge.owner)
                           Container(
+                            margin: const EdgeInsets.symmetric(horizontal: 5.0),
+                            child: CachedImage(
+                              member.pics.isNotEmpty ? member.pics[0] : null,
                               width: 20.0,
                               height: 20.0,
-                              decoration: BoxDecoration(
-                                  color: grey,
-                                  borderRadius: BorderRadius.circular(180))),
-                      ])),
+                              borderRadius: BorderRadius.circular(180.0),
+                            ),
+                          ),
+                      for (int index = 0; index < availableSlots; index++)
+                        Container(
+                            margin: const EdgeInsets.symmetric(horizontal: 5.0),
+                            width: 20.0,
+                            height: 20.0,
+                            decoration: BoxDecoration(
+                                color: Colors.grey,
+                                borderRadius: BorderRadius.circular(180))),
                     ]),
-              ])),
-        ]);
+                  ]),
+            ]),
+          )),
+    ]);
   }
 
   Widget _buildHeader(BuildContext context) {
@@ -105,11 +117,17 @@ class LoungesScreen extends StatelessWidget {
           Container(
               child: Row(children: <Widget>[
             if (event.pic.isNotEmpty)
-              Expanded(
-                  flex: 1,
-                  child: CachedImage(
-                    event.pic,
-                  )),
+              Flexible(
+                  child: Container(
+                      decoration: BoxDecoration(
+                          border: Border(
+                              left: BorderSide(color: orange, width: 3.0))),
+                      child: CachedImage(event.pic,
+                          width: 30.0,
+                          height: 30.0,
+                          borderRadius: const BorderRadius.only(
+                              bottomRight: Radius.circular(5.0),
+                              topRight: Radius.circular(5.0))))),
             Expanded(
                 flex: 6,
                 child: Container(
@@ -117,16 +135,17 @@ class LoungesScreen extends StatelessWidget {
                     child: RichText(
                         textAlign: TextAlign.justify,
                         text: TextSpan(
-                            text: event.name + ' | ' + event.description,
+                            text: event.name,
                             style: TextStyle(
-                                color: Colors.green,
+                                color: orange,
                                 fontSize: 12,
                                 fontWeight: FontWeight.w700))))),
           ])),
         ]));
   }
 
-  Widget _buildListLounges(List<Lounge> lounges, void Function(redux.ReduxAction<AppState>) dispatch, AppState state) {
+  Widget _buildListLounges(List<Lounge> lounges,
+      void Function(redux.ReduxAction<AppState>) dispatch, AppState state) {
     return Container(
         child: Container(
             padding: const EdgeInsets.only(left: 10, right: 30),
@@ -154,15 +173,13 @@ class LoungesScreen extends StatelessWidget {
               child: Column(children: <Widget>[
                 Expanded(
                     child: Container(
-                        color: white,
-                        child: Container(
-                            child: Column(children: <Widget>[
-                          _buildHeader(context),
-                          const Divider(),
-                          Expanded(
-                            child: _buildListLounges(lounges, dispatch, state),
-                          ),
-                        ])))),
+                        child: Column(children: <Widget>[
+                  _buildHeader(context),
+                  const Divider(),
+                  Expanded(
+                    child: _buildListLounges(lounges, dispatch, state),
+                  ),
+                ]))),
               ])
 // TODO(robin): remove this dead code please
               // child: Column(

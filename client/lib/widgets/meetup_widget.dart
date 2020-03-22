@@ -25,6 +25,7 @@ class LoungeMeetupWidget extends StatefulWidget {
 
   _LoungeMeetupWidgetState loungeMeetupWidgetState = _LoungeMeetupWidgetState();
 
+// TODO(robin): what ?
   @override
   _LoungeMeetupWidgetState createState() {
     final _LoungeMeetupWidgetState _loungeMeetupWidgetState =

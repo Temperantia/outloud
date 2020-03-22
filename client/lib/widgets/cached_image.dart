@@ -7,7 +7,7 @@ class CachedImage extends StatefulWidget {
   final String url;
   final double width;
   final double height;
-  final double borderRadius;
+  final BorderRadius borderRadius;
 
   @override
   _CachedImageState createState() => _CachedImageState();
@@ -20,14 +20,19 @@ class _CachedImageState extends State<CachedImage> {
         width: widget.width,
         height: widget.height,
         child: ClipRRect(
-            borderRadius: BorderRadius.circular(widget.borderRadius ?? 0.0),
-            child: CachedNetworkImage(
-              fit: BoxFit.cover,
-              imageUrl: widget.url,
-              placeholder: (BuildContext context, String url) =>
-                  const CircularProgressIndicator(),
-              errorWidget: (BuildContext context, String url, Object error) =>
-                  Icon(Icons.error),
-            )));
+            borderRadius: widget.borderRadius ?? BorderRadius.zero,
+            child: widget.url == null
+                ? Image.asset(
+                    'images/default-user-profile-image-png-7.png',
+                  )
+                : CachedNetworkImage(
+                    fit: BoxFit.cover,
+                    imageUrl: widget.url,
+                    placeholder: (BuildContext context, String url) =>
+                        const CircularProgressIndicator(),
+                    errorWidget:
+                        (BuildContext context, String url, Object error) =>
+                            Icon(Icons.error),
+                  )));
   }
 }
