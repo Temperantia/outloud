@@ -67,32 +67,29 @@ class LoungesScreen extends StatelessWidget {
                                     fontSize: 15,
                                     fontWeight: FontWeight.w700))))),
               ]),
-              Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Text('$availableSlots slot$s available'),
-                    Row(children: <Widget>[
-                      for (User member in lounge.members)
-                        if (member.id != lounge.owner)
-                          Container(
-                            margin: const EdgeInsets.symmetric(horizontal: 5.0),
-                            child: CachedImage(
+              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: <
+                  Widget>[
+                Text('$availableSlots slot$s available'),
+                Row(children: <Widget>[
+                  for (User member in lounge.members)
+                    if (member.id != lounge.owner)
+                      Container(
+                          margin: const EdgeInsets.symmetric(horizontal: 5.0),
+                          child: CachedImage(
                               member.pics.isNotEmpty ? member.pics[0] : null,
                               width: 20.0,
                               height: 20.0,
-                              borderRadius: BorderRadius.circular(180.0),
-                            ),
-                          ),
-                      for (int index = 0; index < availableSlots; index++)
-                        Container(
-                            margin: const EdgeInsets.symmetric(horizontal: 5.0),
-                            width: 20.0,
-                            height: 20.0,
-                            decoration: BoxDecoration(
-                                color: Colors.grey,
-                                borderRadius: BorderRadius.circular(180))),
-                    ]),
-                  ]),
+                              borderRadius: BorderRadius.circular(180.0))),
+                  for (int index = 0; index < availableSlots; index++)
+                    Container(
+                        margin: const EdgeInsets.symmetric(horizontal: 5.0),
+                        width: 20.0,
+                        height: 20.0,
+                        decoration: BoxDecoration(
+                            color: Colors.grey,
+                            borderRadius: BorderRadius.circular(180))),
+                ]),
+              ]),
             ]),
           )),
     ]);

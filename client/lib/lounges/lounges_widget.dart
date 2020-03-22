@@ -53,10 +53,11 @@ class _LoungesWidgetState extends State<LoungesWidget>
         children: <Widget>[
           Row(children: <Widget>[
             Container(
-                child: CircularImage(
-              imageUrl: owner.pics.isNotEmpty ? owner.pics[0] : null,
-              imageRadius: 20.0,
-            )),
+                margin: const EdgeInsets.symmetric(horizontal: 5.0),
+                child: CachedImage(owner.pics.isNotEmpty ? owner.pics[0] : null,
+                    width: 20.0,
+                    height: 20.0,
+                    borderRadius: BorderRadius.circular(180.0))),
             Container(
                 margin: const EdgeInsets.only(left: 5.0),
                 child: RichText(

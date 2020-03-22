@@ -11,7 +11,6 @@ const Color blueAlt = Color(0xFF28D6C0);
 const Color white = Color(0xFFF9F5F5);
 Color whiteAlt = const Color(0xFFFF764C).withOpacity(0.1);
 const Color black = Color(0xFF000000);
-
 const Color grey = Color(0xFF898989);
 const Color red = Color(0xFFFF0000);
 const Color pinkBright = Color(0xFFFF6260);
