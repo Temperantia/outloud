@@ -68,6 +68,15 @@ class _EventsWidgetState extends State<EventsWidget>
     getPosition();
   }
 
+  @override
+  bool get wantKeepAlive => true;
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
   Future<int> getPosition() async {
     final Position position = await Geolocator()
         .getCurrentPosition(desiredAccuracy: LocationAccuracy.best);
@@ -77,15 +86,6 @@ class _EventsWidgetState extends State<EventsWidget>
       return 0;
     }
     return 1;
-  }
-
-  @override
-  bool get wantKeepAlive => true;
-
-  @override
-  void dispose() {
-    // TODO(me): dispose time
-    super.dispose();
   }
 
   Widget _buildMapView() {
