@@ -8,12 +8,14 @@ import 'package:location_permissions/location_permissions.dart';
 
 class EventsGetAction extends redux.ReduxAction<AppState> {
   final Geolocator _geolocator = Geolocator();
+  final LocationPermissionService _locationPermissionService =
+      LocationPermissionService();
   @override
   Future<AppState> reduce() async {
     final List<Event> events = await getEvents();
 
     final PermissionStatus permission =
-        await LocationPermissionService().checkLocationPermissionStatus();
+        await _locationPermissionService.checkLocationPermissionStatus();
     if (permission == PermissionStatus.granted) {
       try {
         final Position position = await _geolocator.getCurrentPosition(
