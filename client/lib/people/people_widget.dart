@@ -142,7 +142,7 @@ class _PeopleWidgetState extends State<PeopleWidget>
               Tab(text: 'Chats'),
             ])),
             Expanded(
-                flex: 6,
+                flex: 8,
                 child: TabBarView(
                     physics: const NeverScrollableScrollPhysics(),
                     children: <Widget>[

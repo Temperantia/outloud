@@ -52,15 +52,27 @@ class _LoungeEditScreenState extends State<LoungeEditScreen> {
     super.dispose();
   }
 
-  Widget _buildHeader(BuildContext context, AppState state) {
-    final User owner =
-        lounge.members.firstWhere((User member) => member.id == lounge.owner);
+  Widget _buildHeader(
+      AppState state, void Function(ReduxAction<AppState>) dispatch) {
+    final User owner = widget.lounge.members
+        .firstWhere((User member) => member.id == widget.lounge.owner);
     return Container(
-        color: white,
         padding: const EdgeInsets.all(15.0),
         child: Row(children: <Widget>[
-          if (lounge.event.pic.isNotEmpty)
-            Flexible(flex: 2, child: CachedImage(lounge.event.pic)),
+          if (widget.lounge.event.pic.isNotEmpty)
+            Flexible(
+                child: Stack(alignment: Alignment.center, children: <Widget>[
+              Container(
+                  decoration: const BoxDecoration(
+                      border:
+                          Border(left: BorderSide(color: orange, width: 5.0))),
+                  child: CachedImage(widget.lounge.event.pic,
+                      width: 40.0,
+                      height: 40.0,
+                      borderRadius: const BorderRadius.only(
+                          bottomRight: Radius.circular(5.0),
+                          topRight: Radius.circular(5.0))))
+            ])),
           Flexible(
               flex: 8,
               child: Container(
@@ -68,11 +80,10 @@ class _LoungeEditScreenState extends State<LoungeEditScreen> {
                   child: Column(children: <Widget>[
                     Container(
                         child: Row(children: <Widget>[
-                      Container(
-                          child: CircularImage(
-                        imageUrl: owner.pics.isNotEmpty ? owner.pics[0] : null,
-                        imageRadius: 30.0,
-                      )),
+                      CachedImage(owner.pics.isNotEmpty ? owner.pics[0] : null,
+                          width: 20.0,
+                          height: 20.0,
+                          borderRadius: BorderRadius.circular(180.0)),
                       Container(
                           padding: const EdgeInsets.only(left: 10),
                           child: RichText(
@@ -84,30 +95,33 @@ class _LoungeEditScreenState extends State<LoungeEditScreen> {
                                 color: Colors.black,
                                 fontSize: 13,
                                 fontWeight: FontWeight.w500),
-                          ))),
+                          )))
                     ])),
                     Container(
                         child: Row(children: <Widget>[
                       Container(
                           child: RichText(
                               text: TextSpan(
-                                  text: lounge.members.length.toString() +
-                                      ' member' +
-                                      (lounge.members.length > 1 ? 's ' : ' '),
+                                  text:
+                                      widget.lounge.members.length.toString() +
+                                          ' member' +
+                                          (widget.lounge.members.length > 1
+                                              ? 's '
+                                              : ' '),
                                   style: const TextStyle(
                                       color: Colors.black,
                                       fontSize: 13,
                                       fontWeight: FontWeight.w500),
                                   children: <TextSpan>[
                             TextSpan(
-                                text: lounge.event.name,
+                                text: widget.lounge.event.name,
                                 style: TextStyle(
-                                    color: Colors.greenAccent,
+                                    color: orange,
                                     fontSize: 14,
-                                    fontWeight: FontWeight.w800)),
-                          ]))),
-                    ])),
-                  ]))),
+                                    fontWeight: FontWeight.w800))
+                          ])))
+                    ]))
+                  ])))
         ]));
   }
 
@@ -125,14 +139,12 @@ class _LoungeEditScreenState extends State<LoungeEditScreen> {
                   children: <Widget>[
                     Container(
                         child: RichText(
-                      text: const TextSpan(
-                        text: 'MEMBERS',
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 15,
-                            fontWeight: FontWeight.w700),
-                      ),
-                    )),
+                            text: const TextSpan(
+                                text: 'MEMBERS',
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w700)))),
                     Container(
                         child: GestureDetector(
                             child: Row(
@@ -199,13 +211,14 @@ class _LoungeEditScreenState extends State<LoungeEditScreen> {
                                           text: const TextSpan(
                                               text: 'vote to KICK',
                                               style: TextStyle(
-                                                  color: Colors.orange,
+                                                  color: orange,
                                                   fontSize: 15,
                                                   fontWeight:
                                                       FontWeight.w700))))),
                               Container(
-                                margin: const EdgeInsets.only(left: 20),
-                                padding: const EdgeInsets.only(left: 10, right: 10),
+                                  margin: const EdgeInsets.only(left: 20),
+                                  padding: const EdgeInsets.only(
+                                      left: 10, right: 10),
                                   child: GestureDetector(
                                       child: RichText(
                                           text: const TextSpan(
@@ -236,7 +249,7 @@ class _LoungeEditScreenState extends State<LoungeEditScreen> {
                   text: const TextSpan(
                     text: 'INVITE MORE PEOPLE',
                     style: TextStyle(
-                        color: Colors.orange,
+                        color: orange,
                         fontSize: 15,
                         fontWeight: FontWeight.w700),
                   ),
@@ -250,13 +263,12 @@ class _LoungeEditScreenState extends State<LoungeEditScreen> {
   Widget _buildLoungeMaxMemberCount(BuildContext context, AppState state) {
     return Container(
         padding: const EdgeInsets.all(15),
-        child: Column(
-          children: <Widget>[
-            Container(
-                constraints: BoxConstraints.expand(
-                  height: Theme.of(context).textTheme.display1.fontSize * 1.1,
-                ),
-                child: Row(
+        child: Column(children: <Widget>[
+          Container(
+              constraints: BoxConstraints.expand(
+                height: Theme.of(context).textTheme.display1.fontSize * 1.1,
+              ),
+              child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     Container(
@@ -270,14 +282,14 @@ class _LoungeEditScreenState extends State<LoungeEditScreen> {
                       ),
                     )),
                     Container(
-                      padding:  const EdgeInsets.all(10),
+                        padding: const EdgeInsets.all(10),
                         color: pinkLight.withOpacity(0.4),
                         child: GestureDetector(
                             child: RichText(
                                 text: const TextSpan(
                                     text: 'UPGRADE FOR MORE!',
                                     style: TextStyle(
-                                        color: Colors.black87,
+                                        color: pink,
                                         fontSize: 15,
                                         fontWeight: FontWeight.w500))))),
                     // Container(
@@ -289,63 +301,55 @@ class _LoungeEditScreenState extends State<LoungeEditScreen> {
                     //   colorText: Colors.black87,
                     //   width: 180,
                     // ))
-                  ],
-                )),
-            Slider(
-                value: _limit,
-                label: _limit.toInt().toString(),
-                min: 2,
-                max: 5,
-                activeColor: orange,
-                inactiveColor: orangeLight,
-                divisions: 3,
-                onChanged: (double value) {
-                  setState(() {
-                    _limit = value;
-                  });
-                })
-          ],
-        ));
+                  ])),
+          Slider(
+              value: _limit,
+              label: _limit.toInt().toString(),
+              min: 2,
+              max: 5,
+              activeColor: orange,
+              inactiveColor: orangeLight,
+              divisions: 3,
+              onChanged: (double value) {
+                setState(() {
+                  _limit = value;
+                });
+              })
+        ]));
   }
 
   Widget _buildLoungeDescription(BuildContext context, AppState state) {
     return Container(
         padding: const EdgeInsets.all(15),
-        child: Column(
-          children: <Widget>[
-            Container(
-                constraints: BoxConstraints.expand(
-                  height: Theme.of(context).textTheme.display1.fontSize * 1.1,
-                ),
-                child: RichText(
+        child: Column(children: <Widget>[
+          Container(
+              constraints: BoxConstraints.expand(
+                height: Theme.of(context).textTheme.display1.fontSize * 1.1,
+              ),
+              child: RichText(
                   text: const TextSpan(
-                    text: 'LOUNGE DESCRIPTION',
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 15,
-                        fontWeight: FontWeight.w700),
-                  ),
-                )),
-            Container(
-                constraints: BoxConstraints.expand(
-                  height:
-                      Theme.of(context).textTheme.display1.fontSize * 1.1 + 100,
-                ),
-                padding:
-                    const EdgeInsets.only(left: 10.0, top: 1.0, right: 10.0),
-                color: orangeLight,
-                child: TextField(
+                      text: 'LOUNGE DESCRIPTION',
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 15,
+                          fontWeight: FontWeight.w700)))),
+          Container(
+              constraints: BoxConstraints.expand(
+                height:
+                    Theme.of(context).textTheme.display1.fontSize * 1.1 + 100,
+              ),
+              padding: const EdgeInsets.only(left: 10.0, top: 1.0, right: 10.0),
+              color: orangeLight,
+              child: TextField(
                   controller: _descriptionController,
                   keyboardType: TextInputType.text,
                   inputFormatters: <TextInputFormatter>[
                     LengthLimitingTextInputFormatter(100),
                   ],
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                       border: InputBorder.none,
-                      hintText: 'Brief description of your group.'),
-                )),
-          ],
-        ));
+                      hintText: 'Brief description of your group.')))
+        ]));
   }
 
   @override
@@ -357,56 +361,49 @@ class _LoungeEditScreenState extends State<LoungeEditScreen> {
         Widget child) {
       return View(
           title: 'EDIT LOUNGE',
-          child: Container(
-              child: Column(children: <Widget>[
+          child: Column(children: <Widget>[
             Expanded(
                 child: Container(
                     child: Container(
                         child: Column(children: <Widget>[
-              _buildHeader(context, state),
+              _buildHeader(state, dispatch),
               Container(color: white, child: const Divider()),
               Expanded(
-                  flex: 6,
-                  child: Container(
-                      color: white,
-                      child: Scrollbar(
-                          child: ListView(
-                        controller: _scrollController,
-                        children: <Widget>[
-                          Column(
-                            children: <Widget>[
-                              _buildMembers(context, state),
-                              _buildLoungeMaxMemberCount(context, state),
-                              _buildLoungeDescription(context, state),
-                              Container(child: _meetupWidget)
-                            ],
-                          )
-                        ],
-                      )))),
+                  flex: 8,
+                  child: Scrollbar(
+                      child: ListView(
+                          controller: _scrollController,
+                          children: <Widget>[
+                        Column(children: <Widget>[
+                          _buildMembers(context, state),
+                          _buildLoungeMaxMemberCount(context, state),
+                          _buildLoungeDescription(context, state),
+                          _meetupWidget
+                        ])
+                      ]))),
               Expanded(
                   child: Container(
                       child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
                     Button(
-                      text: 'SAVE CHANGES',
-                      onPressed: () {
-                        final Map<String, dynamic> _meetupEdits =
-                            _meetupWidget.saveMeetupOptions();
-                        dispatch(LoungeEditMeetupAction(
-                            lounge,
-                            _meetupEdits['date'] as DateTime,
-                            _meetupEdits['location'] as GeoPoint,
-                            _meetupEdits['notes'] as String));
-                        dispatch(LoungeEditDetailsAction(lounge, _visibility,
-                            _limit.toInt(), _descriptionController.text));
-                        dispatch(NavigateAction<AppState>.pop());
-                      },
-                      paddingLeft: 5,
-                    ),
+                        text: 'SAVE CHANGES',
+                        onPressed: () {
+                          final Map<String, dynamic> _meetupEdits =
+                              _meetupWidget.saveMeetupOptions();
+                          dispatch(LoungeEditMeetupAction(
+                              lounge,
+                              _meetupEdits['date'] as DateTime,
+                              _meetupEdits['location'] as GeoPoint,
+                              _meetupEdits['notes'] as String));
+                          dispatch(LoungeEditDetailsAction(lounge, _visibility,
+                              _limit.toInt(), _descriptionController.text));
+                          dispatch(NavigateAction<AppState>.pop());
+                        },
+                        paddingLeft: 5)
                   ])))
-            ])))),
-          ])));
+            ]))))
+          ]));
     });
   }
 }

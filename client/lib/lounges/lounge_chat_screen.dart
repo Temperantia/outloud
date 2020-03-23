@@ -14,6 +14,7 @@ import 'package:inclusive/widgets/cached_image.dart';
 import 'package:inclusive/widgets/circular_image.dart';
 import 'package:inclusive/widgets/view.dart';
 import 'package:intl/intl.dart' as date_formater;
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:provider_for_redux/provider_for_redux.dart';
 
 class LoungeChatScreen extends StatefulWidget {
@@ -45,7 +46,7 @@ class _LoungeChatScreenState extends State<LoungeChatScreen> {
             Flexible(
                 child: Stack(alignment: Alignment.center, children: <Widget>[
               Container(
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                       border:
                           Border(left: BorderSide(color: orange, width: 5.0))),
                   child: CachedImage(
@@ -100,24 +101,25 @@ class _LoungeChatScreenState extends State<LoungeChatScreen> {
                             TextSpan(
                                 text: widget.lounge.event.name,
                                 style: TextStyle(
-                                    color: Colors.greenAccent,
+                                    color: orange,
                                     fontSize: 14,
                                     fontWeight: FontWeight.w800))
                           ])))
                     ]))
                   ]))),
-          Flexible(
-              flex: 1,
-              child: Container(
-                  child: state.userState.user.id == owner.id
-                      ? IconButton(
-                          icon: Icon(Icons.edit),
-                          onPressed: () {
-                            dispatch(redux.NavigateAction<AppState>.pushNamed(
-                                LoungeEditScreen.id,
-                                arguments: widget.lounge));
-                          })
-                      : IconButton(icon: Icon(Icons.block), onPressed: null)))
+          if (state.userState.user.id == owner.id)
+            Flexible(
+                child: GestureDetector(
+                    onTap: () => dispatch(
+                        redux.NavigateAction<AppState>.pushNamed(
+                            LoungeEditScreen.id,
+                            arguments: widget.lounge)),
+                    child: Column(children: <Widget>[
+                      Icon(MdiIcons.calendarEdit, color: orange),
+                      const Text('EDIT',
+                          style: TextStyle(
+                              color: orange, fontWeight: FontWeight.bold))
+                    ])))
         ]));
   }
 
@@ -233,16 +235,40 @@ class _LoungeChatScreenState extends State<LoungeChatScreen> {
               const Divider(),
               Expanded(child: Container(child: _buildChat(chat)))
             ]))),
-            Row(children: <Widget>[
-              Expanded(child: TextField(controller: _messageController)),
-              GestureDetector(
-                  onTap: () {
-                    addMessage(widget.lounge.id, state.loginState.id,
-                        _messageController.text);
-                    _messageController.clear();
-                  },
-                  child: Icon(Icons.send, color: white))
-            ])
+            Container(
+                margin: const EdgeInsets.all(10.0),
+                decoration: BoxDecoration(
+                    color: orangeLight.withOpacity(0.5),
+                    borderRadius: BorderRadius.circular(5.0)),
+                child: Row(children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: GestureDetector(
+                        onTap: () {}, child: Icon(Icons.add, color: white)),
+                  ),
+                  Expanded(
+                      child: TextField(
+                          controller: _messageController,
+                          decoration: const InputDecoration.collapsed(
+                              hintText: 'Message lounge',
+                              hintStyle: TextStyle(color: white)))),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: GestureDetector(
+                        onTap: () {},
+                        child: Icon(MdiIcons.stickerEmoji, color: white)),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: GestureDetector(
+                        onTap: () {
+                          addMessage(widget.lounge.id, state.loginState.id,
+                              _messageController.text);
+                          _messageController.clear();
+                        },
+                        child: Icon(Icons.send, color: white)),
+                  )
+                ]))
           ])));
     });
   }

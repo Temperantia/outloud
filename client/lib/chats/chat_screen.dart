@@ -134,7 +134,7 @@ class _ChatScreenState extends State<ChatScreen> {
   Widget _buildInput(String userId) {
     return Row(children: <Widget>[
       Flexible(
-          flex: 6,
+          flex: 8,
           child: Padding(
               padding: const EdgeInsets.all(10.0),
               child: TextField(

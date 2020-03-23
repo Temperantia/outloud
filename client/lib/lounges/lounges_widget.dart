@@ -12,7 +12,6 @@ import 'package:inclusive/lounges/lounges_screen.dart';
 import 'package:inclusive/theme.dart';
 import 'package:inclusive/widgets/button.dart';
 import 'package:inclusive/widgets/cached_image.dart';
-import 'package:inclusive/widgets/circular_image.dart';
 import 'package:inclusive/widgets/loading.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:provider_for_redux/provider_for_redux.dart';
@@ -28,7 +27,7 @@ class _LoungesWidgetState extends State<LoungesWidget>
   bool get wantKeepAlive => true;
 
   Widget _buildLounges(
-    AppState state,
+      AppState state,
       List<Lounge> lounges,
       Map<String, List<Lounge>> userEventLounges,
       void Function(redux.ReduxAction<AppState>) dispatch,
@@ -44,9 +43,8 @@ class _LoungesWidgetState extends State<LoungesWidget>
                     ])));
   }
 
-  Widget _buildInfoLoungeLayout(AppState state,
-      Lounge lounge, void Function(redux.ReduxAction<AppState>) dispatch) {
-    // TODO(robin): bring the state user here to compare if user.id == owner.id so you write "Your Lounge" instead
+  Widget _buildInfoLoungeLayout(AppState state, Lounge lounge,
+      void Function(redux.ReduxAction<AppState>) dispatch) {
     final User owner =
         lounge.members.firstWhere((User member) => member.id == lounge.owner);
     return Column(
@@ -64,8 +62,8 @@ class _LoungesWidgetState extends State<LoungesWidget>
                 child: RichText(
                     text: TextSpan(
                   text: state.userState.user.id == owner.id
-                                        ? 'Your Lounge'
-                                        : owner.name + '\'s Lounge',
+                      ? 'Your Lounge'
+                      : owner.name + '\'s Lounge',
                   style: const TextStyle(
                       color: Colors.black,
                       fontSize: 13,
@@ -103,7 +101,7 @@ class _LoungesWidgetState extends State<LoungesWidget>
                     // TODO(robin): go to event listing gesture detector
                     Image.asset('images/arrowForward.png',
                         width: 10.0, height: 10.0),
-                    Text(' GO TO EVENT LISTING',
+                    const Text(' GO TO EVENT LISTING',
                         style: TextStyle(
                             color: orange, fontWeight: FontWeight.bold))
                   ])))
@@ -120,7 +118,7 @@ class _LoungesWidgetState extends State<LoungesWidget>
             Flexible(
                 child: Stack(alignment: Alignment.center, children: <Widget>[
               Container(
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                       border:
                           Border(left: BorderSide(color: orange, width: 7.0))),
                   child: CachedImage(
@@ -190,7 +188,7 @@ class _LoungesWidgetState extends State<LoungesWidget>
             Flexible(
                 child: Stack(alignment: Alignment.center, children: <Widget>[
               Container(
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                       border:
                           Border(left: BorderSide(color: orange, width: 7.0))),
                   child: CachedImage(
@@ -214,10 +212,10 @@ class _LoungesWidgetState extends State<LoungesWidget>
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         Text(stateMessage,
-                            style: TextStyle(
+                            style: const TextStyle(
                                 fontWeight: FontWeight.bold, fontSize: 13)),
                         Text(event.name,
-                            style: TextStyle(
+                            style: const TextStyle(
                                 color: orange,
                                 fontWeight: FontWeight.bold,
                                 fontSize: 13)),
@@ -233,7 +231,7 @@ class _LoungesWidgetState extends State<LoungesWidget>
                               Expanded(
                                   child: Text(
                                       ' FIND LOUNGES (${lounges == null ? '0' : lounges.length} AVAILABLE)',
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                           color: orange,
                                           fontWeight: FontWeight.bold,
                                           fontSize: 14)))
@@ -277,8 +275,8 @@ class _LoungesWidgetState extends State<LoungesWidget>
                 child: TabBarView(
                     physics: const NeverScrollableScrollPhysics(),
                     children: <Widget>[
-                      _buildLounges(state,
-                          userLounges, userEventLounges, dispatch, themeStyle),
+                      _buildLounges(state, userLounges, userEventLounges,
+                          dispatch, themeStyle),
                       _buildEvents(userEvents, userEventStates,
                           userEventLounges, dispatch, themeStyle),
                     ])),

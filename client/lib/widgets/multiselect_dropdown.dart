@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:inclusive/theme.dart';
 
 class MyMultiCheckBoxesContent extends StatefulWidget {
   const MyMultiCheckBoxesContent({
@@ -28,6 +29,7 @@ class _MyMultiCheckBoxesContent extends State<MyMultiCheckBoxesContent> {
                 itemCount: widget.checkboxes.length,
                 itemBuilder: (BuildContext context, int index) => Container(
                       child: CheckboxListTile(
+                          checkColor: orange,
                           title: Text(widget.checkboxes[index].name),
                           value: widget.checkboxes[index].checked,
                           onChanged: (bool choosen) {

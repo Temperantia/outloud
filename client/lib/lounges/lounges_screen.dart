@@ -9,7 +9,6 @@ import 'package:business/lounges/actions/lounge_leave_action.dart';
 
 import 'package:inclusive/theme.dart';
 import 'package:inclusive/widgets/cached_image.dart';
-import 'package:inclusive/widgets/circular_image.dart';
 import 'package:inclusive/widgets/view.dart';
 import 'package:provider_for_redux/provider_for_redux.dart';
 
@@ -25,12 +24,11 @@ class LoungesScreen extends StatelessWidget {
       void Function(redux.ReduxAction<AppState>) dispatch, AppState state) {
     if (lounge.members.isEmpty) {
       print('omg c vide ? ');
-      
     } else {
       print('non ya  :' + lounge.members.toString());
     }
     // state.userState.eventLounges[event.id].
-    final User owner = 
+    final User owner =
         lounge.members.firstWhere((User member) => member.id == lounge.owner);
     final int availableSlots = lounge.memberLimit - lounge.members.length;
     final String s = availableSlots <= 1 ? '' : 's';
@@ -84,7 +82,7 @@ class LoungesScreen extends StatelessWidget {
                                         .contains(state.userState.user.id)
                                     ? '< LEAVE'
                                     : ' > JOIN ', // TODO(me): add arrow icon
-                                style: TextStyle(
+                                style: const TextStyle(
                                     color: orange,
                                     fontSize: 15,
                                     fontWeight: FontWeight.w700))))),
@@ -138,7 +136,7 @@ class LoungesScreen extends StatelessWidget {
             if (event.pic.isNotEmpty)
               Flexible(
                   child: Container(
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                           border: Border(
                               left: BorderSide(color: orange, width: 3.0))),
                       child: CachedImage(event.pic,
@@ -148,14 +146,14 @@ class LoungesScreen extends StatelessWidget {
                               bottomRight: Radius.circular(5.0),
                               topRight: Radius.circular(5.0))))),
             Expanded(
-                flex: 6,
+                flex: 8,
                 child: Container(
                     padding: const EdgeInsets.only(left: 10),
                     child: RichText(
                         textAlign: TextAlign.justify,
                         text: TextSpan(
                             text: event.name,
-                            style: TextStyle(
+                            style: const TextStyle(
                                 color: orange,
                                 fontSize: 12,
                                 fontWeight: FontWeight.w700))))),
@@ -165,6 +163,9 @@ class LoungesScreen extends StatelessWidget {
 
   Widget _buildListLounges(List<Lounge> lounges,
       void Function(redux.ReduxAction<AppState>) dispatch, AppState state) {
+    if (lounges == null) {
+      return Container(); // TODO(robin): handle no lounge @anthony
+    }
     return Container(
         child: Container(
             padding: const EdgeInsets.only(left: 10, right: 30),
@@ -185,52 +186,15 @@ class LoungesScreen extends StatelessWidget {
       final List<Lounge> lounges = state.userState.eventLounges[event.id];
       return View(
           title: 'BROWSING LOUNGES',
-          child: Container(
-              constraints: const BoxConstraints.expand(
-                  // width: MediaQuery.of(context).size.width
-                  ),
-              child: Column(children: <Widget>[
-                Expanded(
-                    child: Container(
-                        child: Column(children: <Widget>[
-                  _buildHeader(context),
-                  const Divider(),
-                  Expanded(
-                    child: _buildListLounges(lounges, dispatch, state),
-                  ),
-                ]))),
-              ])
-// TODO(robin): remove this dead code please
-              // child: Column(
-              //   children: <Widget>[
-              //     const Text('FOR THE EVENT'),
-              //     Row(
-              //       children: <Widget>[
-              //         if (event.pic.isNotEmpty)
-              //           Expanded(
-              //               flex: 1,
-              //               child: CachedImage(
-              //                 event.pic,
-              //               )),
-              //         Expanded(
-              //           flex: 6,
-              //           child: Text(event.name),
-              //         )
-              //       ],
-              //     ),
-              //     const Divider(),
-              //     Container(
-              //         // width: 600,
-              //         child: Container(
-              //             color: white,
-              //             child: ListView.builder(
-              //               itemCount: lounges.length,
-              //               itemBuilder: (BuildContext context, int index) =>
-              //                   _buildLounge(lounges[index]),
-              //             ))),
-              //   ],
-              // )
-              ));
+          child: Column(children: <Widget>[
+            Expanded(
+                child: Container(
+                    child: Column(children: <Widget>[
+              _buildHeader(context),
+              const Divider(),
+              Expanded(child: _buildListLounges(lounges, dispatch, state)),
+            ])))
+          ]));
     });
   }
 }

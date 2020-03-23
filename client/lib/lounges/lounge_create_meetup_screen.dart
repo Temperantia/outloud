@@ -618,9 +618,9 @@ class _LoungeCreateMeetupScreenState extends State<LoungeCreateMeetupScreen> {
                       controller: _notesTextController,
                       focusNode: _focusNodeNotes,
                       keyboardType: TextInputType.text,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                           border: InputBorder.none,
-                          hintStyle: const TextStyle(color: orange),
+                          hintStyle: TextStyle(color: orange),
                           hintMaxLines: 2,
                           hintText:
                               'Notes for your group to easily find each other.')))),

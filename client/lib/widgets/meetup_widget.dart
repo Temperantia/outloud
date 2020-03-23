@@ -121,8 +121,9 @@ class _LoungeMeetupWidgetState extends State<LoungeMeetupWidget> {
 
   Future<String> _getAdressFromCoordinates(
       double latitude, double longitude) async {
-    final List<Placemark> placemark =
-        await Geolocator().placemarkFromCoordinates(latitude, longitude);
+    final List<Placemark> placemark = await Geolocator()
+        .placemarkFromCoordinates(
+            latitude, longitude); // TODO(robin): exception here
     String _address = '';
     if (placemark.isNotEmpty) {
       final Placemark _place = placemark.first;
@@ -647,7 +648,7 @@ class _LoungeMeetupWidgetState extends State<LoungeMeetupWidget> {
                   controller: _notesTextController,
                   focusNode: _focusNodeNotes,
                   keyboardType: TextInputType.text,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                       border: InputBorder.none,
                       hintText: 'Notes for your group...'),
                 )))

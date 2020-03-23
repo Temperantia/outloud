@@ -10,11 +10,13 @@ class Event extends Entity {
     String description = '',
     GeoPoint location,
     List<Interest> interests = const <Interest>[],
-    this.date,
-    this.owner = '',
+    this.dateStart,
+    this.dateEnd,
     this.adminIds = const <String>[],
     this.memberIds = const <String>[],
+    this.likes = const <String>[],
     this.pic = '',
+    this.price = '',
   }) : super(
           id: id,
           name: name,
@@ -24,16 +26,23 @@ class Event extends Entity {
         );
 
   Event.fromMap(Map<String, dynamic> snapshot, String id)
-      : date = snapshot['date'] == null
+      : dateStart = snapshot['dateStart'] == null
             ? null
-            : (snapshot['date'] as Timestamp).toDate(),
+            : (snapshot['dateStart'] as Timestamp).toDate(),
+        dateEnd = snapshot['dateEnd'] == null
+            ? null
+            : (snapshot['dateEnd'] as Timestamp).toDate(),
         adminIds = snapshot['adminIds'] == null
             ? <String>[]
             : snapshot['adminIds'].cast<String>() as List<String>,
         memberIds = snapshot['memberIds'] == null
             ? <String>[]
             : snapshot['memberIds'].cast<String>() as List<String>,
+        likes = snapshot['likes'] == null
+            ? <String>[]
+            : snapshot['likes'].cast<String>() as List<String>,
         pic = snapshot['pic'] as String ?? '',
+        price = snapshot['price'] as String ?? '',
         super(
           id: id ?? '',
           name: snapshot['name'] as String ?? '',
@@ -48,11 +57,15 @@ class Event extends Entity {
                   .toList(),
         );
 
-  DateTime date;
-  String owner;
+  DateTime dateStart;
+  DateTime dateEnd;
   List<String> adminIds;
   List<String> memberIds;
+  List<String> likes;
   String pic;
+  String price;
+
+  double distance;
 
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
@@ -62,11 +75,13 @@ class Event extends Entity {
       'interests': interests
           .map<Map<String, String>>((Interest interest) => interest.toJson())
           .toList(),
-      'date': date == null ? null : Timestamp.fromDate(date),
-      'owner': owner,
+      'dateStart': dateStart == null ? null : Timestamp.fromDate(dateStart),
+      'dateEnd': dateEnd == null ? null : Timestamp.fromDate(dateEnd),
       'adminIds': adminIds,
       'memberIds': memberIds,
+      'likes': likes,
       'pic': pic,
+      'price': price,
     };
   }
 

@@ -35,8 +35,8 @@ class _EventCreateScreenState extends State<EventCreateScreen> {
       void Function(redux.ReduxAction<AppState>) dispatch) async {
     final Event event = await createEvent()
       ..name = _name.text
-      ..description = _description.text
-      ..date = DateTime.now();
+      ..description = _description.text;
+    //    ..date = DateTime.now();
     //final String url = await saveImage(_picture, event.id);
     //event..pic = url;
     updateEvent(event);
@@ -92,18 +92,14 @@ class _EventCreateScreenState extends State<EventCreateScreen> {
                 Container(
                     //width: MediaQuery.of(context).size.width * 0.3,
                     child: Image.asset(
-                  'images/default-user-profile-image-png-7.png',
-                ))
+                        'images/default-user-profile-image-png-7.png'))
               else
                 Image.memory(_picture),
               GestureDetector(
                   onTap: () => _addPicture(),
                   child: Container(child: Icon(Icons.add)))
             ]),
-            Button(
-              text: 'Create',
-              onPressed: () => onSave(dispatch),
-            )
+            Button(text: 'Create', onPressed: () => onSave(dispatch))
           ]));
     });
   }

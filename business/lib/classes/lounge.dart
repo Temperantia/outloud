@@ -23,7 +23,8 @@ class Lounge {
   }) {
     members = <User>[];
     if (eventRef != null)
-      eventRef.snapshots().listen((DocumentSnapshot doc) =>
+      eventRef.snapshots().listen((DocumentSnapshot
+              doc) => // TODO(me): this probably should get transferred in actions
           event = Event.fromMap(doc.data, doc.documentID));
     if (memberRefs != null) {
       for (final DocumentReference memberRef in memberRefs) {

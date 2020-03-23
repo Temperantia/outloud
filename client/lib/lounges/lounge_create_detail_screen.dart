@@ -35,105 +35,69 @@ class _LoungeCreateDetailScreenState extends State<LoungeCreateDetailScreen> {
   Widget _buildLoungeVisibility(AppState state) {
     return Container(
         padding: const EdgeInsets.all(15),
-        child: Column(
-          children: <Widget>[
-            Container(
-                constraints: BoxConstraints.expand(
-                  height: Theme.of(context).textTheme.display1.fontSize * 1.1,
-                ),
-                child: RichText(
+        child: Column(children: <Widget>[
+          Container(
+              constraints: BoxConstraints.expand(
+                height: Theme.of(context).textTheme.display1.fontSize * 1.1,
+              ),
+              child: RichText(
                   text: const TextSpan(
-                    text: 'LOUNGE VISIBILITY',
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 15,
-                        fontWeight: FontWeight.w700),
-                  ),
-                )),
-            Row(
-              children: <Widget>[
-                Radio<LoungeVisibility>(
-                  activeColor: primary(state.theme),
-                  groupValue: _visibility,
-                  value: LoungeVisibility.Public,
-                  onChanged: (LoungeVisibility visibility) =>
-                      _visibility = visibility,
-                ),
-                Text('PUBLIC', style: textStyleCardTitle(state.theme))
-              ],
+                text: 'LOUNGE VISIBILITY',
+                style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 15,
+                    fontWeight: FontWeight.w700),
+              ))),
+          Row(children: <Widget>[
+            Radio<LoungeVisibility>(
+              activeColor: primary(state.theme),
+              groupValue: _visibility,
+              value: LoungeVisibility.Public,
+              onChanged: (LoungeVisibility visibility) =>
+                  _visibility = visibility,
             ),
-          ],
-        ));
+            Text('PUBLIC', style: textStyleCardTitle(state.theme))
+          ])
+        ]));
   }
 
   Widget _buildLoungeMaxMemberCount(AppState state) {
     return Container(
         padding: const EdgeInsets.all(15),
-        child: Column(
-          children: <Widget>[
-            Container(
-                constraints: BoxConstraints.expand(
-                  height: Theme.of(context).textTheme.display1.fontSize * 1.1,
-                ),
-                child: RichText(
+        child: Column(children: <Widget>[
+          Container(
+              constraints: BoxConstraints.expand(
+                height: Theme.of(context).textTheme.display1.fontSize * 1.1,
+              ),
+              child: RichText(
                   text: const TextSpan(
-                    text: 'MAX MEMBER COUNT',
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 15,
-                        fontWeight: FontWeight.w700),
-                  ),
-                )),
-            Stack(alignment: Alignment.center, children: <Widget>[
-              Container(
-                  width: 400.0,
-                  height: 5.0,
-                  decoration: BoxDecoration(
-                      color: orangeLight,
-                      borderRadius: BorderRadius.circular(180.0))),
-              Align(
-                  alignment: Alignment.centerRight,
-                  child: Container(
-                      margin: const EdgeInsets.fromLTRB(50.0, 0.0, 00.0, 0.0),
-                      child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            for (int memberCount = 2;
-                                memberCount <= 5;
-                                memberCount++)
-                              if (memberCount == _limit)
-                                Stack(
-                                    alignment: Alignment.center,
-                                    children: <Widget>[
-                                      Container(
-                                          width: 30,
-                                          height: 30,
-                                          decoration: BoxDecoration(
-                                              color: orangeAlt,
-                                              borderRadius:
-                                                  BorderRadius.circular(180.0)),
-                                          child: Center(
-                                              child: Text(
-                                            memberCount.toString(),
-                                            textAlign: TextAlign.center,
-                                            style: const TextStyle(
-                                                color: white,
-                                                fontWeight: FontWeight.bold),
-                                          ))),
-                                      Container(
-                                          width: 50,
-                                          height: 50,
-                                          decoration: BoxDecoration(
-                                              color: pinkLight.withOpacity(0.7),
-                                              borderRadius:
-                                                  BorderRadius.circular(
-                                                      180.0))),
-                                    ])
-                              else
-                                GestureDetector(
-                                    onTap: () => setState(
-                                        () => _limit = memberCount.toDouble()),
-                                    child: Container(
+                      text: 'MAX MEMBER COUNT',
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 15,
+                          fontWeight: FontWeight.w700)))),
+          Stack(alignment: Alignment.center, children: <Widget>[
+            Container(
+                width: 400.0,
+                height: 5.0,
+                decoration: BoxDecoration(
+                    color: orangeLight,
+                    borderRadius: BorderRadius.circular(180.0))),
+            Align(
+                alignment: Alignment.centerRight,
+                child: Container(
+                    margin: const EdgeInsets.only(left: 50.0),
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          for (int memberCount = 2;
+                              memberCount <= 5;
+                              memberCount++)
+                            if (memberCount == _limit)
+                              Stack(
+                                  alignment: Alignment.center,
+                                  children: <Widget>[
+                                    Container(
                                         width: 30,
                                         height: 30,
                                         decoration: BoxDecoration(
@@ -147,11 +111,36 @@ class _LoungeCreateDetailScreenState extends State<LoungeCreateDetailScreen> {
                                           style: const TextStyle(
                                               color: white,
                                               fontWeight: FontWeight.bold),
-                                        )))),
-                          ]))),
-            ]),
-          ],
-        ));
+                                        ))),
+                                    Container(
+                                        width: 50,
+                                        height: 50,
+                                        decoration: BoxDecoration(
+                                            color: pinkLight.withOpacity(0.7),
+                                            borderRadius:
+                                                BorderRadius.circular(180.0)))
+                                  ])
+                            else
+                              GestureDetector(
+                                  onTap: () => setState(
+                                      () => _limit = memberCount.toDouble()),
+                                  child: Container(
+                                      width: 30,
+                                      height: 30,
+                                      decoration: BoxDecoration(
+                                          color: orangeAlt,
+                                          borderRadius:
+                                              BorderRadius.circular(180.0)),
+                                      child: Center(
+                                          child: Text(memberCount.toString(),
+                                              textAlign: TextAlign.center,
+                                              style: const TextStyle(
+                                                  color: white,
+                                                  fontWeight:
+                                                      FontWeight.bold)))))
+                        ])))
+          ])
+        ]));
   }
 
   Widget _buildLoungeUpgradeSection(AppState state) {
@@ -162,21 +151,16 @@ class _LoungeCreateDetailScreenState extends State<LoungeCreateDetailScreen> {
           Container(
               padding: const EdgeInsets.all(10.0),
               child: RichText(
-                textAlign: TextAlign.center,
-                text: const TextSpan(
-                  text:
-                      'Upgrade your lounge for more members, bigger reach, and featured spolight',
-                  style: TextStyle(
-                      color: pinkBright,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w400),
-                ),
-              )),
+                  textAlign: TextAlign.center,
+                  text: const TextSpan(
+                      text:
+                          'Upgrade your lounge for more members, bigger reach, and featured spolight',
+                      style: TextStyle(
+                          color: pinkBright,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w400)))),
           const Button(
-            text: 'UPGRADE   >',
-            width: 300,
-            backgroundColor: pinkBright,
-          ),
+              text: 'UPGRADE   >', width: 300, backgroundColor: pinkBright)
         ]));
   }
 
@@ -208,10 +192,10 @@ class _LoungeCreateDetailScreenState extends State<LoungeCreateDetailScreen> {
                   inputFormatters: <TextInputFormatter>[
                     LengthLimitingTextInputFormatter(100),
                   ],
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                       hintStyle: TextStyle(color: orange),
                       border: InputBorder.none,
-                      hintText: 'Brief description of your group.'))),
+                      hintText: 'Brief description of your group.')))
         ]));
   }
 
@@ -227,49 +211,44 @@ class _LoungeCreateDetailScreenState extends State<LoungeCreateDetailScreen> {
           onBack: () => Navigator.popUntil(
               context, (Route<dynamic> route) => route.isFirst),
           backIcon: Icons.close,
-          child: Column(
-            children: <Widget>[
-              Expanded(
-                  flex: 6,
-                  child: Container(
-                      child: Scrollbar(
-                          controller: _scrollController,
-                          child: ListView(
-                            children: <Widget>[
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  _buildLoungeVisibility(state),
-                                  _buildLoungeMaxMemberCount(state),
-                                  _buildLoungeUpgradeSection(state),
-                                  _buildLoungeDescription(state)
-                                ],
-                              )
-                            ],
-                          )))),
-              Expanded(
-                  child: Container(
-                      child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                    Button(
-                        text: 'BACK',
-                        onPressed: () {
-                          dispatch(NavigateAction<AppState>.pop());
-                        },
-                        paddingRight: 5),
-                    Button(
-                        text: 'NEXT',
-                        onPressed: () {
-                          dispatch(LoungeCreateDetailAction(_visibility,
-                              _limit.toInt(), _descriptionController.text));
-                          dispatch(NavigateAction<AppState>.pushNamed(
-                              LoungeCreateMeetupScreen.id));
-                        },
-                        paddingLeft: 5),
-                  ])))
-            ],
-          ));
+          child: Column(children: <Widget>[
+            Expanded(
+                flex: 8,
+                child: Container(
+                    child: Scrollbar(
+                        controller: _scrollController,
+                        child: ListView(children: <Widget>[
+                          Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                _buildLoungeVisibility(state),
+                                _buildLoungeMaxMemberCount(state),
+                                _buildLoungeUpgradeSection(state),
+                                _buildLoungeDescription(state)
+                              ])
+                        ])))),
+            Expanded(
+                child: Container(
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                  Button(
+                      text: 'BACK',
+                      onPressed: () {
+                        dispatch(NavigateAction<AppState>.pop());
+                      },
+                      paddingRight: 5),
+                  Button(
+                      text: 'NEXT',
+                      onPressed: () {
+                        dispatch(LoungeCreateDetailAction(_visibility,
+                            _limit.toInt(), _descriptionController.text));
+                        dispatch(NavigateAction<AppState>.pushNamed(
+                            LoungeCreateMeetupScreen.id));
+                      },
+                      paddingLeft: 5)
+                ])))
+          ]));
     });
   }
 }

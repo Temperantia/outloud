@@ -3,6 +3,9 @@ import 'dart:async';
 import 'package:async_redux/async_redux.dart' as redux;
 import 'package:business/app_state.dart';
 import 'package:business/classes/event.dart';
+import 'package:business/classes/interest.dart';
+import 'package:business/classes/lounge.dart';
+import 'package:business/classes/user_event_state.dart';
 import 'package:business/events/actions/events_get_action.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
@@ -10,12 +13,15 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:inclusive/events/event_screen.dart';
+import 'package:inclusive/lounges/lounge_chat_screen.dart';
+import 'package:inclusive/lounges/lounges_screen.dart';
 import 'package:inclusive/theme.dart';
 import 'package:inclusive/widgets/button.dart';
 import 'package:inclusive/widgets/cached_image.dart';
 import 'package:inclusive/widgets/loading.dart';
 import 'package:inclusive/widgets/multiselect_dropdown.dart';
 import 'package:intl/intl.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:provider_for_redux/provider_for_redux.dart';
 
 class EventsWidget extends StatefulWidget {
@@ -76,41 +82,11 @@ class _EventsWidgetState extends State<EventsWidget>
   @override
   bool get wantKeepAlive => true;
 
-/*  Widget _buildMap() {
-    return Container(
-        constraints: BoxConstraints.expand(
-          height: Theme.of(context).textTheme.display1.fontSize * 1.1 +
-              _googleMapSize,
-        ),
-        decoration: const BoxDecoration(color: white),
-        child: GoogleMap(
-            onTap: (LatLng latlang) {
-              setState(() {
-                _googleMapSize = 400.0;
-              });
-            },
-            onCameraMoveStarted: () {
-              setState(() {
-                _googleMapSize = 400.0;
-              });
-            },
-            mapType: MapType.normal,
-            zoomGesturesEnabled: true,
-            myLocationButtonEnabled: true,
-            myLocationEnabled: true,
-            gestureRecognizers: <Factory<OneSequenceGestureRecognizer>>{
-              Factory<OneSequenceGestureRecognizer>(
-                () => EagerGestureRecognizer(),
-              )
-            },
-            initialCameraPosition: _intialMapLocation,
-            markers: _markers.values.toSet(),
-            onMapCreated: (GoogleMapController controller) {
-              if (!_controller.isCompleted) {
-                _controller.complete(controller);
-              }
-            }));
-  } */
+  @override
+  void dispose() {
+    // TODO(me): dispose time
+    super.dispose();
+  }
 
   Widget _buildMapView() {
     return Container(
@@ -155,94 +131,88 @@ class _EventsWidgetState extends State<EventsWidget>
             height: Theme.of(context).textTheme.display1.fontSize * 1.1),
         padding: const EdgeInsets.only(bottom: 10),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: <Widget>[
-            Container(
-                // padding: const EdgeInsets.all(5),
-                child: CompositedTransformTarget(
-                    link: _interestLink,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(color: black, width: 1),
-                      ),
-                      key: _interestFilterKey,
-                      child: FlatButton(
-                        child: Row(
-                          children: <Widget>[
-                            const Text('Interests'),
-                            Icon(Icons.arrow_drop_down)
-                          ],
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
+              Container(
+                  // padding: const EdgeInsets.all(5),
+                  child: CompositedTransformTarget(
+                      link: _interestLink,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(color: black, width: 1),
                         ),
-                        onPressed: () {
-                          if (_checkBoxDisplayed) {
-                            _interestsCheckBox.remove();
-                            setState(() {
-                              _checkBoxDisplayed = false;
-                            });
-                          } else {
-                            setState(() {
-                              _flexFactorListEvent = 5;
-                              _flexFactorMap = 1;
-                              _interestsCheckBox = _createInterestsCheckBox();
-                              _checkBoxDisplayed = true;
-                            });
-                            Overlay.of(context).insert(_interestsCheckBox);
-                          }
-                        },
-                      ),
-                    ))),
-            Container(
-                decoration: BoxDecoration(
-                  border: Border.all(color: black, width: 1),
-                ),
-                child: DropdownButton<String>(
-                    hint: const Text('Set distance'),
-                    underline: Container(),
-                    value: _distanceValue,
-                    items: <String>[
-                      ' < 1 km',
-                      ' < 2 km',
-                      ' < 3 km',
-                      ' < 5 km',
-                      ' < 10km'
-                    ].map<DropdownMenuItem<String>>((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(value),
-                      );
-                    }).toList(),
-                    onChanged: (String newValue) {
-                      setState(() {
-                        _distanceValue = newValue;
-                      });
-                    })),
-            Container(
-                decoration: BoxDecoration(
-                  border: Border.all(color: black, width: 1),
-                ),
-                child: DropdownButton<String>(
-                    hint: const Text('Set time'),
-                    underline: Container(),
-                    value: _timeValue,
-                    items: <String>[
-                      ' 6 pm ',
-                      ' 7 pm',
-                      ' 8 pm',
-                      ' 9 pm',
-                      ' 10 pm'
-                    ].map<DropdownMenuItem<String>>((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(value),
-                      );
-                    }).toList(),
-                    onChanged: (String newValue) {
-                      setState(() {
-                        _timeValue = newValue;
-                      });
-                    }))
-          ],
-        ));
+                        key: _interestFilterKey,
+                        child: FlatButton(
+                          child: Row(
+                            children: <Widget>[
+                              const Text('Interests'),
+                              Icon(Icons.arrow_drop_down)
+                            ],
+                          ),
+                          onPressed: () {
+                            if (_checkBoxDisplayed) {
+                              _interestsCheckBox.remove();
+                              setState(() {
+                                _checkBoxDisplayed = false;
+                              });
+                            } else {
+                              setState(() {
+                                _flexFactorListEvent = 5;
+                                _flexFactorMap = 1;
+                                _interestsCheckBox = _createInterestsCheckBox();
+                                _checkBoxDisplayed = true;
+                              });
+                              Overlay.of(context).insert(_interestsCheckBox);
+                            }
+                          },
+                        ),
+                      ))),
+              Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(color: black, width: 1),
+                  ),
+                  child: DropdownButton<String>(
+                      hint: const Text('Distance'),
+                      underline: Container(),
+                      value: _distanceValue,
+                      items: <String>[
+                        ' < 1 km',
+                        ' < 2 km',
+                        ' < 3 km',
+                        ' < 5 km',
+                        ' < 10km'
+                      ].map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                      onChanged: (String newValue) {
+                        setState(() {
+                          _distanceValue = newValue;
+                        });
+                      })),
+              Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(color: black, width: 1),
+                  ),
+                  child: DropdownButton<String>(
+                      hint: const Text('Time'),
+                      underline: Container(),
+                      value: _timeValue,
+                      items: <String>['6 pm', '7 pm', '8 pm', '9 pm', '10 pm']
+                          .map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                      onChanged: (String newValue) {
+                        setState(() {
+                          _timeValue = newValue;
+                        });
+                      }))
+            ]));
   }
 
   OverlayEntry _createInterestsCheckBox() {
@@ -266,60 +236,153 @@ class _EventsWidgetState extends State<EventsWidget>
             )));
   }
 
-  @override
-  void dispose() {
-    // TODO(me): dispose time
-    super.dispose();
+  Widget _buildUserEvents(
+      List<Event> events,
+      Map<String, UserEventState> userEventStates,
+      List<Lounge> userLounges,
+      ThemeStyle themeStyle,
+      void Function(redux.ReduxAction<AppState>) dispatch) {
+    return Column(children: <Widget>[
+      Expanded(
+          flex: 8,
+          child: ListView.builder(
+              itemCount: events.length,
+              itemBuilder: (BuildContext context, int index) => Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        _buildUserEvent(events[index], userEventStates,
+                            userLounges, dispatch, themeStyle),
+                        const Divider(color: orange),
+                      ]))),
+      Expanded(
+          child: Container(
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+            Button(text: 'VIEW CALENDAR', width: 200, onPressed: () => null)
+          ])))
+    ]);
   }
 
-  Widget _buildUserEvents(List<Event> events, ThemeStyle themeStyle,
-      void Function(redux.ReduxAction<AppState>) dispatch) {
+  Widget _buildUserEvent(
+      Event event,
+      Map<String, UserEventState> userEventStates,
+      List<Lounge> userLounges,
+      void Function(redux.ReduxAction<AppState>) dispatch,
+      ThemeStyle theme) {
+    final String date = event.dateStart == null
+        ? null
+        : DateFormat('dd').format(event.dateStart);
+    final String month = event.dateStart == null
+        ? null
+        : DateFormat('MMM').format(event.dateStart);
+    final String time = event.dateStart == null
+        ? null
+        : DateFormat('jm').format(event.dateStart);
+    final String timeEnd =
+        event.dateEnd == null ? null : DateFormat('jm').format(event.dateEnd);
+
+    final UserEventState state = userEventStates[event.id];
+    String stateMessage;
+    if (state == UserEventState.Attending) {
+      stateMessage = 'Going';
+    } else if (state == UserEventState.Liked) {
+      stateMessage = 'Liked';
+    }
+
+    final Lounge lounge = userLounges.firstWhere(
+        (Lounge lounge) => lounge.eventId == event.id,
+        orElse: () => null);
+
+    if (date == null || month == null || time == null) {
+      return Container();
+    }
     return Container(
-      child: Column(
-        children: <Widget>[
-          Expanded(
-            flex: 6,
-            child: ListView.builder(
-                itemCount: events.length,
-                itemBuilder: (BuildContext context, int index) => Container(
-                    decoration: const BoxDecoration(color: white),
-                    child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+        padding: const EdgeInsets.all(10.0),
+        child: Row(children: <Widget>[
+          Stack(alignment: Alignment.center, children: <Widget>[
+            CachedImage(event.pic,
+                width: 70.0,
+                height: 70.0,
+                borderRadius: const BorderRadius.only(
+                    bottomRight: Radius.circular(5.0),
+                    topRight: Radius.circular(5.0))),
+            Container(color: pink.withOpacity(0.5), width: 70.0, height: 70.0),
+            Column(children: <Widget>[
+              Text(date,
+                  style: const TextStyle(
+                      color: white, fontWeight: FontWeight.bold, fontSize: 20)),
+              Text(month,
+                  style: const TextStyle(
+                      color: white, fontWeight: FontWeight.bold))
+            ])
+          ]),
+          Container(
+              padding: const EdgeInsets.only(left: 10.0),
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(event.name,
+                        style: const TextStyle(fontWeight: FontWeight.bold)),
+                    Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
-                          _buildEvent(events[index], dispatch, themeStyle),
-                        ]))),
-          ),
-          Expanded(
-              child: Container(
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                Button(
-                    text: 'VIEW CALENDAR', width: 200, onPressed: () => null),
-              ])))
-        ],
-      ),
-    );
+                          Text('$time - $timeEnd'),
+                          Container(
+                              padding: const EdgeInsets.only(left: 100.0),
+                              child: Row(children: <Widget>[
+                                if (state == UserEventState.Attending)
+                                  Icon(Icons.check)
+                                else if (state == UserEventState.Liked)
+                                  Icon(MdiIcons.heart),
+                                Text(stateMessage),
+                              ]))
+                        ]),
+                    if (lounge == null)
+                      Button(
+                          text: 'JOIN A LOUNGE',
+                          width: 300.0,
+                          height: 30.0,
+                          backgroundColor: orange,
+                          backgroundOpacity: 1.0,
+                          onPressed: () => dispatch(
+                              redux.NavigateAction<AppState>.pushNamed(
+                                  LoungesScreen.id,
+                                  arguments: event)))
+                    else
+                      Button(
+                          text: 'VIEW LOUNGE',
+                          width: 300.0,
+                          height: 30.0,
+                          backgroundColor: pinkBright,
+                          backgroundOpacity: 1.0,
+                          onPressed: () => dispatch(
+                              redux.NavigateAction<AppState>.pushNamed(
+                                  LoungeChatScreen.id,
+                                  arguments: lounge)))
+                  ]))
+        ]));
   }
 
   Widget _buildFindEvents(
       List<Event> events,
+      Map<String, UserEventState> userEventStates,
       ThemeStyle themeStyle,
       void Function(redux.ReduxAction<AppState>) dispatch,
       Future<void> Function(redux.ReduxAction<AppState>) dispatchFuture) {
+    // TODO(robin): it seems the refresh indicator behaviour is overriden by some gesture detection from your map trick
     return Container(
         child: Column(children: <Widget>[
       Expanded(
           flex: _flexFactorMap,
           child: GestureDetector(
-            onTap: () {
-              setState(() {
-                _flexFactorListEvent = 2;
-                _flexFactorMap = 4;
-              });
-            },
-            child: _buildMapView(),
-          )),
+              onTap: () {
+                setState(() {
+                  _flexFactorListEvent = 2;
+                  _flexFactorMap = 4;
+                });
+              },
+              child: _buildMapView())),
       _buildFilters(),
       Expanded(
           flex: _flexFactorListEvent,
@@ -328,13 +391,12 @@ class _EventsWidgetState extends State<EventsWidget>
               child: ListView.builder(
                   controller: _scrollController,
                   itemCount: events.length,
-                  itemBuilder: (BuildContext context, int index) => Container(
-                      decoration: const BoxDecoration(color: white),
-                      child: Column(
+                  itemBuilder: (BuildContext context, int index) => Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
-                            _buildEvent(events[index], dispatch, themeStyle),
-                          ]))))),
+                            _buildEvent(events[index], userEventStates,
+                                dispatch, themeStyle),
+                          ]))))
       /*  Expanded(
           flex: 1,
           child: Container(
@@ -352,62 +414,104 @@ class _EventsWidgetState extends State<EventsWidget>
     ]));
   }
 
-  Widget _buildEvent(Event event,
+  Widget _buildEvent(Event event, Map<String, UserEventState> userEventStates,
       void Function(redux.ReduxAction<AppState>) dispatch, ThemeStyle theme) {
-    final String date =
-        event.date == null ? null : DateFormat('dd.MM').format(event.date);
-    final String time =
-        event.date == null ? null : DateFormat('Hm').format(event.date);
+    final String date = event.dateStart == null
+        ? null
+        : DateFormat('dd').format(event.dateStart);
+    final String month = event.dateStart == null
+        ? null
+        : DateFormat('MMM').format(event.dateStart);
+    final String time = event.dateStart == null
+        ? null
+        : DateFormat('Hm').format(event.dateStart);
+    final String timeEnd =
+        event.dateEnd == null ? null : DateFormat('Hm').format(event.dateEnd);
+    final UserEventState state = userEventStates[event.id];
     return Column(children: <Widget>[
-      const Divider(
-        thickness: 3.0,
-      ),
       GestureDetector(
           onTap: () async {
             dispatch(redux.NavigateAction<AppState>.pushNamed(EventScreen.id,
                 arguments: event));
           },
           child: Container(
-              child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                if (event != null && event.pic.isNotEmpty)
-                  Flexible(
-                      child:
-                          CachedImage(event.pic, width: 100.0, height: 100.0)),
-                Flexible(
-                    flex: 2,
-                    child: Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Text(event.name,
-                                  style: textStyleCardTitle(theme)),
-                              Text(event.description,
-                                  maxLines: 3, overflow: TextOverflow.ellipsis),
-                            ]))),
-                if (date != null && time != null)
-                  Flexible(
-                      child: Container(
-                          decoration: BoxDecoration(
-                              border: Border.all(color: grey, width: 2.0),
-                              borderRadius: BorderRadius.circular(5.0)),
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 10.0, horizontal: 5.0),
-                          child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              children: <Widget>[
-                                Text(date,
-                                    style: const TextStyle(
-                                        fontWeight: FontWeight.bold)),
-                                Text(time,
-                                    style: const TextStyle(
-                                        color: grey,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 10.0))
-                              ]))),
-              ]))),
+            padding: const EdgeInsets.symmetric(horizontal: 10.0),
+            child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  if (date != null && time != null)
+                    Container(
+                        width: 50.0,
+                        height: 50.0,
+                        decoration: BoxDecoration(
+                            color: pinkBright,
+                            borderRadius: BorderRadius.circular(5.0)),
+                        padding: const EdgeInsets.symmetric(vertical: 5.0),
+                        child: Column(children: <Widget>[
+                          Text(date,
+                              style: const TextStyle(
+                                  color: white, fontWeight: FontWeight.bold)),
+                          Text(month,
+                              style: const TextStyle(
+                                  color: white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 10.0))
+                        ])),
+                  Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text(event.name,
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold)),
+                            Row(children: <Widget>[
+                              Text('$time - $timeEnd',
+                                  style: const TextStyle(color: orange)),
+                              if (event.distance != null)
+                                Padding(
+                                    padding: const EdgeInsets.only(left: 50.0),
+                                    child: Text(
+                                        '${event.distance.toString()}km away',
+                                        style: const TextStyle(color: orange)))
+                            ]),
+                            Wrap(children: <Widget>[
+                              for (Interest interest in event.interests)
+                                Container(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 5.0),
+                                    decoration: BoxDecoration(
+                                        borderRadius:
+                                            BorderRadius.circular(5.0),
+                                        border: Border.all(color: pink)),
+                                    child: Text(interest.name.toUpperCase(),
+                                        style: TextStyle(
+                                            color: pink,
+                                            fontWeight: FontWeight.bold)))
+                            ])
+                          ])),
+                  if (event != null && event.pic.isNotEmpty)
+                    Stack(alignment: Alignment.center, children: <Widget>[
+                      Container(
+                          decoration: const BoxDecoration(
+                              border: Border(
+                                  left: BorderSide(color: orange, width: 7.0))),
+                          child: CachedImage(
+                            event.pic,
+                            width: 50.0,
+                            height: 50.0,
+                            borderRadius: const BorderRadius.only(
+                                bottomRight: Radius.circular(5.0),
+                                topRight: Radius.circular(5.0)),
+                          )),
+                      if (state == UserEventState.Attending)
+                        Icon(Icons.check, size: 40.0, color: white)
+                      else
+                        Icon(MdiIcons.heart, size: 40.0, color: white),
+                    ]),
+                ]),
+          )),
+      const Divider(color: orange),
     ]);
   }
 
@@ -421,8 +525,14 @@ class _EventsWidgetState extends State<EventsWidget>
         Widget child) {
       final List<Event> events = state.eventsState.events;
       final List<Event> userEvents = state.userState.events;
+      final Map<String, UserEventState> userEventStates =
+          state.userState.user.events;
+      final List<Lounge> userLounges = state.userState.lounges;
       final ThemeStyle themeStyle = state.theme;
-      if (events == null || userEvents == null) {
+      if (events == null ||
+          userEvents == null ||
+          userEventStates == null ||
+          userLounges == null) {
         return Loading();
       }
       _markers.clear();
@@ -450,9 +560,10 @@ class _EventsWidgetState extends State<EventsWidget>
                     child: TabBarView(
                         physics: const NeverScrollableScrollPhysics(),
                         children: <Widget>[
-                      _buildUserEvents(userEvents, themeStyle, dispatch),
-                      _buildFindEvents(
-                          events, themeStyle, dispatch, store.dispatchFuture),
+                      _buildUserEvents(userEvents, userEventStates, userLounges,
+                          themeStyle, dispatch),
+                      _buildFindEvents(events, userEventStates, themeStyle,
+                          dispatch, store.dispatchFuture),
                     ]))),
           ]));
     });
