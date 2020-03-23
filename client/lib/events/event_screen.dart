@@ -330,7 +330,7 @@ class _EventScreenState extends State<EventScreen> {
             child: RichText(
                 text: TextSpan(
                     text: _event.price,
-                    style: TextStyle(
+                    style: const TextStyle(
                         color: orange,
                         fontSize: 14,
                         fontWeight: FontWeight.w600))))
