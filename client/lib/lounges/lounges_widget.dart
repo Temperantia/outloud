@@ -52,13 +52,12 @@ class _LoungesWidgetState extends State<LoungesWidget>
         children: <Widget>[
           Row(children: <Widget>[
             Container(
-                margin: const EdgeInsets.symmetric(horizontal: 5.0),
+                margin: const EdgeInsets.only(right: 5),
                 child: CachedImage(owner.pics.isNotEmpty ? owner.pics[0] : null,
                     width: 20.0,
                     height: 20.0,
                     borderRadius: BorderRadius.circular(180.0))),
-            Container(
-                margin: const EdgeInsets.only(left: 5.0),
+            Expanded(
                 child: RichText(
                     text: TextSpan(
                   text: state.userState.user.id == owner.id
@@ -112,10 +111,12 @@ class _LoungesWidgetState extends State<LoungesWidget>
       void Function(redux.ReduxAction<AppState>) dispatch, ThemeStyle theme) {
     return Container(
         margin: const EdgeInsets.symmetric(vertical: 10.0),
-        child: Row(children: <Widget>[
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
           // TODO(me): later default event pic ?
           if (lounge.event != null && lounge.event.pic.isNotEmpty)
-            Flexible(
+            Container(
                 child: Stack(alignment: Alignment.center, children: <Widget>[
               Container(
                   decoration: const BoxDecoration(
@@ -140,9 +141,9 @@ class _LoungesWidgetState extends State<LoungesWidget>
                       child: Image.asset('images/chatIcon.png'))),
             ])),
           Expanded(
-              flex: 3,
               child: Container(
                   padding: const EdgeInsets.all(10.0),
+
                   child: _buildInfoLoungeLayout(state, lounge, dispatch))),
         ]));
   }

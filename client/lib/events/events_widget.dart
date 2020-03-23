@@ -317,50 +317,57 @@ class _EventsWidgetState extends State<EventsWidget>
                       color: white, fontWeight: FontWeight.bold))
             ])
           ]),
-          Container(
-              padding: const EdgeInsets.only(left: 10.0),
-              child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(event.name,
-                        style: const TextStyle(fontWeight: FontWeight.bold)),
-                    Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Text('$time - $timeEnd'),
-                          Container(
-                              padding: const EdgeInsets.only(left: 100.0),
-                              child: Row(children: <Widget>[
-                                if (state == UserEventState.Attending)
-                                  Icon(Icons.check)
-                                else if (state == UserEventState.Liked)
-                                  Icon(MdiIcons.heart),
-                                Text(stateMessage),
-                              ]))
-                        ]),
-                    if (lounge == null)
-                      Button(
-                          text: 'JOIN A LOUNGE',
-                          width: 300.0,
-                          height: 30.0,
-                          backgroundColor: orange,
-                          backgroundOpacity: 1.0,
-                          onPressed: () => dispatch(
-                              redux.NavigateAction<AppState>.pushNamed(
-                                  LoungesScreen.id,
-                                  arguments: event)))
-                    else
-                      Button(
-                          text: 'VIEW LOUNGE',
-                          width: 300.0,
-                          height: 30.0,
-                          backgroundColor: pinkBright,
-                          backgroundOpacity: 1.0,
-                          onPressed: () => dispatch(
-                              redux.NavigateAction<AppState>.pushNamed(
-                                  LoungeChatScreen.id,
-                                  arguments: lounge)))
-                  ]))
+          Expanded(
+              child: Container(
+                  // constraints: const BoxConstraints.expand(),
+                  padding: const EdgeInsets.only(left: 10.0),
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: <Widget>[
+                        Text(event.name,
+                            style:
+                                const TextStyle(fontWeight: FontWeight.bold)),
+                        Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Text('$time - $timeEnd'),
+                              Container(
+                                  // padding: const EdgeInsets.only(left: 100.0),
+                                  child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: <Widget>[
+                                    if (state == UserEventState.Attending)
+                                      Icon(Icons.check)
+                                    else if (state == UserEventState.Liked)
+                                      Icon(MdiIcons.heart),
+                                    Text(stateMessage),
+                                  ]))
+                            ]),
+                        if (lounge == null)
+                          Button(
+                              text: 'JOIN A LOUNGE',
+
+                              // width: 300.0,
+                              height: 30.0,
+                              backgroundColor: orange,
+                              backgroundOpacity: 1.0,
+                              onPressed: () => dispatch(
+                                  redux.NavigateAction<AppState>.pushNamed(
+                                      LoungesScreen.id,
+                                      arguments: event)))
+                        else
+                          Button(
+                              text: 'VIEW LOUNGE',
+                              // width: 300.0,
+                              height: 30.0,
+                              backgroundColor: pinkBright,
+                              backgroundOpacity: 1.0,
+                              onPressed: () => dispatch(
+                                  redux.NavigateAction<AppState>.pushNamed(
+                                      LoungeChatScreen.id,
+                                      arguments: lounge)))
+                      ])))
         ]));
   }
 
@@ -436,28 +443,27 @@ class _EventsWidgetState extends State<EventsWidget>
           },
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 10.0),
-            child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  if (date != null && time != null)
-                    Container(
-                        width: 50.0,
-                        height: 50.0,
-                        decoration: BoxDecoration(
-                            color: pinkBright,
-                            borderRadius: BorderRadius.circular(5.0)),
-                        padding: const EdgeInsets.symmetric(vertical: 5.0),
-                        child: Column(children: <Widget>[
-                          Text(date,
-                              style: const TextStyle(
-                                  color: white, fontWeight: FontWeight.bold)),
-                          Text(month,
-                              style: const TextStyle(
-                                  color: white,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 10.0))
-                        ])),
-                  Padding(
+            child: Row(children: <Widget>[
+              if (date != null && time != null)
+                Container(
+                    width: 50.0,
+                    height: 50.0,
+                    decoration: BoxDecoration(
+                        color: pinkBright,
+                        borderRadius: BorderRadius.circular(5.0)),
+                    padding: const EdgeInsets.symmetric(vertical: 5.0),
+                    child: Column(children: <Widget>[
+                      Text(date,
+                          style: const TextStyle(
+                              color: white, fontWeight: FontWeight.bold)),
+                      Text(month,
+                          style: const TextStyle(
+                              color: white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 10.0))
+                    ])),
+              Expanded(
+                  child: Container(
                       padding: const EdgeInsets.all(10.0),
                       child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -465,16 +471,19 @@ class _EventsWidgetState extends State<EventsWidget>
                             Text(event.name,
                                 style: const TextStyle(
                                     fontWeight: FontWeight.bold)),
-                            Row(children: <Widget>[
-                              Text('$time - $timeEnd',
-                                  style: const TextStyle(color: orange)),
-                              if (event.distance != null)
-                                Padding(
-                                    padding: const EdgeInsets.only(left: 50.0),
-                                    child: Text(
-                                        '${event.distance.toString()}km away',
-                                        style: const TextStyle(color: orange)))
-                            ]),
+                            Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: <Widget>[
+                                  Text('$time - $timeEnd',
+                                      style: const TextStyle(color: orange)),
+                                  if (event.distance != null)
+                                    Container(
+                                        child: Text(
+                                            '${event.distance.toString()}km away',
+                                            style:
+                                                const TextStyle(color: orange)))
+                                ]),
                             Wrap(children: <Widget>[
                               for (Interest interest in event.interests)
                                 Container(
@@ -489,27 +498,27 @@ class _EventsWidgetState extends State<EventsWidget>
                                             color: pink,
                                             fontWeight: FontWeight.bold)))
                             ])
-                          ])),
-                  if (event != null && event.pic.isNotEmpty)
-                    Stack(alignment: Alignment.center, children: <Widget>[
-                      Container(
-                          decoration: const BoxDecoration(
-                              border: Border(
-                                  left: BorderSide(color: orange, width: 7.0))),
-                          child: CachedImage(
-                            event.pic,
-                            width: 50.0,
-                            height: 50.0,
-                            borderRadius: const BorderRadius.only(
-                                bottomRight: Radius.circular(5.0),
-                                topRight: Radius.circular(5.0)),
-                          )),
-                      if (state == UserEventState.Attending)
-                        Icon(Icons.check, size: 40.0, color: white)
-                      else
-                        Icon(MdiIcons.heart, size: 40.0, color: white),
-                    ]),
+                          ]))),
+              if (event != null && event.pic.isNotEmpty)
+                Stack(alignment: Alignment.center, children: <Widget>[
+                  Container(
+                      decoration: const BoxDecoration(
+                          border: Border(
+                              left: BorderSide(color: orange, width: 7.0))),
+                      child: CachedImage(
+                        event.pic,
+                        width: 50.0,
+                        height: 50.0,
+                        borderRadius: const BorderRadius.only(
+                            bottomRight: Radius.circular(5.0),
+                            topRight: Radius.circular(5.0)),
+                      )),
+                  if (state == UserEventState.Attending)
+                    Icon(Icons.check, size: 40.0, color: white)
+                  else
+                    Icon(MdiIcons.heart, size: 40.0, color: white),
                 ]),
+            ]),
           )),
       const Divider(color: orange),
     ]);
