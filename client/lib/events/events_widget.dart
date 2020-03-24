@@ -1,4 +1,3 @@
-
 import 'package:async_redux/async_redux.dart' as redux;
 import 'package:business/app_state.dart';
 import 'package:flutter/material.dart';
@@ -15,17 +14,7 @@ class EventsWidget extends StatefulWidget {
 class _EventsWidgetState extends State<EventsWidget>
     with AutomaticKeepAliveClientMixin<EventsWidget> {
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   bool get wantKeepAlive => true;
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
