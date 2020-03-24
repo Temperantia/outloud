@@ -33,7 +33,7 @@ class _FindEventsScreen extends State<FindEventsScreen>
   final LayerLink _interestLink = LayerLink();
   final List<CheckBoxContent> _interests = <CheckBoxContent>[];
 
-  CameraPosition _intialMapLocation =
+  CameraPosition _initialMapLocation =
       const CameraPosition(target: LatLng(48.85902056, 2.34637398), zoom: 14);
 
   int _flexFactorMap = 1;
@@ -54,33 +54,28 @@ class _FindEventsScreen extends State<FindEventsScreen>
     _interests.add(CheckBoxContent(checked: false, name: 'Food'));
     _interests.add(CheckBoxContent(checked: false, name: 'Gay Community'));
     _interests.add(CheckBoxContent(checked: false, name: 'Books'));
-    getPosition();
+    _getPosition();
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
-  void shrinkMap() {
+  void _shrinkMap() {
     setState(() {
       _flexFactorListEvent = 5;
       _flexFactorMap = 1;
     });
   }
 
-  void growMap() {
+  void _growMap() {
     setState(() {
       _flexFactorListEvent = 2;
       _flexFactorMap = 4;
     });
   }
 
-  Future<int> getPosition() async {
+  Future<int> _getPosition() async {
     final Position position = await Geolocator()
         .getCurrentPosition(desiredAccuracy: LocationAccuracy.best);
     if (position != null) {
-      _intialMapLocation = CameraPosition(
+      _initialMapLocation = CameraPosition(
           target: LatLng(position.latitude, position.longitude), zoom: 14);
       return 0;
     }
@@ -93,10 +88,10 @@ class _FindEventsScreen extends State<FindEventsScreen>
         decoration: const BoxDecoration(color: white),
         child: GoogleMap(
             onTap: (_) {
-              growMap();
+              _growMap();
             },
             onCameraMoveStarted: () {
-              growMap();
+              _growMap();
             },
             mapType: MapType.normal,
             zoomGesturesEnabled: true,
@@ -107,7 +102,7 @@ class _FindEventsScreen extends State<FindEventsScreen>
                 () => EagerGestureRecognizer(),
               )
             },
-            initialCameraPosition: _intialMapLocation,
+            initialCameraPosition: _initialMapLocation,
             markers: _markers.values.toSet(),
             onMapCreated: (GoogleMapController controller) {
               if (!_controller.isCompleted) {
@@ -147,7 +142,7 @@ class _FindEventsScreen extends State<FindEventsScreen>
                                 _checkBoxDisplayed = false;
                               });
                             } else {
-                              shrinkMap();
+                              _shrinkMap();
                               setState(() {
                                 _interestsCheckBox = _createInterestsCheckBox();
                                 _checkBoxDisplayed = true;
@@ -158,6 +153,7 @@ class _FindEventsScreen extends State<FindEventsScreen>
                         ),
                       ))),
               Container(
+                  padding: const EdgeInsets.all(5.0),
                   decoration: BoxDecoration(
                     border: Border.all(color: black, width: 1),
                   ),
@@ -166,11 +162,11 @@ class _FindEventsScreen extends State<FindEventsScreen>
                       underline: Container(),
                       value: _distanceValue,
                       items: <String>[
-                        ' < 1 km',
-                        ' < 2 km',
-                        ' < 3 km',
-                        ' < 5 km',
-                        ' < 10km'
+                        '< 1 km',
+                        '< 2 km',
+                        '< 3 km',
+                        '< 5 km',
+                        '< 10km'
                       ].map<DropdownMenuItem<String>>((String value) {
                         return DropdownMenuItem<String>(
                           value: value,
@@ -341,13 +337,13 @@ class _FindEventsScreen extends State<FindEventsScreen>
           flex: _flexFactorMap,
           child: GestureDetector(
               onTap: () {
-                growMap();
+                _growMap();
               },
               child: _buildMapView())),
       Container(
           child: GestureDetector(
         onTap: () {
-          shrinkMap();
+          _shrinkMap();
         },
         child: _buildFilters(),
       )),
@@ -356,16 +352,16 @@ class _FindEventsScreen extends State<FindEventsScreen>
           child: Container(
               child: GestureDetector(
                   onTap: () {
-                    shrinkMap();
+                    _shrinkMap();
                   },
                   onVerticalDragDown: (_) {
-                    shrinkMap();
+                    _shrinkMap();
                   },
                   onHorizontalDragDown: (_) {
-                    shrinkMap();
+                    _shrinkMap();
                   },
                   onTapDown: (_) {
-                    shrinkMap();
+                    _shrinkMap();
                   },
                   child: RefreshIndicator(
                       onRefresh: () {

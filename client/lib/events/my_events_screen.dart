@@ -23,16 +23,6 @@ class _MyEventsScreen extends State<MyEventsScreen>
   @override
   bool get wantKeepAlive => true;
 
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
   Widget _buildUserEvent(
       Event event,
       Map<String, UserEventState> userEventStates,
