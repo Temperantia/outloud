@@ -22,12 +22,6 @@ class LoungesScreen extends StatelessWidget {
 // TODO(robin): if lounge is full dont show it
   Widget _buildLounge(Lounge lounge,
       void Function(redux.ReduxAction<AppState>) dispatch, AppState state) {
-    if (lounge.members.isEmpty) {
-      print('omg c vide ? ');
-    } else {
-      print('non ya  :' + lounge.members.toString());
-    }
-    // state.userState.eventLounges[event.id].
     final User owner =
         lounge.members.firstWhere((User member) => member.id == lounge.owner);
     final int availableSlots = lounge.memberLimit - lounge.members.length;
@@ -66,11 +60,9 @@ class LoungesScreen extends StatelessWidget {
                         return;
                       }
                       if (lounge.memberIds.contains(state.userState.user.id)) {
-                        print('on part du lounge');
                         dispatch(
                             LoungeLeaveAction(state.userState.user.id, lounge));
                       } else {
-                        print('on rejoint le lounge ');
                         dispatch(
                             LoungeJoinAction(state.userState.user.id, lounge));
                       }

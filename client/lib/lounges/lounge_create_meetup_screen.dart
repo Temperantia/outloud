@@ -174,13 +174,11 @@ class _LoungeCreateMeetupScreenState extends State<LoungeCreateMeetupScreen> {
 
     _focusNodeAdress.addListener(() {
       if (_focusNodeAdress.hasFocus) {
-        print('we have the focus  ');
         setState(() {
           _adressChoosen = false;
         });
       } else {
         _throttle.cancel();
-        print('we dont have the focus');
         setState(() {
           _adressChoosen = true;
         });
@@ -370,7 +368,6 @@ class _LoungeCreateMeetupScreenState extends State<LoungeCreateMeetupScreen> {
                       },
                       onLongPress: (LatLng position) async {
                         if (_moovingMarker) {
-                          print('mooving marker ?  weird ');
                           return;
                         }
                         Marker tmpMarker;

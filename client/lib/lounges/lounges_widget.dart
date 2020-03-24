@@ -60,14 +60,14 @@ class _LoungesWidgetState extends State<LoungesWidget>
             Expanded(
                 child: RichText(
                     text: TextSpan(
-                  text: state.userState.user.id == owner.id
-                      ? 'Your Lounge'
-                      : owner.name + '\'s Lounge',
-                  style: const TextStyle(
-                      color: Colors.black,
-                      fontSize: 13,
-                      fontWeight: FontWeight.w500),
-                ))),
+              text: state.userState.user.id == owner.id
+                  ? 'Your Lounge'
+                  : owner.name + '\'s Lounge',
+              style: const TextStyle(
+                  color: Colors.black,
+                  fontSize: 13,
+                  fontWeight: FontWeight.w500),
+            ))),
           ]),
           Row(children: <Widget>[
             Container(
@@ -91,7 +91,6 @@ class _LoungesWidgetState extends State<LoungesWidget>
           Container(
               child: GestureDetector(
                   onTap: () {
-                    print('il doit se passer un truc');
                     dispatch(redux.NavigateAction<AppState>.pushNamed(
                         EventScreen.id,
                         arguments: lounge.event));
@@ -112,40 +111,40 @@ class _LoungesWidgetState extends State<LoungesWidget>
     return Container(
         margin: const EdgeInsets.symmetric(vertical: 10.0),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-          // TODO(me): later default event pic ?
-          if (lounge.event != null && lounge.event.pic.isNotEmpty)
-            Container(
-                child: Stack(alignment: Alignment.center, children: <Widget>[
-              Container(
-                  decoration: const BoxDecoration(
-                      border:
-                          Border(left: BorderSide(color: orange, width: 7.0))),
-                  child: CachedImage(
-                    lounge.event.pic,
-                    width: 70.0,
-                    height: 70.0,
-                    borderRadius: const BorderRadius.only(
-                        bottomRight: Radius.circular(5.0),
-                        topRight: Radius.circular(5.0)),
-                  )),
-              GestureDetector(
-                  onTap: () => dispatch(
-                      redux.NavigateAction<AppState>.pushNamed(
-                          LoungeChatScreen.id,
-                          arguments: lounge)),
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              // TODO(me): later default event pic ?
+              if (lounge.event != null && lounge.event.pic.isNotEmpty)
+                Container(
+                    child:
+                        Stack(alignment: Alignment.center, children: <Widget>[
+                  Container(
+                      decoration: const BoxDecoration(
+                          border: Border(
+                              left: BorderSide(color: orange, width: 7.0))),
+                      child: CachedImage(
+                        lounge.event.pic,
+                        width: 70.0,
+                        height: 70.0,
+                        borderRadius: const BorderRadius.only(
+                            bottomRight: Radius.circular(5.0),
+                            topRight: Radius.circular(5.0)),
+                      )),
+                  GestureDetector(
+                      onTap: () => dispatch(
+                          redux.NavigateAction<AppState>.pushNamed(
+                              LoungeChatScreen.id,
+                              arguments: lounge)),
+                      child: Container(
+                          width: 40.0,
+                          height: 40.0,
+                          child: Image.asset('images/chatIcon.png'))),
+                ])),
+              Expanded(
                   child: Container(
-                      width: 40.0,
-                      height: 40.0,
-                      child: Image.asset('images/chatIcon.png'))),
-            ])),
-          Expanded(
-              child: Container(
-                  padding: const EdgeInsets.all(10.0),
-
-                  child: _buildInfoLoungeLayout(state, lounge, dispatch))),
-        ]));
+                      padding: const EdgeInsets.all(10.0),
+                      child: _buildInfoLoungeLayout(state, lounge, dispatch))),
+            ]));
   }
 
   Widget _buildEvents(

@@ -200,13 +200,11 @@ class _LoungeMeetupWidgetState extends State<LoungeMeetupWidget> {
 
     _focusNodeAdress.addListener(() {
       if (_focusNodeAdress.hasFocus) {
-        print('we have the focus  ');
         setState(() {
           _adressChoosen = false;
         });
       } else {
         _throttle.cancel();
-        print('we dont have the focus');
         setState(() {
           _adressChoosen = true;
         });
@@ -403,7 +401,6 @@ class _LoungeMeetupWidgetState extends State<LoungeMeetupWidget> {
                       },
                       onLongPress: (LatLng position) async {
                         if (_moovingMarker) {
-                          print('mooving marker ?  weird ');
                           return;
                         }
                         Marker tmpMarker;
@@ -600,8 +597,6 @@ class _LoungeMeetupWidgetState extends State<LoungeMeetupWidget> {
                           if (dateSelected != null) {
                             setState(() {
                               _dateEvent = dateSelected;
-                              print('on change la date : _dateEVent : ' +
-                                  _dateEvent.toString());
                             });
                           }
                         },
