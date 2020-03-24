@@ -235,8 +235,12 @@ class _FindEventsScreen extends State<FindEventsScreen>
             )));
   }
 
-  Widget _buildEvent(Event event, Map<String, UserEventState> userEventStates,
-      void Function(redux.ReduxAction<AppState>) dispatch, ThemeStyle theme) {
+  Widget _buildEvent(
+      Event event,
+      Map<String, UserEventState> userEventStates,
+      void Function(redux.ReduxAction<AppState>) dispatch,
+      Future<void> Function(redux.ReduxAction<AppState>) dispatchFuture,
+      ThemeStyle theme) {
     final String date = event.dateStart == null
         ? null
         : DateFormat('dd').format(event.dateStart);
@@ -255,6 +259,7 @@ class _FindEventsScreen extends State<FindEventsScreen>
             final Animation<double> _angleAnimation =
                 Tween<double>(begin: 0.0, end: 0.1)
                     .animate(_animationController);
+
             showDialog(
               context: context,
               barrierDismissible: false,
@@ -271,16 +276,22 @@ class _FindEventsScreen extends State<FindEventsScreen>
                 );
               },
             );
-            _angleAnimation.addStatusListener((AnimationStatus status) {
+
+            final void Function(AnimationStatus) _listener =
+                (AnimationStatus status) {
               if (status == AnimationStatus.completed) {
                 _animationController.reverse();
               } else if (status == AnimationStatus.dismissed) {
                 _animationController.forward();
               }
-            });
+            };
+
+            _angleAnimation.addStatusListener(_listener);
             _animationController.forward(from: 0.0);
-            Future<void>.delayed(const Duration(milliseconds: 1200), () {
-              Navigator.pop(context);//pop dialog
+
+            Future<void>.delayed(const Duration(milliseconds: 800), () {
+              _angleAnimation.removeStatusListener(_listener);
+              Navigator.pop(context);
               dispatch(redux.NavigateAction<AppState>.pushNamed(EventScreen.id,
                   arguments: event));
             });
@@ -417,7 +428,7 @@ class _FindEventsScreen extends State<FindEventsScreen>
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
                                     _buildEvent(events[index], userEventStates,
-                                        dispatch, themeStyle),
+                                        dispatch, dispatchFuture, themeStyle),
                                   ]))))))
       /*  Expanded(
           flex: 1,
