@@ -49,7 +49,7 @@ class LoungesScreen extends StatelessWidget {
                                       ? 'Your Lounge'
                                       : owner.name + '\'s Lounge',
                                   style: const TextStyle(
-                                      color: Colors.black,
+                                      color: black,
                                       fontSize: 13,
                                       fontWeight: FontWeight.w500)))),
                       GestureDetector(
@@ -123,7 +123,7 @@ class LoungesScreen extends StatelessWidget {
                   text: const TextSpan(
                       text: 'FOR THE EVENT',
                       style: TextStyle(
-                          color: Colors.black,
+                          color: black,
                           fontSize: 13,
                           fontWeight: FontWeight.w500)))),
           Container(

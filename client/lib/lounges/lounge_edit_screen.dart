@@ -92,7 +92,7 @@ class _LoungeEditScreenState extends State<LoungeEditScreen> {
                                 ? 'Your Lounge'
                                 : owner.name + '\'s Lounge',
                             style: const TextStyle(
-                                color: Colors.black,
+                                color: black,
                                 fontSize: 13,
                                 fontWeight: FontWeight.w500),
                           )))
@@ -109,7 +109,7 @@ class _LoungeEditScreenState extends State<LoungeEditScreen> {
                                               ? 's '
                                               : ' '),
                                   style: const TextStyle(
-                                      color: Colors.black,
+                                      color: black,
                                       fontSize: 13,
                                       fontWeight: FontWeight.w500),
                                   children: <TextSpan>[
@@ -142,7 +142,7 @@ class _LoungeEditScreenState extends State<LoungeEditScreen> {
                             text: const TextSpan(
                                 text: 'MEMBERS',
                                 style: TextStyle(
-                                    color: Colors.black,
+                                    color: black,
                                     fontSize: 15,
                                     fontWeight: FontWeight.w700)))),
                     Container(
@@ -192,7 +192,7 @@ class _LoungeEditScreenState extends State<LoungeEditScreen> {
                                     text: TextSpan(
                                         text: member.name,
                                         style: const TextStyle(
-                                            color: Colors.black,
+                                            color: black,
                                             fontSize: 15,
                                             fontWeight: FontWeight.w700))))
                           ])),
@@ -265,7 +265,7 @@ class _LoungeEditScreenState extends State<LoungeEditScreen> {
                       text: const TextSpan(
                         text: 'MAX MEMBER COUNT',
                         style: TextStyle(
-                            color: Colors.black,
+                            color: black,
                             fontSize: 15,
                             fontWeight: FontWeight.w700),
                       ),
@@ -287,7 +287,7 @@ class _LoungeEditScreenState extends State<LoungeEditScreen> {
                     //   fontWeight: FontWeight.w500,
                     //   backgroundColor: pink,
                     //   text: 'UPGRADE FOR MORE!',
-                    //   colorText: Colors.black87,
+                    //   colorText: black87,
                     //   width: 180,
                     // ))
                   ])),
@@ -319,7 +319,7 @@ class _LoungeEditScreenState extends State<LoungeEditScreen> {
                   text: const TextSpan(
                       text: 'LOUNGE DESCRIPTION',
                       style: TextStyle(
-                          color: Colors.black,
+                          color: black,
                           fontSize: 15,
                           fontWeight: FontWeight.w700)))),
           Container(

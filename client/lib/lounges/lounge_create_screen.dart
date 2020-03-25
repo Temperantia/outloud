@@ -68,7 +68,7 @@ class _LoungeCreateScreenState extends State<LoungeCreateScreen> {
                       Row(children: <Widget>[
                         Container(
                             padding: const EdgeInsets.symmetric(vertical: 10.0),
-                            child: Text('CHOOSE AN EVENT FOR THIS LOUNGE',
+                            child: const Text('CHOOSE AN EVENT FOR THIS LOUNGE',
                                 style: TextStyle(fontWeight: FontWeight.w900)))
                       ]),
                       Expanded(

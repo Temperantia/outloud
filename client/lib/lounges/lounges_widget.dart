@@ -65,9 +65,7 @@ class _LoungesWidgetState extends State<LoungesWidget>
                   ? 'Your Lounge'
                   : owner.name + '\'s Lounge',
               style: const TextStyle(
-                  color: Colors.black,
-                  fontSize: 13,
-                  fontWeight: FontWeight.w500),
+                  color: black, fontSize: 13, fontWeight: FontWeight.w500),
             ))),
           ]),
           Row(children: <Widget>[
@@ -77,7 +75,7 @@ class _LoungesWidgetState extends State<LoungesWidget>
                         text:
                             '${lounge.members.length.toString()} member${lounge.members.length > 1 ? 's ' : ' '}',
                         style: const TextStyle(
-                            color: Colors.black,
+                            color: black,
                             fontSize: 13,
                             fontWeight: FontWeight.w500),
                         children: <TextSpan>[
@@ -259,11 +257,13 @@ class _LoungesWidgetState extends State<LoungesWidget>
           length: 2,
           child: Column(children: <Widget>[
             const Expanded(
-                child:
-                    TabBar(indicatorColor: Colors.transparent, tabs: <Widget>[
-              Tab(text: 'MY LOUNGES'),
-              Tab(text: 'FIND LOUNGES'),
-            ])),
+                child: TabBar(
+                    labelColor: white,
+                    indicatorColor: Colors.transparent,
+                    tabs: <Widget>[
+                  Tab(text: 'MY LOUNGES'),
+                  Tab(text: 'FIND LOUNGES'),
+                ])),
             Expanded(
                 flex: 8,
                 child: TabBarView(

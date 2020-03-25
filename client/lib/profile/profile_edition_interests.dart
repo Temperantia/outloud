@@ -157,7 +157,7 @@ class ProfileInterestsState extends State<ProfileInterests>
                           return ListTile(
                             leading: Icon(Icons.category),
                             title: Text(suggestion['name'],
-                                style: const TextStyle(color: Colors.black)),
+                                style: const TextStyle(color: black)),
                           );
                         },
                         onSuggestionSelected: (Map<String, String> suggestion) {

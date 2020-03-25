@@ -7,13 +7,12 @@ import 'package:inclusive/theme.dart';
 
 final Container Function(String image, {ThemeStyle themeStyle}) _buildIcon =
     (String image, {ThemeStyle themeStyle}) => Container(
-          width: 30.0,
-          height: 30.0,
-          child: Image.asset(
-            image,
-            color: themeStyle == null ? null : primary(themeStyle),
-          ),
-        );
+        width: 30.0,
+        height: 30.0,
+        child: Image.asset(image,
+            color: themeStyle == null
+                ? white.withOpacity(0.4)
+                : white.withOpacity(0.8)));
 
 final BottomNavigationBarItem Function(String, ThemeStyle) _buildItem =
     (String image, ThemeStyle themeStyle) => BottomNavigationBarItem(

@@ -149,7 +149,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 onPressed: () => _onSendMessage(_textController.text, userId),
                 color: orange,
               )),
-          color: Colors.white)
+          color: white)
     ]);
   }
 

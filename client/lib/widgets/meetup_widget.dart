@@ -380,9 +380,7 @@ class _LoungeMeetupWidgetState extends State<LoungeMeetupWidget> {
                 text: const TextSpan(
                   text: 'LOUNGE DESIGNATED MEETUP',
                   style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 15,
-                      fontWeight: FontWeight.w700),
+                      color: black, fontSize: 15, fontWeight: FontWeight.w700),
                 ),
               )),
           Expanded(
@@ -498,7 +496,7 @@ class _LoungeMeetupWidgetState extends State<LoungeMeetupWidget> {
               color: orangeLight,
               child: TextFormField(
                 key: _keySearch,
-                cursorColor: Colors.black,
+                cursorColor: black,
                 keyboardType: TextInputType.text,
                 textInputAction: TextInputAction.go,
                 focusNode: _focusNodeAdress,
@@ -529,9 +527,7 @@ class _LoungeMeetupWidgetState extends State<LoungeMeetupWidget> {
                 text: const TextSpan(
                   text: 'MEETUP TIME',
                   style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 15,
-                      fontWeight: FontWeight.w700),
+                      color: black, fontSize: 15, fontWeight: FontWeight.w700),
                 ),
               )),
           Container(
@@ -630,9 +626,7 @@ class _LoungeMeetupWidgetState extends State<LoungeMeetupWidget> {
               text: const TextSpan(
                 text: 'MEETUP TIME',
                 style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 15,
-                    fontWeight: FontWeight.w700),
+                    color: black, fontSize: 15, fontWeight: FontWeight.w700),
               ),
             )),
         Expanded(

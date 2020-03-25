@@ -29,6 +29,12 @@ class _LoungeChatScreenState extends State<LoungeChatScreen> {
   final TextEditingController _messageController = TextEditingController();
 
   @override
+  void initState() {
+    super.initState();
+    // TODO(alexandre): init stream lounge from widget.lounge + stream all users from all messages
+  }
+
+  @override
   void dispose() {
     _messageController.dispose();
     super.dispose();
@@ -75,7 +81,7 @@ class _LoungeChatScreenState extends State<LoungeChatScreen> {
                                 ? 'Your Lounge'
                                 : owner.name + '\'s Lounge',
                             style: const TextStyle(
-                                color: Colors.black,
+                                color: black,
                                 fontSize: 13,
                                 fontWeight: FontWeight.w500),
                           )))
@@ -92,7 +98,7 @@ class _LoungeChatScreenState extends State<LoungeChatScreen> {
                                               ? 's '
                                               : ' '),
                                   style: const TextStyle(
-                                      color: Colors.black,
+                                      color: black,
                                       fontSize: 13,
                                       fontWeight: FontWeight.w500),
                                   children: <TextSpan>[
@@ -185,7 +191,7 @@ class _LoungeChatScreenState extends State<LoungeChatScreen> {
                                                     message.idFrom;
                                               }).name,
                                               style: const TextStyle(
-                                                  color: Colors.black,
+                                                  color: black,
                                                   fontSize: 12,
                                                   fontWeight:
                                                       FontWeight.w600)))),
@@ -194,7 +200,7 @@ class _LoungeChatScreenState extends State<LoungeChatScreen> {
                                           text: TextSpan(
                                     text: _dateFormatter(message.timestamp),
                                     style: const TextStyle(
-                                        color: Colors.black38,
+                                        color: black,
                                         fontSize: 12,
                                         fontWeight: FontWeight.w400),
                                   )))
@@ -206,7 +212,7 @@ class _LoungeChatScreenState extends State<LoungeChatScreen> {
                                     text: TextSpan(
                                       text: message.content,
                                       style: const TextStyle(
-                                          color: Colors.black,
+                                          color: black,
                                           fontSize: 12,
                                           fontWeight: FontWeight.w400),
                                     )))

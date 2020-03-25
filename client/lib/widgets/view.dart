@@ -22,7 +22,8 @@ class View extends StatefulWidget {
       this.title = '',
       this.isRoot = false,
       this.onBack,
-      this.backIcon = Icons.keyboard_arrow_left});
+      this.backIcon = Icons.keyboard_arrow_left,
+      this.actions});
 
   final Widget child;
   final bool showAppBar;
@@ -31,6 +32,7 @@ class View extends StatefulWidget {
   final String title;
   final void Function() onBack;
   final IconData backIcon;
+  final Widget actions;
 
   @override
   _ViewState createState() => _ViewState();
@@ -45,7 +47,7 @@ class _ViewState extends State<View> {
     if (widget.isRoot) {
       margin = const EdgeInsets.fromLTRB(0.0, 40.0, 0.0, 50.0);
     } else if (widget.showAppBar && widget.showNavBar) {
-      margin = const EdgeInsets.fromLTRB(0.0, 80.0, 0.0, 50.0);
+      margin = const EdgeInsets.fromLTRB(0.0, 88.0, 0.0, 50.0);
     }
 
     return SafeArea(
@@ -85,8 +87,7 @@ class _ViewState extends State<View> {
                 Icon(Icons.menu),
               ])),
       if (_showUserSettings || !widget.isRoot)
-        Container(
-            child: Stack(children: <Widget>[
+        Stack(children: <Widget>[
           if (_showUserSettings) _buildUserSettings(user, dispatch),
           if (!widget.isRoot)
             Stack(children: <Widget>[
@@ -102,8 +103,12 @@ class _ViewState extends State<View> {
                     Text(widget.title,
                         textAlign: TextAlign.center, style: textStyleTitleAlt),
                   ]),
+              if (widget.actions != null)
+                Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: <Widget>[widget.actions]),
             ])
-        ])),
+        ]),
     ]);
   }
 
