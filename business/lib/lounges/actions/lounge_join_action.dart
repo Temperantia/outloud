@@ -20,17 +20,12 @@ class LoungeJoinAction extends ReduxAction<AppState> {
     final List<String> _userIdes = lounge.memberIds + <String>[userId];
     final List<DocumentReference> _memberRefs =
         lounge.memberRefs + <DocumentReference>[getUserReference(userId)];
-    
-    // lounge.memberIds = _userIdes;
-    // lounge.memberRefs = _memberRefs;
     await updateLoungeUser(lounge, _userIdes, _memberRefs);
     
-    state.userState.user.lounges =
+    final List<String> _newLounges =
         List<String>.from(state.userState.user.lounges + <String>[lounge.id]);
-    await updateUser(state.userState.user);
+    await updateUserLounge(state.userState.user, _newLounges);
 
     return state;
-
-    // return state.copy(userState: state.userState.copy(eventLounges: state.userState.eventLounges));
   }
 }

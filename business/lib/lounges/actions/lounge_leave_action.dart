@@ -24,32 +24,18 @@ class LoungeLeaveAction extends ReduxAction<AppState> {
     final List<String> _userIdes = lounge.memberIds.sublist(0, _indexOfUserId) +
         lounge.memberIds.sublist(_indexOfUserId, lounge.memberIds.length - 1);
 
-    print('_userIdes :: ' + _userIdes.toString());
-
     final List<DocumentReference> _memberRefs =
         lounge.memberRefs.sublist(0, _indexOfUserRef) +
             lounge.memberRefs
                 .sublist(_indexOfUserRef, lounge.memberRefs.length - 1);
 
-    print('_memberRefs :: ' + _memberRefs.toString());
-
-    lounge.memberIds = _userIdes;
-    lounge.memberRefs = _memberRefs;
+    await updateLoungeUser(lounge, _userIdes, _memberRefs);
 
     final int _indexLounge = state.userState.user.lounges.indexOf(lounge.id);
-
-    state.userState.user.lounges = List<String>.from(
-        state.userState.user.lounges.sublist(0, _indexLounge) +
-            state.userState.user.lounges.sublist(
-                _indexLounge, state.userState.user.lounges.length - 1));
-
-    state.userState.user.lounges.remove(lounge.id);
-    await updateLounge(lounge);
-    await updateUser(state.userState.user);
-
-    // return state;
-
-        return state.copy(userState: state.userState.copy(eventLounges: state.userState.eventLounges));
-
+    final List<String> _newLounges = state.userState.user.lounges.sublist(0, _indexLounge) +
+             state.userState.user.lounges.sublist(
+                 _indexLounge, state.userState.user.lounges.length - 1);
+    await updateUserLounge(state.userState.user, _newLounges);
+    return state;
   }
 }
