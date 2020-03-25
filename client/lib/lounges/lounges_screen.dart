@@ -3,6 +3,7 @@ import 'package:business/app_state.dart';
 import 'package:business/classes/event.dart';
 import 'package:business/classes/lounge.dart';
 import 'package:business/classes/user.dart';
+import 'package:business/models/user.dart';
 import 'package:flutter/material.dart';
 import 'package:business/lounges/actions/lounge_join_action.dart';
 import 'package:business/lounges/actions/lounge_leave_action.dart';
@@ -12,24 +13,56 @@ import 'package:inclusive/widgets/cached_image.dart';
 import 'package:inclusive/widgets/view.dart';
 import 'package:provider_for_redux/provider_for_redux.dart';
 
-class LoungesScreen extends StatelessWidget {
+class LoungesScreen extends StatefulWidget {
   const LoungesScreen(this.event);
+  final Event event;
+  static const String id = 'LoungesScreen';
+
+  @override
+  _LoungesScreenState createState() => _LoungesScreenState(event);
+}
+
+class _LoungesScreenState extends State<LoungesScreen> {
+  _LoungesScreenState(this.event);
 
   final Event event;
+  Map<String, User> _owners;
 
-  static const String id = 'LoungesScreen';
+  @override
+  void initState() {
+    super.initState();
+    _owners = <String, User>{};
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  Future<void> resolveOwner(String loungeId, String ownerId) async {
+    if (_owners.containsKey(loungeId)) {
+      return;
+    }
+    final User owner = await getUser(ownerId);
+    setState(() {
+      _owners[loungeId] = owner;
+    });
+  }
 
 // TODO(robin): if lounge is full dont show it
   Widget _buildLounge(Lounge lounge,
       void Function(redux.ReduxAction<AppState>) dispatch, AppState state) {
-    final User owner =
-        lounge.members.firstWhere((User member) => member.id == lounge.owner);
-    final int availableSlots = lounge.memberLimit - lounge.members.length;
+    resolveOwner(lounge.id, lounge.owner);
+    final User owner = _owners[lounge.id];
+    if (owner == null) {
+      return Container();
+    }
+    final int availableSlots = lounge.memberLimit - lounge.memberIds.length;
     final String s = availableSlots <= 1 ? '' : 's';
 
     return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: <
         Widget>[
-      CachedImage(owner.pics.isEmpty ? null : owner.pics[0],
+      CachedImage(owner != null && owner.pics.isNotEmpty ? owner.pics[0]: null,
           width: 40.0,
           height: 40.0,
           borderRadius: BorderRadius.circular(20.0),
@@ -42,6 +75,7 @@ class LoungesScreen extends StatelessWidget {
                 Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
+                      if (owner != null)
                       Container(
                           child: RichText(
                               text: TextSpan(
