@@ -162,7 +162,7 @@ class _FindEventsScreen extends State<FindEventsScreen>
                         ),
                       ))),
               Container(
-                  padding: const EdgeInsets.all(5.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 5.0),
                   decoration: BoxDecoration(
                     border: Border.all(color: black, width: 1),
                   ),
@@ -188,6 +188,7 @@ class _FindEventsScreen extends State<FindEventsScreen>
                         });
                       })),
               Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 5.0),
                   decoration: BoxDecoration(
                     border: Border.all(color: black, width: 1),
                   ),
