@@ -1,7 +1,7 @@
 import 'package:async_redux/async_redux.dart';
 import 'package:business/actions/app_navigate_action.dart';
 import 'package:business/app_state.dart';
-import 'package:business/permissions/location_permission.dart';
+import 'package:business/singletons/permission_location.dart';
 import 'package:flutter/material.dart';
 import 'package:inclusive/events/events_widget.dart';
 import 'package:inclusive/home_widget.dart';
@@ -28,8 +28,7 @@ class _HomeScreenState extends State<HomeScreen>
   }
 
   Future<bool> requestLocationPermission() async {
-    final bool granted =
-        await LocationPermissionService().requestLocationPermission();
+    final bool granted = await PermissionLocation().requestLocationPermission();
     if (!granted) {
       onPermissionDenied();
     }
@@ -52,7 +51,7 @@ class _HomeScreenState extends State<HomeScreen>
                 FlatButton(
                     child: const Text('GO to settings'),
                     onPressed: () {
-                      LocationPermissionService().openAppSettings();
+                      PermissionLocation().openAppSettings();
                     }),
               ]);
         });

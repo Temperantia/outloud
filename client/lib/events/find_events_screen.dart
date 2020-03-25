@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:math';
 
 import 'package:async_redux/async_redux.dart' as redux;
 import 'package:business/app_state.dart';
@@ -13,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:inclusive/events/event_screen.dart';
+import 'package:inclusive/functions/loader_animation.dart';
 import 'package:inclusive/theme.dart';
 import 'package:inclusive/widgets/cached_image.dart';
 import 'package:inclusive/widgets/multiselect_dropdown.dart';
@@ -28,15 +28,13 @@ class FindEventsScreen extends StatefulWidget {
 class _FindEventsScreen extends State<FindEventsScreen>
     with
         AutomaticKeepAliveClientMixin<FindEventsScreen>,
-        SingleTickerProviderStateMixin {
+        TickerProviderStateMixin {
   final Completer<GoogleMapController> _controller =
       Completer<GoogleMapController>();
   final Map<String, Marker> _markers = <String, Marker>{};
   final GlobalKey _interestFilterKey = GlobalKey();
   final LayerLink _interestLink = LayerLink();
   final List<CheckBoxContent> _interests = <CheckBoxContent>[];
-
-  AnimationController _animationController;
 
   CameraPosition _initialMapLocation =
       const CameraPosition(target: LatLng(48.85902056, 2.34637398), zoom: 14);
@@ -60,10 +58,6 @@ class _FindEventsScreen extends State<FindEventsScreen>
     _interests.add(CheckBoxContent(checked: false, name: 'Gay Community'));
     _interests.add(CheckBoxContent(checked: false, name: 'Books'));
     _getPosition();
-    _animationController = AnimationController(
-        duration: const Duration(milliseconds: 600),
-        upperBound: pi * 2,
-        vsync: this);
   }
 
   void _shrinkMap() {
@@ -232,8 +226,12 @@ class _FindEventsScreen extends State<FindEventsScreen>
             )));
   }
 
-  Widget _buildEvent(Event event, Map<String, UserEventState> userEventStates,
-      void Function(redux.ReduxAction<AppState>) dispatch, ThemeStyle theme) {
+  Widget _buildEvent(
+      Event event,
+      Map<String, UserEventState> userEventStates,
+      void Function(redux.ReduxAction<AppState>) dispatch,
+      Future<void> Function(redux.ReduxAction<AppState>) dispatchFuture,
+      ThemeStyle theme) {
     final String date = event.dateStart == null
         ? null
         : DateFormat('dd').format(event.dateStart);
@@ -249,38 +247,8 @@ class _FindEventsScreen extends State<FindEventsScreen>
     return Column(children: <Widget>[
       GestureDetector(
           onTap: () async {
-            final Animation<double> _angleAnimation =
-                Tween<double>(begin: 0.0, end: 0.1)
-                    .animate(_animationController);
-            showDialog(
-              context: context,
-              barrierDismissible: false,
-              builder: (BuildContext context) {
-                return Dialog(
-                  backgroundColor: Colors.transparent,
-                  child: RotationTransition(
-                    turns: _angleAnimation,
-                    child: Container(
-                        width: 100,
-                        height: 100,
-                        child: Image.asset('images/iconLoader.png')),
-                  ),
-                );
-              },
-            );
-            _angleAnimation.addStatusListener((AnimationStatus status) {
-              if (status == AnimationStatus.completed) {
-                _animationController.reverse();
-              } else if (status == AnimationStatus.dismissed) {
-                _animationController.forward();
-              }
-            });
-            _animationController.forward(from: 0.0);
-            Future<void>.delayed(const Duration(milliseconds: 1200), () {
-              Navigator.pop(context); //pop dialog
-              dispatch(redux.NavigateAction<AppState>.pushNamed(EventScreen.id,
+            showLoaderAnimation(context, this, dispatch, redux.NavigateAction<AppState>.pushNamed(EventScreen.id,
                   arguments: event));
-            });
           },
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 10.0),
@@ -414,7 +382,7 @@ class _FindEventsScreen extends State<FindEventsScreen>
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
                                     _buildEvent(events[index], userEventStates,
-                                        dispatch, themeStyle),
+                                        dispatch, dispatchFuture, themeStyle),
                                   ]))))))
       /*  Expanded(
           flex: 1,

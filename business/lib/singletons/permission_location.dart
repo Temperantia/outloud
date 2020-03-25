@@ -1,7 +1,18 @@
 import 'package:location_permissions/location_permissions.dart';
 
-class LocationPermissionService {
-  final LocationPermissions _locationPermission = LocationPermissions();
+class PermissionLocation {
+  factory PermissionLocation() {
+    return _singletonPermissionLocation;
+  }
+
+  PermissionLocation._internal() {
+    _locationPermission = LocationPermissions();
+  }
+
+  LocationPermissions _locationPermission;
+
+  static final PermissionLocation _singletonPermissionLocation =
+      PermissionLocation._internal();
 
   Future<bool> requestLocationPermission() async {
     final PermissionStatus permissionStatus =
