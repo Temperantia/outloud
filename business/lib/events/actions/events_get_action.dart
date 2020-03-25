@@ -2,14 +2,14 @@ import 'package:async_redux/async_redux.dart' as redux;
 import 'package:business/app_state.dart';
 import 'package:business/classes/event.dart';
 import 'package:business/models/events.dart';
-import 'package:business/permissions/location_permission.dart';
+import 'package:business/singletons/permission_location.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:location_permissions/location_permissions.dart';
 
 class EventsGetAction extends redux.ReduxAction<AppState> {
   final Geolocator _geolocator = Geolocator();
-  final LocationPermissionService _locationPermissionService =
-      LocationPermissionService();
+  final PermissionLocation _locationPermissionService =
+      PermissionLocation();
   @override
   Future<AppState> reduce() async {
     final List<Event> events = await getEvents();
