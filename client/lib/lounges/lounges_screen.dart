@@ -29,81 +29,84 @@ class LoungesScreen extends StatelessWidget {
 
     return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: <
         Widget>[
-      if (owner != null)
-        CachedImage(
-          owner.pics.isNotEmpty ? owner.pics[0] : null,
+      CachedImage(owner.pics.isEmpty ? null : owner.pics[0],
           width: 40.0,
           height: 40.0,
-          borderRadius: BorderRadius.circular(180.0),
-        ),
+          borderRadius: BorderRadius.circular(20.0),
+          imageType: ImageType.User),
       Expanded(
           flex: 3,
           child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 5.0),
-            child: Column(children: <Widget>[
-              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: <
-                  Widget>[
-                Container(
-                    child: RichText(
-                        text: TextSpan(
-                            text: state.userState.user.id == owner.id
-                                ? 'Your Lounge'
-                                : owner.name + '\'s Lounge',
-                            style: const TextStyle(
-                                color: Colors.black,
-                                fontSize: 13,
-                                fontWeight: FontWeight.w500)))),
-                GestureDetector(
-                    onTap: () {
-                      // TODO(robin): this shouldnt exist, the owner shouldnt see a join button on his own lounges and maybe not even see it here (ask @nadir)
-                      if (lounge.owner == state.userState.user.id) {
-                        return;
-                      }
-                      if (lounge.memberIds.contains(state.userState.user.id)) {
-                        dispatch(
-                            LoungeLeaveAction(state.userState.user.id, lounge));
-                      } else {
-                        dispatch(
-                            LoungeJoinAction(state.userState.user.id, lounge));
-                      }
-                    },
-                    child: Container(
-                        child: RichText(
-                            text: TextSpan(
-                                text: lounge.memberIds
-                                        .contains(state.userState.user.id)
-                                    ? '< LEAVE'
-                                    : ' > JOIN ', // TODO(me): add arrow icon
-                                style: const TextStyle(
-                                    color: orange,
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.w700))))),
-              ]),
-              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: <
-                  Widget>[
-                Text('$availableSlots slot$s available'),
-                Row(children: <Widget>[
-                  for (User member in lounge.members)
-                    if (member.id != lounge.owner)
+              padding: const EdgeInsets.symmetric(horizontal: 5.0),
+              child: Column(children: <Widget>[
+                Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
                       Container(
-                          margin: const EdgeInsets.symmetric(horizontal: 5.0),
-                          child: CachedImage(
-                              member.pics.isNotEmpty ? member.pics[0] : null,
+                          child: RichText(
+                              text: TextSpan(
+                                  text: state.userState.user.id == owner.id
+                                      ? 'Your Lounge'
+                                      : owner.name + '\'s Lounge',
+                                  style: const TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.w500)))),
+                      GestureDetector(
+                          onTap: () {
+                            // TODO(robin): this shouldnt exist, the owner shouldnt see a join button on his own lounges and maybe not even see it here (ask @nadir)
+                            if (lounge.owner == state.userState.user.id) {
+                              return;
+                            }
+                            if (lounge.memberIds
+                                .contains(state.userState.user.id)) {
+                              dispatch(LoungeLeaveAction(
+                                  state.userState.user.id, lounge));
+                            } else {
+                              dispatch(LoungeJoinAction(
+                                  state.userState.user.id, lounge));
+                            }
+                          },
+                          child: Container(
+                              child: RichText(
+                                  text: TextSpan(
+                                      text: lounge.memberIds
+                                              .contains(state.userState.user.id)
+                                          ? '< LEAVE'
+                                          : ' > JOIN ', // TODO(me): add arrow icon
+                                      style: const TextStyle(
+                                          color: orange,
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.w700))))),
+                    ]),
+                Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Text('$availableSlots slot$s available'),
+                      Row(children: <Widget>[
+                        for (User member in lounge.members)
+                          if (member.id != lounge.owner)
+                            Container(
+                                margin:
+                                    const EdgeInsets.symmetric(horizontal: 5.0),
+                                child: CachedImage(
+                                    member.pics.isEmpty ? null : member.pics[0],
+                                    width: 20.0,
+                                    height: 20.0,
+                                    borderRadius: BorderRadius.circular(20.0),
+                                    imageType: ImageType.User)),
+                        for (int index = 0; index < availableSlots; index++)
+                          Container(
+                              margin:
+                                  const EdgeInsets.symmetric(horizontal: 5.0),
                               width: 20.0,
                               height: 20.0,
-                              borderRadius: BorderRadius.circular(180.0))),
-                  for (int index = 0; index < availableSlots; index++)
-                    Container(
-                        margin: const EdgeInsets.symmetric(horizontal: 5.0),
-                        width: 20.0,
-                        height: 20.0,
-                        decoration: BoxDecoration(
-                            color: Colors.grey,
-                            borderRadius: BorderRadius.circular(180))),
-                ]),
-              ]),
-            ]),
-          )),
+                              decoration: BoxDecoration(
+                                  color: Colors.grey,
+                                  borderRadius: BorderRadius.circular(180))),
+                      ])
+                    ])
+              ])))
     ]);
   }
 
@@ -125,18 +128,18 @@ class LoungesScreen extends StatelessWidget {
                           fontWeight: FontWeight.w500)))),
           Container(
               child: Row(children: <Widget>[
-            if (event.pic.isNotEmpty)
-              Flexible(
-                  child: Container(
-                      decoration: const BoxDecoration(
-                          border: Border(
-                              left: BorderSide(color: orange, width: 3.0))),
-                      child: CachedImage(event.pic,
-                          width: 30.0,
-                          height: 30.0,
-                          borderRadius: const BorderRadius.only(
-                              bottomRight: Radius.circular(5.0),
-                              topRight: Radius.circular(5.0))))),
+            Flexible(
+                child: Container(
+                    decoration: const BoxDecoration(
+                        border: Border(
+                            left: BorderSide(color: orange, width: 3.0))),
+                    child: CachedImage(event.pic,
+                        width: 30.0,
+                        height: 30.0,
+                        borderRadius: const BorderRadius.only(
+                            bottomRight: Radius.circular(5.0),
+                            topRight: Radius.circular(5.0)),
+                        imageType: ImageType.Event))),
             Expanded(
                 flex: 8,
                 child: Container(

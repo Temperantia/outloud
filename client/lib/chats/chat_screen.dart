@@ -94,7 +94,7 @@ class _ChatScreenState extends State<ChatScreen> {
                     padding: const EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10.0),
                     decoration: BoxDecoration(
                         color: orange,
-                        borderRadius: BorderRadius.circular(8.0)),
+                        borderRadius: BorderRadius.circular(20.0)),
                     margin: const EdgeInsets.only(left: 10.0, right: 10.0)))
           ]));
     } else {
@@ -111,7 +111,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   ),
                   padding: const EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10.0),
                   decoration: BoxDecoration(
-                      color: white, borderRadius: BorderRadius.circular(8.0)),
+                      color: white, borderRadius: BorderRadius.circular(20.0)),
                   margin: const EdgeInsets.only(left: 10.0, right: 10.0),
                 )),
                 Text(messageTime, style: Theme.of(context).textTheme.caption)

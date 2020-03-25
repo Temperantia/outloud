@@ -11,7 +11,6 @@ import 'package:flutter/material.dart';
 import 'package:inclusive/lounges/lounge_edit_screen.dart';
 import 'package:inclusive/theme.dart';
 import 'package:inclusive/widgets/cached_image.dart';
-import 'package:inclusive/widgets/circular_image.dart';
 import 'package:inclusive/widgets/view.dart';
 import 'package:intl/intl.dart' as date_formater;
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -42,22 +41,20 @@ class _LoungeChatScreenState extends State<LoungeChatScreen> {
     return Container(
         padding: const EdgeInsets.all(15.0),
         child: Row(children: <Widget>[
-          if (widget.lounge.event.pic.isNotEmpty)
-            Flexible(
-                child: Stack(alignment: Alignment.center, children: <Widget>[
-              Container(
-                  decoration: const BoxDecoration(
-                      border:
-                          Border(left: BorderSide(color: orange, width: 5.0))),
-                  child: CachedImage(
-                    widget.lounge.event.pic,
+          Flexible(
+              child: Stack(alignment: Alignment.center, children: <Widget>[
+            Container(
+                decoration: const BoxDecoration(
+                    border:
+                        Border(left: BorderSide(color: orange, width: 5.0))),
+                child: CachedImage(widget.lounge.event.pic,
                     width: 40.0,
                     height: 40.0,
                     borderRadius: const BorderRadius.only(
                         bottomRight: Radius.circular(5.0),
                         topRight: Radius.circular(5.0)),
-                  ))
-            ])),
+                    imageType: ImageType.Event))
+          ])),
           Flexible(
               flex: 8,
               child: Container(
@@ -65,10 +62,11 @@ class _LoungeChatScreenState extends State<LoungeChatScreen> {
                   child: Column(children: <Widget>[
                     Container(
                         child: Row(children: <Widget>[
-                      CachedImage(owner.pics.isNotEmpty ? owner.pics[0] : null,
+                      CachedImage(owner.pics.isEmpty ? null : owner.pics[0],
                           width: 20.0,
                           height: 20.0,
-                          borderRadius: BorderRadius.circular(180.0)),
+                          borderRadius: BorderRadius.circular(20.0),
+                          imageType: ImageType.User),
                       Container(
                           padding: const EdgeInsets.only(left: 10),
                           child: RichText(
@@ -156,10 +154,11 @@ class _LoungeChatScreenState extends State<LoungeChatScreen> {
             children: <Widget>[
               Container(
                   padding: const EdgeInsets.all(5),
-                  child: CircularImage(
-                    imageUrl: user.pics.isNotEmpty ? user.pics[0] : null,
-                    imageRadius: 35.0,
-                  )),
+                  child: CachedImage(user.pics.isEmpty ? null : user.pics[0],
+                      width: 35.0,
+                      height: 35.0,
+                      borderRadius: BorderRadius.circular(20.0),
+                      imageType: ImageType.User)),
               Expanded(
                   child: Container(
                       decoration: BoxDecoration(

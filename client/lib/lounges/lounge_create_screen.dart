@@ -32,15 +32,13 @@ class _LoungeCreateScreenState extends State<LoungeCreateScreen> {
                     : null,
                 borderRadius: BorderRadius.circular(5.0)),
             child: Row(children: <Widget>[
-              if (event.pic != null)
-                Padding(
-                    padding: const EdgeInsets.only(right: 10.0),
-                    child: CachedImage(
-                      event.pic,
+              Padding(
+                  padding: const EdgeInsets.only(right: 10.0),
+                  child: CachedImage(event.pic,
                       width: 40.0,
                       height: 40.0,
                       borderRadius: BorderRadius.circular(5.0),
-                    )),
+                      imageType: ImageType.Event)),
               Expanded(
                   child: Text(event.name,
                       style: const TextStyle(

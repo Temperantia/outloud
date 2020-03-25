@@ -8,7 +8,7 @@ import 'package:inclusive/chats/chat_screen.dart';
 import 'package:inclusive/people/people_search_screen.dart';
 import 'package:inclusive/profile/profile_screen.dart';
 import 'package:inclusive/widgets/button.dart';
-import 'package:inclusive/widgets/circular_image.dart';
+import 'package:inclusive/widgets/cached_image.dart';
 import 'package:inclusive/widgets/loading.dart';
 import 'package:provider_for_redux/provider_for_redux.dart';
 
@@ -37,9 +37,11 @@ class _PeopleWidgetState extends State<PeopleWidget>
             padding: const EdgeInsets.all(10.0),
             margin: const EdgeInsets.symmetric(vertical: 10.0),
             child: Row(children: <Widget>[
-              CircularImage(
-                  imageUrl: user.pics.isEmpty ? null : user.pics[0],
-                  imageRadius: 50.0),
+              CachedImage(user.pics.isEmpty ? null : user.pics[0],
+                  width: 50.0,
+                  height: 50.0,
+                  borderRadius: BorderRadius.circular(20.0),
+                  imageType: ImageType.User),
               Expanded(
                   flex: 3,
                   child: Container(
@@ -84,7 +86,11 @@ class _PeopleWidgetState extends State<PeopleWidget>
             padding: const EdgeInsets.all(10.0),
             margin: const EdgeInsets.symmetric(vertical: 10.0),
             child: Row(children: <Widget>[
-              CircularImage(imageUrl: pic, imageRadius: 50.0),
+              CachedImage(pic,
+                  width: 50.0,
+                  height: 50.0,
+                  borderRadius: BorderRadius.circular(20.0),
+                  imageType: ImageType.User),
               Expanded(
                   child: Container(
                       padding: const EdgeInsets.symmetric(horizontal: 5.0),

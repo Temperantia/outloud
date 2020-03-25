@@ -11,7 +11,7 @@ import 'package:inclusive/profile/profile_screen.dart';
 import 'package:inclusive/theme.dart';
 import 'package:inclusive/widgets/bubble_bar.dart';
 import 'package:inclusive/widgets/button.dart';
-import 'package:inclusive/widgets/circular_image.dart';
+import 'package:inclusive/widgets/cached_image.dart';
 import 'package:provider_for_redux/provider_for_redux.dart';
 
 class View extends StatefulWidget {
@@ -76,9 +76,12 @@ class _ViewState extends State<View> {
                   GestureDetector(
                       onTap: () => setState(
                           () => _showUserSettings = !_showUserSettings),
-                      child: CircularImage(
-                          imageRadius: 40.0,
-                          imageUrl: user.pics.isEmpty ? null : user.pics[0])),
+                      child: CachedImage(
+                          user.pics.isEmpty ? null : user.pics[0],
+                          width: 40.0,
+                          height: 40.0,
+                          borderRadius: BorderRadius.circular(20.0),
+                          imageType: ImageType.User)),
                 Icon(Icons.menu),
               ])),
       if (_showUserSettings || !widget.isRoot)

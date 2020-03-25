@@ -53,10 +53,11 @@ class _LoungesWidgetState extends State<LoungesWidget>
           Row(children: <Widget>[
             Container(
                 margin: const EdgeInsets.only(right: 5),
-                child: CachedImage(owner.pics.isNotEmpty ? owner.pics[0] : null,
+                child: CachedImage(owner.pics.isEmpty ? null : owner.pics[0],
                     width: 20.0,
                     height: 20.0,
-                    borderRadius: BorderRadius.circular(180.0))),
+                    borderRadius: BorderRadius.circular(20.0),
+                    imageType: ImageType.User)),
             Expanded(
                 child: RichText(
                     text: TextSpan(
@@ -113,33 +114,29 @@ class _LoungesWidgetState extends State<LoungesWidget>
         child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              // TODO(me): later default event pic ?
-              if (lounge.event != null && lounge.event.pic.isNotEmpty)
+              Container(
+                  child: Stack(alignment: Alignment.center, children: <Widget>[
                 Container(
-                    child:
-                        Stack(alignment: Alignment.center, children: <Widget>[
-                  Container(
-                      decoration: const BoxDecoration(
-                          border: Border(
-                              left: BorderSide(color: orange, width: 7.0))),
-                      child: CachedImage(
-                        lounge.event.pic,
+                    decoration: const BoxDecoration(
+                        border: Border(
+                            left: BorderSide(color: orange, width: 7.0))),
+                    child: CachedImage(lounge.event.pic,
                         width: 70.0,
                         height: 70.0,
                         borderRadius: const BorderRadius.only(
                             bottomRight: Radius.circular(5.0),
                             topRight: Radius.circular(5.0)),
-                      )),
-                  GestureDetector(
-                      onTap: () => dispatch(
-                          redux.NavigateAction<AppState>.pushNamed(
-                              LoungeChatScreen.id,
-                              arguments: lounge)),
-                      child: Container(
-                          width: 40.0,
-                          height: 40.0,
-                          child: Image.asset('images/chatIcon.png'))),
-                ])),
+                        imageType: ImageType.Event)),
+                GestureDetector(
+                    onTap: () => dispatch(
+                        redux.NavigateAction<AppState>.pushNamed(
+                            LoungeChatScreen.id,
+                            arguments: lounge)),
+                    child: Container(
+                        width: 40.0,
+                        height: 40.0,
+                        child: Image.asset('images/chatIcon.png'))),
+              ])),
               Expanded(
                   child: Container(
                       padding: const EdgeInsets.all(10.0),
@@ -183,27 +180,24 @@ class _LoungesWidgetState extends State<LoungesWidget>
     return Container(
         margin: const EdgeInsets.symmetric(vertical: 10.0),
         child: Row(children: <Widget>[
-          // TODO(me): later default event pic ?
-          if (event.pic.isNotEmpty)
-            Flexible(
-                child: Stack(alignment: Alignment.center, children: <Widget>[
-              Container(
-                  decoration: const BoxDecoration(
-                      border:
-                          Border(left: BorderSide(color: orange, width: 7.0))),
-                  child: CachedImage(
-                    event.pic,
+          Flexible(
+              child: Stack(alignment: Alignment.center, children: <Widget>[
+            Container(
+                decoration: const BoxDecoration(
+                    border:
+                        Border(left: BorderSide(color: orange, width: 7.0))),
+                child: CachedImage(event.pic,
                     width: 70.0,
                     height: 70.0,
                     borderRadius: const BorderRadius.only(
                         bottomRight: Radius.circular(5.0),
                         topRight: Radius.circular(5.0)),
-                  )),
-              if (state == UserEventState.Attending)
-                Icon(Icons.check, size: 40.0, color: white)
-              else
-                Icon(MdiIcons.heart, size: 40.0, color: white),
-            ])),
+                    imageType: ImageType.Event)),
+            if (state == UserEventState.Attending)
+              Icon(Icons.check, size: 40.0, color: white)
+            else if (state == UserEventState.Liked)
+              Icon(MdiIcons.heart, size: 40.0, color: white),
+          ])),
           Expanded(
               flex: 3,
               child: Padding(

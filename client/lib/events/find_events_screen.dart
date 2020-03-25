@@ -127,39 +127,38 @@ class _FindEventsScreen extends State<FindEventsScreen>
                   child: CompositedTransformTarget(
                       link: _interestLink,
                       child: Container(
-                        decoration: BoxDecoration(
-                          border: Border.all(color: black, width: 1),
-                        ),
-                        key: _interestFilterKey,
-                        child: FlatButton(
-                          child: Row(
-                            children: <Widget>[
-                              const Text('Interests'),
-                              Icon(Icons.arrow_drop_down)
-                            ],
+                          decoration: BoxDecoration(
+                            border: Border.all(color: black, width: 1),
                           ),
-                          onPressed: () {
-                            if (_checkBoxDisplayed) {
-                              _interestsCheckBox.remove();
-                              setState(() {
-                                _checkBoxDisplayed = false;
-                              });
-                            } else {
-                              _shrinkMap();
-                              setState(() {
-                                _interestsCheckBox = _createInterestsCheckBox();
-                                _checkBoxDisplayed = true;
-                              });
-                              Overlay.of(context).insert(_interestsCheckBox);
-                            }
-                          },
-                        ),
-                      ))),
+                          key: _interestFilterKey,
+                          child: FlatButton(
+                              child: Row(
+                                children: <Widget>[
+                                  const Text('Interests'),
+                                  Icon(Icons.arrow_drop_down)
+                                ],
+                              ),
+                              onPressed: () {
+                                if (_checkBoxDisplayed) {
+                                  _interestsCheckBox.remove();
+                                  setState(() {
+                                    _checkBoxDisplayed = false;
+                                  });
+                                } else {
+                                  _shrinkMap();
+                                  setState(() {
+                                    _interestsCheckBox =
+                                        _createInterestsCheckBox();
+                                    _checkBoxDisplayed = true;
+                                  });
+                                  Overlay.of(context)
+                                      .insert(_interestsCheckBox);
+                                }
+                              })))),
               Container(
                   padding: const EdgeInsets.symmetric(horizontal: 5.0),
-                  decoration: BoxDecoration(
-                    border: Border.all(color: black, width: 1),
-                  ),
+                  decoration:
+                      BoxDecoration(border: Border.all(color: black, width: 1)),
                   child: DropdownButton<String>(
                       hint: const Text('Distance'),
                       underline: Container(),
@@ -217,13 +216,12 @@ class _FindEventsScreen extends State<FindEventsScreen>
             height: 300,
             width: 200,
             child: CompositedTransformFollower(
-              link: _interestLink,
-              showWhenUnlinked: false,
-              offset: Offset(0.0, sizeInterests.height + 5),
-              child: Material(
-                  elevation: 4.0,
-                  child: MyMultiCheckBoxesContent(checkboxes: _interests)),
-            )));
+                link: _interestLink,
+                showWhenUnlinked: false,
+                offset: Offset(0.0, sizeInterests.height + 5),
+                child: Material(
+                    elevation: 4.0,
+                    child: MyMultiCheckBoxesContent(checkboxes: _interests)))));
   }
 
   Widget _buildEvent(
@@ -247,88 +245,89 @@ class _FindEventsScreen extends State<FindEventsScreen>
     return Column(children: <Widget>[
       GestureDetector(
           onTap: () async {
-            showLoaderAnimation(context, this, dispatch, redux.NavigateAction<AppState>.pushNamed(EventScreen.id,
-                  arguments: event));
+            showLoaderAnimation(
+                context,
+                this,
+                dispatch,
+                redux.NavigateAction<AppState>.pushNamed(EventScreen.id,
+                    arguments: event));
           },
           child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10.0),
-            child: Row(children: <Widget>[
-              if (date != null && time != null)
-                Container(
-                    width: 50.0,
-                    height: 50.0,
-                    decoration: BoxDecoration(
-                        color: pinkBright,
-                        borderRadius: BorderRadius.circular(5.0)),
-                    padding: const EdgeInsets.symmetric(vertical: 5.0),
-                    child: Column(children: <Widget>[
-                      Text(date,
-                          style: const TextStyle(
-                              color: white, fontWeight: FontWeight.bold)),
-                      Text(month,
-                          style: const TextStyle(
-                              color: white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 10.0))
-                    ])),
-              Expanded(
-                  child: Container(
-                      padding: const EdgeInsets.all(10.0),
-                      child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Text(event.name,
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.bold)),
-                            Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: <Widget>[
-                                  Text('$time - $timeEnd',
-                                      style: const TextStyle(color: orange)),
-                                  if (event.distance != null)
-                                    Container(
-                                        child: Text(
-                                            '${event.distance.toString()}km away',
-                                            style:
-                                                const TextStyle(color: orange)))
-                                ]),
-                            Wrap(children: <Widget>[
-                              for (Interest interest in event.interests)
-                                Container(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 5.0),
-                                    decoration: BoxDecoration(
-                                        borderRadius:
-                                            BorderRadius.circular(5.0),
-                                        border: Border.all(color: pink)),
-                                    child: Text(interest.name.toUpperCase(),
-                                        style: TextStyle(
-                                            color: pink,
-                                            fontWeight: FontWeight.bold)))
-                            ])
-                          ]))),
-              if (event != null && event.pic.isNotEmpty)
+              padding: const EdgeInsets.symmetric(horizontal: 10.0),
+              child: Row(children: <Widget>[
+                if (date != null && time != null)
+                  Container(
+                      width: 50.0,
+                      height: 50.0,
+                      decoration: BoxDecoration(
+                          color: pinkBright,
+                          borderRadius: BorderRadius.circular(5.0)),
+                      padding: const EdgeInsets.symmetric(vertical: 5.0),
+                      child: Column(children: <Widget>[
+                        Text(date,
+                            style: const TextStyle(
+                                color: white, fontWeight: FontWeight.bold)),
+                        Text(month,
+                            style: const TextStyle(
+                                color: white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 10.0))
+                      ])),
+                Expanded(
+                    child: Container(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Text(event.name,
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold)),
+                              Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: <Widget>[
+                                    Text('$time - $timeEnd',
+                                        style: const TextStyle(color: orange)),
+                                    if (event.distance != null)
+                                      Container(
+                                          child: Text(
+                                              '${event.distance.toString()}km away',
+                                              style: const TextStyle(
+                                                  color: orange)))
+                                  ]),
+                              Wrap(children: <Widget>[
+                                for (Interest interest in event.interests)
+                                  Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 5.0),
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(5.0),
+                                          border: Border.all(color: pink)),
+                                      child: Text(interest.name.toUpperCase(),
+                                          style: const TextStyle(
+                                              color: pink,
+                                              fontWeight: FontWeight.bold)))
+                              ])
+                            ]))),
                 Stack(alignment: Alignment.center, children: <Widget>[
                   Container(
                       decoration: const BoxDecoration(
                           border: Border(
                               left: BorderSide(color: orange, width: 7.0))),
-                      child: CachedImage(
-                        event.pic,
-                        width: 50.0,
-                        height: 50.0,
-                        borderRadius: const BorderRadius.only(
-                            bottomRight: Radius.circular(5.0),
-                            topRight: Radius.circular(5.0)),
-                      )),
+                      child: CachedImage(event.pic,
+                          width: 50.0,
+                          height: 50.0,
+                          borderRadius: const BorderRadius.only(
+                              bottomRight: Radius.circular(5.0),
+                              topRight: Radius.circular(5.0)),
+                          imageType: ImageType.Event)),
                   if (state == UserEventState.Attending)
                     Icon(Icons.check, size: 40.0, color: white)
-                  else
+                  else if (state == UserEventState.Liked)
                     Icon(MdiIcons.heart, size: 40.0, color: white),
-                ]),
-            ]),
-          )),
+                ])
+              ]))),
       const Divider(color: orange),
     ]);
   }
@@ -420,13 +419,12 @@ class _FindEventsScreen extends State<FindEventsScreen>
         }
       }
       return Container(
-        child: _buildFindEvents(
-            state.eventsState.events,
-            state.userState.user.events,
-            state.theme,
-            dispatch,
-            store.dispatchFuture),
-      );
+          child: _buildFindEvents(
+              state.eventsState.events,
+              state.userState.user.events,
+              state.theme,
+              dispatch,
+              store.dispatchFuture));
     });
   }
 }

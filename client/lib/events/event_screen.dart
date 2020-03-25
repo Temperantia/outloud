@@ -362,10 +362,8 @@ class _EventScreenState extends State<EventScreen> {
     return Container(
         constraints: const BoxConstraints.expand(height: 160),
         child: Row(children: <Widget>[
-          if (_event.pic.isNotEmpty)
-            Expanded(flex: 1, child: CachedImage(_event.pic)),
+          Expanded(child: CachedImage(_event.pic, imageType: ImageType.Event)),
           Expanded(
-              flex: 1,
               child: Container(
                   padding: const EdgeInsets.all(5),
                   decoration: const BoxDecoration(color: white),

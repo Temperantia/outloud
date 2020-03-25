@@ -4,7 +4,7 @@ import 'package:business/classes/interest.dart';
 import 'package:business/classes/user.dart';
 import 'package:flutter/material.dart';
 import 'package:inclusive/theme.dart';
-import 'package:inclusive/widgets/circular_image.dart';
+import 'package:inclusive/widgets/cached_image.dart';
 import 'package:inclusive/widgets/view.dart';
 import 'package:provider_for_redux/provider_for_redux.dart';
 
@@ -55,12 +55,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
         child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Padding(
-                  padding: const EdgeInsets.only(right: 10.0),
-                  child: CircularImage(
-                      imageUrl:
-                          'https://firebasestorage.googleapis.com/v0/b/incl-9b378.appspot.com/o/images%2Finterests%2F${interest.name}.png?alt=media',
-                      imageRadius: 50.0)),
               Expanded(
                   child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -70,8 +64,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       interest.comment,
                       overflow: TextOverflow.ellipsis,
                       maxLines: 10,
-                    ),
-                  ])),
+                    )
+                  ]))
             ]));
   }
 
@@ -110,11 +104,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   length: 2,
                   child: Column(children: <Widget>[
                     const SizedBox(height: 20.0),
-                    CircularImage(
-                      imageUrl:
-                          widget.user.pics.isEmpty ? null : widget.user.pics[0],
-                      imageRadius: 150.0,
-                    ),
+                    CachedImage(
+                        widget.user.pics.isEmpty ? null : widget.user.pics[0],
+                        width: 150.0,
+                        height: 150.0,
+                        borderRadius: BorderRadius.circular(20.0),
+                        imageType: ImageType.User),
                     Text('${widget.user.name} • ${widget.user.getAge()}',
                         style: textStyleTitle(state.theme)),
                     const TabBar(

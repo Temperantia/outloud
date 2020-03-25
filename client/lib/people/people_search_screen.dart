@@ -4,7 +4,7 @@ import 'package:business/classes/user.dart';
 import 'package:business/people/actions/people_get_action.dart';
 import 'package:flutter/material.dart';
 import 'package:inclusive/profile/profile_screen.dart';
-import 'package:inclusive/widgets/circular_image.dart';
+import 'package:inclusive/widgets/cached_image.dart';
 import 'package:inclusive/widgets/loading.dart';
 import 'package:inclusive/widgets/view.dart';
 import 'package:provider_for_redux/provider_for_redux.dart';
@@ -32,9 +32,11 @@ class _PeopleSearchScreenState extends State<PeopleSearchScreen> {
             padding: const EdgeInsets.all(10.0),
             margin: const EdgeInsets.symmetric(vertical: 10.0),
             child: Row(children: <Widget>[
-              CircularImage(
-                  imageUrl: user.pics.isEmpty ? null : user.pics[0],
-                  imageRadius: 50.0),
+              CachedImage(user.pics.isEmpty ? null : user.pics[0],
+                  width: 50.0,
+                  height: 50.0,
+                  borderRadius: BorderRadius.circular(20.0),
+                  imageType: ImageType.User),
               Expanded(
                   flex: 3,
                   child: Container(

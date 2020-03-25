@@ -65,7 +65,8 @@ class _MyEventsScreen extends State<MyEventsScreen>
                 height: 70.0,
                 borderRadius: const BorderRadius.only(
                     bottomRight: Radius.circular(5.0),
-                    topRight: Radius.circular(5.0))),
+                    topRight: Radius.circular(5.0)),
+                imageType: ImageType.Event),
             Container(color: pink.withOpacity(0.5), width: 70.0, height: 70.0),
             Column(children: <Widget>[
               Text(date,

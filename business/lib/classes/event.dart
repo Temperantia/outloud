@@ -15,7 +15,7 @@ class Event extends Entity {
     this.adminIds = const <String>[],
     this.memberIds = const <String>[],
     this.likes = const <String>[],
-    this.pic = '',
+    this.pic,
     this.price = '',
   }) : super(
           id: id,
@@ -41,7 +41,7 @@ class Event extends Entity {
         likes = snapshot['likes'] == null
             ? <String>[]
             : snapshot['likes'].cast<String>() as List<String>,
-        pic = snapshot['pic'] as String ?? '',
+        pic = snapshot['pic'] as String,
         price = snapshot['price'] as String ?? '',
         super(
           id: id ?? '',

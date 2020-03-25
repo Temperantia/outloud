@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:inclusive/widgets/circular_image.dart';
+import 'package:inclusive/widgets/cached_image.dart';
 
 class ImageStack extends StatelessWidget {
   const ImageStack({
@@ -36,8 +36,8 @@ class ImageStack extends StatelessWidget {
     final List<Widget> images = <Widget>[];
     int _size = imageCount;
     if (imageList.isNotEmpty) {
-      images
-          .add(CircularImage(imageRadius: imageRadius, imageUrl: imageList[0]));
+      images.add(CachedImage(imageList[0],
+          width: imageRadius, height: imageRadius, imageType: ImageType.User));
     }
 
     if (imageList.length > 1) {
@@ -48,51 +48,42 @@ class ImageStack extends StatelessWidget {
           .sublist(1, _size)
           .asMap()
           .map((int index, String image) => MapEntry<int, Positioned>(
-                index,
-                Positioned(
+              index,
+              Positioned(
                   right: 0.8 * imageRadius * (index + 1.0),
-                  child:
-                      CircularImage(imageRadius: imageRadius, imageUrl: image),
-                ),
-              ))
+                  child: CachedImage(image,
+                      width: imageRadius,
+                      height: imageRadius,
+                      imageType: ImageType.User))))
           .values
           .toList());
     }
     return Container(
-      child: Row(
-        children: <Widget>[
-          if (images.isNotEmpty)
-            Stack(
-              overflow: Overflow.visible,
-              textDirection: TextDirection.rtl,
-              children: images,
-            )
-          else
-            const SizedBox(),
-          Container(
-            margin: const EdgeInsets.only(left: 5),
-            child: totalCount - images.length > 0
-                ? Container(
-                    constraints: BoxConstraints(minWidth: imageRadius),
-                    padding: const EdgeInsets.all(3),
-                    height: imageRadius,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(imageRadius),
-                        border: Border.all(
-                            color: imageBorderColor, width: imageBorderWidth),
-                        color: backgroundColor),
-                    child: Center(
-                      child: Text(
-                        (totalCount - images.length).toString(),
-                        textAlign: TextAlign.center,
-                        style: extraCountTextStyle,
-                      ),
-                    ),
-                  )
-                : const SizedBox(),
-          ),
-        ],
-      ),
-    );
+        child: Row(children: <Widget>[
+      if (images.isNotEmpty)
+        Stack(
+            overflow: Overflow.visible,
+            textDirection: TextDirection.rtl,
+            children: images)
+      else
+        const SizedBox(),
+      Container(
+          margin: const EdgeInsets.only(left: 5),
+          child: totalCount - images.length > 0
+              ? Container(
+                  constraints: BoxConstraints(minWidth: imageRadius),
+                  padding: const EdgeInsets.all(3),
+                  height: imageRadius,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(imageRadius),
+                      border: Border.all(
+                          color: imageBorderColor, width: imageBorderWidth),
+                      color: backgroundColor),
+                  child: Center(
+                      child: Text((totalCount - images.length).toString(),
+                          textAlign: TextAlign.center,
+                          style: extraCountTextStyle)))
+              : const SizedBox())
+    ]));
   }
 }
