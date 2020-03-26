@@ -44,6 +44,8 @@ class _EventScreenState extends State<EventScreen> {
 
   CameraPosition _intialMapLocation;
   String _adressEvent;
+  double _latitude;
+  double _longitude;
 
   @override
   void initState() {
@@ -51,21 +53,21 @@ class _EventScreenState extends State<EventScreen> {
     _event = widget.event;
     _eventSub = streamEvent(widget.event.id)
         .listen((Event event) => setState(() => _event = event));
-    _resolveAdressEvent();
-    _intialMapLocation = CameraPosition(
-        target: LatLng(_event.location.latitude, _event.location.longitude),
-        zoom: 14);
+    _latitude = _event.location != null ? _event.location.latitude : 48.859305;
+    _longitude = _event.location != null ? _event.location.longitude : 2.294348;
+    _intialMapLocation =
+        CameraPosition(target: LatLng(_latitude, _longitude), zoom: 14);
     _markers.clear();
     _markers[_event.id] = Marker(
         markerId: MarkerId(_event.id),
-        position: LatLng(_event.location.latitude, _event.location.longitude),
+        position: LatLng(_latitude, _longitude),
         infoWindow: InfoWindow(title: _event.name));
+    _resolveAdressEvent();
   }
 
   Future<int> _resolveAdressEvent() async {
-    final List<Placemark> placemark = await Geolocator()
-        .placemarkFromCoordinates(
-            _event.location.latitude, _event.location.longitude);
+    final List<Placemark> placemark =
+        await Geolocator().placemarkFromCoordinates(_latitude, _longitude);
     String _address = '';
     if (placemark.isNotEmpty) {
       final Placemark _place = placemark.first;
@@ -343,7 +345,9 @@ class _EventScreenState extends State<EventScreen> {
                               child: Image.asset('images/iconLounge.png')),
                           RichText(
                               text: TextSpan(
-                                  text: lounges.length.toString(),
+                                  text: lounges != null
+                                      ? lounges.length.toString()
+                                      : '0',
                                   style: const TextStyle(
                                       color: white,
                                       fontSize: 16,
