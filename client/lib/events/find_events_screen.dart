@@ -250,7 +250,7 @@ class _FindEventsScreen extends State<FindEventsScreen>
                 this,
                 dispatch,
                 redux.NavigateAction<AppState>.pushNamed(EventScreen.id,
-                    arguments: event));
+                    arguments: event), 600);
           },
           child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 10.0),

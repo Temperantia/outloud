@@ -7,6 +7,8 @@ import 'package:business/models/user.dart';
 import 'package:flutter/material.dart';
 import 'package:business/lounges/actions/lounge_join_action.dart';
 import 'package:business/lounges/actions/lounge_leave_action.dart';
+import 'package:inclusive/functions/loader_animation.dart';
+import 'package:inclusive/lounges/lounge_chat_screen.dart';
 
 import 'package:inclusive/theme.dart';
 import 'package:inclusive/widgets/cached_image.dart';
@@ -22,7 +24,8 @@ class LoungesScreen extends StatefulWidget {
   _LoungesScreenState createState() => _LoungesScreenState(event);
 }
 
-class _LoungesScreenState extends State<LoungesScreen> {
+class _LoungesScreenState extends State<LoungesScreen>
+    with TickerProviderStateMixin {
   _LoungesScreenState(this.event);
 
   final Event event;
@@ -50,11 +53,17 @@ class _LoungesScreenState extends State<LoungesScreen> {
   }
 
 // TODO(robin): if lounge is full dont show it
-  Widget _buildLounge(Lounge lounge,
-      void Function(redux.ReduxAction<AppState>) dispatch, AppState state) {
+  Widget _buildLounge(
+      Lounge lounge,
+      Future<void> Function(redux.ReduxAction<AppState>) dispatchFuture,
+      void Function(redux.ReduxAction<AppState>) dispatch,
+      AppState state) {
     resolveOwner(lounge.id, lounge.owner);
     final User owner = _owners[lounge.id];
     if (owner == null) {
+      return Container();
+    }
+    if (owner.id == state.userState.user.id) {
       return Container();
     }
     final int availableSlots = lounge.memberLimit - lounge.memberIds.length;
@@ -87,7 +96,7 @@ class _LoungesScreenState extends State<LoungesScreen> {
                                         fontSize: 13,
                                         fontWeight: FontWeight.w500)))),
                       GestureDetector(
-                          onTap: () {
+                          onTap: () async {
                             // TODO(robin): this shouldnt exist, the owner shouldnt see a join button on his own lounges and maybe not even see it here (ask @nadir)
                             if (lounge.owner == state.userState.user.id) {
                               return;
@@ -97,8 +106,16 @@ class _LoungesScreenState extends State<LoungesScreen> {
                               dispatch(LoungeLeaveAction(
                                   state.userState.user.id, lounge));
                             } else {
-                              dispatch(LoungeJoinAction(
+                              dispatchFuture(LoungeJoinAction(
                                   state.userState.user.id, lounge));
+                              showLoaderAnimation(
+                                  context,
+                                  this,
+                                  dispatch,
+                                  redux.NavigateAction<AppState>.pushNamed(
+                                      LoungeChatScreen.id,
+                                      arguments: lounge),
+                                  1200);
                             }
                           },
                           child: Container(
@@ -190,8 +207,11 @@ class _LoungesScreenState extends State<LoungesScreen> {
         ]));
   }
 
-  Widget _buildListLounges(List<Lounge> lounges,
-      void Function(redux.ReduxAction<AppState>) dispatch, AppState state) {
+  Widget _buildListLounges(
+      List<Lounge> lounges,
+      Future<void> Function(redux.ReduxAction<AppState>) dispatchFuture,
+      void Function(redux.ReduxAction<AppState>) dispatch,
+      AppState state) {
     if (lounges == null) {
       return Container(); // TODO(robin): handle no lounge @anthony
     }
@@ -202,7 +222,8 @@ class _LoungesScreenState extends State<LoungesScreen> {
                 itemCount: lounges.length,
                 itemBuilder: (BuildContext context, int index) => Container(
                     padding: const EdgeInsets.all(10.0),
-                    child: _buildLounge(lounges[index], dispatch, state)))));
+                    child: _buildLounge(
+                        lounges[index], dispatchFuture, dispatch, state)))));
   }
 
   @override
@@ -221,7 +242,9 @@ class _LoungesScreenState extends State<LoungesScreen> {
                     child: Column(children: <Widget>[
               _buildHeader(context),
               const Divider(),
-              Expanded(child: _buildListLounges(lounges, dispatch, state)),
+              Expanded(
+                  child: _buildListLounges(
+                      lounges, store.dispatchFuture, dispatch, state)),
             ])))
           ]));
     });
