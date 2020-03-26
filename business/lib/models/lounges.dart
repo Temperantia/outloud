@@ -12,6 +12,7 @@ Stream<Lounge> streamLounge(String id) {
 
 Stream<List<Lounge>> streamLounges({List<String> ids, List<String> eventIds}) {
   Query query = _api.queryCollection();
+
   if ((eventIds != null && eventIds.isEmpty) || (ids != null && ids.isEmpty)) {
     return Stream<List<Lounge>>.value(<Lounge>[]);
   }

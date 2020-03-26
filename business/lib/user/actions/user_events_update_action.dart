@@ -22,7 +22,7 @@ class UserEventsUpdateAction extends redux.ReduxAction<AppState> {
     if (eventLoungesSub != null) {
       eventLoungesSub.cancel();
     }
-
+    
     eventLoungesSub = streamLounges(eventIds: eventIds).listen(
         // TODO(me): actually it's a future lol
         (List<Lounge> lounges) =>

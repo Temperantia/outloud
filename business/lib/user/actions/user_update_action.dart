@@ -38,6 +38,7 @@ class UserUpdateAction extends redux.ReduxAction<AppState> {
     if (loungesSub != null) {
       loungesSub.cancel();
     }
+
     loungesSub = streamLounges(ids: user.lounges).listen(
         (List<Lounge> lounges) => dispatch(UserLoungesUpdateAction(lounges)));
 
