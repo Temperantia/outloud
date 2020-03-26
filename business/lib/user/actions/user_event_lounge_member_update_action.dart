@@ -3,16 +3,18 @@ import 'package:business/app_state.dart';
 import 'package:business/classes/lounge.dart';
 import 'package:business/classes/user.dart';
 
-class UserLoungeMemberUpdateAction extends ReduxAction<AppState> {
-  UserLoungeMemberUpdateAction(this._user, this.loungeId);
+class UserEventLoungeMemberUpdateAction extends ReduxAction<AppState> {
+  UserEventLoungeMemberUpdateAction(this._user, this.loungeId, this.eventId);
 
   final User _user;
   final String loungeId;
+  final String eventId;
 
   @override
   AppState reduce() {
-    final List<Lounge> lounges = state.userState.lounges;
+    final Map<String, List<Lounge>> eventLounges = state.userState.eventLounges;
 
+    final List<Lounge> lounges = eventLounges[eventId];
     final Lounge lounge =
         lounges.firstWhere((Lounge lounge) => lounge.id == loungeId);
     final int index =
@@ -23,6 +25,7 @@ class UserLoungeMemberUpdateAction extends ReduxAction<AppState> {
       lounge.members[index] = _user;
     }
 
-    return state.copy(userState: state.userState.copy(lounges: lounges));
+    return state.copy(
+        userState: state.userState.copy(eventLounges: eventLounges));
   }
 }

@@ -25,10 +25,10 @@ class _EventsWidgetState extends State<EventsWidget>
         AppState state,
         void Function(redux.ReduxAction<dynamic>) dispatch,
         Widget child) {
-      if (state.eventsState.events == null ||
+      if ( //state.eventsState.events == null ||
           state.userState.events == null ||
-          state.userState.user.events == null ||
-          state.userState.lounges == null) {
+              state.userState.user.events == null ||
+              state.userState.lounges == null) {
         return Loading();
       }
       return DefaultTabController(

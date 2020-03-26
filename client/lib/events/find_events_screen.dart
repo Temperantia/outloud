@@ -416,6 +416,7 @@ class _FindEventsScreen extends State<FindEventsScreen>
         void Function(redux.ReduxAction<dynamic>) dispatch,
         Widget child) {
       _markers.clear();
+      // TODO(alexandre): this thing might bug
       for (final Event event in state.eventsState.events) {
         if (event.location != null) {
           _markers[event.id] = Marker(

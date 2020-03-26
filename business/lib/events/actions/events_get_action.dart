@@ -1,7 +1,12 @@
+import 'dart:async';
+
 import 'package:async_redux/async_redux.dart' as redux;
 import 'package:business/app_state.dart';
 import 'package:business/classes/event.dart';
+import 'package:business/classes/user.dart';
+import 'package:business/events/actions/event_members_update_action.dart';
 import 'package:business/models/events.dart';
+import 'package:business/models/user.dart';
 import 'package:business/singletons/permission_location.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:location_permissions/location_permissions.dart';
@@ -9,11 +14,16 @@ import 'package:location_permissions/location_permissions.dart';
 class EventsGetAction extends redux.ReduxAction<AppState> {
   final Geolocator _geolocator = Geolocator();
   final PermissionLocation _locationPermissionService = PermissionLocation();
+
+  static final List<StreamSubscription<List<User>>> _membersSubs =
+      <StreamSubscription<List<User>>>[];
   @override
   Future<AppState> reduce() async {
     final List<Event> events = await getEvents();
+
     final PermissionStatus permission =
         await _locationPermissionService.checkLocationPermissionStatus();
+
     if (permission == PermissionStatus.granted) {
       try {
         final Position position = await _geolocator.getCurrentPosition(
@@ -31,6 +41,20 @@ class EventsGetAction extends redux.ReduxAction<AppState> {
       }
     }
 
+    _streamUsers(events);
+
     return state.copy(eventsState: state.eventsState.copy(events: events));
+  }
+
+  void _streamUsers(List<Event> events) {
+    for (final StreamSubscription<List<User>> memberSub in _membersSubs) {
+      memberSub.cancel();
+    }
+    _membersSubs.clear();
+    for (final Event event in events) {
+      _membersSubs.add(streamUsers(ids: event.memberIds).listen(
+          (List<User> members) =>
+              dispatch(EventMembersUpdateAction(members, event.id))));
+    }
   }
 }
