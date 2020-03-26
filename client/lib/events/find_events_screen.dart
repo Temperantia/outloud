@@ -242,6 +242,7 @@ class _FindEventsScreen extends State<FindEventsScreen>
     final String timeEnd =
         event.dateEnd == null ? null : DateFormat('Hm').format(event.dateEnd);
     final UserEventState state = userEventStates[event.id];
+
     return Column(children: <Widget>[
       GestureDetector(
           onTap: () async {
@@ -250,7 +251,8 @@ class _FindEventsScreen extends State<FindEventsScreen>
                 this,
                 dispatch,
                 redux.NavigateAction<AppState>.pushNamed(EventScreen.id,
-                    arguments: event), 600);
+                    arguments: event),
+                600);
           },
           child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 10.0),

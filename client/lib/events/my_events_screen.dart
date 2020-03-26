@@ -42,7 +42,8 @@ class _MyEventsScreen extends State<MyEventsScreen>
         event.dateEnd == null ? null : DateFormat('jm').format(event.dateEnd);
 
     final UserEventState state = userEventStates[event.id];
-    String stateMessage;
+
+    String stateMessage = '';
     if (state == UserEventState.Attending) {
       stateMessage = 'Going';
     } else if (state == UserEventState.Liked) {
@@ -53,7 +54,7 @@ class _MyEventsScreen extends State<MyEventsScreen>
         (Lounge lounge) => lounge.eventId == event.id,
         orElse: () => null);
 
-    if (date == null || month == null || time == null) {
+    if (event == null) {
       return Container();
     }
     return Container(

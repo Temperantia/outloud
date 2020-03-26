@@ -13,6 +13,7 @@ import 'package:business/models/events.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:inclusive/events/event_attending_screen.dart';
 import 'package:inclusive/lounges/lounge_chat_screen.dart';
 import 'package:inclusive/lounges/lounges_screen.dart';
 import 'package:inclusive/theme.dart';
@@ -65,6 +66,12 @@ class _EventScreenState extends State<EventScreen> {
     _resolveAdressEvent();
   }
 
+  @override
+  void dispose() {
+    _eventSub.cancel();
+    super.dispose();
+  }
+
   Future<int> _resolveAdressEvent() async {
     final List<Placemark> placemark =
         await Geolocator().placemarkFromCoordinates(_latitude, _longitude);
@@ -85,17 +92,10 @@ class _EventScreenState extends State<EventScreen> {
     return 0;
   }
 
-  @override
-  void dispose() {
-    _eventSub.cancel();
-    super.dispose();
-  }
-
   Widget _buildEventInfo(
       AppState state, void Function(redux.ReduxAction<dynamic>) dispatch) {
     final bool isUserAttending =
         state.userState.user.isAttendingEvent(_event.id);
-
     return Column(children: <Widget>[
       Stack(alignment: Alignment.center, children: <Widget>[
         Row(children: <Widget>[
@@ -116,13 +116,11 @@ class _EventScreenState extends State<EventScreen> {
                     child: Column(children: <Widget>[
                       Padding(
                           padding: const EdgeInsets.all(5),
-                          child: RichText(
-                              text: TextSpan(
-                                  text: _event.dateStart.day.toString(),
-                                  style: const TextStyle(
-                                      color: white,
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.w700)))),
+                          child: Text(_event.dateStart.day.toString(),
+                              style: const TextStyle(
+                                  color: white,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w700))),
                       Padding(
                           padding: const EdgeInsets.all(5),
                           child: RichText(
@@ -168,77 +166,37 @@ class _EventScreenState extends State<EventScreen> {
         ])
       ]),
       Container(
-        height: 50.0,
-        margin: const EdgeInsets.all(10),
-        child: Row(children: <Widget>[
-          Expanded(
-              child: Container(
-                  margin: const EdgeInsets.only(right: 5.0),
-                  decoration:
-                      BoxDecoration(border: Border.all(color: pinkLight)),
-                  child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        RichText(
-                            text: TextSpan(
-                                text:
-                                    '${DateFormat('jm').format(_event.dateStart)} -',
-                                style: const TextStyle(
-                                    color: pinkLight,
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.w900))),
-                        RichText(
-                            text: TextSpan(
-                                text: DateFormat('jm').format(_event.dateEnd
-                                    .add(const Duration(hours: 2))),
-                                style: const TextStyle(
-                                    color: pinkLight,
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.w900)))
-                      ]))),
-          _buildLoungeButton(isUserAttending, state, dispatch),
-          Expanded(
-              child: Container(
-                  padding: const EdgeInsets.all(5),
-                  color: isUserAttending ? pink : orange,
-                  child: InkWell(
-                      onTap: () {
-                        if (isUserAttending) {
-                          dispatch(EventUnRegisterAction(_event));
-                        } else {
-                          dispatch(EventRegisterAction(_event));
-                        }
-                      },
-                      child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Container(
-                                child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
-                                    children: <Widget>[
-                                  Icon(Icons.check, color: white, size: 16),
-                                  RichText(
-                                      text: TextSpan(
-                                          text: _event.memberIds.length
-                                              .toString(),
-                                          style: const TextStyle(
-                                              color: white,
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.w400)))
-                                ])),
-                            Container(
-                                padding: const EdgeInsets.only(bottom: 5),
-                                child: RichText(
-                                    text: const TextSpan(
-                                        text: 'ATTENDING',
-                                        style: TextStyle(
-                                            color: white,
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.w400))))
-                          ]))))
-        ]),
-      ),
+          height: 60.0,
+          margin: const EdgeInsets.all(10),
+          child: Row(children: <Widget>[
+            Expanded(
+                child: Container(
+                    margin: const EdgeInsets.only(right: 5.0),
+                    decoration:
+                        BoxDecoration(border: Border.all(color: pinkLight)),
+                    child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          RichText(
+                              text: TextSpan(
+                                  text:
+                                      '${DateFormat('jm').format(_event.dateStart)} -',
+                                  style: const TextStyle(
+                                      color: pinkLight,
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w900))),
+                          RichText(
+                              text: TextSpan(
+                                  text: DateFormat('jm').format(_event.dateEnd
+                                      .add(const Duration(hours: 2))),
+                                  style: const TextStyle(
+                                      color: pinkLight,
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w900)))
+                        ]))),
+            _buildLoungeButton(isUserAttending, state, dispatch),
+            _buildAttendingButton(isUserAttending, state, dispatch)
+          ])),
       Padding(
           padding: const EdgeInsets.only(left: 5.0),
           child: Row(
@@ -291,8 +249,6 @@ class _EventScreenState extends State<EventScreen> {
     final Lounge userLounge = state.userState.lounges.firstWhere(
         (Lounge lounge) => lounge.eventId == _event.id,
         orElse: () => null);
-    final List<Lounge> lounges = state.userState.eventLounges[_event.id];
-    final String s = lounges == null || lounges.length == 1 ? '' : 'S';
 
     if (userLounge != null) {
       widget = Container(
@@ -323,6 +279,7 @@ class _EventScreenState extends State<EventScreen> {
                         ]),
                   ])));
     } else if (isUserAttending) {
+      final List<Lounge> lounges = state.userState.eventLounges[_event.id];
       widget = Container(
           margin: const EdgeInsets.only(right: 5.0),
           color: pinkLight,
@@ -343,49 +300,131 @@ class _EventScreenState extends State<EventScreen> {
                               width: 20.0,
                               height: 20.0,
                               child: Image.asset('images/iconLounge.png')),
-                          RichText(
-                              text: TextSpan(
-                                  text: lounges != null
-                                      ? lounges.length.toString()
-                                      : '0',
-                                  style: const TextStyle(
-                                      color: white,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w400))),
+                          Text(
+                              lounges == null ? '0' : lounges.length.toString(),
+                              style: const TextStyle(
+                                  color: white,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w400)),
                         ])),
                     Container(
                         padding: const EdgeInsets.only(bottom: 5),
-                        child: RichText(
-                            text: TextSpan(
-                                text: 'LOUNGE$s',
-                                style: const TextStyle(
-                                    color: white,
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w400))))
+                        child: Text(
+                            'LOUNGE${lounges == null || lounges.length <= 1 ? '' : 'S'}',
+                            style: const TextStyle(
+                                color: white,
+                                fontSize: 12,
+                                fontWeight: FontWeight.w400)))
                   ])));
     } else {
       widget = Container(
           margin: const EdgeInsets.only(right: 5.0),
           color: grey,
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: <Widget>[
-                    Container(
-                        width: 20.0,
-                        height: 20.0,
-                        child: Image.asset('images/iconLounge.png')),
-                    const Text('ATTEND',
-                        style: TextStyle(
-                            color: white, fontWeight: FontWeight.bold)),
-                  ]),
-              const Text('FOR LOUNGES', style: TextStyle(color: white)),
-            ],
-          ));
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      Container(
+                          width: 20.0,
+                          height: 20.0,
+                          child: Image.asset('images/iconLounge.png')),
+                      const Text('ATTEND',
+                          style: TextStyle(
+                              color: white, fontWeight: FontWeight.bold)),
+                    ]),
+                const Text('FOR LOUNGES', style: TextStyle(color: white)),
+              ]));
     }
     return Expanded(child: widget);
+  }
+
+  Widget _buildAttendingButton(bool isUserAttending, AppState state,
+      void Function(redux.ReduxAction<dynamic>) dispatch) {
+    return Expanded(
+        child: isUserAttending
+            ? Container(
+                child: Row(children: <Widget>[
+                Expanded(
+                    child: Container(
+                        color: orange,
+                        padding: const EdgeInsets.all(5),
+                        child: GestureDetector(
+                            onTap: () =>
+                                dispatch(EventUnRegisterAction(_event)),
+                            // TODO(alexandre): to unattend an event, you need not to have a lounge, so if that's the case, toast a msg about it and/or disable it,
+                            child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  Stack(
+                                      alignment: Alignment.center,
+                                      children: <Widget>[
+                                        Icon(Icons.check, color: white),
+                                        Icon(Icons.not_interested, color: pink)
+                                      ])
+                                ])))),
+                Expanded(
+                    flex: 3,
+                    child: GestureDetector(
+                        onTap: () => dispatch(
+                            redux.NavigateAction<AppState>.pushNamed(
+                                EventAttendingScreen.id,
+                                arguments: _event)),
+                        child: Container(
+                            color: pink,
+                            padding: const EdgeInsets.all(5),
+                            child: Column(children: <Widget>[
+                              Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: <Widget>[
+                                    Icon(Icons.person, color: white),
+                                    Text(_event.memberIds.length.toString(),
+                                        style: const TextStyle(color: white))
+                                  ]),
+                              const Text('VIEW LIST',
+                                  style: TextStyle(color: white))
+                            ]))))
+              ]))
+            : Container(
+                padding: const EdgeInsets.all(5),
+                color: orange,
+                child: InkWell(
+                    onTap: () {
+                      dispatch(EventRegisterAction(_event));
+                      if (!_event.likes.contains(state.loginState.id)) {
+                        dispatch(EventLikeAction(_event));
+                      }
+                    },
+                    child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Container(
+                              child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: <Widget>[
+                                Icon(Icons.check, color: white, size: 16),
+                                RichText(
+                                    text: TextSpan(
+                                        text:
+                                            _event.memberIds.length.toString(),
+                                        style: const TextStyle(
+                                            color: white,
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w400)))
+                              ])),
+                          Container(
+                              padding: const EdgeInsets.only(bottom: 5),
+                              child: RichText(
+                                  text: const TextSpan(
+                                      text: 'ATTENDING',
+                                      style: TextStyle(
+                                          color: white,
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w400))))
+                        ]))));
   }
 
   Widget _buildDescription() {
@@ -529,8 +568,7 @@ class _EventScreenState extends State<EventScreen> {
                             padding: const EdgeInsets.only(left: 5.0),
                             child: Text(_event.likes.length.toString(),
                                 style: const TextStyle(color: white)))
-                      ])),
-                ),
+                      ]))),
           child: _event == null
               ? const CircularProgressIndicator()
               : Container(
