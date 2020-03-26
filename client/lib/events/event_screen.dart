@@ -286,15 +286,10 @@ class _EventScreenState extends State<EventScreen> {
   Widget _buildLoungeButton(bool isUserAttending, AppState state,
       void Function(redux.ReduxAction<dynamic>) dispatch) {
     Widget widget;
-    print(state.userState.user.lounges.length);
-    final Lounge userLounge =
-        state.userState.lounges.firstWhere((Lounge lounge) {
-      print(lounge.eventId);
-      print(_event.id);
-      return lounge.eventId == _event.id;
-    }, orElse: () => null);
+    final Lounge userLounge = state.userState.lounges.firstWhere(
+        (Lounge lounge) => lounge.eventId == _event.id,
+        orElse: () => null);
     final List<Lounge> lounges = state.userState.eventLounges[_event.id];
-    print(lounges[0].eventId);
     final String s = lounges == null || lounges.length == 1 ? '' : 'S';
 
     if (userLounge != null) {
@@ -307,19 +302,24 @@ class _EventScreenState extends State<EventScreen> {
                     LoungeChatScreen.id,
                     arguments: userLounge));
               },
-              child: Row(children: <Widget>[
-                Container(
-                    width: 20.0,
-                    height: 20.0,
-                    child: Image.asset('images/iconLounge.png')),
-                RichText(
-                    text: const TextSpan(
-                        text: 'VIEW MY LOUNGE',
-                        style: TextStyle(
-                            color: white,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w400))),
-              ])));
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: <Widget>[
+                    Container(
+                        width: 20.0,
+                        height: 20.0,
+                        child: Image.asset('images/iconLounge.png')),
+                    Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: const <Widget>[
+                          Text('VIEW MY',
+                              style: TextStyle(
+                                  color: white, fontWeight: FontWeight.bold)),
+                          Text('LOUNGE',
+                              style: TextStyle(
+                                  color: white, fontWeight: FontWeight.bold)),
+                        ]),
+                  ])));
     } else if (isUserAttending) {
       widget = Container(
           margin: const EdgeInsets.only(right: 5.0),
@@ -343,9 +343,7 @@ class _EventScreenState extends State<EventScreen> {
                               child: Image.asset('images/iconLounge.png')),
                           RichText(
                               text: TextSpan(
-                                  text: lounges == null
-                                      ? '0'
-                                      : lounges.length.toString(),
+                                  text: lounges.length.toString(),
                                   style: const TextStyle(
                                       color: white,
                                       fontSize: 16,

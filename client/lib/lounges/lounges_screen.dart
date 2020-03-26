@@ -62,7 +62,7 @@ class _LoungesScreenState extends State<LoungesScreen> {
 
     return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: <
         Widget>[
-      CachedImage(owner != null && owner.pics.isNotEmpty ? owner.pics[0]: null,
+      CachedImage(owner != null && owner.pics.isNotEmpty ? owner.pics[0] : null,
           width: 40.0,
           height: 40.0,
           borderRadius: BorderRadius.circular(20.0),
@@ -76,16 +76,16 @@ class _LoungesScreenState extends State<LoungesScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       if (owner != null)
-                      Container(
-                          child: RichText(
-                              text: TextSpan(
-                                  text: state.userState.user.id == owner.id
-                                      ? 'Your Lounge'
-                                      : owner.name + '\'s Lounge',
-                                  style: const TextStyle(
-                                      color: black,
-                                      fontSize: 13,
-                                      fontWeight: FontWeight.w500)))),
+                        Container(
+                            child: RichText(
+                                text: TextSpan(
+                                    text: state.userState.user.id == owner.id
+                                        ? 'Your Lounge'
+                                        : owner.name + '\'s Lounge',
+                                    style: const TextStyle(
+                                        color: black,
+                                        fontSize: 13,
+                                        fontWeight: FontWeight.w500)))),
                       GestureDetector(
                           onTap: () {
                             // TODO(robin): this shouldnt exist, the owner shouldnt see a join button on his own lounges and maybe not even see it here (ask @nadir)
