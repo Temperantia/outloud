@@ -20,19 +20,7 @@ class Lounge {
     this.memberIds = const <String>[],
     this.memberRefs,
     this.members,
-  }) {
-    members = <User>[];
-    if (eventRef != null)
-      eventRef.snapshots().listen((DocumentSnapshot
-              doc) => // TODO(me): this probably should get transferred in actions
-          event = Event.fromMap(doc.data, doc.documentID));
-    if (memberRefs != null) {
-      for (final DocumentReference memberRef in memberRefs) {
-        memberRef.snapshots().listen((DocumentSnapshot doc) =>
-            members.add(User.fromMap(doc.data, doc.documentID)));
-      }
-    }
-  }
+  });
 
   Lounge.fromMap(Map<String, dynamic> snapshot, String id)
       : id = id ?? '',
@@ -58,17 +46,7 @@ class Lounge {
             ? <DocumentReference>[]
             : snapshot['memberRefs'].cast<DocumentReference>()
                 as List<DocumentReference>,
-        members = <User>[] {
-    if (eventRef != null)
-      eventRef.snapshots().listen((DocumentSnapshot doc) =>
-          event = Event.fromMap(doc.data, doc.documentID));
-    if (memberRefs != null) {
-      for (final DocumentReference memberRef in memberRefs) {
-        memberRef.snapshots().listen((DocumentSnapshot doc) =>
-            members.add(User.fromMap(doc.data, doc.documentID)));
-      }
-    }
-  }
+        members = <User>[];
 
   String id;
   String eventId;
