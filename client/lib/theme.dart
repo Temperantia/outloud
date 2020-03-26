@@ -2,22 +2,20 @@ import 'package:business/app_state.dart';
 import 'package:flutter/material.dart';
 
 const Color yellow = Color(0xFFFFEF00);
-//Color orange = const Color(0xFFFF8C00);
 const Color orangeLight = Color(0xFFFFD3B1);
 const Color orangeAlt = Color(0xFFFFA067);
-const Color blue = Color(0xFF185782);
-const Color blueLight = Color(0xFFBCE0FD);
-const Color blueAlt = Color(0xFF28D6C0);
+const Color blue = Color(0xFF01B5B6);
+
 const Color white = Color(0xFFF9F5F5);
 Color whiteAlt = const Color(0xFFFF764C).withOpacity(0.1);
-const Color black = Color(0xFF000000);
+const Color black = Color(0xFF292929);
 const Color grey = Color(0xFF898989);
 const Color red = Color(0xFFFF0000);
-const Color pinkBright = Color(0xFFFF6260);
+const Color pinkBright = Color(0xFFFF5437);
 const Color pink = Color(0xFFFF706F);
 
-const Color pinkLight = Color(0xCCF38181);
-const Color orange = Color(0xFFFF6000);
+const Color pinkLight = Color(0xFFFA9465);
+const Color orange = Color(0xFFFF8431);
 const Color purple = Color(0xFF6324CA);
 
 const LinearGradient gradient = LinearGradient(
@@ -40,7 +38,7 @@ Color primary(ThemeStyle themeStyle) =>
     themeStyle == ThemeStyle.Orange ? orange : purple;
 
 Color secondary(ThemeStyle themeStyle) =>
-    themeStyle == ThemeStyle.Orange ? orangeLight : blueLight;
+    themeStyle == ThemeStyle.Orange ? orangeLight : blue;
 
 TextStyle textStyleTitle(ThemeStyle themeStyle) => TextStyle(
     color: primary(themeStyle), fontSize: 24.0, fontWeight: FontWeight.bold);

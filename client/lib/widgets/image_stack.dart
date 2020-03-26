@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:inclusive/theme.dart';
 import 'package:inclusive/widgets/cached_image.dart';
 
 class ImageStack extends StatelessWidget {
@@ -11,10 +12,10 @@ class ImageStack extends StatelessWidget {
     this.imageBorderWidth = 2,
     this.imageBorderColor = Colors.grey,
     this.extraCountTextStyle = const TextStyle(
-      color: Colors.black,
+      color: black,
       fontWeight: FontWeight.w600,
     ),
-    this.backgroundColor = Colors.white,
+    this.backgroundColor = white,
   })  : assert(imageList != null),
         assert(extraCountTextStyle != null),
         assert(imageBorderColor != null),

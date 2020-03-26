@@ -44,9 +44,7 @@ class _LoungeCreateDetailScreenState extends State<LoungeCreateDetailScreen> {
                   text: const TextSpan(
                 text: 'LOUNGE VISIBILITY',
                 style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 15,
-                    fontWeight: FontWeight.w700),
+                    color: black, fontSize: 15, fontWeight: FontWeight.w700),
               ))),
           Row(children: <Widget>[
             Radio<LoungeVisibility>(
@@ -73,7 +71,7 @@ class _LoungeCreateDetailScreenState extends State<LoungeCreateDetailScreen> {
                   text: const TextSpan(
                       text: 'MAX MEMBER COUNT',
                       style: TextStyle(
-                          color: Colors.black,
+                          color: black,
                           fontSize: 15,
                           fontWeight: FontWeight.w700)))),
           Stack(alignment: Alignment.center, children: <Widget>[
@@ -176,7 +174,7 @@ class _LoungeCreateDetailScreenState extends State<LoungeCreateDetailScreen> {
                   text: const TextSpan(
                       text: 'LOUNGE DESCRIPTION',
                       style: TextStyle(
-                          color: Colors.black,
+                          color: black,
                           fontSize: 15,
                           fontWeight: FontWeight.w700)))),
           Container(

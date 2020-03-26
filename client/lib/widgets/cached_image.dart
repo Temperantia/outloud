@@ -8,13 +8,18 @@ enum ImageType {
 
 class CachedImage extends StatefulWidget {
   const CachedImage(this.url,
-      {this.width, this.height, this.borderRadius, @required this.imageType});
+      {this.width,
+      this.height,
+      this.borderRadius,
+      @required this.imageType,
+      this.fit = BoxFit.cover});
 
   final String url;
   final double width;
   final double height;
   final BorderRadius borderRadius;
   final ImageType imageType;
+  final BoxFit fit;
 
   @override
   _CachedImageState createState() => _CachedImageState();
@@ -28,15 +33,15 @@ class _CachedImageState extends State<CachedImage> {
     if (widget.url == null) {
       switch (widget.imageType) {
         case ImageType.User:
-          image = Image.asset('images/defaultUser.png');
+          image = Image.asset('images/defaultUser.png', fit: widget.fit);
           break;
         case ImageType.Event:
-          image = Image.asset('images/defaultEvent.png');
+          image = Image.asset('images/defaultEvent.png', fit: widget.fit);
           break;
       }
     } else {
       image = CachedNetworkImage(
-        fit: BoxFit.cover,
+        fit: widget.fit,
         imageUrl: widget.url,
         placeholder: (BuildContext context, String url) =>
             const CircularProgressIndicator(),

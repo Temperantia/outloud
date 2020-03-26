@@ -143,10 +143,13 @@ class _PeopleWidgetState extends State<PeopleWidget>
           length: 2,
           child: Column(children: <Widget>[
             const Expanded(
-                child: TabBar(tabs: <Widget>[
-              Tab(text: 'Friends'),
-              Tab(text: 'Chats'),
-            ])),
+                child: TabBar(
+                    labelColor: white,
+                    indicatorColor: Colors.transparent,
+                    tabs: <Widget>[
+                  Tab(text: 'Friends'),
+                  Tab(text: 'Chats'),
+                ])),
             Expanded(
                 flex: 8,
                 child: TabBarView(

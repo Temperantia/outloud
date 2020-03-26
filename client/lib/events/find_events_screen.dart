@@ -339,51 +339,56 @@ class _FindEventsScreen extends State<FindEventsScreen>
       void Function(redux.ReduxAction<AppState>) dispatch,
       Future<void> Function(redux.ReduxAction<AppState>) dispatchFuture) {
     return Container(
+        padding: const EdgeInsets.only(bottom: 60.0),
         child: Column(children: <Widget>[
-      Flexible(
-          flex: _flexFactorMap,
-          child: GestureDetector(
-              onTap: () {
-                _growMap();
-              },
-              child: _buildMapView())),
-      Container(
-          child: GestureDetector(
-        onTap: () {
-          _shrinkMap();
-        },
-        child: _buildFilters(),
-      )),
-      Expanded(
-          flex: _flexFactorListEvent,
-          child: Container(
+          Flexible(
+              flex: _flexFactorMap,
+              child: GestureDetector(
+                  onTap: () {
+                    _growMap();
+                  },
+                  child: _buildMapView())),
+          Container(
               child: GestureDetector(
                   onTap: () {
                     _shrinkMap();
                   },
-                  onVerticalDragDown: (_) {
-                    _shrinkMap();
-                  },
-                  onHorizontalDragDown: (_) {
-                    _shrinkMap();
-                  },
-                  onTapDown: (_) {
-                    _shrinkMap();
-                  },
-                  child: RefreshIndicator(
-                      onRefresh: () {
-                        return dispatchFuture(EventsGetAction());
+                  child: _buildFilters())),
+          Expanded(
+              flex: _flexFactorListEvent,
+              child: Container(
+                  child: GestureDetector(
+                      onTap: () {
+                        _shrinkMap();
                       },
-                      child: ListView.builder(
-                          itemCount: events?.length,
-                          itemBuilder: (BuildContext context, int index) =>
-                              Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: <Widget>[
-                                    _buildEvent(events[index], userEventStates,
-                                        dispatch, dispatchFuture, themeStyle),
-                                  ]))))))
-      /*  Expanded(
+                      onVerticalDragDown: (_) {
+                        _shrinkMap();
+                      },
+                      onHorizontalDragDown: (_) {
+                        _shrinkMap();
+                      },
+                      onTapDown: (_) {
+                        _shrinkMap();
+                      },
+                      child: RefreshIndicator(
+                          onRefresh: () {
+                            return dispatchFuture(EventsGetAction());
+                          },
+                          child: ListView.builder(
+                              itemCount: events?.length,
+                              itemBuilder: (BuildContext context, int index) =>
+                                  Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: <Widget>[
+                                        _buildEvent(
+                                            events[index],
+                                            userEventStates,
+                                            dispatch,
+                                            dispatchFuture,
+                                            themeStyle),
+                                      ]))))))
+          /*  Expanded(
           flex: 1,
           child: Container(
               child: Row(
@@ -397,7 +402,7 @@ class _FindEventsScreen extends State<FindEventsScreen>
                         redux.NavigateAction<AppState>.pushNamed(
                             EventCreateScreen.id))),
               ]))) */
-    ]));
+        ]));
   }
 
   @override

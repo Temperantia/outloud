@@ -3,6 +3,7 @@ import 'package:business/app_state.dart';
 import 'package:flutter/material.dart';
 import 'package:inclusive/events/find_events_screen.dart';
 import 'package:inclusive/events/my_events_screen.dart';
+import 'package:inclusive/theme.dart';
 import 'package:inclusive/widgets/loading.dart';
 import 'package:provider_for_redux/provider_for_redux.dart';
 
@@ -34,11 +35,13 @@ class _EventsWidgetState extends State<EventsWidget>
           length: 2,
           child: Column(children: <Widget>[
             const Expanded(
-                child:
-                    TabBar(indicatorColor: Colors.transparent, tabs: <Widget>[
-              Tab(text: 'MY EVENTS'),
-              Tab(text: 'FIND EVENTS'),
-            ])),
+                child: TabBar(
+                    labelColor: white,
+                    indicatorColor: Colors.transparent,
+                    tabs: <Widget>[
+                  Tab(text: 'MY EVENTS'),
+                  Tab(text: 'FIND EVENTS'),
+                ])),
             Expanded(
                 flex: 8,
                 child: Container(

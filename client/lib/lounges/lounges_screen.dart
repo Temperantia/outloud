@@ -173,7 +173,7 @@ class _LoungesScreenState extends State<LoungesScreen>
                   text: const TextSpan(
                       text: 'FOR THE EVENT',
                       style: TextStyle(
-                          color: Colors.black,
+                          color: black,
                           fontSize: 13,
                           fontWeight: FontWeight.w500)))),
           Container(
