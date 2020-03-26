@@ -18,10 +18,11 @@ import '../theme.dart';
 const String googleApiKey = 'AIzaSyCO8sI1kmXRQXqvwQRGrnbAW3IX-VTcCDw';
 
 class LoungeMeetupWidget extends StatefulWidget {
-  LoungeMeetupWidget(this.lounge);
+  LoungeMeetupWidget(this.lounge, this.readMode);
   static const String id = 'LoungeMeetupWidget';
 
   final Lounge lounge;
+  final bool readMode;
 
   _LoungeMeetupWidgetState loungeMeetupWidgetState = _LoungeMeetupWidgetState();
 
@@ -398,6 +399,9 @@ class _LoungeMeetupWidgetState extends State<LoungeMeetupWidget> {
                         )
                       },
                       onLongPress: (LatLng position) async {
+                        if (widget.readMode) {
+                          return;
+                        }
                         if (_moovingMarker) {
                           return;
                         }
@@ -495,6 +499,7 @@ class _LoungeMeetupWidgetState extends State<LoungeMeetupWidget> {
           child: Container(
               color: orangeLight,
               child: TextFormField(
+                readOnly: widget.readMode,
                 key: _keySearch,
                 cursorColor: black,
                 keyboardType: TextInputType.text,
@@ -544,6 +549,9 @@ class _LoungeMeetupWidgetState extends State<LoungeMeetupWidget> {
                           children: <Widget>[
                             GestureDetector(
                               onTap: () {
+                                if (widget.readMode) {
+                                  return;
+                                }
                                 _updateTimeOfEvent();
                               },
                               child: Container(
@@ -556,6 +564,9 @@ class _LoungeMeetupWidgetState extends State<LoungeMeetupWidget> {
                             Container(child: const Text(':')),
                             GestureDetector(
                               onTap: () {
+                                if (widget.readMode) {
+                                  return;
+                                }
                                 _updateTimeOfEvent();
                               },
                               child: Container(
@@ -567,6 +578,9 @@ class _LoungeMeetupWidgetState extends State<LoungeMeetupWidget> {
                             ),
                             GestureDetector(
                               onTap: () {
+                                if (widget.readMode) {
+                                  return;
+                                }
                                 _updateTimeOfEvent();
                               },
                               child: Container(
@@ -583,6 +597,9 @@ class _LoungeMeetupWidgetState extends State<LoungeMeetupWidget> {
                       ),
                       GestureDetector(
                         onTap: () async {
+                          if (widget.readMode) {
+                                  return;
+                                }
                           final DateTime dateSelected = await showDatePicker(
                               context: context,
                               initialDate:
@@ -624,7 +641,7 @@ class _LoungeMeetupWidgetState extends State<LoungeMeetupWidget> {
             ),
             child: RichText(
               text: const TextSpan(
-                text: 'MEETUP TIME',
+                text: 'MEETUP NOTES',
                 style: TextStyle(
                     color: black, fontSize: 15, fontWeight: FontWeight.w700),
               ),
@@ -634,6 +651,7 @@ class _LoungeMeetupWidgetState extends State<LoungeMeetupWidget> {
                 padding: const EdgeInsets.all(15.0),
                 color: orangeLight,
                 child: TextField(
+                  readOnly: widget.readMode,
                   controller: _notesTextController,
                   focusNode: _focusNodeNotes,
                   keyboardType: TextInputType.text,

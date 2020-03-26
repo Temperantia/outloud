@@ -3,14 +3,17 @@ import 'package:business/app_state.dart';
 import 'package:business/classes/event.dart';
 import 'package:business/classes/lounge.dart';
 import 'package:business/classes/user.dart';
+import 'package:business/lounges/actions/lounge_create_action.dart';
 import 'package:business/models/user.dart';
 import 'package:flutter/material.dart';
 import 'package:business/lounges/actions/lounge_join_action.dart';
 import 'package:business/lounges/actions/lounge_leave_action.dart';
-import 'package:inclusive/functions/loader_animation.dart';
 import 'package:inclusive/lounges/lounge_chat_screen.dart';
+import 'package:inclusive/lounges/lounge_create_detail_screen.dart';
+import 'package:inclusive/lounges/lounges_widget.dart';
 
 import 'package:inclusive/theme.dart';
+import 'package:inclusive/widgets/button.dart';
 import 'package:inclusive/widgets/cached_image.dart';
 import 'package:inclusive/widgets/view.dart';
 import 'package:provider_for_redux/provider_for_redux.dart';
@@ -106,16 +109,13 @@ class _LoungesScreenState extends State<LoungesScreen>
                               dispatch(LoungeLeaveAction(
                                   state.userState.user.id, lounge));
                             } else {
-                              dispatchFuture(LoungeJoinAction(
+                              await dispatchFuture(redux.NavigateAction<AppState>.pop());
+                              await dispatchFuture(LoungeJoinAction(
                                   state.userState.user.id, lounge));
-                              showLoaderAnimation(
-                                  context,
-                                  this,
-                                  dispatch,
-                                  redux.NavigateAction<AppState>.pushNamed(
-                                      LoungeChatScreen.id,
-                                      arguments: lounge),
-                                  1200);
+                              dispatch(redux.NavigateAction<AppState>.pushNamed(
+                                        LoungeChatScreen.id,
+                                        arguments: lounge));
+
                             }
                           },
                           child: Container(
@@ -226,6 +226,38 @@ class _LoungesScreenState extends State<LoungesScreen>
                         lounges[index], dispatchFuture, dispatch, state)))));
   }
 
+  Widget _noLoungeWidget(void Function(redux.ReduxAction<AppState>) dispatch) {
+    return Container(
+      width: 320,
+      child: Column(
+        children: <Widget>[
+          Container(
+            width: 320,
+            height: 300,
+            child: Image.asset('images/lounges_empty_cat.png'),
+          ),
+          Container(
+            margin: const EdgeInsets.only(top: 10),
+            child: Button(
+              text: 'CREATE YOUR OWN LOUNGE',
+              backgroundColor: blueDark,
+              backgroundOpacity: 1,
+              width: 320,
+              fontWeight: FontWeight.w700,
+              onPressed: () {
+                dispatch(LoungeCreateAction(
+                  event.id,
+                ));
+                dispatch(redux.NavigateAction<AppState>.pushNamed(
+                    LoungeCreateDetailScreen.id));
+              },
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return ReduxConsumer<AppState>(builder: (BuildContext context,
@@ -242,9 +274,24 @@ class _LoungesScreenState extends State<LoungesScreen>
                     child: Column(children: <Widget>[
               _buildHeader(context),
               const Divider(),
-              Expanded(
-                  child: _buildListLounges(
-                      lounges, store.dispatchFuture, dispatch, state)),
+              if (lounges == null) _noLoungeWidget(dispatch),
+              if (lounges != null && lounges.isNotEmpty)
+                Container(
+                  margin: const EdgeInsets.only(top: 10, bottom: 20),
+                  child: RichText(
+                      text: TextSpan(
+                          text: '${lounges.length} lounge' +
+                              (lounges.length > 1 ? 's' : '') +
+                              ' available for this event',
+                          style: const TextStyle(
+                              color: orange,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600))),
+                ),
+              if (lounges != null && lounges.isNotEmpty)
+                Expanded(
+                    child: _buildListLounges(
+                        lounges, store.dispatchFuture, dispatch, state)),
             ])))
           ]));
     });

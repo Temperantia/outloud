@@ -138,14 +138,17 @@ class _LoungesWidgetState extends State<LoungesWidget>
                         height: 40.0,
                         child: Image.asset('images/chatIcon.png'))),
               ])),
-              Expanded(
-                  child: Container(
-                      padding: const EdgeInsets.all(10.0),
-                      child: _buildInfoLoungeLayout(state, lounge, dispatch))),
+              if (lounge.members.isNotEmpty)
+                Expanded(
+                    child: Container(
+                        padding: const EdgeInsets.all(10.0),
+                        child:
+                            _buildInfoLoungeLayout(state, lounge, dispatch))),
             ]));
   }
 
   Widget _buildEvents(
+      List<Lounge> userLounges,
       List<Event> userEvents,
       Map<String, UserEventState> userEventStates,
       Map<String, List<Lounge>> userEventLounges,
@@ -158,12 +161,18 @@ class _LoungesWidgetState extends State<LoungesWidget>
             itemBuilder: (BuildContext context, int index) => Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      _buildEvent(userEvents[index], userEventStates,
-                          userEventLounges, dispatch, themeStyle),
+                      _buildEvent(
+                          userLounges,
+                          userEvents[index],
+                          userEventStates,
+                          userEventLounges,
+                          dispatch,
+                          themeStyle),
                     ])));
   }
 
   Widget _buildEvent(
+      List<Lounge> userLounges,
       Event event,
       Map<String, UserEventState> userEventStates,
       Map<String, List<Lounge>> userEventLounges,
@@ -176,7 +185,6 @@ class _LoungesWidgetState extends State<LoungesWidget>
     } else if (state == UserEventState.Liked) {
       stateMessage = 'You liked this event';
     }
-    final List<Lounge> lounges = userEventLounges[event.id];
 
     return GestureDetector(
         onTap: () {
@@ -222,11 +230,10 @@ class _LoungesWidgetState extends State<LoungesWidget>
                             Row(children: <Widget>[
                               Image.asset('images/arrowForward.png',
                                   width: 10.0, height: 10.0),
-                              Expanded(
-                                  child: Text(
-                                      ' FIND LOUNGES (${lounges == null ? '0' : lounges.length} AVAILABLE)',
-                                      style: const TextStyle(
-                                          color: orange,
+                              const Expanded(
+                                  child: Text(' FIND LOUNGES ',
+                                      style: TextStyle(
+                                          color: blue,
                                           fontWeight: FontWeight.bold,
                                           fontSize: 14)))
                             ])
@@ -255,6 +262,20 @@ class _LoungesWidgetState extends State<LoungesWidget>
         return Loading();
       }
 
+      final List<Event> eventsWithoutLounge = userEvents.where((Event _event) {
+        final List<Lounge> _lounges = userEventLounges[_event.id];
+        if (_lounges != null) {
+          for (final Lounge _lounge in _lounges) {
+            for (final Lounge _userLounge in userLounges) {
+              if (_userLounge.id == _lounge.id) {
+                return false;
+              }
+            }
+          }
+        }
+        return true;
+      }).toList();
+
       return DefaultTabController(
           length: 2,
           child: Column(children: <Widget>[
@@ -273,8 +294,13 @@ class _LoungesWidgetState extends State<LoungesWidget>
                     children: <Widget>[
                       _buildLounges(state, userLounges, userEventLounges,
                           dispatch, themeStyle),
-                      _buildEvents(userEvents, userEventStates,
-                          userEventLounges, dispatch, themeStyle),
+                      _buildEvents(
+                          userLounges,
+                          eventsWithoutLounge,
+                          userEventStates,
+                          userEventLounges,
+                          dispatch,
+                          themeStyle),
                     ])),
             Expanded(
                 child: Container(
