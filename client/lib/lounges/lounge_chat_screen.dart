@@ -10,6 +10,7 @@ import 'package:business/classes/message.dart';
 import 'package:business/models/message.dart';
 import 'package:flutter/material.dart';
 import 'package:inclusive/lounges/lounge_edit_screen.dart';
+import 'package:inclusive/lounges/lounge_view_screen.dart';
 import 'package:inclusive/theme.dart';
 import 'package:inclusive/widgets/cached_image.dart';
 import 'package:inclusive/widgets/view.dart';
@@ -75,18 +76,25 @@ class _LoungeChatScreenState extends State<LoungeChatScreen> {
                           height: 20.0,
                           borderRadius: BorderRadius.circular(20.0),
                           imageType: ImageType.User),
-                      Container(
-                          padding: const EdgeInsets.only(left: 10),
-                          child: RichText(
-                              text: TextSpan(
-                            text: state.userState.user.id == owner.id
-                                ? 'Your Lounge'
-                                : owner.name + '\'s Lounge',
-                            style: const TextStyle(
-                                color: black,
-                                fontSize: 13,
-                                fontWeight: FontWeight.w500),
-                          )))
+                      Expanded(
+                        child: Wrap(
+                          direction: Axis.horizontal,
+                          children: <Widget>[
+                            Container(
+                                padding: const EdgeInsets.only(left: 10),
+                                child: RichText(
+                                    text: TextSpan(
+                                  text: state.userState.user.id == owner.id
+                                      ? 'Your Lounge'
+                                      : owner.name + '\'s Lounge',
+                                  style: const TextStyle(
+                                      color: black,
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.w500),
+                                )))
+                          ],
+                        ),
+                      )
                     ])),
                     Container(
                         child: Row(children: <Widget>[
@@ -121,27 +129,63 @@ class _LoungeChatScreenState extends State<LoungeChatScreen> {
                         redux.NavigateAction<AppState>.pushNamed(
                             LoungeEditScreen.id,
                             arguments: widget.lounge)),
-                    child: Column(children: <Widget>[
+                    child: Column(children: const <Widget>[
                       Icon(MdiIcons.calendarEdit, color: orange),
-                      const Text('EDIT',
+                      Text('EDIT',
                           style: TextStyle(
                               color: orange, fontWeight: FontWeight.bold))
                     ])))
           else
             Flexible(
-                flex: 2,
-                child: GestureDetector(
-                    onTap: () {
-                      dispatch(LoungeLeaveAction(
-                          state.userState.user.id, widget.lounge));
-                      dispatch(NavigateAction<AppState>.pop());
-                    },
-                    child: Column(children: <Widget>[
-                      Icon(MdiIcons.arrowLeftBoldCircleOutline, color: orange),
-                      const Text('LEAVE',
-                          style: TextStyle(
-                              color: orange, fontWeight: FontWeight.bold))
-                    ])))
+                flex: 5,
+                child: Row(
+                  children: <Widget>[
+                    GestureDetector(
+                        onTap: () {
+                          dispatch(LoungeLeaveAction(
+                              state.userState.user.id, widget.lounge));
+                          dispatch(NavigateAction<AppState>.pop());
+                        },
+                        child: Container(
+                            margin: const EdgeInsets.only(
+                                left: 5, right: 10, top: 10),
+                            child: Column(children: const <Widget>[
+                              Icon(MdiIcons.arrowLeftBoldCircleOutline,
+                                  color: orange),
+                              Text('LEAVE',
+                                  style: TextStyle(
+                                      color: orange,
+                                      fontSize: 9,
+                                      fontWeight: FontWeight.bold)),
+                              Text('LOUNGE',
+                                  style: TextStyle(
+                                      color: orange,
+                                      fontSize: 9,
+                                      fontWeight: FontWeight.bold))
+                            ]))),
+                    GestureDetector(
+                        onTap: () {
+                          dispatch(NavigateAction<AppState>.pushNamed(
+                              LoungeViewScreen.id,
+                              arguments: widget.lounge));
+                        },
+                        child: Container(
+                            margin: const EdgeInsets.only(left: 5, top: 10),
+                            child: Column(children: const <Widget>[
+                              Icon(MdiIcons.viewCarousel, color: orange),
+                              Text('VIEW',
+                                  style: TextStyle(
+                                      color: orange,
+                                      fontSize: 9,
+                                      fontWeight: FontWeight.bold)),
+                              Text('DETAILS',
+                                  style: TextStyle(
+                                      color: orange,
+                                      fontSize: 9,
+                                      fontWeight: FontWeight.bold))
+                            ])))
+                  ],
+                ))
         ]));
   }
 
@@ -279,7 +323,7 @@ class _LoungeChatScreenState extends State<LoungeChatScreen> {
                     padding: const EdgeInsets.all(8.0),
                     child: GestureDetector(
                         onTap: () {},
-                        child: Icon(MdiIcons.stickerEmoji, color: white)),
+                        child: const Icon(MdiIcons.stickerEmoji, color: white)),
                   ),
                   Padding(
                     padding: const EdgeInsets.all(8.0),

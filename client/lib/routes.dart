@@ -10,6 +10,7 @@ import 'package:inclusive/lounges/lounge_create_detail_screen.dart';
 import 'package:inclusive/lounges/lounge_create_meetup_screen.dart';
 import 'package:inclusive/lounges/lounge_create_screen.dart';
 import 'package:inclusive/lounges/lounge_edit_screen.dart';
+import 'package:inclusive/lounges/lounge_view_screen.dart';
 import 'package:inclusive/lounges/lounges_screen.dart';
 import 'package:inclusive/people/people_search_screen.dart';
 import 'package:inclusive/profile/profile_screen.dart';
@@ -30,6 +31,7 @@ final Map<String, Widget Function(Object)> routes =
   LoungeCreateDetailScreen.id: (_) => LoungeCreateDetailScreen(),
   LoungeCreateMeetupScreen.id: (_) => LoungeCreateMeetupScreen(),
   LoungeEditScreen.id: (dynamic lounge) => LoungeEditScreen(lounge as Lounge),
+  LoungeViewScreen.id: (dynamic lounge) => LoungeViewScreen(lounge as Lounge),
   ProfileEditionScreen.id: (_) => ProfileEditionScreen(),
   ProfileScreen.id: (dynamic user) => ProfileScreen(user as User),
   ChatScreen.id: (dynamic chat) => ChatScreen(chat as Chat),

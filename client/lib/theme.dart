@@ -5,6 +5,7 @@ const Color yellow = Color(0xFFFFEF00);
 const Color orangeLight = Color(0xFFFFD3B1);
 const Color orangeAlt = Color(0xFFFFA067);
 const Color blue = Color(0xFF01B5B6);
+const Color blueDark = Color(0xFF01B5D6);
 
 const Color white = Color(0xFFF9F5F5);
 Color whiteAlt = const Color(0xFFFF764C).withOpacity(0.1);

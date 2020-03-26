@@ -1,34 +1,28 @@
 import 'package:async_redux/async_redux.dart';
 import 'package:business/classes/lounge_visibility.dart';
 import 'package:business/classes/user.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:business/app_state.dart';
-import 'package:business/lounges/actions/lounge_edit_details_action.dart';
-import 'package:business/lounges/actions/lounge_edit_meetup_action.dart';
 import 'package:async_redux/async_redux.dart' as redux;
 import 'package:business/classes/lounge.dart';
 import 'package:flutter/material.dart';
 import 'package:inclusive/theme.dart';
-import 'package:inclusive/widgets/button.dart';
 import 'package:inclusive/widgets/cached_image.dart';
 import 'package:inclusive/widgets/meetup_widget.dart';
 import 'package:inclusive/widgets/view.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:provider_for_redux/provider_for_redux.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
-class LoungeEditScreen extends StatefulWidget {
-  const LoungeEditScreen(this.lounge);
+class LoungeViewScreen extends StatefulWidget {
+  const LoungeViewScreen(this.lounge);
   final Lounge lounge;
-  static const String id = 'LoungeEditScreen';
+  static const String id = 'LoungeViewScreen';
 
   @override
-  _LoungeEditScreenState createState() => _LoungeEditScreenState(lounge);
+  _LoungeViewScreenState createState() => _LoungeViewScreenState(lounge);
 }
 
-class _LoungeEditScreenState extends State<LoungeEditScreen> {
-  _LoungeEditScreenState(this.lounge);
+class _LoungeViewScreenState extends State<LoungeViewScreen> {
+  _LoungeViewScreenState(this.lounge);
   final Lounge lounge;
   final ScrollController _scrollController = ScrollController();
   final TextEditingController _descriptionController = TextEditingController();
@@ -41,7 +35,7 @@ class _LoungeEditScreenState extends State<LoungeEditScreen> {
     super.initState();
     _limit = lounge.memberLimit.toDouble();
     _visibility = lounge.visibility;
-    _meetupWidget = LoungeMeetupWidget(lounge, false);
+    _meetupWidget = LoungeMeetupWidget(lounge, true);
     _descriptionController.text = lounge.description;
   }
 
@@ -60,20 +54,19 @@ class _LoungeEditScreenState extends State<LoungeEditScreen> {
         padding: const EdgeInsets.all(15.0),
         child: Row(children: <Widget>[
           Flexible(
-              flex: 2,
               child: Stack(alignment: Alignment.center, children: <Widget>[
-                Container(
-                    decoration: const BoxDecoration(
-                        border: Border(
-                            left: BorderSide(color: orange, width: 5.0))),
-                    child: CachedImage(widget.lounge.event.pic,
-                        width: 40.0,
-                        height: 40.0,
-                        borderRadius: const BorderRadius.only(
-                            bottomRight: Radius.circular(5.0),
-                            topRight: Radius.circular(5.0)),
-                        imageType: ImageType.Event))
-              ])),
+            Container(
+                decoration: const BoxDecoration(
+                    border:
+                        Border(left: BorderSide(color: orange, width: 5.0))),
+                child: CachedImage(widget.lounge.event.pic,
+                    width: 40.0,
+                    height: 40.0,
+                    borderRadius: const BorderRadius.only(
+                        bottomRight: Radius.circular(5.0),
+                        topRight: Radius.circular(5.0)),
+                    imageType: ImageType.Event))
+          ])),
           Flexible(
               flex: 8,
               child: Container(
@@ -123,27 +116,7 @@ class _LoungeEditScreenState extends State<LoungeEditScreen> {
                                     fontWeight: FontWeight.w800))
                           ])))
                     ]))
-                  ]))),
-          Flexible(
-              flex: 2,
-              child: GestureDetector(
-                  onTap: () => dispatch(redux.NavigateAction<AppState>.pop()),
-                  child: Container(
-                      margin:
-                          const EdgeInsets.only(left: 5, right: 10, top: 10),
-                      child: Column(children: const <Widget>[
-                        Icon(MdiIcons.trashCan, color: orange),
-                        Text('REMOVE',
-                            style: TextStyle(
-                                color: orange,
-                                fontSize: 10,
-                                fontWeight: FontWeight.bold)),
-                        Text('LOUNGE',
-                            style: TextStyle(
-                                color: orange,
-                                fontSize: 10,
-                                fontWeight: FontWeight.bold))
-                      ]))))
+                  ])))
         ]));
   }
 
@@ -232,18 +205,6 @@ class _LoungeEditScreenState extends State<LoungeEditScreen> {
                                                 fontSize: 15,
                                                 fontWeight:
                                                     FontWeight.w700))))),
-                            Container(
-                                margin: const EdgeInsets.only(left: 20),
-                                padding:
-                                    const EdgeInsets.only(left: 10, right: 10),
-                                child: GestureDetector(
-                                    child: RichText(
-                                        text: const TextSpan(
-                                            text: 'BAN',
-                                            style: TextStyle(
-                                                color: Colors.red,
-                                                fontSize: 15,
-                                                fontWeight: FontWeight.w700)))))
                           ]))
                     ]))
             ])),
@@ -284,48 +245,15 @@ class _LoungeEditScreenState extends State<LoungeEditScreen> {
                   children: <Widget>[
                     Container(
                         child: RichText(
-                      text: const TextSpan(
-                        text: 'MAX MEMBER COUNT',
-                        style: TextStyle(
+                      text: TextSpan(
+                        text: 'MAX MEMBER COUNT : $_limit',
+                        style: const TextStyle(
                             color: black,
                             fontSize: 15,
                             fontWeight: FontWeight.w700),
                       ),
                     )),
-                    Container(
-                        padding: const EdgeInsets.all(10),
-                        color: pinkLight.withOpacity(0.4),
-                        child: GestureDetector(
-                            child: RichText(
-                                text: const TextSpan(
-                                    text: 'UPGRADE FOR MORE!',
-                                    style: TextStyle(
-                                        color: pink,
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.w500))))),
-                    // Container(
-                    //     child: const Button(
-                    //   fontSize: 13,
-                    //   fontWeight: FontWeight.w500,
-                    //   backgroundColor: pink,
-                    //   text: 'UPGRADE FOR MORE!',
-                    //   colorText: black87,
-                    //   width: 180,
-                    // ))
                   ])),
-          Slider(
-              value: _limit,
-              label: _limit.toInt().toString(),
-              min: 2,
-              max: 5,
-              activeColor: orange,
-              inactiveColor: orangeLight,
-              divisions: 3,
-              onChanged: (double value) {
-                setState(() {
-                  _limit = value;
-                });
-              })
         ]));
   }
 
@@ -352,14 +280,9 @@ class _LoungeEditScreenState extends State<LoungeEditScreen> {
               padding: const EdgeInsets.only(left: 10.0, top: 1.0, right: 10.0),
               color: orangeLight,
               child: TextField(
-                  controller: _descriptionController,
-                  keyboardType: TextInputType.text,
-                  inputFormatters: <TextInputFormatter>[
-                    LengthLimitingTextInputFormatter(100),
-                  ],
-                  decoration: const InputDecoration(
-                      border: InputBorder.none,
-                      hintText: 'Brief description of your group.')))
+                readOnly: true,
+                controller: _descriptionController,
+              ))
         ]));
   }
 
@@ -371,7 +294,7 @@ class _LoungeEditScreenState extends State<LoungeEditScreen> {
         void Function(redux.ReduxAction<dynamic>) dispatch,
         Widget child) {
       return View(
-          title: 'EDIT LOUNGE',
+          title: 'VIEW LOUNGE DETAILS',
           child: Column(children: <Widget>[
             Expanded(
                 child: Container(
@@ -397,21 +320,21 @@ class _LoungeEditScreenState extends State<LoungeEditScreen> {
                       child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
-                    Button(
-                        text: 'SAVE CHANGES',
-                        onPressed: () {
-                          final Map<String, dynamic> _meetupEdits =
-                              _meetupWidget.saveMeetupOptions();
-                          dispatch(LoungeEditMeetupAction(
-                              lounge,
-                              _meetupEdits['date'] as DateTime,
-                              _meetupEdits['location'] as GeoPoint,
-                              _meetupEdits['notes'] as String));
-                          dispatch(LoungeEditDetailsAction(lounge, _visibility,
-                              _limit.toInt(), _descriptionController.text));
-                          dispatch(NavigateAction<AppState>.pop());
-                        },
-                        paddingLeft: 5)
+                    // Button(
+                    //     text: 'SAVE CHANGES',
+                    //     onPressed: () {
+                    //       final Map<String, dynamic> _meetupEdits =
+                    //           _meetupWidget.saveMeetupOptions();
+                    //       dispatch(LoungeEditMeetupAction(
+                    //           lounge,
+                    //           _meetupEdits['date'] as DateTime,
+                    //           _meetupEdits['location'] as GeoPoint,
+                    //           _meetupEdits['notes'] as String));
+                    //       dispatch(LoungeEditDetailsAction(lounge, _visibility,
+                    //           _limit.toInt(), _descriptionController.text));
+                    //       dispatch(NavigateAction<AppState>.pop());
+                    //     },
+                    //     paddingLeft: 5)
                   ])))
             ]))))
           ]));
