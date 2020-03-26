@@ -107,6 +107,9 @@ class _LoungesWidgetState extends State<LoungesWidget>
 
   Widget _buildLounge(AppState state, Lounge lounge,
       void Function(redux.ReduxAction<AppState>) dispatch, ThemeStyle theme) {
+    if (lounge.event == null) {
+      return Container();
+    }
     return Container(
         margin: const EdgeInsets.symmetric(vertical: 10.0),
         child: Row(
@@ -175,49 +178,48 @@ class _LoungesWidgetState extends State<LoungesWidget>
     }
     final List<Lounge> lounges = userEventLounges[event.id];
 
-    return Container(
-        margin: const EdgeInsets.symmetric(vertical: 10.0),
-        child: Row(children: <Widget>[
-          Flexible(
-              child: Stack(alignment: Alignment.center, children: <Widget>[
-            Container(
-                decoration: const BoxDecoration(
-                    border:
-                        Border(left: BorderSide(color: orange, width: 7.0))),
-                child: CachedImage(event.pic,
-                    width: 70.0,
-                    height: 70.0,
-                    borderRadius: const BorderRadius.only(
-                        bottomRight: Radius.circular(5.0),
-                        topRight: Radius.circular(5.0)),
-                    imageType: ImageType.Event)),
-            if (state == UserEventState.Attending)
-              Icon(Icons.check, size: 40.0, color: white)
-            else if (state == UserEventState.Liked)
-              Icon(MdiIcons.heart, size: 40.0, color: white),
-          ])),
-          Expanded(
-              flex: 3,
-              child: Padding(
-                  padding: const EdgeInsets.only(left: 10.0),
-                  child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Text(stateMessage,
-                            style: const TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 13)),
-                        Text(event.name,
-                            style: const TextStyle(
-                                color: orange,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 13)),
-                        GestureDetector(
-                            onTap: () {
-                              dispatch(redux.NavigateAction<AppState>.pushNamed(
-                                  LoungesScreen.id,
-                                  arguments: event));
-                            },
-                            child: Row(children: <Widget>[
+    return GestureDetector(
+        onTap: () {
+          dispatch(redux.NavigateAction<AppState>.pushNamed(LoungesScreen.id,
+              arguments: event));
+        },
+        child: Container(
+            margin: const EdgeInsets.symmetric(vertical: 10.0),
+            child: Row(children: <Widget>[
+              Flexible(
+                  child: Stack(alignment: Alignment.center, children: <Widget>[
+                Container(
+                    decoration: const BoxDecoration(
+                        border: Border(
+                            left: BorderSide(color: orange, width: 7.0))),
+                    child: CachedImage(event.pic,
+                        width: 70.0,
+                        height: 70.0,
+                        borderRadius: const BorderRadius.only(
+                            bottomRight: Radius.circular(5.0),
+                            topRight: Radius.circular(5.0)),
+                        imageType: ImageType.Event)),
+                if (state == UserEventState.Attending)
+                  Icon(Icons.check, size: 40.0, color: white)
+                else if (state == UserEventState.Liked)
+                  Icon(MdiIcons.heart, size: 40.0, color: white),
+              ])),
+              Expanded(
+                  flex: 3,
+                  child: Padding(
+                      padding: const EdgeInsets.only(left: 10.0),
+                      child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text(stateMessage,
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 13)),
+                            Text(event.name,
+                                style: const TextStyle(
+                                    color: orange,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 13)),
+                            Row(children: <Widget>[
                               Image.asset('images/arrowForward.png',
                                   width: 10.0, height: 10.0),
                               Expanded(
@@ -227,9 +229,9 @@ class _LoungesWidgetState extends State<LoungesWidget>
                                           color: orange,
                                           fontWeight: FontWeight.bold,
                                           fontSize: 14)))
-                            ]))
-                      ]))),
-        ]));
+                            ])
+                          ]))),
+            ])));
   }
 
   @override

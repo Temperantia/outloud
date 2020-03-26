@@ -1,5 +1,6 @@
 import 'package:async_redux/async_redux.dart';
 import 'package:business/classes/user.dart';
+import 'package:business/lounges/actions/lounge_leave_action.dart';
 import 'package:flutter/widgets.dart';
 import 'package:business/app_state.dart';
 import 'package:async_redux/async_redux.dart' as redux;
@@ -48,21 +49,22 @@ class _LoungeChatScreenState extends State<LoungeChatScreen> {
         padding: const EdgeInsets.all(15.0),
         child: Row(children: <Widget>[
           Flexible(
+              flex: 2,
               child: Stack(alignment: Alignment.center, children: <Widget>[
-            Container(
-                decoration: const BoxDecoration(
-                    border:
-                        Border(left: BorderSide(color: orange, width: 5.0))),
-                child: CachedImage(widget.lounge.event.pic,
-                    width: 40.0,
-                    height: 40.0,
-                    borderRadius: const BorderRadius.only(
-                        bottomRight: Radius.circular(5.0),
-                        topRight: Radius.circular(5.0)),
-                    imageType: ImageType.Event))
-          ])),
+                Container(
+                    decoration: const BoxDecoration(
+                        border: Border(
+                            left: BorderSide(color: orange, width: 5.0))),
+                    child: CachedImage(widget.lounge.event.pic,
+                        width: 40.0,
+                        height: 40.0,
+                        borderRadius: const BorderRadius.only(
+                            bottomRight: Radius.circular(5.0),
+                            topRight: Radius.circular(5.0)),
+                        imageType: ImageType.Event))
+              ])),
           Flexible(
-              flex: 8,
+              flex: 11,
               child: Container(
                   padding: const EdgeInsets.only(left: 20),
                   child: Column(children: <Widget>[
@@ -113,6 +115,7 @@ class _LoungeChatScreenState extends State<LoungeChatScreen> {
                   ]))),
           if (state.userState.user.id == owner.id)
             Flexible(
+                flex: 2,
                 child: GestureDetector(
                     onTap: () => dispatch(
                         redux.NavigateAction<AppState>.pushNamed(
@@ -121,6 +124,21 @@ class _LoungeChatScreenState extends State<LoungeChatScreen> {
                     child: Column(children: <Widget>[
                       Icon(MdiIcons.calendarEdit, color: orange),
                       const Text('EDIT',
+                          style: TextStyle(
+                              color: orange, fontWeight: FontWeight.bold))
+                    ])))
+          else
+            Flexible(
+                flex: 2,
+                child: GestureDetector(
+                    onTap: () {
+                      dispatch(LoungeLeaveAction(
+                          state.userState.user.id, widget.lounge));
+                      dispatch(NavigateAction<AppState>.pop());
+                    },
+                    child: Column(children: <Widget>[
+                      Icon(MdiIcons.arrowLeftBoldCircleOutline, color: orange),
+                      const Text('LEAVE',
                           style: TextStyle(
                               color: orange, fontWeight: FontWeight.bold))
                     ])))
