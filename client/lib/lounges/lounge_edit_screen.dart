@@ -55,6 +55,122 @@ class _LoungeEditScreenState extends State<LoungeEditScreen>
     super.dispose();
   }
 
+  void _showConfirmPopup(void Function(ReduxAction<AppState>) dispatch) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return Dialog(
+            elevation: 0.0,
+            backgroundColor: Colors.transparent,
+            child: Stack(
+              children: <Widget>[
+                Container(
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      shape: BoxShape.rectangle,
+                      borderRadius: BorderRadius.circular(5),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black26,
+                          blurRadius: 10.0,
+                          offset: const Offset(0.0, 10.0),
+                        )
+                      ]),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      const Icon(
+                        MdiIcons.trashCan,
+                        color: orange,
+                        size: 60,
+                      ),
+                      const Text('Delete Lounge?',
+                          style: TextStyle(
+                              color: orange,
+                              fontSize: 26,
+                              fontWeight: FontWeight.w700)),
+                      const SizedBox(
+                        height: 15,
+                      ),
+                      Container(
+                        padding: const EdgeInsets.only(left: 18, right: 18),
+                        child: const Text(
+                            'This will permanently delete the lounge and kick all its members.',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.w500)),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.only(
+                            left: 18, right: 18, bottom: 15),
+                        child: const Text('Are you sure?',
+                            textAlign: TextAlign.justify,
+                            style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.w500)),
+                      ),
+                      SizedBox(
+                        child: Container(
+                          color: orange,
+                          child: Column(
+                            children: <Widget>[
+                              Container(
+                                  padding: const EdgeInsets.only(top: 10),
+                                  child: Align(
+                                    alignment: Alignment.bottomCenter,
+                                    child: FlatButton(
+                                        color: white,
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                        },
+                                        child: Container(
+                                            padding: const EdgeInsets.only(
+                                                left: 20, right: 20),
+                                            child: const Text(
+                                                'No, Take Me Back',
+                                                style: TextStyle(
+                                                    color: orange,
+                                                    fontSize: 16,
+                                                    fontWeight:
+                                                        FontWeight.w500)))),
+                                  )),
+                              Container(
+                                  padding:
+                                      const EdgeInsets.only(bottom: 5, top: 5),
+                                  child: Align(
+                                    alignment: Alignment.bottomCenter,
+                                    child: FlatButton(
+                                        onPressed: () async {
+                                          await showLoaderAnimation(
+                                              context, this,
+                                              animationDuration: 600);
+                                          dispatch(LoungeRemoveAction(
+                                              widget.lounge));
+                                          Navigator.pop(context);
+                                          dispatch(redux
+                                              .NavigateAction<AppState>.pop());
+                                          dispatch(redux
+                                              .NavigateAction<AppState>.pop());
+                                        },
+                                        child: const Text('YES, Delete Lounge',
+                                            style: TextStyle(
+                                                color: white,
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w500))),
+                                  ))
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              ],
+            ));
+      },
+    );
+  }
+
   Widget _buildHeader(
       AppState state, void Function(ReduxAction<AppState>) dispatch) {
     final User owner = widget.lounge.members
@@ -131,11 +247,7 @@ class _LoungeEditScreenState extends State<LoungeEditScreen>
               flex: 2,
               child: GestureDetector(
                   onTap: () async {
-                    await showLoaderAnimation(context, this,
-                        animationDuration: 600);
-                    dispatch(LoungeRemoveAction(widget.lounge));
-                    dispatch(redux.NavigateAction<AppState>.pop());
-                    dispatch(redux.NavigateAction<AppState>.pop());
+                    _showConfirmPopup(dispatch);
                   },
                   child: Container(
                       margin:

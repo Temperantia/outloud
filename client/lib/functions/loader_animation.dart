@@ -5,7 +5,7 @@ import 'package:business/app_state.dart';
 import 'package:flutter/animation.dart';
 import 'package:flutter/material.dart';
 
-Future<void> showLoaderAnimation (
+Future<void> showLoaderAnimation(
     BuildContext context,
     TickerProvider tickerProvider,
     {bool executeCallback = false,
@@ -50,6 +50,7 @@ Future<void> showLoaderAnimation (
 
   return Future<void>.delayed(Duration(milliseconds: animationDuration * 2), () {
     _angleAnimation.removeStatusListener(_listener);
+    _animationController.dispose();
     Navigator.pop(context);
     if (executeCallback) {
       dispatch(callback);
