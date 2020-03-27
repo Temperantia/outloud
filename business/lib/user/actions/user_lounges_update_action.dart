@@ -53,7 +53,6 @@ class UserLoungesUpdateAction extends redux.ReduxAction<AppState> {
       _streamEvent(lounge);
       _streamMembers(lounge);
     }
-
     return state.copy(
         chatsState: state.chatsState.copy(loungeChats: chats),
         userState: state.userState.copy(lounges: _lounges));

@@ -5,6 +5,7 @@ import 'package:business/classes/user.dart';
 import 'package:business/models/lounges.dart';
 import 'package:business/models/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 
 class LoungeCreateMeetupAction extends ReduxAction<AppState> {
   LoungeCreateMeetupAction(this.location, this.date, this.notes);
@@ -27,6 +28,11 @@ class LoungeCreateMeetupAction extends ReduxAction<AppState> {
     user.lounges = List<String>.from(user.lounges + <String>[lounCreation.id]);
 
     updateUser(user);
+
+    dispatch(NavigateAction<AppState>.pushNamedAndRemoveUntil(
+        'LoungeChatScreen',
+        arguments: lounCreation,
+        predicate: (Route<dynamic> route) => route.isFirst));
 
     return state.copy(
         loungesState: state.loungesState.copy(loungeCreation: lounCreation));

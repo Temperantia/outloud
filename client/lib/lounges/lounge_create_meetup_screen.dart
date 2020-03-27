@@ -68,10 +68,11 @@ class _LoungeCreateMeetupScreenState extends State<LoungeCreateMeetupScreen> {
 
   @override
   void dispose() {
+    _scrollController.dispose();
     _searchTextController.removeListener(_onSearchChanged);
     _searchTextController.dispose();
-    // TODO(me): dispose time
-
+    // TODO(alexandre): remove listener on the 2nd
+    _notesTextController.dispose();
     super.dispose();
   }
 
@@ -483,11 +484,10 @@ class _LoungeCreateMeetupScreenState extends State<LoungeCreateMeetupScreen> {
 
   Widget _buildTimeField(BuildContext context) {
     return Container(
-      constraints: BoxConstraints.expand(
-          height: Theme.of(context).textTheme.display1.fontSize * 1.1 + 70),
-      padding: const EdgeInsets.all(15.0),
-      child: Column(
-        children: <Widget>[
+        constraints: BoxConstraints.expand(
+            height: Theme.of(context).textTheme.display1.fontSize * 1.1 + 70),
+        padding: const EdgeInsets.all(15.0),
+        child: Column(children: <Widget>[
           Container(
               constraints: BoxConstraints.expand(
                   height: Theme.of(context).textTheme.display1.fontSize * 1.1),
@@ -585,9 +585,7 @@ class _LoungeCreateMeetupScreenState extends State<LoungeCreateMeetupScreen> {
                                       fontWeight: FontWeight.bold)),
                             ))
                       ])))
-        ],
-      ),
-    );
+        ]));
   }
 
   Widget _buildNotesField(BuildContext context) {
@@ -636,85 +634,77 @@ class _LoungeCreateMeetupScreenState extends State<LoungeCreateMeetupScreen> {
           onBack: () => Navigator.popUntil(
               context, (Route<dynamic> route) => route.isFirst),
           backIcon: Icons.close,
-          child: Container(
-              constraints: const BoxConstraints.expand(
-                  // width: MediaQuery.of(context).size.width
-                  ),
-              child: Column(children: <Widget>[
-                Expanded(
-                    child: Container(
-                        color: white,
-                        child: Scrollbar(
-                            child: ListView(
-                                controller: _scrollController,
-                                padding: const EdgeInsets.all(10),
-                                children: <Widget>[
-                              _buildMap(context),
-                              _buildAdressField(context),
-                              _buildTimeField(context),
-                              _buildNotesField(context),
-                            ])))),
-                Container(
-                    height: 60,
-                    margin: const EdgeInsets.all(10.0),
-                    padding: const EdgeInsets.all(4.0),
-                    child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Button(
-                              text: 'BACK',
-                              width: 150,
-                              paddingRight: 5.0,
-                              onPressed: () {
-                                dispatch(NavigateAction<AppState>.pop());
-                              }),
-                          Button(
-                              text: 'CREATE',
-                              width: 150,
-                              onPressed: () async {
-                                _focusNodeNotes.unfocus();
-                                _focusNodeAdress.unfocus();
-                                final DateTime _dateOfEvent = DateTime(
-                                    _dateEvent.year,
-                                    _dateEvent.month,
-                                    _dateEvent.day,
-                                    _timeEvent.hour,
-                                    _timeEvent.minute);
-                                if (_positionOfPlace == null) {
-                                  showDialog(
-                                      context: context,
-                                      builder: (BuildContext context) {
-                                        return AlertDialog(
-                                            title: const Text(
-                                                'MISSING INFORMATION'),
-                                            content: const Text(
-                                                'PLEASE PROVIDE A POSITION TO YOUR LOUNGE'),
-                                            actions: <Widget>[
-                                              FlatButton(
-                                                  onPressed: () {
-                                                    _dismissDialog();
-                                                    _scrollController.animateTo(
-                                                        0,
-                                                        duration:
-                                                            const Duration(
-                                                                seconds: 1),
-                                                        curve: Curves.ease);
-                                                  },
-                                                  child: const Text('OK'))
-                                            ]);
-                                      });
-                                  return;
-                                }
-                                final GeoPoint _location = GeoPoint(
-                                    _positionOfPlace.position.latitude,
-                                    _positionOfPlace.position.longitude);
-                                dispatch(LoungeCreateMeetupAction(_location,
-                                    _dateOfEvent, _notesTextController.text));
-                                Navigator.popUntil(context,
-                                    (Route<dynamic> route) => route.isFirst);
-                              }),
-                        ]))
-              ])));
+          child: Column(children: <Widget>[
+            Expanded(
+                child: Container(
+                    color: white,
+                    child: Scrollbar(
+                        child: ListView(
+                            controller: _scrollController,
+                            padding: const EdgeInsets.all(10),
+                            children: <Widget>[
+                          _buildMap(context),
+                          _buildAdressField(context),
+                          _buildTimeField(context),
+                          _buildNotesField(context),
+                        ])))),
+            Container(
+                height: 60,
+                margin: const EdgeInsets.all(10.0),
+                padding: const EdgeInsets.all(4.0),
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Button(
+                          text: 'BACK',
+                          width: 150,
+                          paddingRight: 5.0,
+                          onPressed: () {
+                            dispatch(NavigateAction<AppState>.pop());
+                          }),
+                      Button(
+                          text: 'CREATE',
+                          width: 150,
+                          onPressed: () async {
+                            _focusNodeNotes.unfocus();
+                            _focusNodeAdress.unfocus();
+                            final DateTime _dateOfEvent = DateTime(
+                                _dateEvent.year,
+                                _dateEvent.month,
+                                _dateEvent.day,
+                                _timeEvent.hour,
+                                _timeEvent.minute);
+                            if (_positionOfPlace == null) {
+                              showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                        title:
+                                            const Text('MISSING INFORMATION'),
+                                        content: const Text(
+                                            'PLEASE PROVIDE A POSITION TO YOUR LOUNGE'),
+                                        actions: <Widget>[
+                                          FlatButton(
+                                              onPressed: () {
+                                                _dismissDialog();
+                                                _scrollController.animateTo(0,
+                                                    duration: const Duration(
+                                                        seconds: 1),
+                                                    curve: Curves.ease);
+                                              },
+                                              child: const Text('OK'))
+                                        ]);
+                                  });
+                              return;
+                            }
+                            final GeoPoint _location = GeoPoint(
+                                _positionOfPlace.position.latitude,
+                                _positionOfPlace.position.longitude);
+                            dispatch(LoungeCreateMeetupAction(_location,
+                                _dateOfEvent, _notesTextController.text));
+                          }),
+                    ]))
+          ]));
     });
   }
 }
