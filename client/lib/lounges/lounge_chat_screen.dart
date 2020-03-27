@@ -292,7 +292,7 @@ class _LoungeChatScreenState extends State<LoungeChatScreen>
         void Function(redux.ReduxAction<dynamic>) dispatch,
         Widget child) {
       _lounge = state.userState.lounges.firstWhere(
-          (Lounge lounge) => lounge.id == _lounge.id,
+          (Lounge lounge) => lounge.id == widget.lounge.id,
           orElse: () => null);
       Chat chat;
       if (_lounge != null) {
