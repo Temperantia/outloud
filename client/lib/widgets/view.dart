@@ -56,8 +56,8 @@ class _ViewState extends State<View> {
         Expanded(child: Image.asset('images/screenFull.png', fit: BoxFit.fill))
       ]),
       if (widget.showNavBar) _buildNavBar(state, dispatch),
-      if (widget.showAppBar) _buildAppBar(state.userState.user, dispatch),
       Container(margin: margin, child: widget.child),
+      if (widget.showAppBar) _buildAppBar(state.userState.user, dispatch),
     ]));
   }
 
@@ -88,7 +88,6 @@ class _ViewState extends State<View> {
               ])),
       if (_showUserSettings || !widget.isRoot)
         Stack(children: <Widget>[
-          if (_showUserSettings) _buildUserSettings(user, dispatch),
           if (!widget.isRoot)
             Stack(children: <Widget>[
               GestureDetector(
@@ -107,7 +106,8 @@ class _ViewState extends State<View> {
                 Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: <Widget>[widget.actions]),
-            ])
+            ]),
+          if (_showUserSettings) _buildUserSettings(user, dispatch),
         ]),
     ]);
   }
