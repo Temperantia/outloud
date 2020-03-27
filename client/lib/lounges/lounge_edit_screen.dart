@@ -1,4 +1,3 @@
-import 'package:async_redux/async_redux.dart';
 import 'package:business/classes/lounge_visibility.dart';
 import 'package:business/classes/user.dart';
 import 'package:flutter/services.dart';
@@ -55,7 +54,7 @@ class _LoungeEditScreenState extends State<LoungeEditScreen>
     super.dispose();
   }
 
-  void _showConfirmPopup(void Function(ReduxAction<AppState>) dispatch) {
+  void _showConfirmPopup(void Function(redux.ReduxAction<AppState>) dispatch) {
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -172,7 +171,7 @@ class _LoungeEditScreenState extends State<LoungeEditScreen>
   }
 
   Widget _buildHeader(
-      AppState state, void Function(ReduxAction<AppState>) dispatch) {
+      AppState state, void Function(redux.ReduxAction<AppState>) dispatch) {
     final User owner = widget.lounge.members
         .firstWhere((User member) => member.id == widget.lounge.owner);
     return Container(
@@ -530,7 +529,7 @@ class _LoungeEditScreenState extends State<LoungeEditScreen>
                               _meetupEdits['notes'] as String));
                           dispatch(LoungeEditDetailsAction(lounge, _visibility,
                               _limit.toInt(), _descriptionController.text));
-                          dispatch(NavigateAction<AppState>.pop());
+                          dispatch(redux.NavigateAction<AppState>.pop());
                         },
                         paddingLeft: 5)
                   ])))

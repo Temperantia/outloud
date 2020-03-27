@@ -13,6 +13,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:inclusive/events/event_attending_screen.dart';
+import 'package:inclusive/functions/loader_animation.dart';
 import 'package:inclusive/lounges/lounge_chat_screen.dart';
 import 'package:inclusive/lounges/lounges_screen.dart';
 import 'package:inclusive/theme.dart';
@@ -35,7 +36,8 @@ class EventScreen extends StatefulWidget {
   _EventScreenState createState() => _EventScreenState();
 }
 
-class _EventScreenState extends State<EventScreen> {
+class _EventScreenState extends State<EventScreen>
+    with TickerProviderStateMixin {
   final Completer<GoogleMapController> _controller =
       Completer<GoogleMapController>();
   final Map<String, Marker> _markers = <String, Marker>{};
@@ -62,6 +64,208 @@ class _EventScreenState extends State<EventScreen> {
         position: LatLng(_latitude, _longitude),
         infoWindow: InfoWindow(title: widget.event.name));
     _resolveAdressEvent();
+  }
+
+  void _showConfirmPopup(void Function(redux.ReduxAction<AppState>) dispatch) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return Dialog(
+            elevation: 0.0,
+            backgroundColor: Colors.transparent,
+            child: Stack(
+              children: <Widget>[
+                Container(
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      shape: BoxShape.rectangle,
+                      borderRadius: BorderRadius.circular(5),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black26,
+                          blurRadius: 10.0,
+                          offset: const Offset(0.0, 10.0),
+                        )
+                      ]),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      const Icon(
+                        MdiIcons.handRight,
+                        color: pink,
+                        size: 60,
+                      ),
+                      const Text('Hold Up',
+                          style: TextStyle(
+                              color: pink,
+                              fontSize: 28,
+                              fontWeight: FontWeight.w700)),
+                      const SizedBox(
+                        height: 15,
+                      ),
+                      Container(
+                        padding: const EdgeInsets.only(
+                            left: 18, right: 18, bottom: 10),
+                        child: const Text(
+                            'If you unattend this event it will delete/leave any lounge you joined for this event',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                color: pink,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500)),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.only(
+                            left: 18, right: 18, bottom: 15),
+                        child: const Text('Do you still want to continue?',
+                            textAlign: TextAlign.justify,
+                            style: TextStyle(
+                                color: pink,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500)),
+                      ),
+                      SizedBox(
+                        child: Container(
+                          color: pink,
+                          child: Column(
+                            children: <Widget>[
+                              Container(
+                                  padding: const EdgeInsets.only(top: 10),
+                                  child: Align(
+                                    alignment: Alignment.bottomCenter,
+                                    child: FlatButton(
+                                        color: white,
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                        },
+                                        child: Container(
+                                            padding: const EdgeInsets.only(
+                                                left: 20, right: 20),
+                                            child: const Text(
+                                                'No, Take Me Back',
+                                                style: TextStyle(
+                                                    color: pink,
+                                                    fontSize: 16,
+                                                    fontWeight:
+                                                        FontWeight.w500)))),
+                                  )),
+                              Container(
+                                  padding:
+                                      const EdgeInsets.only(bottom: 5, top: 5),
+                                  child: Align(
+                                    alignment: Alignment.bottomCenter,
+                                    child: FlatButton(
+                                        onPressed: () async {
+                                          await showLoaderAnimation(
+                                              context, this,
+                                              animationDuration: 600);
+                                          Navigator.pop(context);
+                                          dispatch(EventUnRegisterAction(
+                                              widget.event));
+                                        },
+                                        child: const Text('YES, Unattend Event',
+                                            style: TextStyle(
+                                                color: white,
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w500))),
+                                  ))
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              ],
+            ));
+      },
+    );
+  }
+
+  void _showInfoPopup() {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return Dialog(
+            elevation: 0.0,
+            backgroundColor: Colors.transparent,
+            child: Stack(
+              children: <Widget>[
+                Container(
+                  decoration: BoxDecoration(
+                      color: Colors.green,
+                      shape: BoxShape.rectangle,
+                      borderRadius: BorderRadius.circular(5),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black26,
+                          blurRadius: 10.0,
+                          offset: const Offset(0.0, 10.0),
+                        )
+                      ]),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      const Icon(
+                        MdiIcons.glassCocktail,
+                        color: white,
+                        size: 60,
+                      ),
+                      const SizedBox(
+                        height: 15,
+                      ),
+                      const Text('Lounges Available!',
+                          style: TextStyle(
+                              color: white,
+                              fontSize: 28,
+                              fontWeight: FontWeight.w700)),
+                      const SizedBox(
+                        height: 15,
+                      ),
+                      Container(
+                        padding: const EdgeInsets.only(
+                            left: 18, right: 18, bottom: 10),
+                        child: const Text(
+                            'You can now join a lounge. Joining a lounge lets you enjoy the event with people just like you.',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                color: white,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500)),
+                      ),
+                      SizedBox(
+                          child: GestureDetector(
+                              onTap: () {
+                                Navigator.pop(context);
+                              },
+                              
+                                child: Container(
+
+                                    color: white,
+                                    child: Column(children: <Widget>[
+                                      Container(
+                                        padding: const EdgeInsets.all(15),
+                                        child: Align(
+                                          alignment: Alignment.bottomCenter,
+                                          child: const Text('GOT IT',
+                                        style: TextStyle(
+                                            color: Colors.green,
+                                            fontSize: 24,
+                                            fontWeight: FontWeight.w600)),
+                                        )
+                                      )
+                                    ],)),
+                              )
+                              ),
+                    ],
+                  ),
+                )
+              ],
+            ));
+      },
+    );
   }
 
   Future<int> _resolveAdressEvent() async {
@@ -339,8 +543,9 @@ class _EventScreenState extends State<EventScreen> {
                         color: orange,
                         padding: const EdgeInsets.all(5),
                         child: GestureDetector(
-                            onTap: () =>
-                                dispatch(EventUnRegisterAction(widget.event)),
+                            onTap: () {
+                              _showConfirmPopup(dispatch);
+                            },
                             // TODO(alexandre): to unattend an event, you need not to have a lounge, so if that's the case, toast a msg about it and/or disable it,
                             child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -383,6 +588,7 @@ class _EventScreenState extends State<EventScreen> {
                 child: InkWell(
                     onTap: () {
                       dispatch(EventRegisterAction(widget.event));
+                      _showInfoPopup();
                       if (!widget.event.likes.contains(state.loginState.id)) {
                         dispatch(EventLikeAction(widget.event));
                       }
