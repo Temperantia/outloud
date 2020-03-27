@@ -237,28 +237,26 @@ class _EventScreenState extends State<EventScreen>
                       ),
                       SizedBox(
                           child: GestureDetector(
-                              onTap: () {
-                                Navigator.pop(context);
-                              },
-                              
-                                child: Container(
-
-                                    color: white,
-                                    child: Column(children: <Widget>[
-                                      Container(
-                                        padding: const EdgeInsets.all(15),
-                                        child: Align(
-                                          alignment: Alignment.bottomCenter,
-                                          child: const Text('GOT IT',
-                                        style: TextStyle(
-                                            color: Colors.green,
-                                            fontSize: 24,
-                                            fontWeight: FontWeight.w600)),
-                                        )
-                                      )
-                                    ],)),
-                              )
-                              ),
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                        child: Container(
+                            color: white,
+                            child: Column(
+                              children: <Widget>[
+                                Container(
+                                    padding: const EdgeInsets.all(15),
+                                    child: Align(
+                                      alignment: Alignment.bottomCenter,
+                                      child: const Text('GOT IT',
+                                          style: TextStyle(
+                                              color: Colors.green,
+                                              fontSize: 24,
+                                              fontWeight: FontWeight.w600)),
+                                    ))
+                              ],
+                            )),
+                      )),
                     ],
                   ),
                 )
