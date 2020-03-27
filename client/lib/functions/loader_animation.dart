@@ -5,12 +5,13 @@ import 'package:business/app_state.dart';
 import 'package:flutter/animation.dart';
 import 'package:flutter/material.dart';
 
-void showLoaderAnimation(
+Future<void> showLoaderAnimation (
     BuildContext context,
     TickerProvider tickerProvider,
+    {bool executeCallback = false,
+    int animationDuration = 600,
     void Function(ReduxAction<AppState>) dispatch,
-    ReduxAction<AppState> callback,
-    int animationDuration) {
+    ReduxAction<AppState> callback}) async{
   final AnimationController _animationController = AnimationController(
       duration: Duration(milliseconds: animationDuration),
       upperBound: pi * 2,
@@ -47,9 +48,13 @@ void showLoaderAnimation(
   _angleAnimation.addStatusListener(_listener);
   _animationController.forward(from: 0.0);
 
-  Future<void>.delayed(Duration(milliseconds: animationDuration * 2), () {
+  return Future<void>.delayed(Duration(milliseconds: animationDuration * 2), () {
     _angleAnimation.removeStatusListener(_listener);
     Navigator.pop(context);
-    dispatch(callback);
+    if (executeCallback) {
+      dispatch(callback);
+    }
   });
 }
+
+

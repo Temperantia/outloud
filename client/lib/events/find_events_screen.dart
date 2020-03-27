@@ -246,13 +246,13 @@ class _FindEventsScreen extends State<FindEventsScreen>
     return Column(children: <Widget>[
       GestureDetector(
           onTap: () async {
-            showLoaderAnimation(
-                context,
-                this,
-                dispatch,
-                redux.NavigateAction<AppState>.pushNamed(EventScreen.id,
+            await showLoaderAnimation(context, this,
+                executeCallback: true,
+                dispatch: dispatch,
+                callback: redux.NavigateAction<AppState>.pushNamed(
+                    EventScreen.id,
                     arguments: event),
-                600);
+                animationDuration: 600);
           },
           child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 10.0),

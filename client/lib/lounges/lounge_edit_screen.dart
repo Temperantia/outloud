@@ -4,6 +4,7 @@ import 'package:business/classes/user.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:business/app_state.dart';
+import 'package:business/lounges/actions/lounge_remove_action.dart';
 import 'package:business/lounges/actions/lounge_edit_details_action.dart';
 import 'package:business/lounges/actions/lounge_edit_meetup_action.dart';
 import 'package:async_redux/async_redux.dart' as redux;
@@ -127,7 +128,12 @@ class _LoungeEditScreenState extends State<LoungeEditScreen> {
           Flexible(
               flex: 2,
               child: GestureDetector(
-                  onTap: () => dispatch(redux.NavigateAction<AppState>.pop()),
+                  onTap: () {
+                    dispatch(LoungeRemoveAction(
+                             widget.lounge));
+                    dispatch(redux.NavigateAction<AppState>.pop());
+                    dispatch(redux.NavigateAction<AppState>.pop());
+                  },
                   child: Container(
                       margin:
                           const EdgeInsets.only(left: 5, right: 10, top: 10),

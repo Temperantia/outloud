@@ -8,9 +8,9 @@ import 'package:business/models/user.dart';
 import 'package:flutter/material.dart';
 import 'package:business/lounges/actions/lounge_join_action.dart';
 import 'package:business/lounges/actions/lounge_leave_action.dart';
+import 'package:inclusive/functions/loader_animation.dart';
 import 'package:inclusive/lounges/lounge_chat_screen.dart';
 import 'package:inclusive/lounges/lounge_create_detail_screen.dart';
-import 'package:inclusive/lounges/lounges_widget.dart';
 
 import 'package:inclusive/theme.dart';
 import 'package:inclusive/widgets/button.dart';
@@ -109,13 +109,15 @@ class _LoungesScreenState extends State<LoungesScreen>
                               dispatch(LoungeLeaveAction(
                                   state.userState.user.id, lounge));
                             } else {
-                              await dispatchFuture(redux.NavigateAction<AppState>.pop());
                               await dispatchFuture(LoungeJoinAction(
                                   state.userState.user.id, lounge));
+                              await showLoaderAnimation(context, this,
+                                  animationDuration: 600);
+                              await dispatchFuture(
+                                  redux.NavigateAction<AppState>.pop());
                               dispatch(redux.NavigateAction<AppState>.pushNamed(
-                                        LoungeChatScreen.id,
-                                        arguments: lounge));
-
+                                  LoungeChatScreen.id,
+                                  arguments: lounge));
                             }
                           },
                           child: Container(

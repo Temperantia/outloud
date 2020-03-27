@@ -9,6 +9,7 @@ import 'package:business/classes/chat.dart';
 import 'package:business/classes/message.dart';
 import 'package:business/models/message.dart';
 import 'package:flutter/material.dart';
+import 'package:inclusive/functions/loader_animation.dart';
 import 'package:inclusive/lounges/lounge_edit_screen.dart';
 import 'package:inclusive/lounges/lounge_view_screen.dart';
 import 'package:inclusive/theme.dart';
@@ -27,7 +28,7 @@ class LoungeChatScreen extends StatefulWidget {
   _LoungeChatScreenState createState() => _LoungeChatScreenState();
 }
 
-class _LoungeChatScreenState extends State<LoungeChatScreen> {
+class _LoungeChatScreenState extends State<LoungeChatScreen> with TickerProviderStateMixin{
   final TextEditingController _messageController = TextEditingController();
 
   @override
@@ -135,7 +136,9 @@ class _LoungeChatScreenState extends State<LoungeChatScreen> {
                 child: Row(
                   children: <Widget>[
                     GestureDetector(
-                        onTap: () {
+                        onTap: () async {
+                          await showLoaderAnimation(context, this,
+                                  animationDuration: 600);
                           dispatch(LoungeLeaveAction(
                               state.userState.user.id, widget.lounge));
                           dispatch(NavigateAction<AppState>.pop());

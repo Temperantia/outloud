@@ -34,6 +34,10 @@ Future<Lounge> createLounge(Lounge lounge) async {
   return Lounge.fromMap(doc.data, doc.documentID);
 }
 
+Future<void> deleteLounge(Lounge lounge) async {
+  await _api.removeDocument(lounge.id);
+}
+
 Future<void> updateLounge(Lounge lounge) async {
   return _api.updateDocument(lounge.toJson(), lounge.id);
 }
