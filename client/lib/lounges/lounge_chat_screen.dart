@@ -28,7 +28,8 @@ class LoungeChatScreen extends StatefulWidget {
   _LoungeChatScreenState createState() => _LoungeChatScreenState();
 }
 
-class _LoungeChatScreenState extends State<LoungeChatScreen> with TickerProviderStateMixin{
+class _LoungeChatScreenState extends State<LoungeChatScreen>
+    with TickerProviderStateMixin {
   final TextEditingController _messageController = TextEditingController();
 
   @override
@@ -138,7 +139,7 @@ class _LoungeChatScreenState extends State<LoungeChatScreen> with TickerProvider
                     GestureDetector(
                         onTap: () async {
                           await showLoaderAnimation(context, this,
-                                  animationDuration: 600);
+                              animationDuration: 600);
                           dispatch(LoungeLeaveAction(
                               state.userState.user.id, widget.lounge));
                           dispatch(NavigateAction<AppState>.pop());

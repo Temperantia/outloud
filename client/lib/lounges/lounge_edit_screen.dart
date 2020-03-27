@@ -10,6 +10,7 @@ import 'package:business/lounges/actions/lounge_edit_meetup_action.dart';
 import 'package:async_redux/async_redux.dart' as redux;
 import 'package:business/classes/lounge.dart';
 import 'package:flutter/material.dart';
+import 'package:inclusive/functions/loader_animation.dart';
 import 'package:inclusive/theme.dart';
 import 'package:inclusive/widgets/button.dart';
 import 'package:inclusive/widgets/cached_image.dart';
@@ -28,7 +29,8 @@ class LoungeEditScreen extends StatefulWidget {
   _LoungeEditScreenState createState() => _LoungeEditScreenState(lounge);
 }
 
-class _LoungeEditScreenState extends State<LoungeEditScreen> {
+class _LoungeEditScreenState extends State<LoungeEditScreen>
+    with TickerProviderStateMixin {
   _LoungeEditScreenState(this.lounge);
   final Lounge lounge;
   final ScrollController _scrollController = ScrollController();
@@ -128,9 +130,10 @@ class _LoungeEditScreenState extends State<LoungeEditScreen> {
           Flexible(
               flex: 2,
               child: GestureDetector(
-                  onTap: () {
-                    dispatch(LoungeRemoveAction(
-                             widget.lounge));
+                  onTap: () async {
+                    await showLoaderAnimation(context, this,
+                        animationDuration: 600);
+                    dispatch(LoungeRemoveAction(widget.lounge));
                     dispatch(redux.NavigateAction<AppState>.pop());
                     dispatch(redux.NavigateAction<AppState>.pop());
                   },
