@@ -4,6 +4,7 @@ import 'package:business/classes/event.dart';
 import 'package:business/classes/lounge.dart';
 import 'package:business/classes/user_event_state.dart';
 import 'package:flutter/material.dart';
+import 'package:inclusive/events/event_screen.dart';
 import 'package:inclusive/lounges/lounge_chat_screen.dart';
 import 'package:inclusive/lounges/lounges_screen.dart';
 import 'package:inclusive/theme.dart';
@@ -60,24 +61,32 @@ class _MyEventsScreen extends State<MyEventsScreen>
     return Container(
         padding: const EdgeInsets.all(10.0),
         child: Row(children: <Widget>[
-          Stack(alignment: Alignment.center, children: <Widget>[
-            CachedImage(event.pic,
-                width: 70.0,
-                height: 70.0,
-                borderRadius: const BorderRadius.only(
-                    bottomRight: Radius.circular(5.0),
-                    topRight: Radius.circular(5.0)),
-                imageType: ImageType.Event),
-            Container(color: pink.withOpacity(0.5), width: 70.0, height: 70.0),
-            Column(children: <Widget>[
-              Text(date,
-                  style: const TextStyle(
-                      color: white, fontWeight: FontWeight.bold, fontSize: 20)),
-              Text(month,
-                  style: const TextStyle(
-                      color: white, fontWeight: FontWeight.bold))
-            ])
-          ]),
+          GestureDetector(
+            onTap: () => dispatch(redux.NavigateAction<AppState>.pushNamed(
+                EventScreen.id,
+                arguments: event)),
+            child: Stack(alignment: Alignment.center, children: <Widget>[
+              CachedImage(event.pic,
+                  width: 70.0,
+                  height: 70.0,
+                  borderRadius: const BorderRadius.only(
+                      bottomRight: Radius.circular(5.0),
+                      topRight: Radius.circular(5.0)),
+                  imageType: ImageType.Event),
+              Container(
+                  color: pink.withOpacity(0.5), width: 70.0, height: 70.0),
+              Column(children: <Widget>[
+                Text(date,
+                    style: const TextStyle(
+                        color: white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20)),
+                Text(month,
+                    style: const TextStyle(
+                        color: white, fontWeight: FontWeight.bold))
+              ])
+            ]),
+          ),
           Expanded(
               child: Container(
                   padding: const EdgeInsets.only(left: 10.0),
@@ -105,7 +114,7 @@ class _MyEventsScreen extends State<MyEventsScreen>
                             ]),
                         if (lounge == null)
                           Button(
-                              text: 'JOIN A LOUNGE',
+                              text: 'FIND LOUNGES',
                               height: 30.0,
                               backgroundColor: orange,
                               backgroundOpacity: 1.0,
@@ -164,13 +173,12 @@ class _MyEventsScreen extends State<MyEventsScreen>
         void Function(redux.ReduxAction<dynamic>) dispatch,
         Widget child) {
       return Container(
-        child: _buildUserEvents(
-            state.userState.events,
-            state.userState.user.events,
-            state.userState.lounges,
-            state.theme,
-            dispatch),
-      );
+          child: _buildUserEvents(
+              state.userState.events,
+              state.userState.user.events,
+              state.userState.lounges,
+              state.theme,
+              dispatch));
     });
   }
 }

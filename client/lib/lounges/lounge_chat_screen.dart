@@ -31,12 +31,6 @@ class _LoungeChatScreenState extends State<LoungeChatScreen> {
   final TextEditingController _messageController = TextEditingController();
 
   @override
-  void initState() {
-    super.initState();
-    // TODO(alexandre): init stream lounge from widget.lounge + stream all users from all messages
-  }
-
-  @override
   void dispose() {
     _messageController.dispose();
     super.dispose();
