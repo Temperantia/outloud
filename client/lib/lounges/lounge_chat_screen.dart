@@ -30,6 +30,7 @@ class LoungeChatScreen extends StatefulWidget {
 
 class _LoungeChatScreenState extends State<LoungeChatScreen>
     with TickerProviderStateMixin {
+  Lounge _lounge;
   final TextEditingController _messageController = TextEditingController();
 
   @override
@@ -40,8 +41,11 @@ class _LoungeChatScreenState extends State<LoungeChatScreen>
 
   Widget _buildHeader(
       AppState state, void Function(ReduxAction<AppState>) dispatch) {
-    final User owner = widget.lounge.members
-        .firstWhere((User member) => member.id == widget.lounge.owner);
+    if (_lounge.members == null) {
+      return Container();
+    }
+    final User owner =
+        _lounge.members.firstWhere((User member) => member.id == _lounge.owner);
     return Container(
         padding: const EdgeInsets.all(15.0),
         child: Row(children: <Widget>[
@@ -52,7 +56,7 @@ class _LoungeChatScreenState extends State<LoungeChatScreen>
                     decoration: const BoxDecoration(
                         border: Border(
                             left: BorderSide(color: orange, width: 5.0))),
-                    child: CachedImage(widget.lounge.event.pic,
+                    child: CachedImage(_lounge.event.pic,
                         width: 40.0,
                         height: 40.0,
                         borderRadius: const BorderRadius.only(
@@ -97,19 +101,16 @@ class _LoungeChatScreenState extends State<LoungeChatScreen>
                       Container(
                           child: RichText(
                               text: TextSpan(
-                                  text:
-                                      widget.lounge.members.length.toString() +
-                                          ' member' +
-                                          (widget.lounge.members.length > 1
-                                              ? 's '
-                                              : ' '),
+                                  text: _lounge.members.length.toString() +
+                                      ' member' +
+                                      (_lounge.members.length > 1 ? 's ' : ' '),
                                   style: const TextStyle(
                                       color: black,
                                       fontSize: 13,
                                       fontWeight: FontWeight.w500),
                                   children: <TextSpan>[
                             TextSpan(
-                                text: widget.lounge.event.name,
+                                text: _lounge.event.name,
                                 style: TextStyle(
                                     color: orange,
                                     fontSize: 14,
@@ -124,7 +125,7 @@ class _LoungeChatScreenState extends State<LoungeChatScreen>
                     onTap: () => dispatch(
                         redux.NavigateAction<AppState>.pushNamed(
                             LoungeEditScreen.id,
-                            arguments: widget.lounge)),
+                            arguments: _lounge)),
                     child: Column(children: const <Widget>[
                       Icon(MdiIcons.calendarEdit, color: orange),
                       Text('EDIT',
@@ -141,7 +142,7 @@ class _LoungeChatScreenState extends State<LoungeChatScreen>
                           await showLoaderAnimation(context, this,
                               animationDuration: 600);
                           dispatch(LoungeLeaveAction(
-                              state.userState.user.id, widget.lounge));
+                              state.userState.user.id, _lounge));
                           dispatch(NavigateAction<AppState>.pop());
                         },
                         child: Container(
@@ -165,7 +166,7 @@ class _LoungeChatScreenState extends State<LoungeChatScreen>
                         onTap: () {
                           dispatch(NavigateAction<AppState>.pushNamed(
                               LoungeViewScreen.id,
-                              arguments: widget.lounge));
+                              arguments: _lounge));
                         },
                         child: Container(
                             margin: const EdgeInsets.only(left: 5, top: 10),
@@ -205,16 +206,19 @@ class _LoungeChatScreenState extends State<LoungeChatScreen>
   }
 
   Widget _buildMessage(Message message) {
-    final User user = widget.lounge.members.firstWhere((User user) {
+    final User user = _lounge.members.firstWhere((User user) {
       return user.id == message.idFrom;
-    });
+    }, orElse: () => null);
+    if (user == null) {
+      return Container();
+    }
     return Container(
         padding: const EdgeInsets.all(4),
         margin: const EdgeInsets.all(4),
         child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
-            textDirection: widget.lounge.owner == user.id
+            textDirection: _lounge.owner == user.id
                 ? TextDirection.rtl
                 : TextDirection.ltr,
             children: <Widget>[
@@ -229,7 +233,7 @@ class _LoungeChatScreenState extends State<LoungeChatScreen>
                   child: Container(
                       decoration: BoxDecoration(
                           color: pinkLight.withOpacity(
-                              widget.lounge.owner == user.id ? 0.7 : 0.4),
+                              _lounge.owner == user.id ? 0.7 : 0.4),
                           borderRadius:
                               const BorderRadius.all(Radius.circular(5))),
                       padding: const EdgeInsets.only(
@@ -245,7 +249,7 @@ class _LoungeChatScreenState extends State<LoungeChatScreen>
                                   Container(
                                       child: RichText(
                                           text: TextSpan(
-                                              text: widget.lounge.members
+                                              text: _lounge.members
                                                   .firstWhere((User user) {
                                                 return user.id ==
                                                     message.idFrom;
@@ -287,19 +291,25 @@ class _LoungeChatScreenState extends State<LoungeChatScreen>
         AppState state,
         void Function(redux.ReduxAction<dynamic>) dispatch,
         Widget child) {
-      final Chat chat = state.chatsState.loungeChats
-          .firstWhere((Chat chat) => chat.id == widget.lounge.id);
+      _lounge = state.userState.lounges.firstWhere(
+          (Lounge lounge) => lounge.id == _lounge.id,
+          orElse: () => null);
+      Chat chat;
+      if (_lounge != null) {
+        chat = state.chatsState.loungeChats.firstWhere(
+            (Chat chat) => chat.id == _lounge.id,
+            orElse: () => null);
+      }
+
       return View(
           title: 'LOUNGE CHAT',
-          child: Container(
-              child: Column(children: <Widget>[
+          child: Column(children: <Widget>[
             Expanded(
-                child: Container(
-                    child: Column(children: <Widget>[
+                child: Column(children: <Widget>[
               _buildHeader(state, dispatch),
               const Divider(),
-              Expanded(child: Container(child: _buildChat(chat)))
-            ]))),
+              if (chat != null) Expanded(child: _buildChat(chat))
+            ])),
             Container(
                 margin: const EdgeInsets.all(10.0),
                 decoration: BoxDecoration(
@@ -327,14 +337,14 @@ class _LoungeChatScreenState extends State<LoungeChatScreen>
                     padding: const EdgeInsets.all(8.0),
                     child: GestureDetector(
                         onTap: () {
-                          addMessage(widget.lounge.id, state.loginState.id,
+                          addMessage(_lounge.id, state.loginState.id,
                               _messageController.text);
                           _messageController.clear();
                         },
                         child: Icon(Icons.send, color: white)),
                   )
                 ]))
-          ])));
+          ]));
     });
   }
 }

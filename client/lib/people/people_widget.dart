@@ -53,7 +53,6 @@ class _PeopleWidgetState extends State<PeopleWidget>
   Widget _buildFriends(List<User> friends, ThemeStyle theme,
       void Function(ReduxAction<AppState>) dispatch) {
     return Container(
-        decoration: const BoxDecoration(color: white),
         padding: const EdgeInsets.all(10.0),
         child: Column(children: <Widget>[
           Expanded(

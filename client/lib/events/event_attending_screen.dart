@@ -96,7 +96,7 @@ class _EventAttendingScreenState extends State<EventAttendingScreen> {
                       padding: const EdgeInsets.symmetric(horizontal: 5.0),
                       child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
+                          children: <Widget>[
                             Text(member.name,
                                 style: const TextStyle(
                                     fontWeight: FontWeight.bold))
