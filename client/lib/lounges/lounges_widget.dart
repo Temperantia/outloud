@@ -45,29 +45,31 @@ class _LoungesWidgetState extends State<LoungesWidget>
 
   Widget _buildInfoLoungeLayout(AppState state, Lounge lounge,
       void Function(redux.ReduxAction<AppState>) dispatch) {
-    final User owner =
-        lounge.members.firstWhere((User member) => member.id == lounge.owner);
+    final User owner = lounge.members.firstWhere(
+        (User member) => member.id == lounge.owner,
+        orElse: () => null);
     return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Row(children: <Widget>[
-            Container(
-                margin: const EdgeInsets.only(right: 5),
-                child: CachedImage(owner.pics.isEmpty ? null : owner.pics[0],
-                    width: 20.0,
-                    height: 20.0,
-                    borderRadius: BorderRadius.circular(20.0),
-                    imageType: ImageType.User)),
-            Expanded(
-                child: RichText(
-                    text: TextSpan(
-              text: state.userState.user.id == owner.id
-                  ? 'Your Lounge'
-                  : owner.name + '\'s Lounge',
-              style: const TextStyle(
-                  color: black, fontSize: 13, fontWeight: FontWeight.w500),
-            ))),
-          ]),
+          if (owner != null)
+            Row(children: <Widget>[
+              Container(
+                  margin: const EdgeInsets.only(right: 5),
+                  child: CachedImage(owner.pics.isEmpty ? null : owner.pics[0],
+                      width: 20.0,
+                      height: 20.0,
+                      borderRadius: BorderRadius.circular(20.0),
+                      imageType: ImageType.User)),
+              Expanded(
+                  child: RichText(
+                      text: TextSpan(
+                text: state.userState.user.id == owner.id
+                    ? 'Your Lounge'
+                    : owner.name + '\'s Lounge',
+                style: const TextStyle(
+                    color: black, fontSize: 13, fontWeight: FontWeight.w500),
+              ))),
+            ]),
           Row(children: <Widget>[
             Container(
                 child: RichText(

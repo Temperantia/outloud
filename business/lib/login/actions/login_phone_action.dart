@@ -6,19 +6,19 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class LoginPhoneAction extends ReduxAction<AppState> {
-  LoginPhoneAction(this.phone, this.context);
+  LoginPhoneAction(this._phone, this._context);
 
-  final String phone;
-  final BuildContext context;
+  final String _phone;
+  final BuildContext _context;
   static String smsCode;
 
   @override
   Future<AppState> reduce() async {
     await firebaseAuth.verifyPhoneNumber(
-        phoneNumber: phone,
+        phoneNumber: _phone,
         timeout: const Duration(seconds: 60),
         verificationCompleted: (AuthCredential authCredential) =>
-            _verificationComplete(authCredential, context),
+            _verificationComplete(authCredential, _context),
         verificationFailed: (AuthException authException) =>
             _verificationFailed(authException),
         codeSent: (String verificationId, [int code]) =>

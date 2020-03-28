@@ -6,19 +6,17 @@ import 'package:business/models/events.dart';
 import 'package:business/models/user.dart';
 
 class EventUnRegisterAction extends redux.ReduxAction<AppState> {
-  EventUnRegisterAction(this.event);
-  final Event event;
+  EventUnRegisterAction(this._event);
+
+  final Event _event;
+
   @override
   AppState reduce() {
     final User user = state.userState.user;
+    updateUser(user..events.remove(_event.id));
 
-    user.events.remove(event.id);
-    updateUser(user);
-
-    final List<String> memberIds = List<String>.from(event.memberIds);
-    memberIds.remove(user.id);
-    event.memberIds = memberIds;
-    updateEvent(event);
+    updateEvent(_event
+      ..memberIds = (List<String>.from(_event.memberIds)..remove(user.id)));
 
     return null;
   }

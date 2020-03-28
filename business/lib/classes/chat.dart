@@ -33,9 +33,8 @@ class Chat {
   bool pinned;
   List<Message> messages;
 
-  static String getUserChatId(String id1, String id2) {
-    return id1.compareTo(id2) < 0 ? '$id1-$id2' : '$id2-$id1';
-  }
+  static String getUserChatId(String id1, String id2) =>
+      id1.compareTo(id2) < 0 ? '$id1-$id2' : '$id2-$id1';
 
   Future<void> markAsRead() async {
     lastRead = DateTime.now().millisecondsSinceEpoch;

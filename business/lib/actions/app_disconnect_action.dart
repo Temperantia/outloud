@@ -1,7 +1,7 @@
 import 'package:async_redux/async_redux.dart';
 import 'package:business/app_state.dart';
-import 'package:business/login/models/login_state.dart';
-import 'package:business/user/models/user_state.dart';
+import 'package:business/login/login_state.dart';
+import 'package:business/user/user_state.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class AppDisconnectAction extends ReduxAction<AppState> {

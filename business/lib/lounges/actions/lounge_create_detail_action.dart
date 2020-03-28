@@ -4,18 +4,18 @@ import 'package:business/classes/lounge.dart';
 import 'package:business/classes/lounge_visibility.dart';
 
 class LoungeCreateDetailAction extends ReduxAction<AppState> {
-  LoungeCreateDetailAction(this.visibility, this.limit, this.description);
+  LoungeCreateDetailAction(this._visibility, this._limit, this._description);
 
-  final LoungeVisibility visibility;
-  final int limit;
-  final String description;
+  final LoungeVisibility _visibility;
+  final int _limit;
+  final String _description;
 
   @override
   AppState reduce() {
     final Lounge loungeCreation = state.loungesState.loungeCreation
-      ..visibility = visibility
-      ..memberLimit = limit
-      ..description = description;
+      ..visibility = _visibility
+      ..memberLimit = _limit
+      ..description = _description;
     return state.copy(
         loungesState: state.loungesState.copy(loungeCreation: loungeCreation));
   }

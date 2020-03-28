@@ -7,18 +7,20 @@ import 'package:business/models/events.dart';
 import 'package:business/models/user.dart';
 
 class EventLikeAction extends redux.ReduxAction<AppState> {
-  EventLikeAction(this.event);
-  final Event event;
+  EventLikeAction(this._event);
+
+  final Event _event;
+
   @override
   AppState reduce() {
     final User user = state.userState.user;
 
-    user.events[event.id] = UserEventState.Liked;
+    user.events[_event.id] = UserEventState.Liked;
     updateUser(user);
 
-    event.likes =
-        List<String>.from(event.likes + <String>[state.userState.user.id]);
-    updateEvent(event);
+    _event.likes =
+        List<String>.from(_event.likes + <String>[state.userState.user.id]);
+    updateEvent(_event);
     return null;
   }
 }

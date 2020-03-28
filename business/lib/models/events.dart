@@ -24,10 +24,6 @@ Stream<List<Event>> streamEvents(List<String> ids) {
   });
 }
 
-DocumentReference getEventReference(String id) {
-  return _api.ref.document(id);
-}
-
 Future<List<Event>> getEvents() async {
   final Query query = _api.queryCollection();
 

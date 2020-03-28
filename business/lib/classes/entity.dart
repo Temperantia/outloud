@@ -4,6 +4,7 @@ import 'interest.dart';
 
 class Entity {
   Entity({this.id, this.name, this.description, this.location, this.interests});
+
   final String id;
   String name;
   String description;

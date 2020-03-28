@@ -7,17 +7,18 @@ import 'package:business/models/events.dart';
 import 'package:business/models/user.dart';
 
 class EventRegisterAction extends redux.ReduxAction<AppState> {
-  EventRegisterAction(this.event);
-  final Event event;
+  EventRegisterAction(this._event);
+  final Event _event;
   @override
   AppState reduce() {
     final User user = state.userState.user;
 
-    user.events[event.id] = UserEventState.Attending;
+    user.events[_event.id] = UserEventState.Attending;
     updateUser(user);
 
-    event.memberIds = List<String>.from(event.memberIds + <String>[user.id]);
-    updateEvent(event);
+    _event.memberIds = List<String>.from(_event.memberIds + <String>[user.id]);
+    updateEvent(_event);
+
     return null;
   }
 }

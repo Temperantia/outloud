@@ -8,33 +8,34 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class LoungeCreateMeetupAction extends ReduxAction<AppState> {
-  LoungeCreateMeetupAction(this.location, this.date, this.notes);
+  LoungeCreateMeetupAction(this._location, this._date, this._notes);
 
-  final GeoPoint location;
-  final DateTime date;
-  final String notes;
+  final GeoPoint _location;
+  final DateTime _date;
+  final String _notes;
 
   @override
   Future<AppState> reduce() async {
-    Lounge lounCreation = state.loungesState.loungeCreation
-      ..location = location
-      ..date = date
-      ..notes = notes;
+    Lounge loungeCreation = state.loungesState.loungeCreation
+      ..location = _location
+      ..date = _date
+      ..notes = _notes;
 
-    lounCreation = await createLounge(lounCreation);
+    loungeCreation = await createLounge(loungeCreation);
 
     final User user = state.userState.user;
 
-    user.lounges = List<String>.from(user.lounges + <String>[lounCreation.id]);
+    user.lounges =
+        List<String>.from(user.lounges + <String>[loungeCreation.id]);
 
     updateUser(user);
 
     dispatch(NavigateAction<AppState>.pushNamedAndRemoveUntil(
         'LoungeChatScreen',
-        arguments: lounCreation,
+        arguments: loungeCreation,
         predicate: (Route<dynamic> route) => route.isFirst));
 
     return state.copy(
-        loungesState: state.loungesState.copy(loungeCreation: lounCreation));
+        loungesState: state.loungesState.copy(loungeCreation: loungeCreation));
   }
 }

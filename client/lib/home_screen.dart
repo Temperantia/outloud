@@ -1,7 +1,7 @@
 import 'package:async_redux/async_redux.dart';
 import 'package:business/actions/app_navigate_action.dart';
+import 'package:business/app.dart';
 import 'package:business/app_state.dart';
-import 'package:business/singletons/permission_location.dart';
 import 'package:flutter/material.dart';
 import 'package:inclusive/events/events_widget.dart';
 import 'package:inclusive/home_widget.dart';
@@ -24,11 +24,11 @@ class _HomeScreenState extends State<HomeScreen>
   void initState() {
     super.initState();
     _tabController = TabController(vsync: this, length: 4);
-    requestLocationPermission();
+    _requestLocationPermission();
   }
 
-  Future<bool> requestLocationPermission() async {
-    final bool granted = await PermissionLocation().requestLocationPermission();
+  Future<bool> _requestLocationPermission() async {
+    final bool granted = await permissionLocation.requestLocationPermission();
     if (!granted) {
       onPermissionDenied();
     }
@@ -51,8 +51,8 @@ class _HomeScreenState extends State<HomeScreen>
                 FlatButton(
                     child: const Text('GO to settings'),
                     onPressed: () {
-                      PermissionLocation().openAppSettings();
-                    }),
+                      permissionLocation.openAppSettings();
+                    })
               ]);
         });
   }

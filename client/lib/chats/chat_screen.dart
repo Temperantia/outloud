@@ -120,10 +120,7 @@ class _ChatScreenState extends State<ChatScreen> {
           (nextMessage == null || message.idFrom != nextMessage.idFrom)) {
         items.add(Container(
             margin: const EdgeInsets.only(left: 20.0),
-            child: Row(children: <Widget>[
-              Text(message.author == null ? 'Anonymous' : message.author.name,
-                  style: Theme.of(context).textTheme.caption)
-            ])));
+            child: Row(children: const <Widget>[])));
       }
     }
 

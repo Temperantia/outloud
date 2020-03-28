@@ -44,8 +44,12 @@ class _LoungeChatScreenState extends State<LoungeChatScreen>
     if (_lounge.members == null) {
       return Container();
     }
-    final User owner =
-        _lounge.members.firstWhere((User member) => member.id == _lounge.owner);
+    final User owner = _lounge.members.firstWhere(
+        (User member) => member.id == _lounge.owner,
+        orElse: () => null);
+    if (owner == null) {
+      return Container();
+    }
     return Container(
         padding: const EdgeInsets.all(15.0),
         child: Row(children: <Widget>[
@@ -206,9 +210,9 @@ class _LoungeChatScreenState extends State<LoungeChatScreen>
   }
 
   Widget _buildMessage(Message message) {
-    final User user = _lounge.members.firstWhere((User user) {
-      return user.id == message.idFrom;
-    }, orElse: () => null);
+    final User user = _lounge.members.firstWhere(
+        (User user) => user.id == message.idFrom,
+        orElse: () => null);
     if (user == null) {
       return Container();
     }
@@ -247,39 +251,30 @@ class _LoungeChatScreenState extends State<LoungeChatScreen>
                                         MainAxisAlignment.spaceBetween,
                                     children: <Widget>[
                                   Container(
-                                      child: RichText(
-                                          text: TextSpan(
-                                              text: _lounge.members
-                                                  .firstWhere((User user) {
-                                                return user.id ==
-                                                    message.idFrom;
-                                              }).name,
-                                              style: const TextStyle(
-                                                  color: black,
-                                                  fontSize: 12,
-                                                  fontWeight:
-                                                      FontWeight.w600)))),
+                                      child: Text(user.name,
+                                          style: const TextStyle(
+                                              color: black,
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.w600))),
                                   Container(
-                                      child: RichText(
-                                          text: TextSpan(
-                                    text: _dateFormatter(message.timestamp),
+                                      child: Text(
+                                    _dateFormatter(message.timestamp),
                                     style: const TextStyle(
                                         color: black,
                                         fontSize: 12,
                                         fontWeight: FontWeight.w400),
-                                  )))
+                                  ))
                                 ])),
                             Container(
                                 padding: const EdgeInsets.only(top: 5),
-                                child: RichText(
-                                    textAlign: TextAlign.left,
-                                    text: TextSpan(
-                                      text: message.content,
-                                      style: const TextStyle(
-                                          color: black,
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.w400),
-                                    )))
+                                child: Text(
+                                  message.content,
+                                  textAlign: TextAlign.left,
+                                  style: const TextStyle(
+                                      color: black,
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w400),
+                                ))
                           ])))
             ]));
   }

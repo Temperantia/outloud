@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:business/app.dart';
 import 'package:business/app_state.dart';
 import 'package:async_redux/async_redux.dart' as redux;
 import 'package:business/classes/event.dart';
@@ -81,7 +82,7 @@ class _EventScreenState extends State<EventScreen>
                       color: Colors.white,
                       shape: BoxShape.rectangle,
                       borderRadius: BorderRadius.circular(5),
-                      boxShadow: [
+                      boxShadow: <BoxShadow>[
                         BoxShadow(
                           color: Colors.black26,
                           blurRadius: 10.0,
@@ -198,7 +199,7 @@ class _EventScreenState extends State<EventScreen>
                       color: Colors.green,
                       shape: BoxShape.rectangle,
                       borderRadius: BorderRadius.circular(5),
-                      boxShadow: [
+                      boxShadow: <BoxShadow>[
                         BoxShadow(
                           color: Colors.black26,
                           blurRadius: 10.0,
@@ -268,7 +269,7 @@ class _EventScreenState extends State<EventScreen>
 
   Future<int> _resolveAdressEvent() async {
     final List<Placemark> placemark =
-        await Geolocator().placemarkFromCoordinates(_latitude, _longitude);
+        await geoLocator.placemarkFromCoordinates(_latitude, _longitude);
     String _address = '';
     if (placemark.isNotEmpty) {
       final Placemark _place = placemark.first;
@@ -636,7 +637,7 @@ class _EventScreenState extends State<EventScreen>
                           fontSize: 16,
                           fontWeight: FontWeight.w600))),
             ),
-            iconColor: orange,
+            theme: const ExpandableThemeData(iconColor: orange),
             expanded: Container(
                 padding: const EdgeInsets.all(20.0),
                 child: Text(widget.event.description, softWrap: true))));

@@ -6,26 +6,26 @@ import 'entity.dart';
 import 'interest.dart';
 
 class User extends Entity {
-  User({
-    String id = '',
-    String name = '',
-    this.email = '',
-    this.home = '',
-    GeoPoint location,
-    this.birthDate,
-    String description = '',
-    List<Interest> interests = const <Interest>[],
-    this.pics = const <String>[],
-    this.facts = const <String>[],
-    this.gender = '',
-    this.pronoun = '',
-    this.orientation = '',
-    this.education = '',
-    this.profession = '',
-    this.friends = const <String>[],
-    this.events = const <String, UserEventState>{},
-    this.lounges = const <String>[],
-  }) : super(
+  User(
+      {String id = '',
+      String name = '',
+      this.email = '',
+      this.home = '',
+      GeoPoint location,
+      this.birthDate,
+      String description = '',
+      List<Interest> interests = const <Interest>[],
+      this.pics = const <String>[],
+      this.facts = const <String>[],
+      this.gender = '',
+      this.pronoun = '',
+      this.orientation = '',
+      this.education = '',
+      this.profession = '',
+      this.friends = const <String>[],
+      this.events = const <String, UserEventState>{},
+      this.lounges = const <String>[]})
+      : super(
             id: id,
             name: name,
             description: description,
@@ -63,18 +63,17 @@ class User extends Entity {
             ? <String>[]
             : snapshot['lounges'].cast<String>() as List<String>,
         super(
-          id: id ?? '',
-          name: snapshot['name'] as String,
-          description: snapshot['description'] as String ?? '',
-          location: snapshot['location'] as GeoPoint,
-          interests: snapshot['interests'] == null
-              ? <Interest>[]
-              : (snapshot['interests'] as List<dynamic>)
-                  .map<Interest>((dynamic interest) => Interest.fromMap(
-                      Map<String, String>.from(
-                          interest as Map<dynamic, dynamic>)))
-                  .toList(),
-        );
+            id: id ?? '',
+            name: snapshot['name'] as String,
+            description: snapshot['description'] as String ?? '',
+            location: snapshot['location'] as GeoPoint,
+            interests: snapshot['interests'] == null
+                ? <Interest>[]
+                : (snapshot['interests'] as List<dynamic>)
+                    .map<Interest>((dynamic interest) => Interest.fromMap(
+                        Map<String, String>.from(
+                            interest as Map<dynamic, dynamic>)))
+                    .toList());
 
   String email;
   String home;
@@ -109,10 +108,9 @@ class User extends Entity {
       'education': education,
       'profession': profession,
       'friends': friends,
-      'events': events.map<String, String>((String key, UserEventState value) {
-        return MapEntry<String, String>(key, EnumToString.parse(value));
-      }),
-      'lounges': lounges,
+      'events': events.map<String, String>((String key, UserEventState value) =>
+          MapEntry<String, String>(key, EnumToString.parse(value))),
+      'lounges': lounges
     };
   }
 
@@ -134,7 +132,6 @@ class User extends Entity {
     return age;
   }
 
-  bool isAttendingEvent(String id) {
-    return events.containsKey(id) && events[id] == UserEventState.Attending;
-  }
+  bool isAttendingEvent(String id) =>
+      events.containsKey(id) && events[id] == UserEventState.Attending;
 }

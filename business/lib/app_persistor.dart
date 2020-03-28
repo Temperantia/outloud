@@ -1,6 +1,6 @@
 import 'package:async_redux/async_redux.dart';
 import 'package:business/app_state.dart';
-import 'package:business/chats/models/chats_state.dart';
+import 'package:business/chats/chats_state.dart';
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:flutter/material.dart';
 
@@ -15,11 +15,10 @@ class AppPersistor extends Persistor<AppState> {
     final List<Object> theme = await themePersist.load();
 
     return AppState.initialState(
-      chatsState: ChatsState.initialState(chatIds: chatIds.cast<String>()),
-      theme: theme == null || theme.isEmpty
-          ? null
-          : EnumToString.fromString(ThemeStyle.values, theme[0].toString()),
-    );
+        chatsState: ChatsState.initialState(chatIds: chatIds.cast<String>()),
+        theme: theme == null || theme.isEmpty
+            ? null
+            : EnumToString.fromString(ThemeStyle.values, theme[0].toString()));
   }
 
   @override

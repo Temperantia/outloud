@@ -14,7 +14,8 @@ class PeopleGetAction extends ReduxAction<AppState> {
     if (state.userState.user != null) {
       location = state.userState.user.location;
     } else {
-      final Position position = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.best);
+      final Position position = await geoLocator.getCurrentPosition(
+          desiredAccuracy: LocationAccuracy.best);
       location = GeoPoint(position.latitude, position.longitude);
     }
     final Map<String, String> distances = <String, String>{};

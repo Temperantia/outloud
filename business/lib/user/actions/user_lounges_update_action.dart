@@ -8,10 +8,11 @@ import 'package:business/classes/event.dart';
 import 'package:business/classes/lounge.dart';
 import 'package:business/classes/message.dart';
 import 'package:business/classes/user.dart';
+import 'package:business/models/events.dart';
 import 'package:business/models/message.dart';
+import 'package:business/models/user.dart';
 import 'package:business/user/actions/user_lounge_event_update_action.dart';
 import 'package:business/user/actions/user_lounge_member_update_action.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 class UserLoungesUpdateAction extends redux.ReduxAction<AppState> {
   UserLoungesUpdateAction(this._lounges);
@@ -27,21 +28,7 @@ class UserLoungesUpdateAction extends redux.ReduxAction<AppState> {
 
   @override
   AppState reduce() {
-    for (final StreamSubscription<List<Message>> messageSub in _messagesSub) {
-      messageSub.cancel();
-    }
-    _messagesSub.clear();
-    for (final StreamSubscription<Event> eventSub in _eventSubs) {
-      eventSub.cancel();
-    }
-    _eventSubs.clear();
-    for (final List<StreamSubscription<User>> memberSubList in _membersSubs) {
-      for (final StreamSubscription<User> memberSub in memberSubList) {
-        memberSub.cancel();
-      }
-      memberSubList.clear();
-    }
-    _membersSubs.clear();
+    _reset();
 
     final List<Chat> chats = <Chat>[];
     for (final Lounge lounge in _lounges) {
@@ -58,23 +45,35 @@ class UserLoungesUpdateAction extends redux.ReduxAction<AppState> {
         userState: state.userState.copy(lounges: _lounges));
   }
 
+  void _reset() {
+    for (final StreamSubscription<List<Message>> messageSub in _messagesSub) {
+      messageSub.cancel();
+    }
+    _messagesSub.clear();
+    for (final StreamSubscription<Event> eventSub in _eventSubs) {
+      eventSub.cancel();
+    }
+    _eventSubs.clear();
+    for (final List<StreamSubscription<User>> memberSubList in _membersSubs) {
+      for (final StreamSubscription<User> memberSub in memberSubList) {
+        memberSub.cancel();
+      }
+      memberSubList.clear();
+    }
+    _membersSubs.clear();
+  }
+
   void _streamEvent(Lounge lounge) {
-    _eventSubs.add(lounge.eventRef
-        .snapshots()
-        .map((DocumentSnapshot doc) => Event.fromMap(doc.data, doc.documentID))
-        .listen((Event event) =>
-            dispatch(UserLoungeEventUpdateAction(event, lounge.id))));
+    _eventSubs.add(streamEvent(lounge.eventId).listen((Event event) =>
+        dispatch(UserLoungeEventUpdateAction(event, lounge.id))));
   }
 
   void _streamMembers(Lounge lounge) {
     final List<StreamSubscription<User>> memberSubs =
         <StreamSubscription<User>>[];
-    for (final DocumentReference memberRef in lounge.memberRefs) {
-      memberSubs.add(memberRef
-          .snapshots()
-          .map((DocumentSnapshot doc) => User.fromMap(doc.data, doc.documentID))
-          .listen((User user) =>
-              dispatch(UserLoungeMemberUpdateAction(user, lounge.id))));
+    for (final String memberId in lounge.memberIds) {
+      memberSubs.add(streamUser(memberId).listen((User user) =>
+          dispatch(UserLoungeMemberUpdateAction(user, lounge.id))));
     }
     _membersSubs.add(memberSubs);
   }

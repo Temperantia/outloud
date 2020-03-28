@@ -3,12 +3,12 @@ import 'package:business/app_state.dart';
 import 'package:business/classes/user.dart';
 
 class UserFriendsUpdateAction extends redux.ReduxAction<AppState> {
-  UserFriendsUpdateAction(this.friends);
+  UserFriendsUpdateAction(this._friends);
 
-  final List<User> friends;
+  final List<User> _friends;
 
   @override
   AppState reduce() {
-    return state.copy(userState: state.userState.copy(friends: friends));
+    return state.copy(userState: state.userState.copy(friends: _friends));
   }
 }

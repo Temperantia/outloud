@@ -69,7 +69,7 @@ class _LoungeEditScreenState extends State<LoungeEditScreen>
                       color: Colors.white,
                       shape: BoxShape.rectangle,
                       borderRadius: BorderRadius.circular(5),
-                      boxShadow: [
+                      boxShadow: <BoxShadow>[
                         BoxShadow(
                           color: Colors.black26,
                           blurRadius: 10.0,
@@ -172,8 +172,10 @@ class _LoungeEditScreenState extends State<LoungeEditScreen>
 
   Widget _buildHeader(
       AppState state, void Function(redux.ReduxAction<AppState>) dispatch) {
-    final User owner = widget.lounge.members
-        .firstWhere((User member) => member.id == widget.lounge.owner);
+    final User owner = widget.lounge.members.firstWhere(
+        (User member) => member.id == widget.lounge.owner,
+        orElse: () => null);
+
     return Container(
         padding: const EdgeInsets.all(15.0),
         child: Row(children: <Widget>[
@@ -197,26 +199,27 @@ class _LoungeEditScreenState extends State<LoungeEditScreen>
               child: Container(
                   padding: const EdgeInsets.only(left: 20),
                   child: Column(children: <Widget>[
-                    Container(
-                        child: Row(children: <Widget>[
-                      CachedImage(owner.pics.isEmpty ? null : owner.pics[0],
-                          width: 20.0,
-                          height: 20.0,
-                          borderRadius: BorderRadius.circular(20.0),
-                          imageType: ImageType.User),
+                    if (owner != null)
                       Container(
-                          padding: const EdgeInsets.only(left: 10),
-                          child: RichText(
-                              text: TextSpan(
-                            text: state.userState.user.id == owner.id
-                                ? 'Your Lounge'
-                                : owner.name + '\'s Lounge',
-                            style: const TextStyle(
-                                color: black,
-                                fontSize: 13,
-                                fontWeight: FontWeight.w500),
-                          )))
-                    ])),
+                          child: Row(children: <Widget>[
+                        CachedImage(owner.pics.isEmpty ? null : owner.pics[0],
+                            width: 20.0,
+                            height: 20.0,
+                            borderRadius: BorderRadius.circular(20.0),
+                            imageType: ImageType.User),
+                        Container(
+                            padding: const EdgeInsets.only(left: 10),
+                            child: RichText(
+                                text: TextSpan(
+                              text: state.userState.user.id == owner.id
+                                  ? 'Your Lounge'
+                                  : owner.name + '\'s Lounge',
+                              style: const TextStyle(
+                                  color: black,
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w500),
+                            )))
+                      ])),
                     Container(
                         child: Row(children: <Widget>[
                       Container(

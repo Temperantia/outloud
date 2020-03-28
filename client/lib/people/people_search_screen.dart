@@ -8,7 +8,7 @@ import 'package:inclusive/widgets/cached_image.dart';
 import 'package:inclusive/widgets/loading.dart';
 import 'package:inclusive/widgets/view.dart';
 import 'package:provider_for_redux/provider_for_redux.dart';
-import 'package:business/people/models/people_state.dart';
+import 'package:business/people/people_state.dart';
 
 import '../theme.dart';
 

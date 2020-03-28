@@ -13,9 +13,9 @@ import 'package:business/user/actions/user_friends_update_action.dart';
 import 'package:business/user/actions/user_lounges_update_action.dart';
 
 class UserUpdateAction extends redux.ReduxAction<AppState> {
-  UserUpdateAction(this.user);
+  UserUpdateAction(this._user);
 
-  final User user;
+  final User _user;
 
   static StreamSubscription<List<User>> usersSub;
   static StreamSubscription<List<Event>> eventsSub;
@@ -23,25 +23,30 @@ class UserUpdateAction extends redux.ReduxAction<AppState> {
 
   @override
   AppState reduce() {
+    _reset();
+    loungesSub = streamLounges(ids: _user.lounges).listen(
+        (List<Lounge> lounges) => dispatch(UserLoungesUpdateAction(lounges)));
+
+    usersSub = streamUsers(ids: _user.friends).listen(
+        (List<User> friends) => dispatch(UserFriendsUpdateAction(friends)));
+
+    eventsSub = streamEvents(_user.events.keys.toList()).listen(
+        (List<Event> events) => dispatch(UserEventsUpdateAction(events)));
+
+    return state.copy(userState: state.userState.copy(user: _user));
+  }
+
+  void _reset() {
     if (usersSub != null) {
       usersSub.cancel();
     }
-    usersSub = streamUsers(ids: user.friends).listen(
-        (List<User> friends) => dispatch(UserFriendsUpdateAction(friends)));
 
     if (eventsSub != null) {
       eventsSub.cancel();
     }
-    eventsSub = streamEvents(user.events.keys.toList()).listen(
-        (List<Event> events) => dispatch(UserEventsUpdateAction(events)));
 
     if (loungesSub != null) {
       loungesSub.cancel();
     }
-
-    loungesSub = streamLounges(ids: user.lounges).listen(
-        (List<Lounge> lounges) => dispatch(UserLoungesUpdateAction(lounges)));
-
-    return state.copy(userState: state.userState.copy(user: user));
   }
 }

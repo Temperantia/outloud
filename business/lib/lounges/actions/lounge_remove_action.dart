@@ -12,16 +12,16 @@ class LoungeRemoveAction extends ReduxAction<AppState> {
 
   @override
   Future<AppState> reduce() async {
-
     for (final User _user in lounge.members) {
-      final List<String> _newLounges = List<String>.from(_user.lounges, growable: true);
+      final List<String> _newLounges =
+          List<String>.from(_user.lounges, growable: true);
       _newLounges.remove(lounge.id);
       updateUserLounge(_user, _newLounges);
       // updateUser(_user);
     }
-    
+
     await deleteLounge(lounge);
 
-    return state;
+    return null;
   }
 }

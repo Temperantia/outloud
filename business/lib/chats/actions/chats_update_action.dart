@@ -4,16 +4,22 @@ import 'package:business/classes/chat.dart';
 import 'package:business/classes/message.dart';
 
 class ChatsUpdateAction extends ReduxAction<AppState> {
-  ChatsUpdateAction(this.messages, this.chatId);
+  ChatsUpdateAction(this._messages, this._chatId);
 
-  final List<Message> messages;
-  final String chatId;
+  final List<Message> _messages;
+  final String _chatId;
 
   @override
   AppState reduce() {
     final List<Chat> chats = state.chatsState.chats;
-    final Chat chat = chats.firstWhere((Chat chat) => chat.id == chatId);
-    chat.messages = messages;
+    final Chat chat =
+        chats.firstWhere((Chat chat) => chat.id == _chatId, orElse: () => null);
+
+    if (chat == null) {
+      return null;
+    }
+
+    chat.messages = _messages;
 
     chats.sort((Chat chat1, Chat chat2) {
       if (chat1.messages.isEmpty || chat2.messages.isEmpty) {

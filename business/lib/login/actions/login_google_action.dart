@@ -37,7 +37,8 @@ class LoginGoogleAction extends ReduxAction<AppState> {
       store.dispatch(ChatsListenAction(id));
       return state.copy(loginState: state.loginState.copy(id: id));
     } catch (error) {
-      return state.copy(loginState: state.loginState.copy(loginError: ''));
+      return state.copy(
+          loginState: state.loginState.copy(loginError: error.toString()));
     }
   }
 }

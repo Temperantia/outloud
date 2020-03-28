@@ -1,5 +1,4 @@
 import 'package:async_redux/async_redux.dart';
-import 'package:business/classes/lounge_visibility.dart';
 import 'package:business/classes/user.dart';
 import 'package:flutter/widgets.dart';
 import 'package:business/app_state.dart';
@@ -27,14 +26,12 @@ class _LoungeViewScreenState extends State<LoungeViewScreen> {
   final ScrollController _scrollController = ScrollController();
   final TextEditingController _descriptionController = TextEditingController();
   double _limit;
-  LoungeVisibility _visibility;
   LoungeMeetupWidget _meetupWidget;
 
   @override
   void initState() {
     super.initState();
     _limit = lounge.memberLimit.toDouble();
-    _visibility = lounge.visibility;
     _meetupWidget = LoungeMeetupWidget(lounge, true);
     _descriptionController.text = lounge.description;
   }
@@ -48,8 +45,10 @@ class _LoungeViewScreenState extends State<LoungeViewScreen> {
 
   Widget _buildHeader(
       AppState state, void Function(ReduxAction<AppState>) dispatch) {
-    final User owner = widget.lounge.members
-        .firstWhere((User member) => member.id == widget.lounge.owner);
+    final User owner = widget.lounge.members.firstWhere(
+        (User member) => member.id == widget.lounge.owner,
+        orElse: () => null);
+
     return Container(
         padding: const EdgeInsets.all(15.0),
         child: Row(children: <Widget>[
@@ -72,26 +71,27 @@ class _LoungeViewScreenState extends State<LoungeViewScreen> {
               child: Container(
                   padding: const EdgeInsets.only(left: 20),
                   child: Column(children: <Widget>[
-                    Container(
-                        child: Row(children: <Widget>[
-                      CachedImage(owner.pics.isEmpty ? null : owner.pics[0],
-                          width: 20.0,
-                          height: 20.0,
-                          borderRadius: BorderRadius.circular(20.0),
-                          imageType: ImageType.User),
+                    if (owner != null)
                       Container(
-                          padding: const EdgeInsets.only(left: 10),
-                          child: RichText(
-                              text: TextSpan(
-                            text: state.userState.user.id == owner.id
-                                ? 'Your Lounge'
-                                : owner.name + '\'s Lounge',
-                            style: const TextStyle(
-                                color: black,
-                                fontSize: 13,
-                                fontWeight: FontWeight.w500),
-                          )))
-                    ])),
+                          child: Row(children: <Widget>[
+                        CachedImage(owner.pics.isEmpty ? null : owner.pics[0],
+                            width: 20.0,
+                            height: 20.0,
+                            borderRadius: BorderRadius.circular(20.0),
+                            imageType: ImageType.User),
+                        Container(
+                            padding: const EdgeInsets.only(left: 10),
+                            child: RichText(
+                                text: TextSpan(
+                              text: state.userState.user.id == owner.id
+                                  ? 'Your Lounge'
+                                  : owner.name + '\'s Lounge',
+                              style: const TextStyle(
+                                  color: black,
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w500),
+                            )))
+                      ])),
                     Container(
                         child: Row(children: <Widget>[
                       Container(
@@ -319,7 +319,7 @@ class _LoungeViewScreenState extends State<LoungeViewScreen> {
                   child: Container(
                       child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
+                          children: const <Widget>[
                     // Button(
                     //     text: 'SAVE CHANGES',
                     //     onPressed: () {

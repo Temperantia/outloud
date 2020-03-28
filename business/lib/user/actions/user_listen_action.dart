@@ -18,9 +18,8 @@ class UserListenAction extends ReduxAction<AppState> {
     if (userSub != null) {
       userSub.cancel();
     }
-    userSub = streamUser(id).listen((User user) {
-      dispatch(UserUpdateAction(user));
-    });
+    userSub =
+        streamUser(id).listen((User user) => dispatch(UserUpdateAction(user)));
     return null;
   }
 }

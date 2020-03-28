@@ -1,24 +1,20 @@
 import 'package:async_redux/async_redux.dart' as redux;
 import 'package:business/app_state.dart';
 import 'package:business/classes/event.dart';
-import 'package:business/classes/user.dart';
 import 'package:business/models/events.dart';
 import 'package:business/models/user.dart';
 
 class EventUnlikeAction extends redux.ReduxAction<AppState> {
-  EventUnlikeAction(this.event);
-  final Event event;
+  EventUnlikeAction(this._event);
+  final Event _event;
   @override
   AppState reduce() {
-    final User user = state.userState.user;
+    updateUser(state.userState.user..events.remove(_event.id));
 
-    user.events.remove(event.id);
-    updateUser(user);
-
-    final List<String> likes = List<String>.from(event.likes);
-    likes.remove(state.userState.user.id);
-    event.likes = likes;
-    updateEvent(event);
+    final List<String> likes = List<String>.from(_event.likes)
+      ..remove(state.userState.user.id);
+    _event.likes = likes;
+    updateEvent(_event..likes);
 
     return null;
   }

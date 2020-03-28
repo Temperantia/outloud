@@ -4,7 +4,6 @@ import 'package:business/classes/lounge.dart';
 import 'package:business/classes/user.dart';
 import 'package:business/models/lounges.dart';
 import 'package:business/models/user.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 class LoungeJoinAction extends ReduxAction<AppState> {
   LoungeJoinAction(this.userId, this.lounge);
@@ -16,21 +15,18 @@ class LoungeJoinAction extends ReduxAction<AppState> {
   Future<AppState> reduce() async {
     if (lounge.memberIds.contains(userId)) {
       // TODO(robin): this is good to check, still a lounge is displayed after the user joined it in browsing lounges = bug
-      return state;
+      return null;
     }
 
     final List<String> _userIdes = lounge.memberIds + <String>[userId];
-    final List<DocumentReference> _memberRefs =
-        lounge.memberRefs + <DocumentReference>[getUserReference(userId)];
     final List<User> _members = lounge.members + <User>[state.userState.user];
 
     lounge..memberIds = _userIdes;
-    lounge..memberRefs = _memberRefs;
     lounge..members = _members;
 
     state.userState.lounges.add(lounge);
 
-    await updateLoungeUser(lounge, _userIdes, _memberRefs);
+    await updateLoungeUser(lounge, _userIdes);
 
     final List<String> _newLounges =
         List<String>.from(state.userState.user.lounges + <String>[lounge.id]);

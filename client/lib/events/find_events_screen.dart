@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:async_redux/async_redux.dart' as redux;
+import 'package:business/app.dart';
 import 'package:business/app_state.dart';
 import 'package:business/classes/event.dart';
 import 'package:business/classes/interest.dart';
@@ -75,8 +76,8 @@ class _FindEventsScreen extends State<FindEventsScreen>
   }
 
   Future<int> _getPosition() async {
-    final Position position = await Geolocator()
-        .getCurrentPosition(desiredAccuracy: LocationAccuracy.best);
+    final Position position = await geoLocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.best);
     if (position != null) {
       _initialMapLocation = CameraPosition(
           target: LatLng(position.latitude, position.longitude), zoom: 14);

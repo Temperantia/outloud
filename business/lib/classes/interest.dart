@@ -8,10 +8,8 @@ class Interest {
   String name;
   String comment;
 
-  Map<String, String> toJson() {
-    return <String, String>{
-      'name': name,
-      'comment': comment,
-    };
-  }
+  Map<String, String> toJson() => <String, String>{
+        'name': name,
+        'comment': comment,
+      };
 }

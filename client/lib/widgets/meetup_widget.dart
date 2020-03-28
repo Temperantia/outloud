@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:async_redux/async_redux.dart';
+import 'package:business/app.dart';
 import 'package:business/app_state.dart';
 import 'package:business/classes/lounge.dart';
 import 'package:flutter/foundation.dart';
@@ -122,9 +123,8 @@ class _LoungeMeetupWidgetState extends State<LoungeMeetupWidget> {
 
   Future<String> _getAdressFromCoordinates(
       double latitude, double longitude) async {
-    final List<Placemark> placemark = await Geolocator()
-        .placemarkFromCoordinates(
-            latitude, longitude); // TODO(robin): exception here
+    final List<Placemark> placemark = await geoLocator.placemarkFromCoordinates(
+        latitude, longitude); // TODO(robin): exception here
     String _address = '';
     if (placemark.isNotEmpty) {
       final Placemark _place = placemark.first;
@@ -598,8 +598,8 @@ class _LoungeMeetupWidgetState extends State<LoungeMeetupWidget> {
                       GestureDetector(
                         onTap: () async {
                           if (widget.readMode) {
-                                  return;
-                                }
+                            return;
+                          }
                           final DateTime dateSelected = await showDatePicker(
                               context: context,
                               initialDate:

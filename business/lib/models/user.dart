@@ -38,10 +38,6 @@ Future<User> getUserWithEmail(final String email) async {
           snapshot.documents[0].data, snapshot.documents[0].documentID);
 }
 
-DocumentReference getUserReference(String id) {
-  return _api.ref.document(id);
-}
-
 Future<List<User>> getUsers(String userId,
     {List<String> interests = const <String>[],
     int ageStart = 13,

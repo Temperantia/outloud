@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:async_redux/async_redux.dart';
 import 'package:business/app_state.dart';
 import 'package:business/classes/lounge.dart';
@@ -15,13 +13,13 @@ class LoungeEditMeetupAction extends ReduxAction<AppState> {
   final String notes;
 
   @override
-  Future<AppState> reduce() async {
+  AppState reduce() {
     lounge
       ..date = date
       ..location = location
       ..notes = notes;
 
-    await updateLounge(lounge);
-    return state;
+    updateLounge(lounge);
+    return null;
   }
 }

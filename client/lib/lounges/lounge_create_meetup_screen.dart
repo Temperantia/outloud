@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:async_redux/async_redux.dart';
+import 'package:business/app.dart';
 import 'package:business/app_state.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
@@ -96,7 +97,7 @@ class _LoungeCreateMeetupScreenState extends State<LoungeCreateMeetupScreen> {
 // TODO(robin): this is bugged if try fails, do something pls :)
     try {
       final List<Placemark> placemark =
-          await Geolocator().placemarkFromCoordinates(latitude, longitude);
+          await geoLocator.placemarkFromCoordinates(latitude, longitude);
       if (placemark.isNotEmpty) {
         final Placemark _place = placemark.first;
         _address = _place.subThoroughfare +

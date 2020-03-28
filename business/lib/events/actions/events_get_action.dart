@@ -1,35 +1,33 @@
 import 'dart:async';
 
 import 'package:async_redux/async_redux.dart' as redux;
+import 'package:business/app.dart';
 import 'package:business/app_state.dart';
 import 'package:business/classes/event.dart';
 import 'package:business/classes/user.dart';
 import 'package:business/events/actions/event_members_update_action.dart';
 import 'package:business/models/events.dart';
 import 'package:business/models/user.dart';
-import 'package:business/singletons/permission_location.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:location_permissions/location_permissions.dart';
 
 class EventsGetAction extends redux.ReduxAction<AppState> {
-  final Geolocator _geolocator = Geolocator();
-  final PermissionLocation _locationPermissionService = PermissionLocation();
-
   static final List<StreamSubscription<List<User>>> _membersSubs =
       <StreamSubscription<List<User>>>[];
+
   @override
   Future<AppState> reduce() async {
     final List<Event> events = await getEvents();
 
     final PermissionStatus permission =
-        await _locationPermissionService.checkLocationPermissionStatus();
+        await permissionLocation.checkLocationPermissionStatus();
 
     if (permission == PermissionStatus.granted) {
       try {
-        final Position position = await _geolocator.getCurrentPosition(
+        final Position position = await geoLocator.getCurrentPosition(
             desiredAccuracy: LocationAccuracy.best);
         for (final Event event in events) {
-          event.distance = (await _geolocator.distanceBetween(
+          event.distance = (await geoLocator.distanceBetween(
                   event.location.latitude,
                   event.location.longitude,
                   position.latitude,

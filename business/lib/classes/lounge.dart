@@ -1,38 +1,32 @@
+import 'package:business/classes/entity.dart';
 import 'package:business/classes/event.dart';
 import 'package:business/classes/lounge_visibility.dart';
 import 'package:business/classes/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:enum_to_string/enum_to_string.dart';
 
-class Lounge {
-  Lounge({
-    this.id = '',
-    this.eventId = '',
-    this.eventRef,
-    this.name = '',
-    this.description = '',
-    this.visibility = LoungeVisibility.Public,
-    this.location,
-    this.date,
-    this.owner = '',
-    this.memberLimit = 5,
-    this.notes,
-    this.memberIds = const <String>[],
-    this.memberRefs,
-    this.members,
-  });
+class Lounge extends Entity {
+  Lounge(
+      {String id = '',
+      this.eventId = '',
+      String name = '',
+      String description = '',
+      this.visibility = LoungeVisibility.Public,
+      GeoPoint location,
+      this.date,
+      this.owner = '',
+      this.memberLimit = 5,
+      this.notes,
+      this.memberIds = const <String>[],
+      this.members})
+      : super(id: id, name: name, description: description, location: location);
 
   Lounge.fromMap(Map<String, dynamic> snapshot, String id)
-      : id = id ?? '',
-        eventId = snapshot['eventId'] as String,
-        eventRef = snapshot['eventRef'] as DocumentReference,
-        name = snapshot['name'] as String ?? '',
-        description = snapshot['description'] as String ?? '',
+      : eventId = snapshot['eventId'] as String,
         visibility = snapshot['visibility'] == null
             ? LoungeVisibility.Public
             : EnumToString.fromString(
                 LoungeVisibility.values, snapshot['visibility'] as String),
-        location = snapshot['location'] as GeoPoint,
         date = snapshot['date'] == null
             ? null
             : (snapshot['date'] as Timestamp).toDate(),
@@ -42,46 +36,35 @@ class Lounge {
         memberIds = snapshot['memberIds'] == null
             ? <String>[]
             : snapshot['memberIds'].cast<String>() as List<String>,
-        memberRefs = snapshot['memberRefs'] == null
-            ? <DocumentReference>[]
-            : snapshot['memberRefs'].cast<DocumentReference>()
-                as List<DocumentReference>,
-        members = <User>[];
+        members = <User>[],
+        super(
+            id: id ?? '',
+            name: snapshot['name'] as String ?? '',
+            description: snapshot['description'] as String ?? '',
+            location: snapshot['location'] as GeoPoint);
 
-  String id;
   String eventId;
-  DocumentReference eventRef;
   Event event;
-  String name;
-  String description;
   LoungeVisibility visibility;
-  GeoPoint location;
   DateTime date;
   String owner;
   int memberLimit;
   String notes;
   List<String> memberIds;
-  List<DocumentReference> memberRefs;
   List<User> members;
 
-  Map<String, dynamic> toJson() {
-    return <String, dynamic>{
-      'eventId': eventId,
-      'eventRef': eventRef,
-      'name': name,
-      'description': description,
-      'visibility': EnumToString.parse(visibility),
-      'location': location,
-      'date': date == null ? null : Timestamp.fromDate(date),
-      'owner': owner,
-      'memberLimit': memberLimit,
-      'notes': notes,
-      'memberIds': memberIds,
-      'memberRefs': memberRefs,
-    };
-  }
+  Map<String, dynamic> toJson() => <String, dynamic>{
+        'eventId': eventId,
+        'name': name,
+        'description': description,
+        'visibility': EnumToString.parse(visibility),
+        'location': location,
+        'date': date == null ? null : Timestamp.fromDate(date),
+        'owner': owner,
+        'memberLimit': memberLimit,
+        'notes': notes,
+        'memberIds': memberIds
+      };
 
-  bool hasUser(String userId) {
-    return memberIds.contains(userId);
-  }
+  bool hasUser(String userId) => memberIds.contains(userId);
 }
