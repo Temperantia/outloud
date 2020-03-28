@@ -41,7 +41,7 @@ class _LoungeChatScreenState extends State<LoungeChatScreen>
 
   Widget _buildHeader(
       AppState state, void Function(ReduxAction<AppState>) dispatch) {
-    if (_lounge.members == null) {
+    if (_lounge == null || _lounge.members == null) {
       return Container();
     }
     final User owner = _lounge.members.firstWhere(

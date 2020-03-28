@@ -383,7 +383,7 @@ class _LoungeEditScreenState extends State<LoungeEditScreen>
                             child: const Text('UPGRADE FOR MORE!',
                                 style: TextStyle(
                                     color: pink,
-                                    fontSize: 15,
+                                    fontSize: 12,
                                     fontWeight: FontWeight.w500)))),
                     // Container(
                     //     child: const Button(

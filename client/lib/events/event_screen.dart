@@ -51,6 +51,7 @@ class _EventScreenState extends State<EventScreen>
   @override
   void initState() {
     super.initState();
+    _adressEvent = '';
     _latitude = widget.event.location != null
         ? widget.event.location.latitude
         : 48.859305;
