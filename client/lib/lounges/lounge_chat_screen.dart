@@ -81,46 +81,41 @@ class _LoungeChatScreenState extends State<LoungeChatScreen>
                           borderRadius: BorderRadius.circular(20.0),
                           imageType: ImageType.User),
                       Expanded(
-                        child: Wrap(
-                          direction: Axis.horizontal,
-                          children: <Widget>[
+                          child: Wrap(
+                              direction: Axis.horizontal,
+                              children: <Widget>[
                             Container(
                                 padding: const EdgeInsets.only(left: 10),
-                                child: RichText(
-                                    text: TextSpan(
-                                  text: state.userState.user.id == owner.id
+                                child: Text(
+                                  state.userState.user.id == owner.id
                                       ? 'Your Lounge'
                                       : owner.name + '\'s Lounge',
                                   style: const TextStyle(
                                       color: black,
                                       fontSize: 13,
                                       fontWeight: FontWeight.w500),
-                                )))
-                          ],
-                        ),
-                      )
+                                ))
+                          ]))
                     ])),
-                    Container(
-                        child: Row(children: <Widget>[
-                      Container(
-                          child: RichText(
-                              text: TextSpan(
-                                  text: _lounge.members.length.toString() +
-                                      ' member' +
-                                      (_lounge.members.length > 1 ? 's ' : ' '),
-                                  style: const TextStyle(
-                                      color: black,
-                                      fontSize: 13,
-                                      fontWeight: FontWeight.w500),
-                                  children: <TextSpan>[
+                    Row(children: <Widget>[
+                      RichText(
+                          text: TextSpan(
+                              text: _lounge.members.length.toString() +
+                                  ' member' +
+                                  (_lounge.members.length > 1 ? 's ' : ' '),
+                              style: const TextStyle(
+                                  color: black,
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w500),
+                              children: <TextSpan>[
                             TextSpan(
                                 text: _lounge.event.name,
                                 style: TextStyle(
                                     color: orange,
                                     fontSize: 14,
                                     fontWeight: FontWeight.w800))
-                          ])))
-                    ]))
+                          ]))
+                    ])
                   ]))),
           if (state.userState.user.id == owner.id)
             Flexible(

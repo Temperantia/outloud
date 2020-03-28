@@ -24,14 +24,11 @@ class LoungesScreen extends StatefulWidget {
   static const String id = 'LoungesScreen';
 
   @override
-  _LoungesScreenState createState() => _LoungesScreenState(event);
+  _LoungesScreenState createState() => _LoungesScreenState();
 }
 
 class _LoungesScreenState extends State<LoungesScreen>
     with TickerProviderStateMixin {
-  _LoungesScreenState(this.event);
-
-  final Event event;
   Map<String, User> _owners;
 
   @override
@@ -40,11 +37,7 @@ class _LoungesScreenState extends State<LoungesScreen>
     _owners = <String, User>{};
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
+// TODO(alexandre): no
   Future<void> resolveOwner(String loungeId, String ownerId) async {
     if (_owners.containsKey(loungeId)) {
       return;
@@ -88,16 +81,14 @@ class _LoungesScreenState extends State<LoungesScreen>
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       if (owner != null)
-                        Container(
-                            child: RichText(
-                                text: TextSpan(
-                                    text: state.userState.user.id == owner.id
-                                        ? 'Your Lounge'
-                                        : owner.name + '\'s Lounge',
-                                    style: const TextStyle(
-                                        color: black,
-                                        fontSize: 13,
-                                        fontWeight: FontWeight.w500)))),
+                        Text(
+                            state.userState.user.id == owner.id
+                                ? 'Your Lounge'
+                                : owner.name + '\'s Lounge',
+                            style: const TextStyle(
+                                color: black,
+                                fontSize: 13,
+                                fontWeight: FontWeight.w500)),
                       GestureDetector(
                           onTap: () async {
                             // TODO(robin): this shouldnt exist, the owner shouldnt see a join button on his own lounges and maybe not even see it here (ask @nadir)
@@ -120,17 +111,14 @@ class _LoungesScreenState extends State<LoungesScreen>
                                   arguments: lounge));
                             }
                           },
-                          child: Container(
-                              child: RichText(
-                                  text: TextSpan(
-                                      text: lounge.memberIds
-                                              .contains(state.userState.user.id)
-                                          ? '< LEAVE'
-                                          : ' > JOIN ', // TODO(me): add arrow icon
-                                      style: const TextStyle(
-                                          color: orange,
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.w700))))),
+                          child: Text(
+                              lounge.memberIds.contains(state.userState.user.id)
+                                  ? '< LEAVE'
+                                  : ' > JOIN ', // TODO(me): add arrow icon
+                              style: const TextStyle(
+                                  color: orange,
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w700))),
                     ]),
                 Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -171,22 +159,19 @@ class _LoungesScreenState extends State<LoungesScreen>
               constraints: BoxConstraints.expand(
                 height: Theme.of(context).textTheme.display1.fontSize * 1.1,
               ),
-              child: RichText(
+              child: const Text('FOR THE EVENT',
                   textAlign: TextAlign.left,
-                  text: const TextSpan(
-                      text: 'FOR THE EVENT',
-                      style: TextStyle(
-                          color: black,
-                          fontSize: 13,
-                          fontWeight: FontWeight.w500)))),
-          Container(
-              child: Row(children: <Widget>[
+                  style: TextStyle(
+                      color: black,
+                      fontSize: 13,
+                      fontWeight: FontWeight.w500))),
+          Row(children: <Widget>[
             Flexible(
                 child: Container(
                     decoration: const BoxDecoration(
                         border: Border(
                             left: BorderSide(color: orange, width: 3.0))),
-                    child: CachedImage(event.pic,
+                    child: CachedImage(widget.event.pic,
                         width: 30.0,
                         height: 30.0,
                         borderRadius: const BorderRadius.only(
@@ -197,15 +182,13 @@ class _LoungesScreenState extends State<LoungesScreen>
                 flex: 8,
                 child: Container(
                     padding: const EdgeInsets.only(left: 10),
-                    child: RichText(
+                    child: Text(widget.event.name,
                         textAlign: TextAlign.justify,
-                        text: TextSpan(
-                            text: event.name,
-                            style: const TextStyle(
-                                color: orange,
-                                fontSize: 12,
-                                fontWeight: FontWeight.w700))))),
-          ])),
+                        style: const TextStyle(
+                            color: orange,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w700)))),
+          ])
         ]));
   }
 
@@ -218,46 +201,37 @@ class _LoungesScreenState extends State<LoungesScreen>
       return Container(); // TODO(robin): handle no lounge @anthony
     }
     return Container(
-        child: Container(
-            padding: const EdgeInsets.only(left: 10, right: 30),
-            child: ListView.builder(
-                itemCount: lounges.length,
-                itemBuilder: (BuildContext context, int index) => Container(
-                    padding: const EdgeInsets.all(10.0),
-                    child: _buildLounge(
-                        lounges[index], dispatchFuture, dispatch, state)))));
+        padding: const EdgeInsets.only(left: 10, right: 30),
+        child: ListView.builder(
+            itemCount: lounges.length,
+            itemBuilder: (BuildContext context, int index) => Container(
+                padding: const EdgeInsets.all(10.0),
+                child: _buildLounge(
+                    lounges[index], dispatchFuture, dispatch, state))));
   }
 
   Widget _noLoungeWidget(void Function(redux.ReduxAction<AppState>) dispatch) {
-    return Container(
-      width: 320,
-      child: Column(
-        children: <Widget>[
-          Container(
-            width: 320,
-            height: 300,
-            child: Image.asset('images/lounges_empty_cat.png'),
-          ),
-          Container(
-            margin: const EdgeInsets.only(top: 10),
-            child: Button(
+    return Column(children: <Widget>[
+      Container(
+        width: 320,
+        height: 300,
+        child: Image.asset('images/lounges_empty_cat.png'),
+      ),
+      Container(
+          margin: const EdgeInsets.only(top: 10),
+          child: Button(
               text: 'CREATE YOUR OWN LOUNGE',
               backgroundColor: blueDark,
               backgroundOpacity: 1,
-              width: 320,
               fontWeight: FontWeight.w700,
               onPressed: () {
                 dispatch(LoungeCreateAction(
-                  event.id,
+                  widget.event.id,
                 ));
                 dispatch(redux.NavigateAction<AppState>.pushNamed(
                     LoungeCreateDetailScreen.id));
-              },
-            ),
-          )
-        ],
-      ),
-    );
+              }))
+    ]);
   }
 
   @override
@@ -267,34 +241,32 @@ class _LoungesScreenState extends State<LoungesScreen>
         AppState state,
         void Function(redux.ReduxAction<AppState>) dispatch,
         Widget child) {
-      final List<Lounge> lounges = state.userState.eventLounges[event.id];
+      final List<Lounge> lounges =
+          state.userState.eventLounges[widget.event.id];
       return View(
           title: 'BROWSING LOUNGES',
           child: Column(children: <Widget>[
             Expanded(
-                child: Container(
-                    child: Column(children: <Widget>[
+                child: Column(children: <Widget>[
               _buildHeader(context),
               const Divider(),
               if (lounges == null) _noLoungeWidget(dispatch),
               if (lounges != null && lounges.isNotEmpty)
                 Container(
-                  margin: const EdgeInsets.only(top: 10, bottom: 20),
-                  child: RichText(
-                      text: TextSpan(
-                          text: '${lounges.length} lounge' +
-                              (lounges.length > 1 ? 's' : '') +
-                              ' available for this event',
-                          style: const TextStyle(
-                              color: orange,
-                              fontSize: 14,
-                              fontWeight: FontWeight.w600))),
-                ),
+                    margin: const EdgeInsets.only(top: 10, bottom: 20),
+                    child: Text(
+                        '${lounges.length} lounge' +
+                            (lounges.length > 1 ? 's' : '') +
+                            ' available for this event',
+                        style: const TextStyle(
+                            color: orange,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600))),
               if (lounges != null && lounges.isNotEmpty)
                 Expanded(
                     child: _buildListLounges(
                         lounges, store.dispatchFuture, dispatch, state)),
-            ])))
+            ]))
           ]));
     });
   }

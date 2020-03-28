@@ -49,12 +49,10 @@ class Button extends StatelessWidget {
             textColor: colorText,
             onPressed: onPressed == null ? () {} : () => onPressed(),
             icon: icon ?? Container(),
-            label: RichText(
-                text: TextSpan(
-                    text: text,
-                    style: TextStyle(
-                        color: colorText,
-                        fontSize: 20.0,
-                        fontWeight: fontWeight)))));
+            label: Text(text,
+                style: TextStyle(
+                    color: colorText,
+                    fontSize: 20.0,
+                    fontWeight: fontWeight))));
   }
 }

@@ -40,12 +40,11 @@ class _LoungeCreateDetailScreenState extends State<LoungeCreateDetailScreen> {
               constraints: BoxConstraints.expand(
                 height: Theme.of(context).textTheme.display1.fontSize * 1.1,
               ),
-              child: RichText(
-                  text: const TextSpan(
-                text: 'LOUNGE VISIBILITY',
-                style: TextStyle(
-                    color: black, fontSize: 15, fontWeight: FontWeight.w700),
-              ))),
+              child: const Text('LOUNGE VISIBILITY',
+                  style: TextStyle(
+                      color: black,
+                      fontSize: 15,
+                      fontWeight: FontWeight.w700))),
           Row(children: <Widget>[
             Radio<LoungeVisibility>(
               activeColor: primary(state.theme),
@@ -67,13 +66,11 @@ class _LoungeCreateDetailScreenState extends State<LoungeCreateDetailScreen> {
               constraints: BoxConstraints.expand(
                 height: Theme.of(context).textTheme.display1.fontSize * 1.1,
               ),
-              child: RichText(
-                  text: const TextSpan(
-                      text: 'MAX MEMBER COUNT',
-                      style: TextStyle(
-                          color: black,
-                          fontSize: 15,
-                          fontWeight: FontWeight.w700)))),
+              child: const Text('MAX MEMBER COUNT',
+                  style: TextStyle(
+                      color: black,
+                      fontSize: 15,
+                      fontWeight: FontWeight.w700))),
           Stack(alignment: Alignment.center, children: <Widget>[
             Container(
                 width: 400.0,
@@ -148,15 +145,13 @@ class _LoungeCreateDetailScreenState extends State<LoungeCreateDetailScreen> {
         child: Column(children: <Widget>[
           Container(
               padding: const EdgeInsets.all(10.0),
-              child: RichText(
+              child: const Text(
+                  'Upgrade your lounge for more members, bigger reach, and featured spolight',
                   textAlign: TextAlign.center,
-                  text: const TextSpan(
-                      text:
-                          'Upgrade your lounge for more members, bigger reach, and featured spolight',
-                      style: TextStyle(
-                          color: pinkBright,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w400)))),
+                  style: TextStyle(
+                      color: pinkBright,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w400))),
           const Button(
               text: 'UPGRADE   >', width: 300, backgroundColor: pinkBright)
         ]));
@@ -170,13 +165,11 @@ class _LoungeCreateDetailScreenState extends State<LoungeCreateDetailScreen> {
               constraints: BoxConstraints.expand(
                 height: Theme.of(context).textTheme.display1.fontSize * 1.1,
               ),
-              child: RichText(
-                  text: const TextSpan(
-                      text: 'LOUNGE DESCRIPTION',
-                      style: TextStyle(
-                          color: black,
-                          fontSize: 15,
-                          fontWeight: FontWeight.w700)))),
+              child: const Text('LOUNGE DESCRIPTION',
+                  style: TextStyle(
+                      color: black,
+                      fontSize: 15,
+                      fontWeight: FontWeight.w700))),
           Container(
               constraints: BoxConstraints.expand(
                 height:

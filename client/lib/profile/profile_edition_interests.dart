@@ -7,14 +7,11 @@ class ProfileInterests extends StatefulWidget {
   const ProfileInterests(this.interests, {Key key}) : super(key: key);
   final List<Interest> interests;
   @override
-  ProfileInterestsState createState() => ProfileInterestsState(interests);
+  ProfileInterestsState createState() => ProfileInterestsState();
 }
 
 class ProfileInterestsState extends State<ProfileInterests>
     with SingleTickerProviderStateMixin {
-  ProfileInterestsState(this._interests);
-  final List<Interest> _interests;
-
   final int maxInterests = 10;
   final List<Map<String, String>> data = <Map<String, String>>[
     <String, String>{'name': 'Gay Community'},
@@ -35,7 +32,7 @@ class ProfileInterestsState extends State<ProfileInterests>
   void initState() {
     super.initState();
 
-    for (final Interest interest in _interests) {
+    for (final Interest interest in widget.interests) {
       _addControllers(name: interest.name, comment: interest.comment);
     }
     _addControllers();

@@ -59,12 +59,11 @@ class _EventAttendingScreenState extends State<EventAttendingScreen> {
                 const EdgeInsets.symmetric(vertical: 5.0, horizontal: 20.0),
             child: Column(children: <Widget>[
               Container(
-                padding: const EdgeInsets.all(5.0),
-                child: Text(
-                    '${memberNumber.toString()} ${memberNumber <= 1 ? 'person is' : 'people are'} attending this event',
-                    style: const TextStyle(
-                        color: orange, fontWeight: FontWeight.bold)),
-              ),
+                  padding: const EdgeInsets.all(5.0),
+                  child: Text(
+                      '${memberNumber.toString()} ${memberNumber <= 1 ? 'person is' : 'people are'} attending this event',
+                      style: const TextStyle(
+                          color: orange, fontWeight: FontWeight.bold))),
               Expanded(
                   child: GridView.builder(
                       gridDelegate:

@@ -14,34 +14,24 @@ import 'package:provider_for_redux/provider_for_redux.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import '../theme.dart';
+import 'package:inclusive/theme.dart';
 
 const String googleApiKey = 'AIzaSyCO8sI1kmXRQXqvwQRGrnbAW3IX-VTcCDw';
 
 class LoungeMeetupWidget extends StatefulWidget {
-  LoungeMeetupWidget(this.lounge, this.readMode);
-  static const String id = 'LoungeMeetupWidget';
+  const LoungeMeetupWidget(this.lounge, this.readMode, {Key key})
+      : super(key: key);
 
   final Lounge lounge;
   final bool readMode;
 
-  _LoungeMeetupWidgetState loungeMeetupWidgetState = _LoungeMeetupWidgetState();
+  static const String id = 'LoungeMeetupWidget';
 
-// TODO(robin): what ?
   @override
-  _LoungeMeetupWidgetState createState() {
-    final _LoungeMeetupWidgetState _loungeMeetupWidgetState =
-        loungeMeetupWidgetState;
-    _loungeMeetupWidgetState.initLounge(lounge);
-    return _loungeMeetupWidgetState;
-  }
-
-  Map<String, dynamic> saveMeetupOptions() {
-    return loungeMeetupWidgetState.saveMeetupOptions();
-  }
+  LoungeMeetupWidgetState createState() => LoungeMeetupWidgetState();
 }
 
-class _LoungeMeetupWidgetState extends State<LoungeMeetupWidget> {
+class LoungeMeetupWidgetState extends State<LoungeMeetupWidget> {
   final Completer<GoogleMapController> _controller =
       Completer<GoogleMapController>();
   //final ScrollController _scrollController = ScrollController();
@@ -77,6 +67,7 @@ class _LoungeMeetupWidgetState extends State<LoungeMeetupWidget> {
   @override
   void initState() {
     super.initState();
+    _initLounge();
     _initVariables();
   }
 
@@ -87,28 +78,25 @@ class _LoungeMeetupWidgetState extends State<LoungeMeetupWidget> {
     super.dispose();
   }
 
-  Future<int> initLounge(Lounge lounge) async {
+  Future<void> _initLounge() async {
     final String _address = await _getAdressFromCoordinates(
-        lounge.location.latitude, lounge.location.longitude);
-    setState(() {
-      lounge = lounge;
-      _searchTextController.text = _address;
-      _positionOfPlace = Marker(
-          markerId: MarkerId(_address),
-          position: LatLng(lounge.location.latitude, lounge.location.longitude),
-          infoWindow: InfoWindow(snippet: _address, title: 'Meeting point'));
+        widget.lounge.location.latitude, widget.lounge.location.longitude);
+    _searchTextController.text = _address;
+    _positionOfPlace = Marker(
+        markerId: MarkerId(_address),
+        position: LatLng(
+            widget.lounge.location.latitude, widget.lounge.location.longitude),
+        infoWindow: InfoWindow(snippet: _address, title: 'Meeting point'));
 
-      _markers.clear();
-      _markers[_positionOfPlace.markerId.toString()] = _positionOfPlace;
-      _notesTextController.text = lounge.notes;
-      _timeEvent = TimeOfDay.fromDateTime(lounge.date);
-      _dateEvent = lounge.date;
-    });
+    _markers.clear();
+    _markers[_positionOfPlace.markerId.toString()] = _positionOfPlace;
+    _notesTextController.text = widget.lounge.notes;
+    _timeEvent = TimeOfDay.fromDateTime(widget.lounge.date);
+    _dateEvent = widget.lounge.date;
     _moveCameraToPosition(_positionOfPlace.position, 15);
-    return 0;
   }
 
-  Future<int> _onSearchChanged() async {
+  Future<void> _onSearchChanged() async {
     if (_throttle?.isActive ?? false) {
       _throttle.cancel();
     }
@@ -118,7 +106,6 @@ class _LoungeMeetupWidgetState extends State<LoungeMeetupWidget> {
         _displayPrediction();
       }
     });
-    return 0;
   }
 
   Future<String> _getAdressFromCoordinates(
@@ -150,21 +137,18 @@ class _LoungeMeetupWidgetState extends State<LoungeMeetupWidget> {
               child: child);
         });
     if (timeSelected != null) {
-      setState(() {
-        _timeEvent = timeSelected;
-      });
+      setState(() => _timeEvent = timeSelected);
     }
     return 0;
   }
 
-  Future<int> _moveCameraToPosition(LatLng position, double zoom) async {
+  Future<void> _moveCameraToPosition(LatLng position, double zoom) async {
     final GoogleMapController controller = await _controller.future;
     controller.animateCamera(CameraUpdate.newCameraPosition(
         CameraPosition(target: position, zoom: zoom)));
-    return 0;
   }
 
-  Future<int> _displayPrediction() async {
+  Future<void> _displayPrediction() async {
     final PlacesSearchResponse response =
         await _googleMapsPlaces.searchByText(_searchTextController.text);
     if (response.results.isNotEmpty) {
@@ -179,14 +163,11 @@ class _LoungeMeetupWidgetState extends State<LoungeMeetupWidget> {
       Overlay.of(context).insert(_suggestionsOverlay);
     } else if (_overlayInserted) {
       _suggestionsOverlay.remove();
-      setState(() {
-        _overlayInserted = false;
-      });
+      setState(() => _overlayInserted = false);
     }
-    return 0;
   }
 
-  Future<int> _initVariables() async {
+  Future<void> _initVariables() async {
     _intialMapLocation =
         const CameraPosition(target: LatLng(48.85902056, 2.34637398), zoom: 14);
 
@@ -201,14 +182,10 @@ class _LoungeMeetupWidgetState extends State<LoungeMeetupWidget> {
 
     _focusNodeAdress.addListener(() {
       if (_focusNodeAdress.hasFocus) {
-        setState(() {
-          _adressChoosen = false;
-        });
+        setState(() => _adressChoosen = false);
       } else {
         _throttle.cancel();
-        setState(() {
-          _adressChoosen = true;
-        });
+        setState(() => _adressChoosen = true);
         if (_suggestionsOverlay != null && _overlayInserted) {
           _suggestionsOverlay.remove();
         }
@@ -216,8 +193,6 @@ class _LoungeMeetupWidgetState extends State<LoungeMeetupWidget> {
         //     duration: const Duration(seconds: 1), curve: Curves.ease);
       }
     });
-
-    return 0;
   }
 
 /*   void _dismissDialog() {
@@ -232,10 +207,10 @@ class _LoungeMeetupWidgetState extends State<LoungeMeetupWidget> {
 
     return OverlayEntry(
         builder: (BuildContext context) => Positioned(
-              left: positionMap.dx,
-              height: 60,
-              width: sizeMap.width / 1.5,
-              child: CompositedTransformFollower(
+            left: positionMap.dx,
+            height: 60,
+            width: sizeMap.width / 1.5,
+            child: CompositedTransformFollower(
                 link: _mapLink,
                 showWhenUnlinked: false,
                 offset: Offset(30, sizeMap.height - 100),
@@ -243,73 +218,67 @@ class _LoungeMeetupWidgetState extends State<LoungeMeetupWidget> {
                     color: grey,
                     elevation: 4.0,
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: <Widget>[
-                        FlatButton(
-                          color: white,
-                          // padding: const EdgeInsets.all(5),
-                          onPressed: () async {
-                            setState(() {
-                              _moovingMarker = false;
-                            });
-                            if (_savedMarker != null) {
-                              final String _previousAdress =
-                                  await _getAdressFromCoordinates(
-                                      _savedMarker.position.latitude,
-                                      _savedMarker.position.longitude);
-                              setState(() {
-                                _positionOfPlace = _savedMarker;
-                                _markers.clear();
-                                _markers[_positionOfPlace.markerId.toString()] =
-                                    _positionOfPlace;
-                                _searchTextController.text = _previousAdress;
-                              });
-                              _moveCameraToPosition(
-                                  _positionOfPlace.position, 15);
-                            } else {
-                              setState(() {
-                                _markers.clear();
-                                _searchTextController.text = '';
-                                _positionOfPlace = null;
-                              });
-                            }
-                            _mapButtonsOverlay.remove();
-                          },
-                          child: const Text('Cancel'),
-                        ),
-                        FlatButton(
-                          color: white,
-                          // padding: const EdgeInsets.all(5),
-                          onPressed: () async {
-                            setState(() {
-                              _moovingMarker = false;
-                            });
-                            final String _address =
-                                await _getAdressFromCoordinates(
-                                    _positionOfPlace.position.latitude,
-                                    _positionOfPlace.position.longitude);
-                            setState(() {
-                              _positionOfPlace = Marker(
-                                  markerId: _positionOfPlace.markerId,
-                                  position: _positionOfPlace.position,
-                                  infoWindow: InfoWindow(
-                                      title: 'Meeting point',
-                                      snippet: _address));
-                              _markers.clear();
-                              _markers[_positionOfPlace.markerId.toString()] =
-                                  _positionOfPlace;
-                              _searchTextController.text = _address;
-                            });
-                            // _moveCameraToPosition(
-                            //     _positionOfPlace.position, 15);
-                            _mapButtonsOverlay.remove();
-                          },
-                          child: const Text('Ok'),
-                        )
-                      ],
-                    )),
-              ),
-            ));
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: <Widget>[
+                          FlatButton(
+                              color: white,
+                              // padding: const EdgeInsets.all(5),
+                              onPressed: () async {
+                                setState(() => _moovingMarker = false);
+                                if (_savedMarker != null) {
+                                  final String _previousAdress =
+                                      await _getAdressFromCoordinates(
+                                          _savedMarker.position.latitude,
+                                          _savedMarker.position.longitude);
+                                  setState(() {
+                                    _positionOfPlace = _savedMarker;
+                                    _markers.clear();
+                                    _markers[_positionOfPlace.markerId
+                                        .toString()] = _positionOfPlace;
+                                    _searchTextController.text =
+                                        _previousAdress;
+                                  });
+                                  _moveCameraToPosition(
+                                      _positionOfPlace.position, 15);
+                                } else {
+                                  setState(() {
+                                    _markers.clear();
+                                    _searchTextController.text = '';
+                                    _positionOfPlace = null;
+                                  });
+                                }
+                                _mapButtonsOverlay.remove();
+                              },
+                              child: const Text('Cancel')),
+                          FlatButton(
+                              color: white,
+                              // padding: const EdgeInsets.all(5),
+                              onPressed: () async {
+                                setState(() {
+                                  _moovingMarker = false;
+                                });
+                                final String _address =
+                                    await _getAdressFromCoordinates(
+                                        _positionOfPlace.position.latitude,
+                                        _positionOfPlace.position.longitude);
+                                setState(() {
+                                  _positionOfPlace = Marker(
+                                      markerId: _positionOfPlace.markerId,
+                                      position: _positionOfPlace.position,
+                                      infoWindow: InfoWindow(
+                                          title: 'Meeting point',
+                                          snippet: _address));
+                                  _markers.clear();
+                                  _markers[_positionOfPlace.markerId
+                                      .toString()] = _positionOfPlace;
+                                  _searchTextController.text = _address;
+                                });
+                                // _moveCameraToPosition(
+                                //     _positionOfPlace.position, 15);
+                                _mapButtonsOverlay.remove();
+                              },
+                              child: const Text('Ok'))
+                        ])))));
   }
 
   OverlayEntry _createOverlayEntry() {
@@ -332,8 +301,7 @@ class _LoungeMeetupWidgetState extends State<LoungeMeetupWidget> {
                     child: ListView.builder(
                         itemCount: _resultPlaces.length,
                         itemBuilder: (BuildContext context, int index) =>
-                            Container(
-                                child: _buildCompletionResult(index)))))));
+                            _buildCompletionResult(index))))));
   }
 
   Widget _buildCompletionResult(int index) {
@@ -377,13 +345,11 @@ class _LoungeMeetupWidgetState extends State<LoungeMeetupWidget> {
               constraints: BoxConstraints.expand(
                 height: Theme.of(context).textTheme.display1.fontSize * 1.1,
               ),
-              child: RichText(
-                text: const TextSpan(
-                  text: 'LOUNGE DESIGNATED MEETUP',
+              child: const Text('LOUNGE DESIGNATED MEETUP',
                   style: TextStyle(
-                      color: black, fontSize: 15, fontWeight: FontWeight.w700),
-                ),
-              )),
+                      color: black,
+                      fontSize: 15,
+                      fontWeight: FontWeight.w700))),
           Expanded(
               child: CompositedTransformTarget(
                   link: _mapLink,
@@ -444,9 +410,7 @@ class _LoungeMeetupWidgetState extends State<LoungeMeetupWidget> {
                             _searchTextController.text = _address;
                           });
                           Timer(const Duration(milliseconds: 800), () {
-                            setState(() {
-                              _moovingMarker = true;
-                            });
+                            setState(() => _moovingMarker = true);
                             Overlay.of(context).insert(_mapButtonsOverlay);
                           });
                         });
@@ -458,9 +422,7 @@ class _LoungeMeetupWidgetState extends State<LoungeMeetupWidget> {
                         final String _address = await _getAdressFromCoordinates(
                             _positionOfPlace.position.latitude,
                             _positionOfPlace.position.longitude);
-                        setState(() {
-                          _searchTextController.text = _address;
-                        });
+                        setState(() => _searchTextController.text = _address);
                       },
                       onCameraMove: (CameraPosition position) {
                         if (!_moovingMarker) {
@@ -496,106 +458,94 @@ class _LoungeMeetupWidgetState extends State<LoungeMeetupWidget> {
         ),
         padding: const EdgeInsets.all(15),
         child: CompositedTransformTarget(
-          child: Container(
-              color: orangeLight,
-              child: TextFormField(
-                readOnly: widget.readMode,
-                key: _keySearch,
-                cursorColor: black,
-                keyboardType: TextInputType.text,
-                textInputAction: TextInputAction.go,
-                focusNode: _focusNodeAdress,
-                controller: _searchTextController,
-                decoration: InputDecoration(
-                  border: InputBorder.none,
-                  prefixIcon: Icon(Icons.location_on),
-                  hintText: 'Select place...',
-                ),
-              )),
-          link: _layerLink,
-        ));
+            child: Container(
+                color: orangeLight,
+                child: TextFormField(
+                    readOnly: widget.readMode,
+                    key: _keySearch,
+                    cursorColor: black,
+                    keyboardType: TextInputType.text,
+                    textInputAction: TextInputAction.go,
+                    focusNode: _focusNodeAdress,
+                    controller: _searchTextController,
+                    decoration: InputDecoration(
+                        border: InputBorder.none,
+                        prefixIcon: Icon(Icons.location_on),
+                        hintText: 'Select place...'))),
+            link: _layerLink));
   }
 
   Widget _buildTimeField(BuildContext context) {
     return Container(
-      constraints: BoxConstraints.expand(
-        height: Theme.of(context).textTheme.display1.fontSize * 1.1 + 70,
-      ),
-      padding: const EdgeInsets.all(15.0),
-      child: Column(
-        children: <Widget>[
+        constraints: BoxConstraints.expand(
+          height: Theme.of(context).textTheme.display1.fontSize * 1.1 + 70,
+        ),
+        padding: const EdgeInsets.all(15.0),
+        child: Column(children: <Widget>[
           Container(
               constraints: BoxConstraints.expand(
                 height: Theme.of(context).textTheme.display1.fontSize * 1.1,
               ),
-              child: RichText(
-                text: const TextSpan(
-                  text: 'MEETUP TIME',
+              child: const Text('MEETUP TIME',
                   style: TextStyle(
-                      color: black, fontSize: 15, fontWeight: FontWeight.w700),
-                ),
-              )),
-          Container(
-              child: CompositedTransformTarget(
-                  key: _keyDate,
-                  link: _dateLink,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Container(
+                      color: black,
+                      fontSize: 15,
+                      fontWeight: FontWeight.w700))),
+          CompositedTransformTarget(
+              key: _keyDate,
+              link: _dateLink,
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Container(
                         width: 180,
                         child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            GestureDetector(
-                              onTap: () {
-                                if (widget.readMode) {
-                                  return;
-                                }
-                                _updateTimeOfEvent();
-                              },
-                              child: Container(
-                                color: orangeLight,
-                                height: 40,
-                                padding: const EdgeInsets.all(10.0),
-                                child: Text(_timeEvent.hourOfPeriod.toString()),
-                              ),
-                            ),
-                            Container(child: const Text(':')),
-                            GestureDetector(
-                              onTap: () {
-                                if (widget.readMode) {
-                                  return;
-                                }
-                                _updateTimeOfEvent();
-                              },
-                              child: Container(
-                                color: orangeLight,
-                                height: 40,
-                                padding: const EdgeInsets.all(10.0),
-                                child: Text(_timeEvent.minute.toString()),
-                              ),
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                if (widget.readMode) {
-                                  return;
-                                }
-                                _updateTimeOfEvent();
-                              },
-                              child: Container(
-                                color: orangeLight,
-                                height: 40,
-                                padding: const EdgeInsets.all(10.0),
-                                child: Text(_timeEvent.period == DayPeriod.am
-                                    ? 'AM'
-                                    : 'PM'),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      GestureDetector(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              GestureDetector(
+                                  onTap: () {
+                                    if (widget.readMode) {
+                                      return;
+                                    }
+                                    _updateTimeOfEvent();
+                                  },
+                                  child: Container(
+                                      color: orangeLight,
+                                      height: 40,
+                                      padding: const EdgeInsets.all(10.0),
+                                      child: Text(
+                                          _timeEvent.hourOfPeriod.toString()))),
+                              const Text(':'),
+                              GestureDetector(
+                                  onTap: () {
+                                    if (widget.readMode) {
+                                      return;
+                                    }
+                                    _updateTimeOfEvent();
+                                  },
+                                  child: Container(
+                                    color: orangeLight,
+                                    height: 40,
+                                    padding: const EdgeInsets.all(10.0),
+                                    child: Text(_timeEvent.minute.toString()),
+                                  )),
+                              GestureDetector(
+                                  onTap: () {
+                                    if (widget.readMode) {
+                                      return;
+                                    }
+                                    _updateTimeOfEvent();
+                                  },
+                                  child: Container(
+                                      color: orangeLight,
+                                      height: 40,
+                                      padding: const EdgeInsets.all(10.0),
+                                      child: Text(
+                                          _timeEvent.period == DayPeriod.am
+                                              ? 'AM'
+                                              : 'PM')))
+                            ])),
+                    GestureDetector(
                         onTap: () async {
                           if (widget.readMode) {
                             return;
@@ -614,51 +564,39 @@ class _LoungeMeetupWidgetState extends State<LoungeMeetupWidget> {
                           }
                         },
                         child: Container(
-                          color: orangeLight,
-                          height: 40,
-                          padding: const EdgeInsets.all(10.0),
-                          child:
-                              Text(DateFormat('dd-MM-yyyy').format(_dateEvent)),
-                        ),
-                      )
-                    ],
-                  )))
-        ],
-      ),
-    );
+                            color: orangeLight,
+                            height: 40,
+                            padding: const EdgeInsets.all(10.0),
+                            child: Text(
+                                DateFormat('dd-MM-yyyy').format(_dateEvent))))
+                  ]))
+        ]));
   }
 
   Widget _buildNotesField(BuildContext context) {
     return Container(
       constraints: BoxConstraints.expand(
-        height: Theme.of(context).textTheme.display1.fontSize * 1.1 + 300,
-      ),
+          height: Theme.of(context).textTheme.display1.fontSize * 1.1 + 300),
       padding: const EdgeInsets.all(15),
       child: Column(children: <Widget>[
         Container(
             constraints: BoxConstraints.expand(
-              height: Theme.of(context).textTheme.display1.fontSize * 1.1,
-            ),
-            child: RichText(
-              text: const TextSpan(
-                text: 'MEETUP NOTES',
+                height: Theme.of(context).textTheme.display1.fontSize * 1.1),
+            child: const Text('MEETUP NOTES',
                 style: TextStyle(
-                    color: black, fontSize: 15, fontWeight: FontWeight.w700),
-              ),
-            )),
+                    color: black, fontSize: 15, fontWeight: FontWeight.w700))),
         Expanded(
             child: Container(
                 padding: const EdgeInsets.all(15.0),
                 color: orangeLight,
                 child: TextField(
-                  readOnly: widget.readMode,
-                  controller: _notesTextController,
-                  focusNode: _focusNodeNotes,
-                  keyboardType: TextInputType.text,
-                  decoration: const InputDecoration(
-                      border: InputBorder.none,
-                      hintText: 'Notes for your group...'),
-                )))
+                    readOnly: widget.readMode,
+                    controller: _notesTextController,
+                    focusNode: _focusNodeNotes,
+                    keyboardType: TextInputType.text,
+                    decoration: const InputDecoration(
+                        border: InputBorder.none,
+                        hintText: 'Notes for your group...'))))
       ]),
     );
   }
@@ -670,18 +608,12 @@ class _LoungeMeetupWidgetState extends State<LoungeMeetupWidget> {
         AppState state,
         void Function(ReduxAction<AppState>) dispatch,
         Widget child) {
-      // setState(() {
-      //   dispatch = dispatch;
-      // });
-      return Container(
-          child: Column(
-        children: <Widget>[
-          _buildMap(context),
-          _buildAdressField(context),
-          _buildTimeField(context),
-          _buildNotesField(context),
-        ],
-      ));
+      return Column(children: <Widget>[
+        _buildMap(context),
+        _buildAdressField(context),
+        _buildTimeField(context),
+        _buildNotesField(context),
+      ]);
     });
   }
 

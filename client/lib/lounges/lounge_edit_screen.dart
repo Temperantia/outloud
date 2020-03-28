@@ -25,26 +25,25 @@ class LoungeEditScreen extends StatefulWidget {
   static const String id = 'LoungeEditScreen';
 
   @override
-  _LoungeEditScreenState createState() => _LoungeEditScreenState(lounge);
+  _LoungeEditScreenState createState() => _LoungeEditScreenState();
 }
 
 class _LoungeEditScreenState extends State<LoungeEditScreen>
     with TickerProviderStateMixin {
-  _LoungeEditScreenState(this.lounge);
-  final Lounge lounge;
   final ScrollController _scrollController = ScrollController();
   final TextEditingController _descriptionController = TextEditingController();
+
+  final GlobalKey<LoungeMeetupWidgetState> _meetupWidget = GlobalKey();
+
   double _limit;
   LoungeVisibility _visibility;
-  LoungeMeetupWidget _meetupWidget;
 
   @override
   void initState() {
     super.initState();
-    _limit = lounge.memberLimit.toDouble();
-    _visibility = lounge.visibility;
-    _meetupWidget = LoungeMeetupWidget(lounge, false);
-    _descriptionController.text = lounge.description;
+    _limit = widget.lounge.memberLimit.toDouble();
+    _visibility = widget.lounge.visibility;
+    _descriptionController.text = widget.lounge.description;
   }
 
   @override
@@ -209,41 +208,34 @@ class _LoungeEditScreenState extends State<LoungeEditScreen>
                             imageType: ImageType.User),
                         Container(
                             padding: const EdgeInsets.only(left: 10),
-                            child: RichText(
-                                text: TextSpan(
-                              text: state.userState.user.id == owner.id
+                            child: Text(
+                              state.userState.user.id == owner.id
                                   ? 'Your Lounge'
                                   : owner.name + '\'s Lounge',
                               style: const TextStyle(
                                   color: black,
                                   fontSize: 13,
                                   fontWeight: FontWeight.w500),
-                            )))
+                            ))
                       ])),
-                    Container(
-                        child: Row(children: <Widget>[
-                      Container(
-                          child: RichText(
-                              text: TextSpan(
-                                  text:
-                                      widget.lounge.members.length.toString() +
-                                          ' member' +
-                                          (widget.lounge.members.length > 1
-                                              ? 's '
-                                              : ' '),
-                                  style: const TextStyle(
-                                      color: black,
-                                      fontSize: 13,
-                                      fontWeight: FontWeight.w500),
-                                  children: <TextSpan>[
+                    Row(children: <Widget>[
+                      RichText(
+                          text: TextSpan(
+                              text:
+                                  '${widget.lounge.members.length.toString()} member${widget.lounge.members.length > 1 ? 's' : ''}',
+                              style: const TextStyle(
+                                  color: black,
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w500),
+                              children: <TextSpan>[
                             TextSpan(
                                 text: widget.lounge.event.name,
                                 style: TextStyle(
                                     color: orange,
                                     fontSize: 14,
                                     fontWeight: FontWeight.w800))
-                          ])))
-                    ]))
+                          ]))
+                    ])
                   ]))),
           Flexible(
               flex: 2,
@@ -273,125 +265,99 @@ class _LoungeEditScreenState extends State<LoungeEditScreen>
   Widget _buildMembers(BuildContext context, AppState state) {
     return Container(
         padding: const EdgeInsets.all(15),
-        child: Column(
-          children: <Widget>[
-            Container(
-                constraints: BoxConstraints.expand(
-                  height: Theme.of(context).textTheme.display1.fontSize * 1.1,
-                ),
-                child: Row(
+        child: Column(children: <Widget>[
+          Container(
+              constraints: BoxConstraints.expand(
+                height: Theme.of(context).textTheme.display1.fontSize * 1.1,
+              ),
+              child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     Container(
-                        child: RichText(
-                            text: const TextSpan(
-                                text: 'MEMBERS',
-                                style: TextStyle(
-                                    color: black,
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.w700)))),
+                        child: const Text('MEMBERS',
+                            style: TextStyle(
+                                color: black,
+                                fontSize: 15,
+                                fontWeight: FontWeight.w700))),
                     Container(
                         child: GestureDetector(
-                            child: Row(
+                            child: Row(children: <Widget>[
+                      Container(
+                          child: const Text('PUBLIC',
+                              style: TextStyle(
+                                  color: Colors.orange,
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w500))),
+                      Container(
+                          child: IconButton(
+                              iconSize: 20,
+                              icon: Icon(Icons.lock_open, color: Colors.orange),
+                              onPressed: null))
+                    ])))
+                  ])),
+          Container(
+              child: Column(children: <Widget>[
+            for (User member in widget.lounge.members)
+              // if (member.id != lounge.owner)
+              Container(
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
-                        Container(
-                            child: RichText(
-                          text: const TextSpan(
-                            text: 'PUBLIC',
-                            style: TextStyle(
-                                color: Colors.orange,
-                                fontSize: 15,
-                                fontWeight: FontWeight.w500),
-                          ),
-                        )),
-                        Container(
-                            child: IconButton(
-                                iconSize: 20,
-                                icon:
-                                    Icon(Icons.lock_open, color: Colors.orange),
-                                onPressed: null))
-                      ],
-                    )))
-                  ],
-                )),
+                    Container(
+                        padding: const EdgeInsets.only(left: 5),
+                        child: Row(children: <Widget>[
+                          CachedImage(
+                              member.pics.isEmpty ? null : member.pics[0],
+                              width: 40.0,
+                              height: 40.0,
+                              borderRadius: BorderRadius.circular(20.0),
+                              imageType: ImageType.User),
+                          Container(
+                              padding: const EdgeInsets.only(left: 10),
+                              child: Text(member.name,
+                                  style: const TextStyle(
+                                      color: black,
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w700)))
+                        ])),
+                    Container(
+                        child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                          Container(
+                              child: GestureDetector(
+                                  child: const Text('vote to KICK',
+                                      style: TextStyle(
+                                          color: orange,
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.w700)))),
+                          Container(
+                              margin: const EdgeInsets.only(left: 20),
+                              padding:
+                                  const EdgeInsets.only(left: 10, right: 10),
+                              child: GestureDetector(
+                                  child: const Text('BAN',
+                                      style: TextStyle(
+                                          color: Colors.red,
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.w700))))
+                        ]))
+                  ]))
+          ])),
+          Row(children: <Widget>[
             Container(
-                child: Column(children: <Widget>[
-              for (User member in lounge.members)
-                // if (member.id != lounge.owner)
-                Container(
-                    child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                      Container(
-                          padding: const EdgeInsets.only(left: 5),
-                          child: Row(children: <Widget>[
-                            CachedImage(
-                                member.pics.isEmpty ? null : member.pics[0],
-                                width: 40.0,
-                                height: 40.0,
-                                borderRadius: BorderRadius.circular(20.0),
-                                imageType: ImageType.User),
-                            Container(
-                                padding: const EdgeInsets.only(left: 10),
-                                child: RichText(
-                                    text: TextSpan(
-                                        text: member.name,
-                                        style: const TextStyle(
-                                            color: black,
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.w700))))
-                          ])),
-                      Container(
-                          child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: <Widget>[
-                            Container(
-                                child: GestureDetector(
-                                    child: RichText(
-                                        text: const TextSpan(
-                                            text: 'vote to KICK',
-                                            style: TextStyle(
-                                                color: orange,
-                                                fontSize: 15,
-                                                fontWeight:
-                                                    FontWeight.w700))))),
-                            Container(
-                                margin: const EdgeInsets.only(left: 20),
-                                padding:
-                                    const EdgeInsets.only(left: 10, right: 10),
-                                child: GestureDetector(
-                                    child: RichText(
-                                        text: const TextSpan(
-                                            text: 'BAN',
-                                            style: TextStyle(
-                                                color: Colors.red,
-                                                fontSize: 15,
-                                                fontWeight: FontWeight.w700)))))
-                          ]))
-                    ]))
-            ])),
+                child: IconButton(
+                    iconSize: 40,
+                    icon: Icon(Icons.add_circle, color: orange),
+                    onPressed: null)),
             Container(
-                child: Row(
-              children: <Widget>[
-                Container(
-                    child: IconButton(
-                        iconSize: 40,
-                        icon: Icon(Icons.add_circle, color: orange),
-                        onPressed: null)),
-                Container(
-                    child: RichText(
-                  text: const TextSpan(
-                    text: 'INVITE MORE PEOPLE',
+                child: const Text('INVITE MORE PEOPLE',
                     style: TextStyle(
                         color: orange,
                         fontSize: 15,
-                        fontWeight: FontWeight.w700),
-                  ),
-                ))
-              ],
-            ))
-          ],
-        ));
+                        fontWeight: FontWeight.w700)))
+          ])
+        ]));
   }
 
   Widget _buildLoungeMaxMemberCount(BuildContext context, AppState state) {
@@ -405,27 +371,20 @@ class _LoungeEditScreenState extends State<LoungeEditScreen>
               child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    Container(
-                        child: RichText(
-                      text: const TextSpan(
-                        text: 'MAX MEMBER COUNT',
+                    const Text('MAX MEMBER COUNT',
                         style: TextStyle(
                             color: black,
                             fontSize: 15,
-                            fontWeight: FontWeight.w700),
-                      ),
-                    )),
+                            fontWeight: FontWeight.w700)),
                     Container(
                         padding: const EdgeInsets.all(10),
                         color: pinkLight.withOpacity(0.4),
                         child: GestureDetector(
-                            child: RichText(
-                                text: const TextSpan(
-                                    text: 'UPGRADE FOR MORE!',
-                                    style: TextStyle(
-                                        color: pink,
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.w500))))),
+                            child: const Text('UPGRADE FOR MORE!',
+                                style: TextStyle(
+                                    color: pink,
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w500)))),
                     // Container(
                     //     child: const Button(
                     //   fontSize: 13,
@@ -460,13 +419,11 @@ class _LoungeEditScreenState extends State<LoungeEditScreen>
               constraints: BoxConstraints.expand(
                 height: Theme.of(context).textTheme.display1.fontSize * 1.1,
               ),
-              child: RichText(
-                  text: const TextSpan(
-                      text: 'LOUNGE DESCRIPTION',
-                      style: TextStyle(
-                          color: black,
-                          fontSize: 15,
-                          fontWeight: FontWeight.w700)))),
+              child: const Text('LOUNGE DESCRIPTION',
+                  style: TextStyle(
+                      color: black,
+                      fontSize: 15,
+                      fontWeight: FontWeight.w700))),
           Container(
               constraints: BoxConstraints.expand(
                 height:
@@ -497,9 +454,7 @@ class _LoungeEditScreenState extends State<LoungeEditScreen>
           title: 'EDIT LOUNGE',
           child: Column(children: <Widget>[
             Expanded(
-                child: Container(
-                    child: Container(
-                        child: Column(children: <Widget>[
+                child: Column(children: <Widget>[
               _buildHeader(state, dispatch),
               Container(color: white, child: const Divider()),
               Expanded(
@@ -512,7 +467,8 @@ class _LoungeEditScreenState extends State<LoungeEditScreen>
                           _buildMembers(context, state),
                           _buildLoungeMaxMemberCount(context, state),
                           _buildLoungeDescription(context, state),
-                          _meetupWidget
+                          LoungeMeetupWidget(widget.lounge, false,
+                              key: _meetupWidget)
                         ])
                       ]))),
               Expanded(
@@ -524,19 +480,22 @@ class _LoungeEditScreenState extends State<LoungeEditScreen>
                         text: 'SAVE CHANGES',
                         onPressed: () {
                           final Map<String, dynamic> _meetupEdits =
-                              _meetupWidget.saveMeetupOptions();
+                              _meetupWidget.currentState.saveMeetupOptions();
                           dispatch(LoungeEditMeetupAction(
-                              lounge,
+                              widget.lounge,
                               _meetupEdits['date'] as DateTime,
                               _meetupEdits['location'] as GeoPoint,
                               _meetupEdits['notes'] as String));
-                          dispatch(LoungeEditDetailsAction(lounge, _visibility,
-                              _limit.toInt(), _descriptionController.text));
+                          dispatch(LoungeEditDetailsAction(
+                              widget.lounge,
+                              _visibility,
+                              _limit.toInt(),
+                              _descriptionController.text));
                           dispatch(redux.NavigateAction<AppState>.pop());
                         },
                         paddingLeft: 5)
                   ])))
-            ]))))
+            ]))
           ]));
     });
   }

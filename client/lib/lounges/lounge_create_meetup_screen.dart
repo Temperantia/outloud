@@ -348,13 +348,11 @@ class _LoungeCreateMeetupScreenState extends State<LoungeCreateMeetupScreen> {
               constraints: BoxConstraints.expand(
                 height: Theme.of(context).textTheme.display1.fontSize * 1.1,
               ),
-              child: RichText(
-                  text: const TextSpan(
-                      text: 'LOUNGE DESIGNATED MEETUP',
-                      style: TextStyle(
-                          color: black,
-                          fontSize: 15,
-                          fontWeight: FontWeight.w700)))),
+              child: const Text('LOUNGE DESIGNATED MEETUP',
+                  style: TextStyle(
+                      color: black,
+                      fontSize: 15,
+                      fontWeight: FontWeight.w700))),
           Expanded(
               child: CompositedTransformTarget(
                   link: _mapLink,
@@ -492,13 +490,11 @@ class _LoungeCreateMeetupScreenState extends State<LoungeCreateMeetupScreen> {
           Container(
               constraints: BoxConstraints.expand(
                   height: Theme.of(context).textTheme.display1.fontSize * 1.1),
-              child: RichText(
-                  text: const TextSpan(
-                      text: 'MEETUP TIME',
-                      style: TextStyle(
-                          color: black,
-                          fontSize: 15,
-                          fontWeight: FontWeight.w700)))),
+              child: const Text('MEETUP TIME',
+                  style: TextStyle(
+                      color: black,
+                      fontSize: 15,
+                      fontWeight: FontWeight.w700))),
           Container(
               child: CompositedTransformTarget(
                   key: _keyDate,
@@ -599,13 +595,11 @@ class _LoungeCreateMeetupScreenState extends State<LoungeCreateMeetupScreen> {
           Container(
               constraints: BoxConstraints.expand(
                   height: Theme.of(context).textTheme.display1.fontSize * 1.1),
-              child: RichText(
-                  text: const TextSpan(
-                      text: 'MEETUP NOTES',
-                      style: TextStyle(
-                          color: black,
-                          fontSize: 15,
-                          fontWeight: FontWeight.w700)))),
+              child: const Text('MEETUP NOTES',
+                  style: TextStyle(
+                      color: black,
+                      fontSize: 15,
+                      fontWeight: FontWeight.w700))),
           Expanded(
               child: Container(
                   padding: const EdgeInsets.all(15.0),

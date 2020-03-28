@@ -159,7 +159,7 @@ class _MyEventsScreen extends State<MyEventsScreen>
               child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-            Button(text: 'VIEW CALENDAR', width: 200, onPressed: () => null)
+            Button(text: 'VIEW CALENDAR', onPressed: () => null)
           ])))
     ]);
   }

@@ -318,26 +318,22 @@ class _EventScreenState extends State<EventScreen>
                                   fontWeight: FontWeight.w700))),
                       Padding(
                           padding: const EdgeInsets.all(5),
-                          child: RichText(
-                              text: TextSpan(
-                                  text: DateFormat('MMM')
-                                      .format(widget.event.dateStart),
-                                  style: const TextStyle(
-                                      color: white,
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w700))))
+                          child: Text(
+                              DateFormat('MMM').format(widget.event.dateStart),
+                              style: const TextStyle(
+                                  color: white,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w700)))
                     ]))),
             Expanded(
                 flex: 5,
                 child: Container(
                     padding: const EdgeInsets.only(left: 5.0),
-                    child: RichText(
-                        text: TextSpan(
-                            text: widget.event.name,
-                            style: const TextStyle(
-                                color: white,
-                                fontSize: 20,
-                                fontWeight: FontWeight.w700)))))
+                    child: Text(widget.event.name,
+                        style: const TextStyle(
+                            color: white,
+                            fontSize: 20,
+                            fontWeight: FontWeight.w700))))
           ]),
           GestureDetector(
               onTap: () async {
@@ -350,13 +346,11 @@ class _EventScreenState extends State<EventScreen>
                 Icon(Icons.location_on, color: pink),
                 Padding(
                     padding: const EdgeInsets.all(5),
-                    child: RichText(
-                        text: TextSpan(
-                            text: _adressEvent,
-                            style: const TextStyle(
-                                color: white,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w500))))
+                    child: Text(_adressEvent,
+                        style: const TextStyle(
+                            color: white,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500)))
               ]))),
         ])
       ]),
@@ -399,35 +393,30 @@ class _EventScreenState extends State<EventScreen>
                         padding: const EdgeInsets.all(5),
                         decoration:
                             BoxDecoration(border: Border.all(color: pinkLight)),
-                        child: RichText(
-                            text: TextSpan(
-                                text: interest.name,
-                                style: const TextStyle(
-                                    color: pink,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w600)))),
+                        child: Text(interest.name,
+                            style: const TextStyle(
+                                color: pink,
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600))),
                   Container(
                       margin: const EdgeInsets.all(5),
                       padding: const EdgeInsets.all(5),
                       color: Colors.pink[100],
-                      child: RichText(
-                          text: const TextSpan(
-                              text: '21 and Over', // TODO(alexandre): firestore
-                              style: TextStyle(
-                                  color: pink,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w600)))),
+                      child: const Text(
+                          '21 and Over', // TODO(alexandre): firestore
+                          style: TextStyle(
+                              color: pink,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600))),
                   Container(
                       margin: const EdgeInsets.all(5),
                       padding: const EdgeInsets.all(5),
                       color: Colors.pink[100],
-                      child: RichText(
-                          text: TextSpan(
-                              text: widget.event.price,
-                              style: const TextStyle(
-                                  color: pink,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w600))))
+                      child: Text(widget.event.price,
+                          style: const TextStyle(
+                              color: pink,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600)))
                 ])
               ]))
     ]);
@@ -601,24 +590,19 @@ class _EventScreenState extends State<EventScreen>
                                       MainAxisAlignment.spaceEvenly,
                                   children: <Widget>[
                                 Icon(Icons.check, color: white, size: 16),
-                                RichText(
-                                    text: TextSpan(
-                                        text: widget.event.memberIds.length
-                                            .toString(),
-                                        style: const TextStyle(
-                                            color: white,
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w400)))
+                                Text(widget.event.memberIds.length.toString(),
+                                    style: const TextStyle(
+                                        color: white,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w400))
                               ])),
                           Container(
                               padding: const EdgeInsets.only(bottom: 5),
-                              child: RichText(
-                                  text: const TextSpan(
-                                      text: 'ATTENDING',
-                                      style: TextStyle(
-                                          color: white,
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.w400))))
+                              child: const Text('ATTENDING',
+                                  style: TextStyle(
+                                      color: white,
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w400)))
                         ]))));
   }
 
@@ -628,14 +612,9 @@ class _EventScreenState extends State<EventScreen>
             header: Container(
               color: orange,
               padding: const EdgeInsets.all(10),
-              child: RichText(
-                  textAlign: TextAlign.center,
-                  text: const TextSpan(
-                      text: 'EVENT DESCRIPTION',
-                      style: TextStyle(
-                          color: white,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600))),
+              child: const Text('EVENT DESCRIPTION',
+                  style: TextStyle(
+                      color: white, fontSize: 16, fontWeight: FontWeight.w600)),
             ),
             theme: const ExpandableThemeData(iconColor: orange),
             expanded: Container(
@@ -677,45 +656,34 @@ class _EventScreenState extends State<EventScreen>
           Expanded(
               child: Container(
                   margin: const EdgeInsets.all(5),
-                  child: RichText(
-                      textAlign: TextAlign.center,
-                      text: const TextSpan(
-                          text: 'LIVE FEED',
-                          style: TextStyle(
-                              color: blue,
-                              fontSize: 28,
-                              fontWeight: FontWeight.w900))))),
+                  child: const Text('LIVE FEED',
+                      style: TextStyle(
+                          color: blue,
+                          fontSize: 28,
+                          fontWeight: FontWeight.w900)))),
           Expanded(
               flex: 3,
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Container(
-                        child: RichText(
-                            textAlign: TextAlign.left,
-                            text: const TextSpan(
-                                text: 'Sponsored by : Best event provider',
-                                style: TextStyle(
-                                    color: black,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w400)))),
-                    Container(
-                        child: RichText(
-                            textAlign: TextAlign.left,
-                            text: const TextSpan(
-                                text: 'https://www.sponsor-best.com',
-                                style: TextStyle(
-                                    color: blue,
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.w700)))),
-                    Container(
-                        child: RichText(
-                            text: const TextSpan(
-                                text: 'Twitter / Facebook / @BestEvent',
-                                style: TextStyle(
-                                    color: blue,
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.w700))))
+                  children: const <Widget>[
+                    Text('Sponsored by : Best event provider',
+                        textAlign: TextAlign.left,
+                        style: TextStyle(
+                            color: black,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w400)),
+                    Text('https://www.sponsor-best.com',
+                        textAlign: TextAlign.left,
+                        style: TextStyle(
+                            color: blue,
+                            fontSize: 15,
+                            fontWeight: FontWeight.w700)),
+                    Text('Twitter / Facebook / @BestEvent',
+                        textAlign: TextAlign.left,
+                        style: TextStyle(
+                            color: blue,
+                            fontSize: 15,
+                            fontWeight: FontWeight.w700))
                   ]))
         ]));
   }

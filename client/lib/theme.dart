@@ -19,22 +19,6 @@ const Color pinkLight = Color(0xFFFA9465);
 const Color orange = Color(0xFFFF8431);
 const Color purple = Color(0xFF6324CA);
 
-const LinearGradient gradient = LinearGradient(
-    begin: Alignment.centerLeft,
-    end: Alignment.centerRight,
-    colors: <Color>[
-      pinkLight,
-      orange,
-    ]);
-
-const LinearGradient gradientTopDown = LinearGradient(
-    begin: Alignment.topCenter,
-    end: Alignment.bottomCenter,
-    colors: <Color>[
-      pinkLight,
-      orange,
-    ]);
-
 Color primary(ThemeStyle themeStyle) =>
     themeStyle == ThemeStyle.Orange ? orange : purple;
 
@@ -66,18 +50,8 @@ const TextStyle textStyleButtonAlt =
     TextStyle(color: grey, fontWeight: FontWeight.bold);
 
 ThemeData theme(ThemeStyle themeStyle) => ThemeData(
-      accentColor: white,
-      /*  buttonTheme: ButtonThemeData(
-    buttonColor: primary,
-    minWidth: 200.0,
-    padding: const EdgeInsets.all(15.0),
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(20.0),
-    ),
-  ), */
-      fontFamily: 'Hiragino',
-      primaryColor: primary(themeStyle),
-      sliderTheme: const SliderThemeData(
-        showValueIndicator: ShowValueIndicator.always,
-      ),
-    );
+    accentColor: white,
+    fontFamily: 'Hiragino',
+    primaryColor: primary(themeStyle),
+    sliderTheme:
+        const SliderThemeData(showValueIndicator: ShowValueIndicator.always));
