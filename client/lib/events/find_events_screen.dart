@@ -134,8 +134,8 @@ class _FindEventsScreen extends State<FindEventsScreen>
                           key: _interestFilterKey,
                           child: FlatButton(
                               child: Row(
-                                children: <Widget>[
-                                  const Text('Interests'),
+                                children: const <Widget>[
+                                  Text('Interests'),
                                   Icon(Icons.arrow_drop_down)
                                 ],
                               ),

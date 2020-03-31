@@ -15,7 +15,6 @@ import 'package:inclusive/lounges/lounge_view_screen.dart';
 import 'package:inclusive/lounges/lounges_screen.dart';
 import 'package:inclusive/people/people_search_screen.dart';
 import 'package:inclusive/profile/profile_screen.dart';
-import 'package:inclusive/profile/profile_edition_screen.dart';
 import 'package:inclusive/register/login.dart';
 import 'package:flutter/material.dart';
 import 'package:inclusive/home_screen.dart';
@@ -35,8 +34,8 @@ final Map<String, Widget Function(Object)> routes =
   LoungeCreateMeetupScreen.id: (_) => LoungeCreateMeetupScreen(),
   LoungeEditScreen.id: (dynamic lounge) => LoungeEditScreen(lounge as Lounge),
   LoungeViewScreen.id: (dynamic lounge) => LoungeViewScreen(lounge as Lounge),
-  ProfileEditionScreen.id: (_) => ProfileEditionScreen(),
-  ProfileScreen.id: (dynamic user) => ProfileScreen(user as User),
+  ProfileScreen.id: (dynamic settings) =>
+      ProfileScreen(settings['user'] as User, settings['isEdition'] as bool),
   ChatScreen.id: (dynamic chat) => ChatScreen(chat as Chat),
   PeopleSearchScreen.id: (_) => PeopleSearchScreen(),
 };

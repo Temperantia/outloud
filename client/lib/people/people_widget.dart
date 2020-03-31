@@ -29,7 +29,7 @@ class _PeopleWidgetState extends State<PeopleWidget>
     return GestureDetector(
         onTap: () => dispatch(NavigateAction<AppState>.pushNamed(
             ProfileScreen.id,
-            arguments: user)),
+            arguments: <String, dynamic>{'user': user, 'isEdition': false})),
         child: Container(
             decoration: BoxDecoration(
                 color: primary(theme),

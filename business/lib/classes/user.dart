@@ -20,8 +20,10 @@ class User extends Entity {
       this.gender = '',
       this.pronoun = '',
       this.orientation = '',
-      this.education = '',
-      this.profession = '',
+      this.school = '',
+      this.degree = '',
+      this.position = '',
+      this.employer = '',
       this.friends = const <String>[],
       this.events = const <String, UserEventState>{},
       this.lounges = const <String>[]})
@@ -47,8 +49,10 @@ class User extends Entity {
         gender = snapshot['gender'] as String ?? '',
         pronoun = snapshot['pronoun'] as String ?? '',
         orientation = snapshot['orientation'] as String ?? '',
-        education = snapshot['education'] as String ?? '',
-        profession = snapshot['profession'] as String ?? '',
+        school = snapshot['school'] as String ?? '',
+        degree = snapshot['degree'] as String ?? '',
+        position = snapshot['position'] as String ?? '',
+        employer = snapshot['employer'] as String ?? '',
         friends = snapshot['friends'] == null
             ? <String>[]
             : snapshot['friends'].cast<String>() as List<String>,
@@ -83,8 +87,10 @@ class User extends Entity {
   String gender;
   String pronoun;
   String orientation;
-  String education;
-  String profession;
+  String school;
+  String degree;
+  String position;
+  String employer;
   List<String> friends;
   Map<String, UserEventState> events;
   List<String> lounges;
@@ -105,8 +111,10 @@ class User extends Entity {
       'gender': gender,
       'pronoun': pronoun,
       'orientation': orientation,
-      'education': education,
-      'profession': profession,
+      'school': school,
+      'degree': degree,
+      'position': position,
+      'employer': employer,
       'friends': friends,
       'events': events.map<String, String>((String key, UserEventState value) =>
           MapEntry<String, String>(key, EnumToString.parse(value))),

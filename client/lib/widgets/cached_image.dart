@@ -3,6 +3,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 
 enum ImageType {
   User,
+  UserBig,
   Event,
 }
 
@@ -35,19 +36,21 @@ class _CachedImageState extends State<CachedImage> {
         case ImageType.User:
           image = Image.asset('images/defaultUser.png', fit: widget.fit);
           break;
+        case ImageType.UserBig:
+          image = Image.asset('images/bigUser.png', fit: widget.fit);
+          break;
         case ImageType.Event:
           image = Image.asset('images/defaultEvent.png', fit: widget.fit);
           break;
       }
     } else {
       image = CachedNetworkImage(
-        fit: widget.fit,
-        imageUrl: widget.url,
-        placeholder: (BuildContext context, String url) =>
-            const CircularProgressIndicator(),
-        errorWidget: (BuildContext context, String url, Object error) =>
-            Icon(Icons.error),
-      );
+          fit: widget.fit,
+          imageUrl: widget.url,
+          placeholder: (BuildContext context, String url) =>
+              const CircularProgressIndicator(),
+          errorWidget: (BuildContext context, String url, Object error) =>
+              Icon(Icons.error));
     }
 
     return Container(
