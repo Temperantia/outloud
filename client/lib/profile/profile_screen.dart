@@ -446,7 +446,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         contentPadding: EdgeInsets.only(left: 10.0, top: 10.0),
                         border: UnderlineInputBorder(),
                         hintText: 'Add more interests',
-                        hintStyle: TextStyle(color: orange),
                         suffixIcon: Icon(Icons.search)),
                     controller: _interestController),
                 suggestionsCallback: (String pattern) => pattern.isEmpty
