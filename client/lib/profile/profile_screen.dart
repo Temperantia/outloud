@@ -39,9 +39,27 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Map<String, List<dynamic>> _controllers;
   final TextEditingController _interestController = TextEditingController();
   final List<Map<String, String>> _interestSuggestions = <Map<String, String>>[
-    <String, String>{'name': 'Gay Community'},
-    <String, String>{'name': 'Cookies'},
-    <String, String>{'name': 'Body Painting'},
+    <String, String>{'name': 'Food & Drink'},
+    <String, String>{'name': 'Art'},
+    <String, String>{'name': 'Fashion & Beauty'},
+    <String, String>{'name': 'Outdoors & Adventure'},
+    <String, String>{'name': 'Sport'},
+    <String, String>{'name': 'Fitness'},
+    <String, String>{'name': 'Tech'},
+    <String, String>{'name': 'Health & Wellness'},
+    <String, String>{'name': 'Self Growth'},
+    <String, String>{'name': 'Photography'},
+    <String, String>{'name': 'Writing'},
+    <String, String>{'name': 'Culture & Language'},
+    <String, String>{'name': 'Music'},
+    <String, String>{'name': 'Activism'},
+    <String, String>{'name': 'Film'},
+    <String, String>{'name': 'Gaming'},
+    <String, String>{'name': 'Beliefs'},
+    <String, String>{'name': 'Books'},
+    <String, String>{'name': 'Dance'},
+    <String, String>{'name': 'Pet'},
+    <String, String>{'name': 'Craft'}
   ];
   final List<dynamic> _pictures = <dynamic>[];
 
@@ -57,24 +75,84 @@ class _ProfileScreenState extends State<ProfileScreen> {
       'GENDER': <dynamic>[
         _user.gender,
         <String>[
+          'Agender',
+          'Androgyne',
+          'Androgynous',
+          'Bigender',
+          'Cis',
+          'Cisgender',
+          'Cis Female',
+          'Cis Male',
+          'Cis Man',
+          'Cis Woman',
+          'Cisgender Female',
+          'Cisgender Male',
+          'Cisgender Man',
+          'Cisgender Woman',
+          'Female',
+          'FTM',
+          'Gender Fluid',
+          'Gender Nonconforming',
+          'Gender Questioning',
+          'Gender Variant',
+          'Genderqueer',
+          'Intersex',
           'Male',
-          'Two',
-          'Free',
-          'Four'
-        ] // TODO(alexandre): list of genders
+          'MTF',
+          'Neither',
+          'Neutrois',
+          'Non-binary',
+          'Other',
+          'Pangender',
+          'Trans',
+          'Trans Female',
+          'Trans Male',
+          'Trans Man',
+          'Trans Person',
+          'Trans Woman',
+          'Transfeminine',
+          'Transgender',
+          'Transgender Female',
+          'Transgender Male',
+          'Transgender Man',
+          'Transgender Person',
+          'Transgender Woman',
+          'Transmasculine',
+          'Transsexual',
+          'Transsexual Female',
+          'Transsexual Male',
+          'Transsexual Man',
+          'Transsexual Person',
+          'Transsexual Woman',
+          'Two-Spirit'
+        ]
       ],
-      'PRONOUNS': <dynamic>[
-        _user.pronoun, // TODO(alexandre): text editing controller
-        <String>['He/Him', 'Two', 'Free', 'Four']
+      'PRONOUNS': <TextEditingController>[
+        TextEditingController()..text = _user.pronoun
       ],
       'SEXUAL ORIENTATION': <dynamic>[
         _user.orientation,
         <String>[
           'Gay',
-          'Two',
-          'Free',
-          'Four'
-        ] // TODO(alexandre): list of sexual orientations
+          'Lesbian',
+          'Bi (Bisexual)',
+          'Pan (Pansexual)',
+          'Queer',
+          'Asexual',
+          'Allosexual',
+          'Aromantic',
+          'Heterosexual',
+          'Closeted',
+          'Androsexual',
+          'Bicurious',
+          'Demiromantic',
+          'Demisexual',
+          'Gynesexual',
+          'Polyamorous',
+          'Skoliosexual',
+          'Graysexual',
+          'Sapiosexual'
+        ]
       ],
       'EDUCATION': <TextEditingController>[
         TextEditingController()..text = _user.school,
@@ -281,15 +359,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     Container(
                         width: 300.0,
                         child: TextField(
-                          decoration: InputDecoration(
-                              contentPadding: const EdgeInsets.all(0.0),
-                              isDense: true,
-                              border: InputBorder.none,
-                              hintText: placeholders == null
-                                  ? null
-                                  : placeholders[textEditingController.key]),
-                          controller: textEditingController.value,
-                        )),
+                            decoration: InputDecoration(
+                                contentPadding: const EdgeInsets.all(0.0),
+                                isDense: true,
+                                border: InputBorder.none,
+                                hintText: placeholders == null
+                                    ? null
+                                    : placeholders[textEditingController.key],
+                                hintStyle: const TextStyle(color: orange)),
+                            controller: textEditingController.value,
+                            style: const TextStyle(color: orange))),
                     if (textEditingController.value.text.isNotEmpty)
                       GestureDetector(
                           onTap: () => textEditingController.value.clear(),
