@@ -576,11 +576,11 @@ class _EventScreenState extends State<EventScreen>
                 color: orange,
                 child: InkWell(
                     onTap: () {
-                      dispatch(EventRegisterAction(widget.event));
-                      _showInfoPopup();
                       if (!widget.event.likes.contains(state.loginState.id)) {
                         dispatch(EventLikeAction(widget.event));
                       }
+                      dispatch(EventRegisterAction(widget.event));
+                      _showInfoPopup();
                     },
                     child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
