@@ -741,9 +741,9 @@ class _EventScreenState extends State<EventScreen>
                   child: Scrollbar(
                       child: ListView(children: <Widget>[
                     _buildEventInfo(state, dispatch),
-                    _buildBanner(),
                     _buildDescription(),
                     _buildLiveFeedSponsor(),
+                    _buildBanner(),
                     // TODO(robin): later feature
                     //_buildLiveFeed()
                   ]))));
