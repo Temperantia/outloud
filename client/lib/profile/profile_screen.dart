@@ -3,7 +3,6 @@ import 'dart:typed_data';
 import 'package:async_redux/async_redux.dart';
 import 'package:business/actions/app_navigate_action.dart';
 import 'package:business/app_state.dart';
-import 'package:business/classes/interest.dart';
 import 'package:business/classes/user.dart';
 import 'package:business/events/actions/events_get_action.dart';
 import 'package:business/models/user.dart';
@@ -73,8 +72,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
         TextEditingController()..text = _user.home
       ],
       'GENDER': <dynamic>[
-        _user.gender,
+        _user.gender ?? '',
         <String>[
+          '',
           'Agender',
           'Androgyne',
           'Androgynous',
@@ -131,8 +131,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
         TextEditingController()..text = _user.pronoun
       ],
       'SEXUAL ORIENTATION': <dynamic>[
-        _user.orientation,
+        _user.orientation ?? '',
         <String>[
+          '',
           'Gay',
           'Lesbian',
           'Bi (Bisexual)',
@@ -203,7 +204,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
   }
 
-  Widget _buildPicture() {
+  Widget _buildPicture(String userId) {
     return Container(
         height: MediaQuery.of(context).size.height,
         child: Stack(alignment: Alignment.center, children: <Widget>[
@@ -270,7 +271,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       fontSize: 24.0,
                                       fontWeight: FontWeight.bold)),
                             ]),
-                            if (!_isEdition)
+                            if (_user.id == userId && !_isEdition)
                               GestureDetector(
                                   onTap: () =>
                                       setState(() => _isEdition = true),
@@ -409,7 +410,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     style: TextStyle(color: pinkBright, fontSize: 20.0)))
           ]),
           Wrap(alignment: WrapAlignment.start, children: <Widget>[
-            for (final MapEntry<int, Interest> interest
+            for (final MapEntry<int, String> interest
                 in _user.interests.asMap().entries)
               _isEdition
                   ? Container(
@@ -421,7 +422,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: <Widget>[
-                            Text(interest.value.name.toUpperCase(),
+                            Text(interest.value.toUpperCase(),
                                 style: const TextStyle(color: pinkBright)),
                             GestureDetector(
                                 onTap: () => setState(() =>
@@ -433,7 +434,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       margin: const EdgeInsets.all(5.0),
                       decoration:
                           BoxDecoration(border: Border.all(color: pinkBright)),
-                      child: Text(interest.value.name.toUpperCase(),
+                      child: Text(interest.value.toUpperCase(),
                           style: const TextStyle(color: pinkBright)))
           ]),
           if (_isEdition)
@@ -452,9 +453,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ? null
                     : _interestSuggestions.where((Map<String, String> elem) {
                         final String name = elem['name'].toLowerCase();
-                        final Interest interest = _user.interests.firstWhere(
-                            (Interest interest) =>
-                                interest.name.toLowerCase() == name,
+                        final String interest = _user.interests.firstWhere(
+                            (String interest) => interest.toLowerCase() == name,
                             orElse: () => null);
 
                         return interest == null &&
@@ -469,7 +469,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 onSuggestionSelected: (Map<String, String> suggestion) =>
                     setState(() {
                       _interestController.clear();
-                      _user.interests.add(Interest(name: suggestion['name']));
+                      _user.interests.add(suggestion['name']);
                     }))
         ]));
   }
@@ -509,10 +509,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
         Widget child) {
       return View(
           isProfileScreen: true,
-          isEditing: true,
+          isEditing: _isEdition,
           user: _user,
           child: ListView(children: <Widget>[
-            _buildPicture(),
+            _buildPicture(state.userState.user.id),
             _buildAbout(),
             const Divider(),
             _buildInterests(),
@@ -523,6 +523,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   onPressed: () async {
                     _user.home =
                         (_controllers['LOCATION'][0] as TextEditingController)
+                            .text
+                            .trim();
+                    _user.pronoun =
+                        (_controllers['PRONOUNS'][0] as TextEditingController)
                             .text
                             .trim();
                     _user.school =

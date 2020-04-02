@@ -3,7 +3,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:enum_to_string/enum_to_string.dart';
 
 import 'entity.dart';
-import 'interest.dart';
 
 class User extends Entity {
   User(
@@ -13,10 +12,8 @@ class User extends Entity {
       this.home = '',
       GeoPoint location,
       this.birthDate,
-      String description = '',
-      List<Interest> interests = const <Interest>[],
+      List<String> interests = const <String>[],
       this.pics = const <String>[],
-      this.facts = const <String>[],
       this.gender = '',
       this.pronoun = '',
       this.orientation = '',
@@ -27,12 +24,7 @@ class User extends Entity {
       this.friends = const <String>[],
       this.events = const <String, UserEventState>{},
       this.lounges = const <String>[]})
-      : super(
-            id: id,
-            name: name,
-            description: description,
-            location: location,
-            interests: interests);
+      : super(id: id, name: name, location: location, interests: interests);
 
   User.fromMap(Map<String, dynamic> snapshot, String id)
       : email = snapshot['email'] as String ?? '',
@@ -43,9 +35,6 @@ class User extends Entity {
         pics = snapshot['pics'] == null
             ? <String>[]
             : snapshot['pics'].cast<String>() as List<String>,
-        facts = snapshot['facts'] == null
-            ? <String>[]
-            : snapshot['facts'].cast<String>() as List<String>,
         gender = snapshot['gender'] as String ?? '',
         pronoun = snapshot['pronoun'] as String ?? '',
         orientation = snapshot['orientation'] as String ?? '',
@@ -69,21 +58,15 @@ class User extends Entity {
         super(
             id: id ?? '',
             name: snapshot['name'] as String,
-            description: snapshot['description'] as String ?? '',
             location: snapshot['location'] as GeoPoint,
             interests: snapshot['interests'] == null
-                ? <Interest>[]
-                : (snapshot['interests'] as List<dynamic>)
-                    .map<Interest>((dynamic interest) => Interest.fromMap(
-                        Map<String, String>.from(
-                            interest as Map<dynamic, dynamic>)))
-                    .toList());
+                ? <String>[]
+                : snapshot['interests'].cast<String>() as List<String>);
 
   String email;
   String home;
   DateTime birthDate;
   List<String> pics;
-  List<String> facts;
   String gender;
   String pronoun;
   String orientation;
@@ -102,12 +85,8 @@ class User extends Entity {
       'home': home,
       'location': location,
       'birthDate': Timestamp.fromDate(birthDate),
-      'description': description,
-      'interests': interests
-          .map<Map<String, String>>((Interest interest) => interest.toJson())
-          .toList(),
+      'interests': interests,
       'pics': pics,
-      'facts': facts,
       'gender': gender,
       'pronoun': pronoun,
       'orientation': orientation,

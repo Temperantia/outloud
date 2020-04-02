@@ -55,6 +55,7 @@ class _ViewState extends State<View> {
     }
 
     if (widget.isProfileScreen) {
+      print(widget.isEditing);
       return SafeArea(
           child: Stack(children: <Widget>[
         Row(children: <Widget>[
@@ -70,9 +71,11 @@ class _ViewState extends State<View> {
 
     return SafeArea(
         child: Stack(children: <Widget>[
-      Row(children: <Widget>[
-        Expanded(child: Image.asset('images/screenFull.png', fit: BoxFit.fill))
-      ]),
+      if (widget.showAppBar && widget.showNavBar)
+        Row(children: <Widget>[
+          Expanded(
+              child: Image.asset('images/screenFull.png', fit: BoxFit.fill))
+        ]),
       if (widget.showNavBar) _buildNavBar(state, dispatch),
       Container(margin: margin, child: widget.child),
       if (widget.showAppBar) _buildAppBar(state.userState.user, dispatch),

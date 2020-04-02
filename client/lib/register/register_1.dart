@@ -1,7 +1,15 @@
+import 'package:async_redux/async_redux.dart';
+import 'package:business/actions/app_disconnect_action.dart';
+import 'package:business/app_state.dart';
+import 'package:business/classes/user.dart';
 import 'package:flutter/material.dart';
 
 import 'package:inclusive/register/register_2.dart';
+import 'package:inclusive/theme.dart';
+import 'package:inclusive/widgets/button.dart';
+import 'package:inclusive/widgets/cached_image.dart';
 import 'package:inclusive/widgets/view.dart';
+import 'package:provider_for_redux/provider_for_redux.dart';
 
 class Register1Screen extends StatefulWidget {
   static const String id = 'Register1';
@@ -10,37 +18,72 @@ class Register1Screen extends StatefulWidget {
 }
 
 class _Register1ScreenState extends State<Register1Screen> {
-  final TextEditingController _controller = TextEditingController();
-
-  Future<void> submit() async {
-    FocusScope.of(context).unfocus();
-    final String name = _controller.text.trim();
-    if (name.isEmpty) {
-      Navigator.pushNamed(context, Register2Screen.id, arguments: name);
-      return;
-    }
-
-    Navigator.pushNamed(context, Register2Screen.id, arguments: name);
-  }
-
   @override
   Widget build(BuildContext context) {
-    return View(
-        title: 'Pick a name',
-        child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
+    return ReduxConsumer<AppState>(builder: (BuildContext context,
+        Store<AppState> store,
+        AppState state,
+        void Function(ReduxAction<dynamic>) dispatch,
+        Widget child) {
+      final User user = state.loginState.user;
+      return View(
+          showAppBar: false,
+          showNavBar: false,
+          child: Stack(children: <Widget>[
+            Container(
+              decoration: const BoxDecoration(
+                  gradient: LinearGradient(colors: <Color>[pinkLight, pink])),
+            ),
+            Container(
+              height: MediaQuery.of(context).size.height * 2 / 3,
+              decoration: const BoxDecoration(
+                  color: white,
+                  borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(30.0),
+                      bottomRight: Radius.circular(30.0))),
+            ),
+            if (user == null)
+              Container()
+            else
               Container(
-                  padding: const EdgeInsets.all(10),
-                  child: TextField(
-                    decoration: const InputDecoration(hintText: 'Riley'),
-                    controller: _controller,
-                  )),
-              Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 16.0),
-                  child: RaisedButton(
-                      onPressed: () => submit(),
-                      child: const Text('Keep going')))
-            ]));
+                  constraints: const BoxConstraints.expand(),
+                  child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: <Widget>[
+                        Container(
+                            width: 50.0,
+                            height: 50.0,
+                            child: Image.asset('images/OL-draft2a.png')),
+                        const Text('Signed in as',
+                            style: TextStyle(fontSize: 20.0)),
+                        CachedImage(user.pics[0],
+                            width: 150.0,
+                            height: 150.0,
+                            borderRadius: BorderRadius.circular(180.0),
+                            imageType: ImageType.User),
+                        Text(user.name, style: const TextStyle(fontSize: 26.0)),
+                        if (state.userState.user == null)
+                          Button(
+                              text: 'COMPLETE PROFILE',
+                              width: MediaQuery.of(context).size.width * 0.8,
+                              onPressed: () => dispatch(
+                                  NavigateAction<AppState>.pushNamed(
+                                      Register2Screen.id)))
+                        else
+                          Button(
+                              text: 'CONTINUE TO APP',
+                              width: MediaQuery.of(context).size.width * 0.8,
+                              onPressed: () =>
+                                  dispatch(NavigateAction<AppState>.pop())),
+                        Button(
+                            text: 'BACK',
+                            width: MediaQuery.of(context).size.width * 0.8,
+                            onPressed: () async {
+                              await store.dispatchFuture(AppDisconnectAction());
+                              dispatch(NavigateAction<AppState>.pop());
+                            })
+                      ])),
+          ]));
+    });
   }
 }

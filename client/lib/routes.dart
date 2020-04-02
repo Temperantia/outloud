@@ -18,10 +18,20 @@ import 'package:inclusive/profile/profile_screen.dart';
 import 'package:inclusive/register/login.dart';
 import 'package:flutter/material.dart';
 import 'package:inclusive/home_screen.dart';
+import 'package:inclusive/register/register_1.dart';
+import 'package:inclusive/register/register_2.dart';
+import 'package:inclusive/register/register_3.dart';
+import 'package:inclusive/register/register_4.dart';
+import 'package:inclusive/register/register_5.dart';
 
 final Map<String, Widget Function(Object)> routes =
     <String, Widget Function(Object)>{
   LoginScreen.id: (_) => LoginScreen(),
+  Register1Screen.id: (_) => Register1Screen(),
+  Register2Screen.id: (_) => Register2Screen(),
+  Register3Screen.id: (_) => Register3Screen(),
+  Register4Screen.id: (_) => Register4Screen(),
+  Register5Screen.id: (_) => Register5Screen(),
   HomeScreen.id: (_) => HomeScreen(),
   EventScreen.id: (dynamic event) => EventScreen(event as Event),
   EventAttendingScreen.id: (dynamic event) =>

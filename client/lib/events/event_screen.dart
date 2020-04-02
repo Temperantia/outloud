@@ -4,7 +4,6 @@ import 'package:business/app.dart';
 import 'package:business/app_state.dart';
 import 'package:async_redux/async_redux.dart' as redux;
 import 'package:business/classes/event.dart';
-import 'package:business/classes/interest.dart';
 import 'package:business/classes/lounge.dart';
 import 'package:business/events/actions/event_like_action.dart';
 import 'package:business/events/actions/event_unlike_action.dart';
@@ -388,13 +387,13 @@ class _EventScreenState extends State<EventScreen>
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
                 Wrap(children: <Widget>[
-                  for (final Interest interest in widget.event.interests)
+                  for (final String interest in widget.event.interests)
                     Container(
                         margin: const EdgeInsets.all(5),
                         padding: const EdgeInsets.all(5),
                         decoration:
                             BoxDecoration(border: Border.all(color: pinkLight)),
-                        child: Text(interest.name,
+                        child: Text(interest,
                             style: const TextStyle(
                                 color: pink,
                                 fontSize: 14,

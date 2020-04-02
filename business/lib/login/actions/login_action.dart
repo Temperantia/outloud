@@ -11,7 +11,7 @@ class LoginAction extends ReduxAction<AppState> {
   @override
   Future<AppState> reduce() async {
     final FirebaseUser user = await FirebaseAuth.instance.currentUser();
-    final String id = user == null ? null : user.uid;
+    final String id = user?.uid;
 
     if (id != null) {
       dispatch(UserListenAction(id));

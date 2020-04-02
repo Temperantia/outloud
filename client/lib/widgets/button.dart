@@ -52,7 +52,7 @@ class Button extends StatelessWidget {
             label: Text(text,
                 style: TextStyle(
                     color: colorText,
-                    fontSize: 20.0,
+                    fontSize: fontSize,
                     fontWeight: fontWeight))));
   }
 }

@@ -2,7 +2,6 @@ import 'package:business/classes/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'entity.dart';
-import 'interest.dart';
 
 class Event extends Entity {
   Event(
@@ -10,7 +9,7 @@ class Event extends Entity {
       String name = '',
       String description = '',
       GeoPoint location,
-      List<Interest> interests = const <Interest>[],
+      List<String> interests = const <String>[],
       this.dateStart,
       this.dateEnd,
       this.adminIds = const <String>[],
@@ -49,12 +48,8 @@ class Event extends Entity {
             description: snapshot['description'] as String ?? '',
             location: snapshot['location'] as GeoPoint,
             interests: snapshot['interests'] == null
-                ? <Interest>[]
-                : (snapshot['interests'] as List<dynamic>)
-                    .map<Interest>((dynamic interest) => Interest.fromMap(
-                        Map<String, String>.from(
-                            interest as Map<dynamic, dynamic>)))
-                    .toList());
+                ? <String>[]
+                : snapshot['interests'].cast<String>() as List<String>);
 
   DateTime dateStart;
   DateTime dateEnd;
@@ -71,9 +66,7 @@ class Event extends Entity {
         'name': name,
         'description': description,
         'location': location,
-        'interests': interests
-            .map<Map<String, String>>((Interest interest) => interest.toJson())
-            .toList(),
+        'interests': interests,
         'dateStart': dateStart == null ? null : Timestamp.fromDate(dateStart),
         'dateEnd': dateEnd == null ? null : Timestamp.fromDate(dateEnd),
         'adminIds': adminIds,

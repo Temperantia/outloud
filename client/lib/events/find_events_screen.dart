@@ -4,7 +4,6 @@ import 'package:async_redux/async_redux.dart' as redux;
 import 'package:business/app.dart';
 import 'package:business/app_state.dart';
 import 'package:business/classes/event.dart';
-import 'package:business/classes/interest.dart';
 import 'package:business/classes/user_event_state.dart';
 import 'package:business/events/actions/events_get_action.dart';
 import 'package:flutter/foundation.dart';
@@ -299,7 +298,7 @@ class _FindEventsScreen extends State<FindEventsScreen>
                                                   color: orange)))
                                   ]),
                               Wrap(children: <Widget>[
-                                for (Interest interest in event.interests)
+                                for (String interest in event.interests)
                                   Container(
                                       padding: const EdgeInsets.symmetric(
                                           horizontal: 5.0),
@@ -307,7 +306,7 @@ class _FindEventsScreen extends State<FindEventsScreen>
                                           borderRadius:
                                               BorderRadius.circular(5.0),
                                           border: Border.all(color: pink)),
-                                      child: Text(interest.name.toUpperCase(),
+                                      child: Text(interest.toUpperCase(),
                                           style: const TextStyle(
                                               color: pink,
                                               fontWeight: FontWeight.bold)))

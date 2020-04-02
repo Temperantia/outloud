@@ -53,7 +53,7 @@ class _AppState extends State<App> {
         value: store,
         child: ReduxSelector<AppState, dynamic>(
             selector: (BuildContext context, AppState state) =>
-                <dynamic>[state.loading, state.loginState.id, state.theme],
+                <dynamic>[state.loading, state.userState.user, state.theme],
             builder: (BuildContext context,
                 Store<AppState> store,
                 AppState state,
@@ -64,15 +64,11 @@ class _AppState extends State<App> {
                   debugShowCheckedModeBanner: false,
                   theme: theme(state.theme),
                   title: 'Inc•lusive',
-                  home: Builder(builder: (BuildContext context) {
-                    if (state.loading) {
-                      return Loading();
-                    }
-                    if (state.loginState.id == null) {
-                      return LoginScreen();
-                    }
-                    return HomeScreen();
-                  }),
+                  home: state.loading
+                      ? Loading()
+                      : state.userState.user == null
+                          ? LoginScreen()
+                          : HomeScreen(),
                   navigatorKey: navigatorKey,
                   onGenerateRoute: (RouteSettings settings) =>
                       MaterialPageRoute<dynamic>(
