@@ -27,11 +27,16 @@ Stream<List<Message>> streamMessages(String conversationId) {
       (List<Message> messages) => GroupPing(value: messages.length));
 } */
 
-Future<void> addMessage(
-    String conversation, String idFrom, String content) async {
+void addMessage(String conversation, String idFrom, String content,
+    MessageType messageType) {
   final int timestamp = DateTime.now().millisecondsSinceEpoch;
   _api.addDocumentToSubCollection(
-      Message(idFrom: idFrom, content: content, timestamp: timestamp).toJson(),
+      Message(
+              idFrom: idFrom,
+              content: content,
+              timestamp: timestamp,
+              messageType: messageType)
+          .toJson(),
       conversation,
       conversation);
 }

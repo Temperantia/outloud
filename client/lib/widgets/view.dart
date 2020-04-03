@@ -55,7 +55,6 @@ class _ViewState extends State<View> {
     }
 
     if (widget.isProfileScreen) {
-      print(widget.isEditing);
       return SafeArea(
           child: Stack(children: <Widget>[
         Row(children: <Widget>[

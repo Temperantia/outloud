@@ -1,5 +1,6 @@
 import 'package:async_redux/async_redux.dart';
 import 'package:business/app_state.dart';
+import 'package:business/classes/message.dart';
 import 'package:business/models/message.dart';
 
 class ChatsMessageSendAction extends ReduxAction<AppState> {
@@ -10,7 +11,7 @@ class ChatsMessageSendAction extends ReduxAction<AppState> {
 
   @override
   AppState reduce() {
-    addMessage(_chatId, state.loginState.id, _content);
+    addMessage(_chatId, state.loginState.id, _content, MessageType.Text);
     return null;
   }
 }

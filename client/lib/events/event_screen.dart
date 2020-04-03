@@ -1,14 +1,19 @@
 import 'dart:async';
+import 'dart:typed_data';
 
 import 'package:business/app.dart';
 import 'package:business/app_state.dart';
 import 'package:async_redux/async_redux.dart' as redux;
 import 'package:business/classes/event.dart';
 import 'package:business/classes/lounge.dart';
+import 'package:business/classes/message.dart';
+import 'package:business/classes/user.dart';
 import 'package:business/events/actions/event_like_action.dart';
 import 'package:business/events/actions/event_unlike_action.dart';
 import 'package:business/events/actions/event_register_action.dart';
 import 'package:business/events/actions/event_unregister_action.dart';
+import 'package:business/models/event_message.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -24,6 +29,7 @@ import 'package:inclusive/widgets/cached_image.dart';
 import 'package:inclusive/widgets/view.dart';
 import 'package:intl/intl.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:provider_for_redux/provider_for_redux.dart';
 
 class EventScreen extends StatefulWidget {
@@ -41,6 +47,8 @@ class _EventScreenState extends State<EventScreen>
   final Completer<GoogleMapController> _controller =
       Completer<GoogleMapController>();
   final Map<String, Marker> _markers = <String, Marker>{};
+  final TextEditingController _messageController = TextEditingController();
+  final ScrollController _scrollController = ScrollController();
 
   CameraPosition _intialMapLocation;
   String _adressEvent;
@@ -67,204 +75,217 @@ class _EventScreenState extends State<EventScreen>
     _resolveAdressEvent();
   }
 
+  @override
+  void dispose() {
+    _messageController.dispose();
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _sendImage(String userId) async {
+    try {
+      final Uint8List image =
+          (await (await MultiImagePicker.pickImages(maxImages: 1))[0]
+                  .getByteData())
+              .buffer
+              .asUint8List();
+      final StorageReference ref = FirebaseStorage.instance
+          .ref()
+          .child('images/events/${widget.event.id}/${DateTime.now()}');
+      final StorageUploadTask uploadTask = ref.putData(image);
+      final StorageTaskSnapshot result = await uploadTask.onComplete;
+      final String url = (await result.ref.getDownloadURL()).toString();
+      addEventMessage(widget.event.id, userId, url, MessageType.Image);
+    } catch (error) {
+      return;
+    }
+  }
+
   void _showConfirmPopup(void Function(redux.ReduxAction<AppState>) dispatch) {
     showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return Dialog(
-            elevation: 0.0,
-            backgroundColor: Colors.transparent,
-            child: Stack(
-              children: <Widget>[
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return Dialog(
+              elevation: 0.0,
+              backgroundColor: Colors.transparent,
+              child: Stack(children: <Widget>[
                 Container(
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      shape: BoxShape.rectangle,
-                      borderRadius: BorderRadius.circular(5),
-                      boxShadow: <BoxShadow>[
-                        BoxShadow(
-                          color: Colors.black26,
-                          blurRadius: 10.0,
-                          offset: const Offset(0.0, 10.0),
-                        )
-                      ]),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      const Icon(
-                        MdiIcons.handRight,
-                        color: pink,
-                        size: 60,
-                      ),
-                      const Text('Hold Up',
-                          style: TextStyle(
-                              color: pink,
-                              fontSize: 28,
-                              fontWeight: FontWeight.w700)),
-                      const SizedBox(
-                        height: 15,
-                      ),
-                      Container(
-                        padding: const EdgeInsets.only(
-                            left: 18, right: 18, bottom: 10),
-                        child: const Text(
-                            'If you unattend this event it will delete/leave any lounge you joined for this event',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                color: pink,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w500)),
-                      ),
-                      Container(
-                        padding: const EdgeInsets.only(
-                            left: 18, right: 18, bottom: 15),
-                        child: const Text('Do you still want to continue?',
-                            textAlign: TextAlign.justify,
-                            style: TextStyle(
-                                color: pink,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w500)),
-                      ),
-                      SizedBox(
-                        child: Container(
-                          color: pink,
-                          child: Column(
-                            children: <Widget>[
-                              Container(
-                                  padding: const EdgeInsets.only(top: 10),
-                                  child: Align(
-                                    alignment: Alignment.bottomCenter,
-                                    child: FlatButton(
-                                        color: white,
-                                        onPressed: () {
-                                          Navigator.pop(context);
-                                        },
-                                        child: Container(
-                                            padding: const EdgeInsets.only(
-                                                left: 20, right: 20),
-                                            child: const Text(
-                                                'No, Take Me Back',
-                                                style: TextStyle(
-                                                    color: pink,
-                                                    fontSize: 16,
-                                                    fontWeight:
-                                                        FontWeight.w500)))),
-                                  )),
-                              Container(
-                                  padding:
-                                      const EdgeInsets.only(bottom: 5, top: 5),
-                                  child: Align(
-                                    alignment: Alignment.bottomCenter,
-                                    child: FlatButton(
-                                        onPressed: () async {
-                                          await showLoaderAnimation(
-                                              context, this,
-                                              animationDuration: 600);
-                                          Navigator.pop(context);
-                                          dispatch(EventUnRegisterAction(
-                                              widget.event));
-                                        },
-                                        child: const Text('YES, Unattend Event',
-                                            style: TextStyle(
-                                                color: white,
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.w500))),
-                                  ))
-                            ],
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        shape: BoxShape.rectangle,
+                        borderRadius: BorderRadius.circular(5),
+                        boxShadow: <BoxShadow>[
+                          BoxShadow(
+                            color: Colors.black26,
+                            blurRadius: 10.0,
+                            offset: const Offset(0.0, 10.0),
+                          )
+                        ]),
+                    child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          const Icon(
+                            MdiIcons.handRight,
+                            color: pink,
+                            size: 60,
                           ),
-                        ),
-                      ),
-                    ],
-                  ),
-                )
-              ],
-            ));
-      },
-    );
+                          const Text('Hold Up',
+                              style: TextStyle(
+                                  color: pink,
+                                  fontSize: 28,
+                                  fontWeight: FontWeight.w700)),
+                          const SizedBox(
+                            height: 15,
+                          ),
+                          Container(
+                            padding: const EdgeInsets.only(
+                                left: 18, right: 18, bottom: 10),
+                            child: const Text(
+                                'If you unattend this event it will delete/leave any lounge you joined for this event',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    color: pink,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w500)),
+                          ),
+                          Container(
+                            padding: const EdgeInsets.only(
+                                left: 18, right: 18, bottom: 15),
+                            child: const Text('Do you still want to continue?',
+                                textAlign: TextAlign.justify,
+                                style: TextStyle(
+                                    color: pink,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w500)),
+                          ),
+                          SizedBox(
+                              child: Container(
+                                  color: pink,
+                                  child: Column(children: <Widget>[
+                                    Container(
+                                        padding: const EdgeInsets.only(top: 10),
+                                        child: Align(
+                                          alignment: Alignment.bottomCenter,
+                                          child: FlatButton(
+                                              color: white,
+                                              onPressed: () {
+                                                Navigator.pop(context);
+                                              },
+                                              child: Container(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          left: 20, right: 20),
+                                                  child: const Text(
+                                                      'No, Take Me Back',
+                                                      style: TextStyle(
+                                                          color: pink,
+                                                          fontSize: 16,
+                                                          fontWeight: FontWeight
+                                                              .w500)))),
+                                        )),
+                                    Container(
+                                        padding: const EdgeInsets.only(
+                                            bottom: 5, top: 5),
+                                        child: Align(
+                                            alignment: Alignment.bottomCenter,
+                                            child: FlatButton(
+                                                onPressed: () async {
+                                                  await showLoaderAnimation(
+                                                      context, this,
+                                                      animationDuration: 600);
+                                                  Navigator.pop(context);
+                                                  dispatch(
+                                                      EventUnRegisterAction(
+                                                          widget.event));
+                                                },
+                                                child: const Text(
+                                                    'YES, Unattend Event',
+                                                    style: TextStyle(
+                                                        color: white,
+                                                        fontSize: 16,
+                                                        fontWeight:
+                                                            FontWeight.w500)))))
+                                  ])))
+                        ]))
+              ]));
+        });
   }
 
   void _showInfoPopup() {
     showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return Dialog(
-            elevation: 0.0,
-            backgroundColor: Colors.transparent,
-            child: Stack(
-              children: <Widget>[
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return Dialog(
+              elevation: 0.0,
+              backgroundColor: Colors.transparent,
+              child: Stack(children: <Widget>[
                 Container(
-                  decoration: BoxDecoration(
-                      color: Colors.green,
-                      shape: BoxShape.rectangle,
-                      borderRadius: BorderRadius.circular(5),
-                      boxShadow: <BoxShadow>[
-                        BoxShadow(
-                          color: Colors.black26,
-                          blurRadius: 10.0,
-                          offset: const Offset(0.0, 10.0),
-                        )
-                      ]),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      const Icon(
-                        MdiIcons.glassCocktail,
-                        color: white,
-                        size: 60,
-                      ),
-                      const SizedBox(
-                        height: 15,
-                      ),
-                      const Text('Lounges Available!',
-                          style: TextStyle(
-                              color: white,
-                              fontSize: 28,
-                              fontWeight: FontWeight.w700)),
-                      const SizedBox(
-                        height: 15,
-                      ),
-                      Container(
-                        padding: const EdgeInsets.only(
-                            left: 18, right: 18, bottom: 10),
-                        child: const Text(
-                            'You can now join a lounge. Joining a lounge lets you enjoy the event with people just like you.',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                color: white,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w500)),
-                      ),
-                      SizedBox(
-                          child: GestureDetector(
-                        onTap: () {
-                          Navigator.pop(context);
-                        },
-                        child: Container(
+                    decoration: BoxDecoration(
+                        color: Colors.green,
+                        shape: BoxShape.rectangle,
+                        borderRadius: BorderRadius.circular(5),
+                        boxShadow: <BoxShadow>[
+                          BoxShadow(
+                            color: Colors.black26,
+                            blurRadius: 10.0,
+                            offset: const Offset(0.0, 10.0),
+                          )
+                        ]),
+                    child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          const Icon(
+                            MdiIcons.glassCocktail,
                             color: white,
-                            child: Column(
-                              children: <Widget>[
-                                Container(
-                                    padding: const EdgeInsets.all(15),
-                                    child: Align(
-                                      alignment: Alignment.bottomCenter,
-                                      child: const Text('GOT IT',
-                                          style: TextStyle(
-                                              color: Colors.green,
-                                              fontSize: 24,
-                                              fontWeight: FontWeight.w600)),
-                                    ))
-                              ],
-                            )),
-                      )),
-                    ],
-                  ),
-                )
-              ],
-            ));
-      },
-    );
+                            size: 60,
+                          ),
+                          const SizedBox(
+                            height: 15,
+                          ),
+                          const Text('Lounges Available!',
+                              style: TextStyle(
+                                  color: white,
+                                  fontSize: 28,
+                                  fontWeight: FontWeight.w700)),
+                          const SizedBox(
+                            height: 15,
+                          ),
+                          Container(
+                            padding: const EdgeInsets.only(
+                                left: 18, right: 18, bottom: 10),
+                            child: const Text(
+                                'You can now join a lounge. Joining a lounge lets you enjoy the event with people just like you.',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    color: white,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w500)),
+                          ),
+                          SizedBox(
+                              child: GestureDetector(
+                                  onTap: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: Container(
+                                      color: white,
+                                      child: Column(children: <Widget>[
+                                        Container(
+                                            padding: const EdgeInsets.all(15),
+                                            child: Align(
+                                                alignment:
+                                                    Alignment.bottomCenter,
+                                                child: const Text('GOT IT',
+                                                    style: TextStyle(
+                                                        color: Colors.green,
+                                                        fontSize: 24,
+                                                        fontWeight:
+                                                            FontWeight.w600))))
+                                      ]))))
+                        ]))
+              ]));
+        });
   }
 
   Future<int> _resolveAdressEvent() async {
@@ -432,7 +453,7 @@ class _EventScreenState extends State<EventScreen>
     if (userLounge != null) {
       w = Container(
           margin: const EdgeInsets.only(right: 5.0),
-          color: blue,
+          color: blueDark,
           child: InkWell(
               onTap: () {
                 dispatch(redux.NavigateAction<AppState>.pushNamed(
@@ -658,7 +679,7 @@ class _EventScreenState extends State<EventScreen>
                   margin: const EdgeInsets.all(5),
                   child: const Text('LIVE FEED',
                       style: TextStyle(
-                          color: blue,
+                          color: blueDark,
                           fontSize: 28,
                           fontWeight: FontWeight.w900)))),
           Expanded(
@@ -675,31 +696,94 @@ class _EventScreenState extends State<EventScreen>
                     Text('https://www.sponsor-best.com',
                         textAlign: TextAlign.left,
                         style: TextStyle(
-                            color: blue,
+                            color: blueDark,
                             fontSize: 15,
                             fontWeight: FontWeight.w700)),
                     Text('Twitter / Facebook / @BestEvent',
                         textAlign: TextAlign.left,
                         style: TextStyle(
-                            color: blue,
+                            color: blueDark,
                             fontSize: 15,
                             fontWeight: FontWeight.w700))
                   ]))
         ]));
   }
 
-  /*  Widget _buildLiveFeed() {
-    return Container(
-        height: 280,
-        child: ListView.builder(
-            itemCount: 150,
-            itemBuilder: (BuildContext context, int index) => Container(
-                child: Row(
-                    mainAxisAlignment: index.isEven
-                        ? MainAxisAlignment.end
-                        : MainAxisAlignment.start,
-                    children: <Widget>[Text(' NEWS  - $index ')]))));
-  } */
+  Widget _buildLiveFeed() {
+    if (widget.event.chatMembers == null) {
+      return Container();
+    }
+    return Column(children: <Widget>[
+      for (final Message message in widget.event.messages)
+        _buildMessage(message)
+    ]);
+  }
+
+  Widget _buildMessage(Message message) {
+    final User user = widget.event.chatMembers.firstWhere(
+        (User user) => user.id == message.idFrom,
+        orElse: () => null);
+    final String date = DateFormat('yyyy-MM-dd \'at\' kk:mm')
+        .format(DateTime.fromMillisecondsSinceEpoch(message.timestamp));
+    if (user == null) {
+      return Container();
+    }
+    return message.messageType == MessageType.Text
+        ? Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(children: <Widget>[
+              CachedImage(user.pics.isEmpty ? null : user.pics[0],
+                  width: 30.0,
+                  height: 30.0,
+                  borderRadius: BorderRadius.circular(20.0),
+                  imageType: ImageType.User),
+              Expanded(
+                  child: Padding(
+                      padding: const EdgeInsets.only(left: 8.0),
+                      child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text(user.name,
+                                style: const TextStyle(
+                                    color: blueDark,
+                                    fontWeight: FontWeight.bold)),
+                            Text(message.content,
+                                style: const TextStyle(color: blueDark))
+                          ]))),
+              Text(date, style: const TextStyle(color: blueDark))
+            ]))
+        : Row(children: <Widget>[
+            Expanded(
+                child: Column(children: <Widget>[
+              Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(children: <Widget>[
+                    CachedImage(user.pics.isEmpty ? null : user.pics[0],
+                        width: 30.0,
+                        height: 30.0,
+                        borderRadius: BorderRadius.circular(20.0),
+                        imageType: ImageType.User),
+                    Expanded(
+                        child: Padding(
+                            padding: const EdgeInsets.only(left: 8.0),
+                            child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  Text(user.name,
+                                      style: const TextStyle(
+                                          color: blueDark,
+                                          fontWeight: FontWeight.bold))
+                                ]))),
+                    Text(date, style: const TextStyle(color: blueDark))
+                  ])),
+              Row(children: <Widget>[
+                Expanded(
+                    child: CachedImage(message.content,
+                        fit: BoxFit.cover, imageType: ImageType.Event))
+              ])
+            ]))
+          ]);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -734,18 +818,56 @@ class _EventScreenState extends State<EventScreen>
                       ]))),
           child: widget.event == null
               ? const CircularProgressIndicator()
-              : Container(
-                  color: white,
-                  constraints: const BoxConstraints.expand(),
-                  child: Scrollbar(
-                      child: ListView(children: <Widget>[
-                    _buildEventInfo(state, dispatch),
-                    _buildDescription(),
-                    _buildLiveFeedSponsor(),
-                    _buildBanner(),
-                    // TODO(robin): later feature
-                    //_buildLiveFeed()
-                  ]))));
+              : Column(children: <Widget>[
+                  Expanded(
+                      child: Container(
+                          color: white,
+                          child: ListView(
+                              controller: _scrollController,
+                              children: <Widget>[
+                                _buildEventInfo(state, dispatch),
+                                _buildDescription(),
+                                _buildBanner(),
+                                _buildLiveFeedSponsor(),
+                                _buildLiveFeed()
+                              ]))),
+                  Container(
+                      margin: const EdgeInsets.all(5.0),
+                      decoration: BoxDecoration(
+                          color: orangeLight.withOpacity(0.5),
+                          borderRadius: BorderRadius.circular(5.0)),
+                      child: Row(children: <Widget>[
+                        Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: GestureDetector(
+                                onTap: () {
+                                  _sendImage(state.userState.user.id);
+                                  _scrollController.jumpTo(_scrollController
+                                      .position.maxScrollExtent);
+                                },
+                                child: Icon(Icons.panorama, color: white))),
+                        Expanded(
+                            child: TextField(
+                                controller: _messageController,
+                                decoration: const InputDecoration.collapsed(
+                                    hintText: 'Join in the fun',
+                                    hintStyle: TextStyle(color: white)))),
+                        Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: GestureDetector(
+                                onTap: () {
+                                  addEventMessage(
+                                      widget.event.id,
+                                      state.userState.user.id,
+                                      _messageController.text.trim(),
+                                      MessageType.Text);
+                                  _messageController.clear();
+                                  _scrollController.jumpTo(_scrollController
+                                      .position.maxScrollExtent);
+                                },
+                                child: Icon(Icons.send, color: white)))
+                      ]))
+                ]));
     });
   }
 }

@@ -1,3 +1,4 @@
+import 'package:business/classes/message.dart';
 import 'package:business/classes/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -61,6 +62,8 @@ class Event extends Entity {
 
   double distance;
   List<User> members;
+  List<Message> messages;
+  List<User> chatMembers;
 
   Map<String, dynamic> toJson() => <String, dynamic>{
         'name': name,

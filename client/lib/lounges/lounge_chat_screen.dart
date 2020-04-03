@@ -328,7 +328,7 @@ class _LoungeChatScreenState extends State<LoungeChatScreen>
                     child: GestureDetector(
                         onTap: () {
                           addMessage(_lounge.id, state.loginState.id,
-                              _messageController.text);
+                              _messageController.text, MessageType.Text);
                           _messageController.clear();
                         },
                         child: Icon(Icons.send, color: white)),

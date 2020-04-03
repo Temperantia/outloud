@@ -37,7 +37,7 @@ class _ChatScreenState extends State<ChatScreen> {
       Fluttertoast.showToast(msg: 'Nothing to send');
     } else {
       _textController.clear();
-      addMessage(widget.chat.id, userId, text.trim());
+      addMessage(widget.chat.id, userId, text.trim(), MessageType.Text);
       _listScrollController.animateTo(0.0,
           duration: const Duration(milliseconds: 300), curve: Curves.linear);
     }
