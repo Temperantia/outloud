@@ -251,8 +251,7 @@ class _FindEventsScreen extends State<FindEventsScreen>
                         'This weekend',
                         'Next week',
                         'This month',
-                        'Next month',
-                        'This year'
+                        'Next month'
                       ]
                           .map<DropdownMenuItem<String>>((String value) =>
                               DropdownMenuItem<String>(
