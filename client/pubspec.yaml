@@ -45,6 +45,7 @@ dependencies:
   path_provider: ^1.6.4
   network_to_file_image: ^2.2.8
   dotted_border: ^1.0.5
+  date_utils: ^0.1.0+3
 
 flutter:
   uses-material-design: true

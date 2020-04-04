@@ -1,4 +1,3 @@
-import 'package:business/classes/user.dart';
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:flutter/material.dart';
 import 'package:timeago/timeago.dart' as timeago;

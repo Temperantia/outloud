@@ -27,19 +27,28 @@ class EventsGetAction extends redux.ReduxAction<AppState> {
 
     final PermissionStatus permission =
         await permissionLocation.checkLocationPermissionStatus();
-
     if (permission == PermissionStatus.granted) {
       try {
         final Position position = await geoLocator.getCurrentPosition(
             desiredAccuracy: LocationAccuracy.best);
         for (final Event event in events) {
-          event.distance = (await geoLocator.distanceBetween(
-                  event.location.latitude,
-                  event.location.longitude,
-                  position.latitude,
-                  position.longitude))
-              .roundToDouble();
+          event.distance = event.location == null
+              ? null
+              : (await geoLocator.distanceBetween(
+                      event.location.latitude,
+                      event.location.longitude,
+                      position.latitude,
+                      position.longitude))
+                  .roundToDouble();
         }
+        events.sort((Event eventA, Event eventB) {
+          if (eventA.dateStart.isBefore(eventB.dateStart)) {
+            return -1;
+          } else if (eventA.dateStart.isAfter(eventB.dateStart)) {
+            return 1;
+          }
+          return 0;
+        });
       } catch (error) {
         // TODO(me): handle error
       }

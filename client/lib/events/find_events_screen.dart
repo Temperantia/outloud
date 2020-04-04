@@ -6,6 +6,7 @@ import 'package:business/app_state.dart';
 import 'package:business/classes/event.dart';
 import 'package:business/classes/user_event_state.dart';
 import 'package:business/events/actions/events_get_action.dart';
+import 'package:date_utils/date_utils.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -32,8 +33,8 @@ class _FindEventsScreen extends State<FindEventsScreen>
   final Completer<GoogleMapController> _controller =
       Completer<GoogleMapController>();
   final Map<String, Marker> _markers = <String, Marker>{};
-  final GlobalKey _interestFilterKey = GlobalKey();
-  final LayerLink _interestLink = LayerLink();
+  // final GlobalKey _interestFilterKey = GlobalKey();
+  //final LayerLink _interestLink = LayerLink();
   final List<CheckBoxContent> _interests = <CheckBoxContent>[];
 
   CameraPosition _initialMapLocation =
@@ -41,10 +42,12 @@ class _FindEventsScreen extends State<FindEventsScreen>
 
   int _flexFactorMap = 1;
   int _flexFactorListEvent = 5;
-  OverlayEntry _interestsCheckBox;
-  bool _checkBoxDisplayed = false;
-  String _distanceValue;
-  String _timeValue;
+  //OverlayEntry _interestsCheckBox;
+  // bool _checkBoxDisplayed = false;
+  String _distanceValue = 'Any distance';
+  String _timeValue = 'Any time';
+  List<Event> _events;
+  List<Event> _eventsDisplayed;
 
   @override
   bool get wantKeepAlive => true;
@@ -85,6 +88,69 @@ class _FindEventsScreen extends State<FindEventsScreen>
     return 1;
   }
 
+  void _refreshEvents() {
+    final DateTime now = DateTime.now();
+
+    _eventsDisplayed = _events.where((Event event) {
+      final DateTime eventDateStart = event.dateStart;
+      switch (_distanceValue) {
+        case 'Within 5km':
+          if (event.distance == null || event.distance > 5.0) {
+            return false;
+          }
+          break;
+        case 'Within 10km':
+          if (event.distance == null || event.distance > 5.0) {
+            return false;
+          }
+          break;
+        case 'Within 50km':
+          if (event.distance == null || event.distance > 5.0) {
+            return false;
+          }
+          break;
+        case 'Within 100km':
+          if (event.distance == null || event.distance > 5.0) {
+            return false;
+          }
+          break;
+      }
+
+      switch (_timeValue) {
+        case 'This week':
+          if (!Utils.isSameWeek(now, eventDateStart) ||
+              eventDateStart.weekday > 5) {
+            return false;
+          }
+          break;
+        case 'This weekend':
+          if (!Utils.isSameWeek(now, eventDateStart) ||
+              eventDateStart.weekday < 5) {
+            return false;
+          }
+          break;
+        case 'Next week':
+          if (!Utils.isSameWeek(Utils.nextWeek(now), eventDateStart)) {
+            return false;
+          }
+          break;
+        case 'This month':
+          if (now.year != eventDateStart.year ||
+              now.month != eventDateStart.month) {
+            return false;
+          }
+          break;
+        case 'Next month':
+          if (now.year != eventDateStart.year ||
+              Utils.nextMonth(now).month != eventDateStart.month) {
+            return false;
+          }
+          break;
+      }
+      return true;
+    }).toList();
+  }
+
   Widget _buildMapView() {
     return Container(
         padding: const EdgeInsets.all(10),
@@ -123,88 +189,83 @@ class _FindEventsScreen extends State<FindEventsScreen>
         child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
-              Container(
-                  child: CompositedTransformTarget(
-                      link: _interestLink,
-                      child: Container(
-                          decoration: BoxDecoration(
-                            border: Border.all(color: black, width: 1),
+              /*  CompositedTransformTarget(
+                  link: _interestLink,
+                  child: Container(
+                      decoration: BoxDecoration(
+                        border: Border.all(color: black, width: 1),
+                      ),
+                      key: _interestFilterKey,
+                      child: FlatButton(
+                          child: Row(
+                            children: const <Widget>[
+                              Text('Interests'),
+                              Icon(Icons.arrow_drop_down)
+                            ],
                           ),
-                          key: _interestFilterKey,
-                          child: FlatButton(
-                              child: Row(
-                                children: const <Widget>[
-                                  Text('Interests'),
-                                  Icon(Icons.arrow_drop_down)
-                                ],
-                              ),
-                              onPressed: () {
-                                if (_checkBoxDisplayed) {
-                                  _interestsCheckBox.remove();
-                                  setState(() {
-                                    _checkBoxDisplayed = false;
-                                  });
-                                } else {
-                                  _shrinkMap();
-                                  setState(() {
-                                    _interestsCheckBox =
-                                        _createInterestsCheckBox();
-                                    _checkBoxDisplayed = true;
-                                  });
-                                  Overlay.of(context)
-                                      .insert(_interestsCheckBox);
-                                }
-                              })))),
+                          onPressed: () {
+                            if (_checkBoxDisplayed) {
+                              _interestsCheckBox.remove();
+                              setState(() {
+                                _checkBoxDisplayed = false;
+                              });
+                            } else {
+                              _shrinkMap();
+                              setState(() {
+                                _interestsCheckBox = _createInterestsCheckBox();
+                                _checkBoxDisplayed = true;
+                              });
+                              Overlay.of(context).insert(_interestsCheckBox);
+                            }
+                          }))), */
               Container(
                   padding: const EdgeInsets.symmetric(horizontal: 5.0),
-                  decoration:
-                      BoxDecoration(border: Border.all(color: black, width: 1)),
+                  decoration: BoxDecoration(border: Border.all(color: black)),
                   child: DropdownButton<String>(
-                      hint: const Text('Distance'),
                       underline: Container(),
                       value: _distanceValue,
                       items: <String>[
-                        '< 1 km',
-                        '< 2 km',
-                        '< 3 km',
-                        '< 5 km',
-                        '< 10km'
-                      ].map<DropdownMenuItem<String>>((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(value),
-                        );
-                      }).toList(),
-                      onChanged: (String newValue) {
-                        setState(() {
-                          _distanceValue = newValue;
-                        });
-                      })),
+                        'Any distance',
+                        'Within 5km',
+                        'Within 10km',
+                        'Within 50km',
+                        'Within 100km',
+                      ]
+                          .map<DropdownMenuItem<String>>((String value) =>
+                              DropdownMenuItem<String>(
+                                  value: value, child: Text(value)))
+                          .toList(),
+                      onChanged: (String newValue) => setState(() {
+                            _distanceValue = newValue;
+                            _refreshEvents();
+                          }))),
               Container(
                   padding: const EdgeInsets.symmetric(horizontal: 5.0),
-                  decoration: BoxDecoration(
-                    border: Border.all(color: black, width: 1),
-                  ),
+                  decoration: BoxDecoration(border: Border.all(color: black)),
                   child: DropdownButton<String>(
-                      hint: const Text('Time'),
                       underline: Container(),
                       value: _timeValue,
-                      items: <String>['6 pm', '7 pm', '8 pm', '9 pm', '10 pm']
-                          .map<DropdownMenuItem<String>>((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(value),
-                        );
-                      }).toList(),
-                      onChanged: (String newValue) {
-                        setState(() {
-                          _timeValue = newValue;
-                        });
-                      }))
+                      items: <String>[
+                        'Any time',
+                        'This week',
+                        'This weekend',
+                        'Next week',
+                        'This month',
+                        'Next month',
+                        'This year'
+                      ]
+                          .map<DropdownMenuItem<String>>((String value) =>
+                              DropdownMenuItem<String>(
+                                  value: value, child: Text(value)))
+                          .toList(),
+                      onChanged: (String newValue) => setState(() {
+                            _timeValue = newValue;
+                            _refreshEvents();
+                          })))
             ]));
   }
 
-  OverlayEntry _createInterestsCheckBox() {
+/*   OverlayEntry _createInterestsCheckBox() {
     final RenderBox renderBox =
         _interestFilterKey.currentContext.findRenderObject() as RenderBox;
     final Size sizeInterests = renderBox.size;
@@ -222,7 +283,7 @@ class _FindEventsScreen extends State<FindEventsScreen>
                 child: Material(
                     elevation: 4.0,
                     child: MyMultiCheckBoxesContent(checkboxes: _interests)))));
-  }
+  } */
 
   Widget _buildEvent(
       Event event,
@@ -245,15 +306,12 @@ class _FindEventsScreen extends State<FindEventsScreen>
 
     return Column(children: <Widget>[
       GestureDetector(
-          onTap: () async {
-            await showLoaderAnimation(context, this,
-                executeCallback: true,
-                dispatch: dispatch,
-                callback: redux.NavigateAction<AppState>.pushNamed(
-                    EventScreen.id,
-                    arguments: event),
-                animationDuration: 600);
-          },
+          onTap: () async => await showLoaderAnimation(context, this,
+              executeCallback: true,
+              dispatch: dispatch,
+              callback: redux.NavigateAction<AppState>.pushNamed(EventScreen.id,
+                  arguments: event),
+              animationDuration: 600),
           child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 10.0),
               child: Row(children: <Widget>[
@@ -335,7 +393,6 @@ class _FindEventsScreen extends State<FindEventsScreen>
   }
 
   Widget _buildFindEvents(
-      List<Event> events,
       Map<String, UserEventState> userEventStates,
       ThemeStyle themeStyle,
       void Function(redux.ReduxAction<AppState>) dispatch,
@@ -373,18 +430,16 @@ class _FindEventsScreen extends State<FindEventsScreen>
                         _shrinkMap();
                       },
                       child: RefreshIndicator(
-                          onRefresh: () {
-                            return dispatchFuture(EventsGetAction());
-                          },
+                          onRefresh: () => dispatchFuture(EventsGetAction()),
                           child: ListView.builder(
-                              itemCount: events?.length,
+                              itemCount: _eventsDisplayed?.length,
                               itemBuilder: (BuildContext context, int index) =>
                                   Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: <Widget>[
                                         _buildEvent(
-                                            events[index],
+                                            _eventsDisplayed[index],
                                             userEventStates,
                                             dispatch,
                                             dispatchFuture,
@@ -416,8 +471,12 @@ class _FindEventsScreen extends State<FindEventsScreen>
         void Function(redux.ReduxAction<dynamic>) dispatch,
         Widget child) {
       _markers.clear();
-      // TODO(alexandre): this thing might bug
-      for (final Event event in state.eventsState.events) {
+      _events = state.eventsState.events;
+      if (_events == null) {
+        return const CircularProgressIndicator();
+      }
+      _refreshEvents();
+      for (final Event event in _events) {
         if (event.location != null) {
           _markers[event.id] = Marker(
               markerId: MarkerId(event.id),
@@ -426,13 +485,8 @@ class _FindEventsScreen extends State<FindEventsScreen>
               infoWindow: InfoWindow(title: event.name));
         }
       }
-      return Container(
-          child: _buildFindEvents(
-              state.eventsState.events,
-              state.userState.user.events,
-              state.theme,
-              dispatch,
-              store.dispatchFuture));
+      return _buildFindEvents(state.userState.user.events, state.theme,
+          dispatch, store.dispatchFuture);
     });
   }
 }
