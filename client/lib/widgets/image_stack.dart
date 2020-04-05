@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:inclusive/theme.dart';
-import 'package:inclusive/widgets/cached_image.dart';
+import 'package:outloud/theme.dart';
+import 'package:outloud/widgets/cached_image.dart';
 
 class ImageStack extends StatelessWidget {
   const ImageStack({

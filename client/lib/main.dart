@@ -2,14 +2,14 @@ import 'package:async_redux/async_redux.dart';
 import 'package:flutter/material.dart';
 import 'package:business/app_persistor.dart';
 import 'package:business/app_state.dart';
-import 'package:inclusive/home_screen.dart';
-import 'package:inclusive/register/login.dart';
+import 'package:outloud/home_screen.dart';
+import 'package:outloud/register/login.dart';
 import 'package:business/login/actions/login_action.dart';
 
-import 'package:inclusive/routes.dart';
+import 'package:outloud/routes.dart';
 
-import 'package:inclusive/theme.dart';
-import 'package:inclusive/widgets/loading.dart';
+import 'package:outloud/theme.dart';
+import 'package:outloud/widgets/loading.dart';
 import 'package:provider_for_redux/provider_for_redux.dart';
 
 Store<AppState> store;

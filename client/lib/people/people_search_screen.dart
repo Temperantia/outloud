@@ -3,10 +3,10 @@ import 'package:business/app_state.dart';
 import 'package:business/classes/user.dart';
 import 'package:business/people/actions/people_get_action.dart';
 import 'package:flutter/material.dart';
-import 'package:inclusive/profile/profile_screen.dart';
-import 'package:inclusive/widgets/cached_image.dart';
-import 'package:inclusive/widgets/loading.dart';
-import 'package:inclusive/widgets/view.dart';
+import 'package:outloud/profile/profile_screen.dart';
+import 'package:outloud/widgets/cached_image.dart';
+import 'package:outloud/widgets/loading.dart';
+import 'package:outloud/widgets/view.dart';
 import 'package:provider_for_redux/provider_for_redux.dart';
 import 'package:business/people/people_state.dart';
 

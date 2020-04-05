@@ -1,10 +1,10 @@
 import 'package:async_redux/async_redux.dart' as redux;
 import 'package:business/app_state.dart';
 import 'package:flutter/material.dart';
-import 'package:inclusive/events/find_events_screen.dart';
-import 'package:inclusive/events/my_events_screen.dart';
-import 'package:inclusive/theme.dart';
-import 'package:inclusive/widgets/loading.dart';
+import 'package:outloud/events/find_events_screen.dart';
+import 'package:outloud/events/my_events_screen.dart';
+import 'package:outloud/theme.dart';
+import 'package:outloud/widgets/loading.dart';
 import 'package:provider_for_redux/provider_for_redux.dart';
 
 class EventsWidget extends StatefulWidget {

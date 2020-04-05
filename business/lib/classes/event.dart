@@ -13,7 +13,6 @@ class Event extends Entity {
       List<String> interests = const <String>[],
       this.dateStart,
       this.dateEnd,
-      this.adminIds = const <String>[],
       this.memberIds = const <String>[],
       this.likes = const <String>[],
       this.pic,
@@ -32,9 +31,6 @@ class Event extends Entity {
         dateEnd = snapshot['dateEnd'] == null
             ? null
             : (snapshot['dateEnd'] as Timestamp).toDate(),
-        adminIds = snapshot['adminIds'] == null
-            ? <String>[]
-            : snapshot['adminIds'].cast<String>() as List<String>,
         memberIds = snapshot['memberIds'] == null
             ? <String>[]
             : snapshot['memberIds'].cast<String>() as List<String>,
@@ -54,7 +50,6 @@ class Event extends Entity {
 
   DateTime dateStart;
   DateTime dateEnd;
-  List<String> adminIds;
   List<String> memberIds;
   List<String> likes;
   String pic;
@@ -72,7 +67,6 @@ class Event extends Entity {
         'interests': interests,
         'dateStart': dateStart == null ? null : Timestamp.fromDate(dateStart),
         'dateEnd': dateEnd == null ? null : Timestamp.fromDate(dateEnd),
-        'adminIds': adminIds,
         'memberIds': memberIds,
         'likes': likes,
         'pic': pic,

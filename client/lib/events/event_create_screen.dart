@@ -6,8 +6,8 @@ import 'package:business/classes/event.dart';
 import 'package:business/models/events.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:inclusive/widgets/button.dart';
-import 'package:inclusive/widgets/view.dart';
+import 'package:outloud/widgets/button.dart';
+import 'package:outloud/widgets/view.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:provider_for_redux/provider_for_redux.dart';
 

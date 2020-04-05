@@ -5,8 +5,8 @@ import 'package:business/classes/message.dart';
 import 'package:business/models/message.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:inclusive/theme.dart';
-import 'package:inclusive/widgets/view.dart';
+import 'package:outloud/theme.dart';
+import 'package:outloud/widgets/view.dart';
 import 'package:intl/intl.dart';
 import 'package:provider_for_redux/provider_for_redux.dart';
 

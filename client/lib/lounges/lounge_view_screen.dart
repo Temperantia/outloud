@@ -5,10 +5,10 @@ import 'package:business/app_state.dart';
 import 'package:async_redux/async_redux.dart' as redux;
 import 'package:business/classes/lounge.dart';
 import 'package:flutter/material.dart';
-import 'package:inclusive/theme.dart';
-import 'package:inclusive/widgets/cached_image.dart';
-import 'package:inclusive/widgets/meetup_widget.dart';
-import 'package:inclusive/widgets/view.dart';
+import 'package:outloud/theme.dart';
+import 'package:outloud/widgets/cached_image.dart';
+import 'package:outloud/widgets/meetup_widget.dart';
+import 'package:outloud/widgets/view.dart';
 import 'package:provider_for_redux/provider_for_redux.dart';
 
 class LoungeViewScreen extends StatefulWidget {

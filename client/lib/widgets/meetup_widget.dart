@@ -14,7 +14,7 @@ import 'package:provider_for_redux/provider_for_redux.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import 'package:inclusive/theme.dart';
+import 'package:outloud/theme.dart';
 
 const String googleApiKey = 'AIzaSyCO8sI1kmXRQXqvwQRGrnbAW3IX-VTcCDw';
 

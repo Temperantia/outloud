@@ -4,10 +4,10 @@ import 'package:business/lounges/actions/lounge_create_detail_action.dart';
 import 'package:business/classes/lounge_visibility.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:inclusive/lounges/lounge_create_meetup_screen.dart';
-import 'package:inclusive/theme.dart';
-import 'package:inclusive/widgets/button.dart';
-import 'package:inclusive/widgets/view.dart';
+import 'package:outloud/lounges/lounge_create_meetup_screen.dart';
+import 'package:outloud/theme.dart';
+import 'package:outloud/widgets/button.dart';
+import 'package:outloud/widgets/view.dart';
 import 'package:provider_for_redux/provider_for_redux.dart';
 
 class LoungeCreateDetailScreen extends StatefulWidget {

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:inclusive/theme.dart';
+import 'package:outloud/theme.dart';
 
 class Button extends StatelessWidget {
   const Button(

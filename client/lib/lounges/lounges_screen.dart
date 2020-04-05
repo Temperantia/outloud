@@ -8,14 +8,14 @@ import 'package:business/models/user.dart';
 import 'package:flutter/material.dart';
 import 'package:business/lounges/actions/lounge_join_action.dart';
 import 'package:business/lounges/actions/lounge_leave_action.dart';
-import 'package:inclusive/functions/loader_animation.dart';
-import 'package:inclusive/lounges/lounge_chat_screen.dart';
-import 'package:inclusive/lounges/lounge_create_detail_screen.dart';
+import 'package:outloud/functions/loader_animation.dart';
+import 'package:outloud/lounges/lounge_chat_screen.dart';
+import 'package:outloud/lounges/lounge_create_detail_screen.dart';
 
-import 'package:inclusive/theme.dart';
-import 'package:inclusive/widgets/button.dart';
-import 'package:inclusive/widgets/cached_image.dart';
-import 'package:inclusive/widgets/view.dart';
+import 'package:outloud/theme.dart';
+import 'package:outloud/widgets/button.dart';
+import 'package:outloud/widgets/cached_image.dart';
+import 'package:outloud/widgets/view.dart';
 import 'package:provider_for_redux/provider_for_redux.dart';
 
 class LoungesScreen extends StatefulWidget {

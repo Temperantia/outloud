@@ -4,11 +4,11 @@ import 'package:business/app_state.dart';
 import 'package:business/classes/user.dart';
 import 'package:flutter/material.dart';
 
-import 'package:inclusive/register/register_2.dart';
-import 'package:inclusive/theme.dart';
-import 'package:inclusive/widgets/button.dart';
-import 'package:inclusive/widgets/cached_image.dart';
-import 'package:inclusive/widgets/view.dart';
+import 'package:outloud/register/register_2.dart';
+import 'package:outloud/theme.dart';
+import 'package:outloud/widgets/button.dart';
+import 'package:outloud/widgets/cached_image.dart';
+import 'package:outloud/widgets/view.dart';
 import 'package:provider_for_redux/provider_for_redux.dart';
 
 class Register1Screen extends StatefulWidget {

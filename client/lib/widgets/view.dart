@@ -5,11 +5,11 @@ import 'package:business/classes/user.dart';
 import 'package:business/events/actions/events_get_action.dart';
 import 'package:business/actions/app_disconnect_action.dart';
 import 'package:flutter/material.dart';
-import 'package:inclusive/profile/profile_screen.dart';
+import 'package:outloud/profile/profile_screen.dart';
 
-import 'package:inclusive/theme.dart';
-import 'package:inclusive/widgets/bubble_bar.dart';
-import 'package:inclusive/widgets/cached_image.dart';
+import 'package:outloud/theme.dart';
+import 'package:outloud/widgets/bubble_bar.dart';
+import 'package:outloud/widgets/cached_image.dart';
 import 'package:provider_for_redux/provider_for_redux.dart';
 
 class View extends StatefulWidget {

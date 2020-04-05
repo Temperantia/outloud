@@ -4,12 +4,12 @@ import 'package:business/classes/chat.dart';
 import 'package:business/classes/message.dart';
 import 'package:business/classes/user.dart';
 import 'package:flutter/material.dart';
-import 'package:inclusive/chats/chat_screen.dart';
-import 'package:inclusive/people/people_search_screen.dart';
-import 'package:inclusive/profile/profile_screen.dart';
-import 'package:inclusive/widgets/button.dart';
-import 'package:inclusive/widgets/cached_image.dart';
-import 'package:inclusive/widgets/loading.dart';
+import 'package:outloud/chats/chat_screen.dart';
+import 'package:outloud/people/people_search_screen.dart';
+import 'package:outloud/profile/profile_screen.dart';
+import 'package:outloud/widgets/button.dart';
+import 'package:outloud/widgets/cached_image.dart';
+import 'package:outloud/widgets/loading.dart';
 import 'package:provider_for_redux/provider_for_redux.dart';
 
 import '../theme.dart';

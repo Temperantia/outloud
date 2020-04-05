@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import 'package:inclusive/theme.dart';
-import 'package:inclusive/widgets/background.dart';
-import 'package:inclusive/widgets/logo.dart';
+import 'package:outloud/theme.dart';
+import 'package:outloud/widgets/background.dart';
+import 'package:outloud/widgets/logo.dart';
 
 class Loading extends StatelessWidget {
   @override

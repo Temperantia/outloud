@@ -3,11 +3,11 @@ import 'package:business/actions/app_navigate_action.dart';
 import 'package:business/app.dart';
 import 'package:business/app_state.dart';
 import 'package:flutter/material.dart';
-import 'package:inclusive/events/events_widget.dart';
-import 'package:inclusive/home_widget.dart';
-import 'package:inclusive/lounges/lounges_widget.dart';
-import 'package:inclusive/people/people_widget.dart';
-import 'package:inclusive/widgets/view.dart';
+import 'package:outloud/events/events_widget.dart';
+import 'package:outloud/home_widget.dart';
+import 'package:outloud/lounges/lounges_widget.dart';
+import 'package:outloud/people/people_widget.dart';
+import 'package:outloud/widgets/view.dart';
 import 'package:provider_for_redux/provider_for_redux.dart';
 
 class HomeScreen extends StatefulWidget {

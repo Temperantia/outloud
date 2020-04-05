@@ -3,7 +3,7 @@ import 'package:business/app_state.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'package:inclusive/theme.dart';
+import 'package:outloud/theme.dart';
 
 final Container Function(String image, {ThemeStyle themeStyle}) _buildIcon =
     (String image, {ThemeStyle themeStyle}) => Container(

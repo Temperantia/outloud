@@ -10,11 +10,11 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
-import 'package:inclusive/theme.dart';
-import 'package:inclusive/widgets/bubble_bar.dart';
-import 'package:inclusive/widgets/button.dart';
-import 'package:inclusive/widgets/cached_image.dart';
-import 'package:inclusive/widgets/view.dart';
+import 'package:outloud/theme.dart';
+import 'package:outloud/widgets/bubble_bar.dart';
+import 'package:outloud/widgets/button.dart';
+import 'package:outloud/widgets/cached_image.dart';
+import 'package:outloud/widgets/view.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:provider_for_redux/provider_for_redux.dart';
 
