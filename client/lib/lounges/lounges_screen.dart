@@ -8,6 +8,7 @@ import 'package:business/models/user.dart';
 import 'package:flutter/material.dart';
 import 'package:business/lounges/actions/lounge_join_action.dart';
 import 'package:business/lounges/actions/lounge_leave_action.dart';
+import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:outloud/functions/loader_animation.dart';
 import 'package:outloud/lounges/lounge_chat_screen.dart';
 import 'package:outloud/lounges/lounge_create_detail_screen.dart';
@@ -83,8 +84,11 @@ class _LoungesScreenState extends State<LoungesScreen>
                       if (owner != null)
                         Text(
                             state.userState.user.id == owner.id
-                                ? 'Your Lounge'
-                                : owner.name + '\'s Lounge',
+                                ? FlutterI18n.translate(
+                                    context, 'LOUNGES.YOUR_LOUNGE')
+                                : owner.name +
+                                    FlutterI18n.translate(
+                                        context, 'LOUNGES.SOMEONES_LOUNGE'),
                             style: const TextStyle(
                                 color: black,
                                 fontSize: 13,
@@ -113,8 +117,10 @@ class _LoungesScreenState extends State<LoungesScreen>
                           },
                           child: Text(
                               lounge.memberIds.contains(state.userState.user.id)
-                                  ? '< LEAVE'
-                                  : ' > JOIN ', // TODO(me): add arrow icon
+                                  ? FlutterI18n.translate(
+                                      context, 'LOUNGES.LEAVE')
+                                  : FlutterI18n.translate(context,
+                                      'LOUNGES.JOIN'), // TODO(me): add arrow icon
                               style: const TextStyle(
                                   color: orange,
                                   fontSize: 15,
@@ -123,7 +129,8 @@ class _LoungesScreenState extends State<LoungesScreen>
                 Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
-                      Text('$availableSlots slot$s available'),
+                      Text(
+                          '$availableSlots ${FlutterI18n.translate(context, "LOUNGES.SLOT")}$s ${FlutterI18n.translate(context, "LOUNGES.AVAILABLE")}'),
                       Row(children: <Widget>[
                         for (User member in lounge.members)
                           if (member.id != lounge.owner)
@@ -159,9 +166,10 @@ class _LoungesScreenState extends State<LoungesScreen>
               constraints: BoxConstraints.expand(
                 height: Theme.of(context).textTheme.display1.fontSize * 1.1,
               ),
-              child: const Text('FOR THE EVENT',
+              child: Text(
+                  FlutterI18n.translate(context, 'LOUNGES.FOR_THE_EVENT'),
                   textAlign: TextAlign.left,
-                  style: TextStyle(
+                  style: const TextStyle(
                       color: black,
                       fontSize: 13,
                       fontWeight: FontWeight.w500))),
@@ -213,14 +221,13 @@ class _LoungesScreenState extends State<LoungesScreen>
   Widget _noLoungeWidget(void Function(redux.ReduxAction<AppState>) dispatch) {
     return Column(children: <Widget>[
       Container(
-        width: 320,
-        height: 300,
-        child: Image.asset('images/lounges_empty_cat.png'),
-      ),
+          width: 320,
+          height: 300,
+          child: Image.asset('images/lounges_empty_cat.png')),
       Container(
           margin: const EdgeInsets.only(top: 10),
           child: Button(
-              text: 'CREATE YOUR OWN LOUNGE',
+              text: FlutterI18n.translate(context, 'LOUNGES.CREATE_LOUNGE'),
               backgroundColor: blueDark,
               backgroundOpacity: 1,
               fontWeight: FontWeight.w700,
@@ -244,7 +251,7 @@ class _LoungesScreenState extends State<LoungesScreen>
       final List<Lounge> lounges =
           state.userState.eventLounges[widget.event.id];
       return View(
-          title: 'BROWSING LOUNGES',
+          title: FlutterI18n.translate(context, 'LOUNGES.BROWSING_LOUNGES'),
           child: Column(children: <Widget>[
             Expanded(
                 child: Column(children: <Widget>[
@@ -255,9 +262,11 @@ class _LoungesScreenState extends State<LoungesScreen>
                 Container(
                     margin: const EdgeInsets.only(top: 10, bottom: 20),
                     child: Text(
-                        '${lounges.length} lounge' +
+                        '${lounges.length} ${FlutterI18n.translate(context, "LOUNGES.LOUNGE")}' +
                             (lounges.length > 1 ? 's' : '') +
-                            ' available for this event',
+                            ' ' +
+                            FlutterI18n.translate(
+                                context, 'LOUNGES.AVAILABLE_FOR_EVENT'),
                         style: const TextStyle(
                             color: orange,
                             fontSize: 14,

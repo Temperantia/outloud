@@ -17,6 +17,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:outloud/events/event_attending_screen.dart';
 import 'package:outloud/functions/loader_animation.dart';
 import 'package:outloud/lounges/lounge_chat_screen.dart';
@@ -122,92 +123,91 @@ class _EventScreenState extends State<EventScreen>
                             offset: const Offset(0.0, 10.0),
                           )
                         ]),
-                    child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
-                          const Icon(
-                            MdiIcons.handRight,
-                            color: pink,
-                            size: 60,
-                          ),
-                          const Text('Hold Up',
-                              style: TextStyle(
-                                  color: pink,
-                                  fontSize: 28,
-                                  fontWeight: FontWeight.w700)),
-                          const SizedBox(
-                            height: 15,
-                          ),
-                          Container(
-                            padding: const EdgeInsets.only(
-                                left: 18, right: 18, bottom: 10),
-                            child: const Text(
-                                'If you unattend this event it will delete/leave any lounge you joined for this event',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    color: pink,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w500)),
-                          ),
-                          Container(
-                            padding: const EdgeInsets.only(
-                                left: 18, right: 18, bottom: 15),
-                            child: const Text('Do you still want to continue?',
-                                textAlign: TextAlign.justify,
-                                style: TextStyle(
-                                    color: pink,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w500)),
-                          ),
-                          SizedBox(
-                              child: Container(
-                                  color: pink,
-                                  child: Column(children: <Widget>[
-                                    Container(
-                                        padding: const EdgeInsets.only(top: 10),
-                                        child: Align(
-                                          alignment: Alignment.bottomCenter,
-                                          child: FlatButton(
-                                              color: white,
-                                              onPressed: () {
-                                                Navigator.pop(context);
-                                              },
-                                              child: Container(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          left: 20, right: 20),
-                                                  child: const Text(
-                                                      'No, Take Me Back',
-                                                      style: TextStyle(
-                                                          color: pink,
-                                                          fontSize: 16,
-                                                          fontWeight: FontWeight
-                                                              .w500)))),
-                                        )),
-                                    Container(
-                                        padding: const EdgeInsets.only(
-                                            bottom: 5, top: 5),
-                                        child: Align(
-                                            alignment: Alignment.bottomCenter,
-                                            child: FlatButton(
-                                                onPressed: () async {
-                                                  await showLoaderAnimation(
-                                                      context, this,
-                                                      animationDuration: 600);
-                                                  Navigator.pop(context);
-                                                  dispatch(
-                                                      EventUnRegisterAction(
-                                                          widget.event));
-                                                },
-                                                child: const Text(
-                                                    'YES, Unattend Event',
-                                                    style: TextStyle(
-                                                        color: white,
-                                                        fontSize: 16,
-                                                        fontWeight:
-                                                            FontWeight.w500)))))
-                                  ])))
-                        ]))
+                    child: Column(mainAxisSize: MainAxisSize.min, children: <
+                        Widget>[
+                      const Icon(
+                        MdiIcons.handRight,
+                        color: pink,
+                        size: 60,
+                      ),
+                      Text(FlutterI18n.translate(context, 'EVENT.HOLD_UP'),
+                          style: const TextStyle(
+                              color: pink,
+                              fontSize: 28,
+                              fontWeight: FontWeight.w700)),
+                      const SizedBox(height: 15),
+                      Container(
+                        padding: const EdgeInsets.only(
+                            left: 18, right: 18, bottom: 10),
+                        child: Text(
+                            FlutterI18n.translate(
+                                context, 'EVENT.UNATTEND_WARNING'),
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(
+                                color: pink,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500)),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.only(
+                            left: 18, right: 18, bottom: 15),
+                        child: Text(
+                            FlutterI18n.translate(context, 'EVENT.CONTINUE'),
+                            textAlign: TextAlign.justify,
+                            style: const TextStyle(
+                                color: pink,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500)),
+                      ),
+                      SizedBox(
+                          child: Container(
+                              color: pink,
+                              child: Column(children: <Widget>[
+                                Container(
+                                    padding: const EdgeInsets.only(top: 10),
+                                    child: Align(
+                                      alignment: Alignment.bottomCenter,
+                                      child: FlatButton(
+                                          color: white,
+                                          onPressed: () {
+                                            Navigator.pop(context);
+                                          },
+                                          child: Container(
+                                              padding: const EdgeInsets.only(
+                                                  left: 20, right: 20),
+                                              child: Text(
+                                                  FlutterI18n.translate(context,
+                                                      'EVENT.TAKE_ME_BACK'),
+                                                  style: const TextStyle(
+                                                      color: pink,
+                                                      fontSize: 16,
+                                                      fontWeight:
+                                                          FontWeight.w500)))),
+                                    )),
+                                Container(
+                                    padding: const EdgeInsets.only(
+                                        bottom: 5, top: 5),
+                                    child: Align(
+                                        alignment: Alignment.bottomCenter,
+                                        child: FlatButton(
+                                            onPressed: () async {
+                                              await showLoaderAnimation(
+                                                  context, this,
+                                                  animationDuration: 600);
+                                              Navigator.pop(context);
+                                              dispatch(EventUnRegisterAction(
+                                                  widget.event));
+                                            },
+                                            child: Text(
+                                                FlutterI18n.translate(
+                                                    context, 'EVENT.UNATTEND'),
+                                                style: const TextStyle(
+                                                    color: white,
+                                                    fontSize: 16,
+                                                    fontWeight:
+                                                        FontWeight.w500)))))
+                              ])))
+                    ]))
               ]));
         });
   }
@@ -244,30 +244,28 @@ class _EventScreenState extends State<EventScreen>
                           const SizedBox(
                             height: 15,
                           ),
-                          const Text('Lounges Available!',
-                              style: TextStyle(
+                          Text(
+                              FlutterI18n.translate(
+                                  context, 'EVENT.LOUNGES_AVAILABLE'),
+                              style: const TextStyle(
                                   color: white,
                                   fontSize: 28,
                                   fontWeight: FontWeight.w700)),
-                          const SizedBox(
-                            height: 15,
-                          ),
+                          const SizedBox(height: 15),
                           Container(
                             padding: const EdgeInsets.only(
                                 left: 18, right: 18, bottom: 10),
-                            child: const Text(
-                                'You can now join a lounge. Joining a lounge lets you enjoy the event with people just like you.',
+                            child: Text(
+                                FlutterI18n.translate(context, 'EVENT.JOINING'),
                                 textAlign: TextAlign.center,
-                                style: TextStyle(
+                                style: const TextStyle(
                                     color: white,
                                     fontSize: 16,
                                     fontWeight: FontWeight.w500)),
                           ),
                           SizedBox(
                               child: GestureDetector(
-                                  onTap: () {
-                                    Navigator.pop(context);
-                                  },
+                                  onTap: () => Navigator.pop(context),
                                   child: Container(
                                       color: white,
                                       child: Column(children: <Widget>[
@@ -276,8 +274,11 @@ class _EventScreenState extends State<EventScreen>
                                             child: Align(
                                                 alignment:
                                                     Alignment.bottomCenter,
-                                                child: const Text('GOT IT',
-                                                    style: TextStyle(
+                                                child: Text(
+                                                    FlutterI18n.translate(
+                                                        context,
+                                                        'EVENT.GOT_IT'),
+                                                    style: const TextStyle(
                                                         color: Colors.green,
                                                         fontSize: 24,
                                                         fontWeight:
@@ -302,9 +303,7 @@ class _EventScreenState extends State<EventScreen>
           ' ' +
           _place.locality;
     }
-    setState(() {
-      _adressEvent = _address;
-    });
+    setState(() => _adressEvent = _address);
     return 0;
   }
 
@@ -423,16 +422,6 @@ class _EventScreenState extends State<EventScreen>
                       margin: const EdgeInsets.all(5),
                       padding: const EdgeInsets.all(5),
                       color: Colors.pink[100],
-                      child: const Text(
-                          '21 and Over', // TODO(alexandre): firestore
-                          style: TextStyle(
-                              color: pink,
-                              fontSize: 14,
-                              fontWeight: FontWeight.w600))),
-                  Container(
-                      margin: const EdgeInsets.all(5),
-                      padding: const EdgeInsets.all(5),
-                      color: Colors.pink[100],
                       child: Text(widget.event.price,
                           style: const TextStyle(
                               color: pink,
@@ -469,12 +458,12 @@ class _EventScreenState extends State<EventScreen>
                         child: Image.asset('images/iconLounge.png')),
                     Column(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        children: const <Widget>[
-                          Text('VIEW MY',
-                              style: TextStyle(
+                        children: <Widget>[
+                          Text(FlutterI18n.translate(context, 'EVENT.VIEW_MY'),
+                              style: const TextStyle(
                                   color: white, fontWeight: FontWeight.bold)),
-                          Text('LOUNGE',
-                              style: TextStyle(
+                          Text(FlutterI18n.translate(context, 'EVENT.LOUNGE'),
+                              style: const TextStyle(
                                   color: white, fontWeight: FontWeight.bold)),
                         ]),
                   ])));
@@ -531,8 +520,8 @@ class _EventScreenState extends State<EventScreen>
                           width: 20.0,
                           height: 20.0,
                           child: Image.asset('images/iconLounge.png')),
-                      const Text('ATTEND',
-                          style: TextStyle(
+                      Text(FlutterI18n.translate(context, 'EVENT.ATTEND'),
+                          style: const TextStyle(
                               color: white, fontWeight: FontWeight.bold)),
                     ]),
                 const Text('FOR LOUNGES', style: TextStyle(color: white)),
@@ -587,8 +576,10 @@ class _EventScreenState extends State<EventScreen>
                                             .toString(),
                                         style: const TextStyle(color: white))
                                   ]),
-                              const Text('VIEW LIST',
-                                  style: TextStyle(color: white))
+                              Text(
+                                  FlutterI18n.translate(
+                                      context, 'EVENT.VIEW_LIST'),
+                                  style: const TextStyle(color: white))
                             ]))))
               ]))
             : Container(
@@ -619,8 +610,10 @@ class _EventScreenState extends State<EventScreen>
                               ])),
                           Container(
                               padding: const EdgeInsets.only(bottom: 5),
-                              child: const Text('ATTENDING',
-                                  style: TextStyle(
+                              child: Text(
+                                  FlutterI18n.translate(
+                                      context, 'EVENT.ATTENDING'),
+                                  style: const TextStyle(
                                       color: white,
                                       fontSize: 12,
                                       fontWeight: FontWeight.w400)))
@@ -633,8 +626,9 @@ class _EventScreenState extends State<EventScreen>
             header: Container(
               color: orange,
               padding: const EdgeInsets.all(10),
-              child: const Text('EVENT DESCRIPTION',
-                  style: TextStyle(
+              child: Text(
+                  FlutterI18n.translate(context, 'EVENT.EVENT_DESCRIPTION'),
+                  style: const TextStyle(
                       color: white, fontSize: 16, fontWeight: FontWeight.w600)),
             ),
             theme: const ExpandableThemeData(iconColor: orange),
@@ -670,7 +664,7 @@ class _EventScreenState extends State<EventScreen>
     ]);
   }
 
-  Widget _buildLiveFeedSponsor() {
+/*   Widget _buildLiveFeedSponsor() {
     return Container(
         color: Colors.grey[400],
         child: Row(children: <Widget>[
@@ -707,7 +701,7 @@ class _EventScreenState extends State<EventScreen>
                             fontWeight: FontWeight.w700))
                   ]))
         ]));
-  }
+  } */
 
   Widget _buildLiveFeed() {
     if (widget.event.chatMembers == null) {
@@ -793,7 +787,7 @@ class _EventScreenState extends State<EventScreen>
         void Function(redux.ReduxAction<dynamic>) dispatch,
         Widget child) {
       return View(
-          title: 'EVENT DETAILS',
+          title: FlutterI18n.translate(context, 'EVENT.EVENT_DETAILS'),
           actions: widget.event == null
               ? null
               : Padding(
@@ -828,7 +822,7 @@ class _EventScreenState extends State<EventScreen>
                                 _buildEventInfo(state, dispatch),
                                 _buildDescription(),
                                 _buildBanner(),
-                                _buildLiveFeedSponsor(),
+                                //_buildLiveFeedSponsor(),
                                 _buildLiveFeed()
                               ]))),
                   Container(
@@ -849,9 +843,10 @@ class _EventScreenState extends State<EventScreen>
                         Expanded(
                             child: TextField(
                                 controller: _messageController,
-                                decoration: const InputDecoration.collapsed(
-                                    hintText: 'Join in the fun',
-                                    hintStyle: TextStyle(color: white)))),
+                                decoration: InputDecoration.collapsed(
+                                    hintText: FlutterI18n.translate(
+                                        context, 'EVENT.MESSAGE'),
+                                    hintStyle: const TextStyle(color: white)))),
                         Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: GestureDetector(

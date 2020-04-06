@@ -4,6 +4,7 @@ import 'package:business/classes/event.dart';
 import 'package:business/classes/lounge.dart';
 import 'package:business/lounges/actions/lounge_create_action.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:outloud/lounges/lounge_create_detail_screen.dart';
 import 'package:outloud/theme.dart';
 import 'package:outloud/widgets/button.dart';
@@ -66,7 +67,7 @@ class _LoungeCreateScreenState extends State<LoungeCreateScreen> {
               null)
           .toList();
       return View(
-          title: 'CREATE LOUNGE',
+          title: FlutterI18n.translate(context, 'LOUNGE_CREATE.CREATE_LOUNGE'),
           onBack: () => Navigator.popUntil(
               context, (Route<dynamic> route) => route.isFirst),
           backIcon: Icons.close,
@@ -79,24 +80,27 @@ class _LoungeCreateScreenState extends State<LoungeCreateScreen> {
                       Row(children: <Widget>[
                         Container(
                             padding: const EdgeInsets.symmetric(vertical: 10.0),
-                            child: const Text('CHOOSE AN EVENT FOR THIS LOUNGE',
-                                style: TextStyle(fontWeight: FontWeight.w900)))
+                            child: Text(
+                                FlutterI18n.translate(
+                                    context, 'LOUNGE_CREATE.CHOOSE_EVENT'),
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.w900)))
                       ]),
                       Expanded(
                           child: ListView.builder(
-                        itemCount: userEvents.length,
-                        itemBuilder: (BuildContext context, int index) =>
-                            _buildUserEvent(userEvents[index], state.theme),
-                      )),
+                              itemCount: userEvents.length,
+                              itemBuilder: (BuildContext context, int index) =>
+                                  _buildUserEvent(
+                                      userEvents[index], state.theme))),
                     ]))),
             if (_selected != null)
               Expanded(
-                  child: Container(
-                      child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
                     Button(
-                        text: 'NEXT',
+                        text: FlutterI18n.translate(
+                            context, 'LOUNGE_CREATE.NEXT'),
                         width: 150.0,
                         onPressed: () {
                           dispatch(LoungeCreateAction(
@@ -105,7 +109,7 @@ class _LoungeCreateScreenState extends State<LoungeCreateScreen> {
                           dispatch(redux.NavigateAction<AppState>.pushNamed(
                               LoungeCreateDetailScreen.id));
                         }),
-                  ]))),
+                  ])),
           ]));
     });
   }

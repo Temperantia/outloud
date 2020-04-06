@@ -4,6 +4,7 @@ import 'package:business/lounges/actions/lounge_create_detail_action.dart';
 import 'package:business/classes/lounge_visibility.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:outloud/lounges/lounge_create_meetup_screen.dart';
 import 'package:outloud/theme.dart';
 import 'package:outloud/widgets/button.dart';
@@ -40,8 +41,10 @@ class _LoungeCreateDetailScreenState extends State<LoungeCreateDetailScreen> {
               constraints: BoxConstraints.expand(
                 height: Theme.of(context).textTheme.display1.fontSize * 1.1,
               ),
-              child: const Text('LOUNGE VISIBILITY',
-                  style: TextStyle(
+              child: Text(
+                  FlutterI18n.translate(
+                      context, 'LOUNGE_CREATE_DETAIL.LOUNGE_VISIBILITY'),
+                  style: const TextStyle(
                       color: black,
                       fontSize: 15,
                       fontWeight: FontWeight.w700))),
@@ -53,7 +56,8 @@ class _LoungeCreateDetailScreenState extends State<LoungeCreateDetailScreen> {
               onChanged: (LoungeVisibility visibility) =>
                   _visibility = visibility,
             ),
-            Text('PUBLIC', style: textStyleCardTitle(state.theme))
+            Text(FlutterI18n.translate(context, 'LOUNGE_CREATE_DETAIL.PUBLIC'),
+                style: textStyleCardTitle(state.theme))
           ])
         ]));
   }
@@ -66,8 +70,10 @@ class _LoungeCreateDetailScreenState extends State<LoungeCreateDetailScreen> {
               constraints: BoxConstraints.expand(
                 height: Theme.of(context).textTheme.display1.fontSize * 1.1,
               ),
-              child: const Text('MAX MEMBER COUNT',
-                  style: TextStyle(
+              child: Text(
+                  FlutterI18n.translate(
+                      context, 'LOUNGE_CREATE_DETAIL.MAX_MEMBER_COUNT'),
+                  style: const TextStyle(
                       color: black,
                       fontSize: 15,
                       fontWeight: FontWeight.w700))),
@@ -145,15 +151,19 @@ class _LoungeCreateDetailScreenState extends State<LoungeCreateDetailScreen> {
         child: Column(children: <Widget>[
           Container(
               padding: const EdgeInsets.all(10.0),
-              child: const Text(
-                  'Upgrade your lounge for more members, bigger reach, and featured spolight',
+              child: Text(
+                  FlutterI18n.translate(
+                      context, 'LOUNGE_CREATE_DETAIL.PREMIUM_UPGRADE'),
                   textAlign: TextAlign.center,
-                  style: TextStyle(
+                  style: const TextStyle(
                       color: pinkBright,
                       fontSize: 16,
                       fontWeight: FontWeight.w400))),
-          const Button(
-              text: 'UPGRADE   >', width: 300, backgroundColor: pinkBright)
+          Button(
+              text: FlutterI18n.translate(
+                  context, 'LOUNGE_CREATE_DETAIL.UPGRADE'),
+              width: 300,
+              backgroundColor: pinkBright)
         ]));
   }
 
@@ -165,8 +175,10 @@ class _LoungeCreateDetailScreenState extends State<LoungeCreateDetailScreen> {
               constraints: BoxConstraints.expand(
                 height: Theme.of(context).textTheme.display1.fontSize * 1.1,
               ),
-              child: const Text('LOUNGE DESCRIPTION',
-                  style: TextStyle(
+              child: Text(
+                  FlutterI18n.translate(
+                      context, 'LOUNGE_CREATE_DETAIL.LOUNGE_DESCRIPTION'),
+                  style: const TextStyle(
                       color: black,
                       fontSize: 15,
                       fontWeight: FontWeight.w700))),
@@ -183,10 +195,11 @@ class _LoungeCreateDetailScreenState extends State<LoungeCreateDetailScreen> {
                   inputFormatters: <TextInputFormatter>[
                     LengthLimitingTextInputFormatter(100),
                   ],
-                  decoration: const InputDecoration(
-                      hintStyle: TextStyle(color: orange),
+                  decoration: InputDecoration(
+                      hintStyle: const TextStyle(color: orange),
                       border: InputBorder.none,
-                      hintText: 'Brief description of your group.')))
+                      hintText: FlutterI18n.translate(
+                          context, 'LOUNGE_CREATE_DETAIL.GROUP_DESCRIPTION'))))
         ]));
   }
 
@@ -198,7 +211,8 @@ class _LoungeCreateDetailScreenState extends State<LoungeCreateDetailScreen> {
         void Function(ReduxAction<AppState>) dispatch,
         Widget child) {
       return View(
-          title: 'CREATE LOUNGE',
+          title: FlutterI18n.translate(
+              context, 'LOUNGE_CREATE_DETAIL.CREATE_LOUNGE'),
           onBack: () => Navigator.popUntil(
               context, (Route<dynamic> route) => route.isFirst),
           backIcon: Icons.close,
@@ -219,18 +233,17 @@ class _LoungeCreateDetailScreenState extends State<LoungeCreateDetailScreen> {
                               ])
                         ])))),
             Expanded(
-                child: Container(
-                    child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
                   Button(
-                      text: 'BACK',
-                      onPressed: () {
-                        dispatch(NavigateAction<AppState>.pop());
-                      },
+                      text: FlutterI18n.translate(
+                          context, 'LOUNGE_CREATE_DETAIL.BACK'),
+                      onPressed: () => dispatch(NavigateAction<AppState>.pop()),
                       paddingRight: 5),
                   Button(
-                      text: 'NEXT',
+                      text: FlutterI18n.translate(
+                          context, 'LOUNGE_CREATE_DETAIL.NEXT'),
                       onPressed: () {
                         dispatch(LoungeCreateDetailAction(_visibility,
                             _limit.toInt(), _descriptionController.text));
@@ -238,7 +251,7 @@ class _LoungeCreateDetailScreenState extends State<LoungeCreateDetailScreen> {
                             LoungeCreateMeetupScreen.id));
                       },
                       paddingLeft: 5)
-                ])))
+                ]))
           ]));
     });
   }

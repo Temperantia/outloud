@@ -3,6 +3,7 @@ import 'package:business/actions/app_navigate_action.dart';
 import 'package:business/app.dart';
 import 'package:business/app_state.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:outloud/events/events_widget.dart';
 import 'package:outloud/home_widget.dart';
 import 'package:outloud/lounges/lounges_widget.dart';
@@ -40,16 +41,19 @@ class _HomeScreenState extends State<HomeScreen>
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-              title: const Text('PERMISSION WARNING'),
-              content: const Text('YOU SHOULD ALLOW LOCATION PERMISSION !'),
+              title: Text(
+                  FlutterI18n.translate(context, 'HOME.PERMISSION_WARNING')),
+              content:
+                  Text(FlutterI18n.translate(context, 'HOME.ALLOW_PERMISSION')),
               actions: <Widget>[
                 FlatButton(
-                    child: const Text('NO, THANKS'),
+                    child: Text(FlutterI18n.translate(context, 'HOME.REFUSE')),
                     onPressed: () {
                       Navigator.pop(context);
                     }),
                 FlatButton(
-                    child: const Text('GO to settings'),
+                    child:
+                        Text(FlutterI18n.translate(context, 'HOME.SETTINGS')),
                     onPressed: () {
                       permissionLocation.openAppSettings();
                     })

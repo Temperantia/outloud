@@ -2,6 +2,7 @@ import 'package:async_redux/async_redux.dart';
 import 'package:business/app_state.dart';
 import 'package:business/login/actions/login_interests_action.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:outloud/register/register_3.dart';
 import 'package:outloud/theme.dart';
 import 'package:outloud/widgets/button.dart';
@@ -16,29 +17,7 @@ class Register2Screen extends StatefulWidget {
 }
 
 class _Register2ScreenState extends State<Register2Screen> {
-  final List<String> _interests = <String>[
-    'Food & Drink',
-    'Art',
-    'Fashion & Beauty',
-    'Outdoors & Adventure',
-    'Sport',
-    'Fitness',
-    'Tech',
-    'Health & Wellness',
-    'Self Growth',
-    'Photography',
-    'Writing',
-    'Culture & Language',
-    'Music',
-    'Activism',
-    'Film',
-    'Gaming',
-    'Beliefs',
-    'Books',
-    'Dance',
-    'Pet',
-    'Craft'
-  ];
+  List<String> _interests;
 
   final Map<String, bool> _selected = <String, bool>{};
 
@@ -90,6 +69,29 @@ class _Register2ScreenState extends State<Register2Screen> {
         AppState state,
         void Function(ReduxAction<dynamic>) dispatch,
         Widget child) {
+      _interests = <String>[
+        FlutterI18n.translate(context, 'INTERESTS.FOOD_AND_DRINK'),
+        FlutterI18n.translate(context, 'INTERESTS.ART'),
+        FlutterI18n.translate(context, 'INTERESTS.FASHION_AND_BEAUTY'),
+        FlutterI18n.translate(context, 'INTERESTS.OUTDOORS_AND_ADVENTURE'),
+        FlutterI18n.translate(context, 'INTERESTS.SPORT'),
+        FlutterI18n.translate(context, 'INTERESTS.FITNESS'),
+        FlutterI18n.translate(context, 'INTERESTS.TECH'),
+        FlutterI18n.translate(context, 'INTERESTS.HEALTH_AND_WELLNESS'),
+        FlutterI18n.translate(context, 'INTERESTS.SELF_GROWTH'),
+        FlutterI18n.translate(context, 'INTERESTS.PHOTOGRAPHY'),
+        FlutterI18n.translate(context, 'INTERESTS.WRITING'),
+        FlutterI18n.translate(context, 'INTERESTS.CULTURE_AND_LANGUAGE'),
+        FlutterI18n.translate(context, 'INTERESTS.MUSIC'),
+        FlutterI18n.translate(context, 'INTERESTS.ACTIVISM'),
+        FlutterI18n.translate(context, 'INTERESTS.FILM'),
+        FlutterI18n.translate(context, 'INTERESTS.GAMING'),
+        FlutterI18n.translate(context, 'INTERESTS.BELIEFS'),
+        FlutterI18n.translate(context, 'INTERESTS.BOOKS'),
+        FlutterI18n.translate(context, 'INTERESTS.DANCE'),
+        FlutterI18n.translate(context, 'INTERESTS.PET'),
+        FlutterI18n.translate(context, 'INTERESTS.CRAFT'),
+      ];
       return View(
           showAppBar: false,
           showNavBar: false,
@@ -124,17 +126,22 @@ class _Register2ScreenState extends State<Register2Screen> {
                                     onTap: () => dispatch(
                                         NavigateAction<AppState>.pushNamed(
                                             Register3Screen.id)),
-                                    child: const Text('Skip >',
-                                        style: TextStyle(color: grey)))))
+                                    child: Text(
+                                        FlutterI18n.translate(
+                                            context, 'REGISTER_2.SKIP'),
+                                        style: const TextStyle(color: grey)))))
                       ]),
                       Expanded(
                           flex: 7,
                           child: ListView(children: <Widget>[
-                            const Text('Tell us about what interests you',
-                                style: TextStyle(fontSize: 20.0)),
-                            const Text(
-                                'Help us find people and events for you that you\'ll really enjoy.',
-                                style: TextStyle(color: grey)),
+                            Text(
+                                FlutterI18n.translate(
+                                    context, 'REGISTER_2.TITLE'),
+                                style: const TextStyle(fontSize: 20.0)),
+                            Text(
+                                FlutterI18n.translate(
+                                    context, 'REGISTER_2.SUBTITLE'),
+                                style: const TextStyle(color: grey)),
                             Container(
                                 width: MediaQuery.of(context).size.width * 0.9,
                                 height:
@@ -153,12 +160,14 @@ class _Register2ScreenState extends State<Register2Screen> {
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: <Widget>[
                             Button(
-                                text: 'BACK',
+                                text: FlutterI18n.translate(
+                                    context, 'REGISTER_2.BACK'),
                                 width: MediaQuery.of(context).size.width * 0.4,
                                 onPressed: () =>
                                     dispatch(NavigateAction<AppState>.pop())),
                             Button(
-                                text: 'NEXT',
+                                text: FlutterI18n.translate(
+                                    context, 'REGISTER_2.NEXT'),
                                 width: MediaQuery.of(context).size.width * 0.4,
                                 onPressed: () {
                                   dispatch(LoginInterestsAction(_selected

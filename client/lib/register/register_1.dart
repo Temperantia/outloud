@@ -3,6 +3,7 @@ import 'package:business/actions/app_disconnect_action.dart';
 import 'package:business/app_state.dart';
 import 'package:business/classes/user.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_i18n/flutter_i18n.dart';
 
 import 'package:outloud/register/register_2.dart';
 import 'package:outloud/theme.dart';
@@ -54,8 +55,10 @@ class _Register1ScreenState extends State<Register1Screen> {
                             width: 50.0,
                             height: 50.0,
                             child: Image.asset('images/OL-draft2a.png')),
-                        const Text('Signed in as',
-                            style: TextStyle(fontSize: 20.0)),
+                        Text(
+                            FlutterI18n.translate(
+                                context, 'REGISTER_1.SIGNED_AS'),
+                            style: const TextStyle(fontSize: 20.0)),
                         CachedImage(user.pics[0],
                             width: 150.0,
                             height: 150.0,
@@ -64,19 +67,22 @@ class _Register1ScreenState extends State<Register1Screen> {
                         Text(user.name, style: const TextStyle(fontSize: 26.0)),
                         if (state.userState.user == null)
                           Button(
-                              text: 'COMPLETE PROFILE',
+                              text: FlutterI18n.translate(
+                                  context, 'REGISTER_1.COMPLETE_PROFILE'),
                               width: MediaQuery.of(context).size.width * 0.8,
                               onPressed: () => dispatch(
                                   NavigateAction<AppState>.pushNamed(
                                       Register2Screen.id)))
                         else
                           Button(
-                              text: 'CONTINUE TO APP',
+                              text: FlutterI18n.translate(
+                                  context, 'REGISTER_1.CONTINUE_APP'),
                               width: MediaQuery.of(context).size.width * 0.8,
                               onPressed: () =>
                                   dispatch(NavigateAction<AppState>.pop())),
                         Button(
-                            text: 'BACK',
+                            text: FlutterI18n.translate(
+                                context, 'REGISTER_1.BACK'),
                             width: MediaQuery.of(context).size.width * 0.8,
                             onPressed: () async {
                               await store.dispatchFuture(AppDisconnectAction());

@@ -1,6 +1,7 @@
 import 'package:async_redux/async_redux.dart';
 import 'package:business/app_state.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:outloud/register/register_5.dart';
 import 'package:outloud/theme.dart';
 import 'package:outloud/widgets/button.dart';
@@ -68,14 +69,19 @@ class _Register4ScreenState extends State<Register4Screen> {
                                     child: Image.asset(
                                         'images/illustrationEvents.png',
                                         fit: BoxFit.fitWidth)),
-                                const Text('Find exciting',
-                                    style:
-                                        TextStyle(color: grey, fontSize: 20.0)),
-                                const Text('EVENTS',
-                                    style: TextStyle(fontSize: 40.0)),
-                                const Text(
-                                    'Browse new and exciting events to attend, local or exotic, and live life to its fullest.',
-                                    style: TextStyle(color: grey)),
+                                Text(
+                                    FlutterI18n.translate(
+                                        context, 'REGISTER_4.TITLE'),
+                                    style: const TextStyle(
+                                        color: grey, fontSize: 20.0)),
+                                Text(
+                                    FlutterI18n.translate(
+                                        context, 'REGISTER_4.TITLE_BIG'),
+                                    style: const TextStyle(fontSize: 40.0)),
+                                Text(
+                                    FlutterI18n.translate(
+                                        context, 'REGISTER_4.SUBTITLE'),
+                                    style: const TextStyle(color: grey)),
                                 Row(children: <Widget>[
                                   Icon(Icons.lens, size: 10.0),
                                   Icon(Icons.radio_button_unchecked, size: 10.0)
@@ -86,12 +92,14 @@ class _Register4ScreenState extends State<Register4Screen> {
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: <Widget>[
                             Button(
-                                text: 'BACK',
+                                text: FlutterI18n.translate(
+                                    context, 'REGISTER_4.BACK'),
                                 width: MediaQuery.of(context).size.width * 0.4,
                                 onPressed: () =>
                                     dispatch(NavigateAction<AppState>.pop())),
                             Button(
-                                text: 'NEXT',
+                                text: FlutterI18n.translate(
+                                    context, 'REGISTER_4.NEXT'),
                                 width: MediaQuery.of(context).size.width * 0.4,
                                 onPressed: () => dispatch(
                                     NavigateAction<AppState>.pushNamed(

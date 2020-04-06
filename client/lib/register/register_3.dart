@@ -3,6 +3,7 @@ import 'package:business/app_state.dart';
 import 'package:business/classes/user.dart';
 import 'package:business/login/actions/login_info_action.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:outloud/register/register_4.dart';
 import 'package:outloud/theme.dart';
 import 'package:outloud/widgets/button.dart';
@@ -26,88 +27,9 @@ class _Register3ScreenState extends State<Register3Screen> {
     super.initState();
     _controllers = <String, List<dynamic>>{
       'LOCATION': <TextEditingController>[TextEditingController()],
-      'GENDER': <dynamic>[
-        _gender,
-        <String>[
-          '',
-          'Agender',
-          'Androgyne',
-          'Androgynous',
-          'Bigender',
-          'Cis',
-          'Cisgender',
-          'Cis Female',
-          'Cis Male',
-          'Cis Man',
-          'Cis Woman',
-          'Cisgender Female',
-          'Cisgender Male',
-          'Cisgender Man',
-          'Cisgender Woman',
-          'Female',
-          'FTM',
-          'Gender Fluid',
-          'Gender Nonconforming',
-          'Gender Questioning',
-          'Gender Variant',
-          'Genderqueer',
-          'Intersex',
-          'Male',
-          'MTF',
-          'Neither',
-          'Neutrois',
-          'Non-binary',
-          'Other',
-          'Pangender',
-          'Trans',
-          'Trans Female',
-          'Trans Male',
-          'Trans Man',
-          'Trans Person',
-          'Trans Woman',
-          'Transfeminine',
-          'Transgender',
-          'Transgender Female',
-          'Transgender Male',
-          'Transgender Man',
-          'Transgender Person',
-          'Transgender Woman',
-          'Transmasculine',
-          'Transsexual',
-          'Transsexual Female',
-          'Transsexual Male',
-          'Transsexual Man',
-          'Transsexual Person',
-          'Transsexual Woman',
-          'Two-Spirit'
-        ]
-      ],
+      'GENDER': <dynamic>[_gender],
       'PRONOUNS': <TextEditingController>[TextEditingController()],
-      'SEXUAL ORIENTATION': <dynamic>[
-        _orientation,
-        <String>[
-          '',
-          'Gay',
-          'Lesbian',
-          'Bi (Bisexual)',
-          'Pan (Pansexual)',
-          'Queer',
-          'Asexual',
-          'Allosexual',
-          'Aromantic',
-          'Heterosexual',
-          'Closeted',
-          'Androsexual',
-          'Bicurious',
-          'Demiromantic',
-          'Demisexual',
-          'Gynesexual',
-          'Polyamorous',
-          'Skoliosexual',
-          'Graysexual',
-          'Sapiosexual'
-        ]
-      ],
+      'SEXUAL ORIENTATION': <dynamic>[_orientation],
       'EDUCATION': <TextEditingController>[
         TextEditingController(),
         TextEditingController()
@@ -208,6 +130,82 @@ class _Register3ScreenState extends State<Register3Screen> {
         void Function(ReduxAction<dynamic>) dispatch,
         Widget child) {
       User user = state.loginState.user;
+      _controllers['GENDER'].add(<String>[
+        '',
+        FlutterI18n.translate(context, 'GENDERS.AGENDER'),
+        FlutterI18n.translate(context, 'GENDERS.ANDROGYNE'),
+        FlutterI18n.translate(context, 'GENDERS.ANDROGYNOUS'),
+        FlutterI18n.translate(context, 'GENDERS.BIGENDER'),
+        FlutterI18n.translate(context, 'GENDERS.CIS'),
+        FlutterI18n.translate(context, 'GENDERS.CISGENDER'),
+        FlutterI18n.translate(context, 'GENDERS.CIS_FEMALE'),
+        FlutterI18n.translate(context, 'GENDERS.CIS_MALE'),
+        FlutterI18n.translate(context, 'GENDERS.CIS_MAN'),
+        FlutterI18n.translate(context, 'GENDERS.CIS_WOMAN'),
+        FlutterI18n.translate(context, 'GENDERS.CIS_GENDER_FEMALE'),
+        FlutterI18n.translate(context, 'GENDERS.CISGENDER_MALE'),
+        FlutterI18n.translate(context, 'GENDERS.CISGENDER_MAN'),
+        FlutterI18n.translate(context, 'GENDERS.CISGENDER_WOMAN'),
+        FlutterI18n.translate(context, 'GENDERS.FEMALE'),
+        FlutterI18n.translate(context, 'GENDERS.FTM'),
+        FlutterI18n.translate(context, 'GENDERS.GENDER_FLUID'),
+        FlutterI18n.translate(context, 'GENDERS.GENDER_NONCONFORMING'),
+        FlutterI18n.translate(context, 'GENDERS.GENDER_QUESTIONING'),
+        FlutterI18n.translate(context, 'GENDERS.GENDER_VARIANT'),
+        FlutterI18n.translate(context, 'GENDERS.GENDERQUEER'),
+        FlutterI18n.translate(context, 'GENDERS.INTERSEX'),
+        FlutterI18n.translate(context, 'GENDERS.MALE'),
+        FlutterI18n.translate(context, 'GENDERS.MTF'),
+        FlutterI18n.translate(context, 'GENDERS.NEITHER'),
+        FlutterI18n.translate(context, 'GENDERS.NEUTROIS'),
+        FlutterI18n.translate(context, 'GENDERS.NON_BINARY'),
+        FlutterI18n.translate(context, 'GENDERS.OTHER'),
+        FlutterI18n.translate(context, 'GENDERS.PANGENDER'),
+        FlutterI18n.translate(context, 'GENDERS.TRANS'),
+        FlutterI18n.translate(context, 'GENDERS.TRANS_FEMALE'),
+        FlutterI18n.translate(context, 'GENDERS.TRANS_MALE'),
+        FlutterI18n.translate(context, 'GENDERS.TRANS_MAN'),
+        FlutterI18n.translate(context, 'GENDERS.TRANS_PERSON'),
+        FlutterI18n.translate(context, 'GENDERS.TRANS_WOMAN'),
+        FlutterI18n.translate(context, 'GENDERS.TRANSFEMININE'),
+        FlutterI18n.translate(context, 'GENDERS.TRANSGENDER'),
+        FlutterI18n.translate(context, 'GENDERS.TRANSGENDER_FEMALE'),
+        FlutterI18n.translate(context, 'GENDERS.TRANSGENDER_MALE'),
+        FlutterI18n.translate(context, 'GENDERS.TRANSGENDER_MAN'),
+        FlutterI18n.translate(context, 'GENDERS.TRANSGENDER_PERSON'),
+        FlutterI18n.translate(context, 'GENDERS.TRANSGENDER_WOMAN'),
+        FlutterI18n.translate(context, 'GENDERS.TRANSMASCULINE'),
+        FlutterI18n.translate(context, 'GENDERS.TRANSSEXUAL'),
+        FlutterI18n.translate(context, 'GENDERS.TRANSSEXUAL_FEMALE'),
+        FlutterI18n.translate(context, 'GENDERS.TRANSSEXUAL_MALE'),
+        FlutterI18n.translate(context, 'GENDERS.TRANSSEXUAL_MAN'),
+        FlutterI18n.translate(context, 'GENDERS.TRANSSEXUAL_PERSON'),
+        FlutterI18n.translate(context, 'GENDERS.TRANSSEXUAL_WOMAN'),
+        FlutterI18n.translate(context, 'GENDERS.TWO_SPIRIT'),
+      ]);
+
+      _controllers['SEXUAL ORIENTATION'].add(<String>[
+        '',
+        FlutterI18n.translate(context, 'SEXUAL_ORIENTATIONS.GAY'),
+        FlutterI18n.translate(context, 'SEXUAL_ORIENTATIONS.LESBIAN'),
+        FlutterI18n.translate(context, 'SEXUAL_ORIENTATIONS.BI'),
+        FlutterI18n.translate(context, 'SEXUAL_ORIENTATIONS.PAN'),
+        FlutterI18n.translate(context, 'SEXUAL_ORIENTATIONS.QUEER'),
+        FlutterI18n.translate(context, 'SEXUAL_ORIENTATIONS.ASEXUAL'),
+        FlutterI18n.translate(context, 'SEXUAL_ORIENTATIONS.ALLOSEXUAL'),
+        FlutterI18n.translate(context, 'SEXUAL_ORIENTATIONS.AROMANTIC'),
+        FlutterI18n.translate(context, 'SEXUAL_ORIENTATIONS.HETEROSEXUAL'),
+        FlutterI18n.translate(context, 'SEXUAL_ORIENTATIONS.CLOSETED'),
+        FlutterI18n.translate(context, 'SEXUAL_ORIENTATIONS.ANDROSEXUAL'),
+        FlutterI18n.translate(context, 'SEXUAL_ORIENTATIONS.BICURIOUS'),
+        FlutterI18n.translate(context, 'SEXUAL_ORIENTATIONS.DEMIROMANTIC'),
+        FlutterI18n.translate(context, 'SEXUAL_ORIENTATIONS.DEMISEXUAL'),
+        FlutterI18n.translate(context, 'SEXUAL_ORIENTATIONS.GYNESEXUAL'),
+        FlutterI18n.translate(context, 'SEXUAL_ORIENTATIONS.POLYAMOROUS'),
+        FlutterI18n.translate(context, 'SEXUAL_ORIENTATIONS.SKOLIOSEXUAL'),
+        FlutterI18n.translate(context, 'SEXUAL_ORIENTATIONS.GRAYSEXUAL'),
+        FlutterI18n.translate(context, 'SEXUAL_ORIENTATIONS.SAPIOSEXUAL'),
+      ]);
       return View(
           showAppBar: false,
           showNavBar: false,
@@ -246,37 +244,62 @@ class _Register3ScreenState extends State<Register3Screen> {
                                           NavigateAction<AppState>.pushNamed(
                                               Register4Screen.id));
                                     },
-                                    child: const Text('Skip >',
-                                        style: TextStyle(color: grey)))))
+                                    child: Text(
+                                        FlutterI18n.translate(
+                                            context, 'REGISTER_3.SKIP'),
+                                        style: const TextStyle(color: grey)))))
                       ]),
                       Expanded(
                           flex: 7,
                           child: ListView(children: <Widget>[
-                            const Text('Say a little about yourself',
-                                style: TextStyle(fontSize: 20.0)),
-                            const Text(
-                                'Let your soon-to-be friends get to know you a little better.',
-                                style: TextStyle(color: grey)),
-                            _buildAboutBloc('LOCATION'),
-                            _buildAboutBloc('GENDER'),
-                            _buildAboutBloc('PRONOUNS'),
-                            _buildAboutBloc('SEXUAL ORIENTATION'),
-                            _buildAboutBloc('EDUCATION',
-                                placeholders: <String>['School', 'Degree']),
-                            _buildAboutBloc('OCCUPATION',
-                                placeholders: <String>['Position', 'Employer']),
+                            Text(
+                                FlutterI18n.translate(
+                                    context, 'REGISTER_3.TITLE'),
+                                style: const TextStyle(fontSize: 20.0)),
+                            Text(
+                                FlutterI18n.translate(
+                                    context, 'REGISTER_3.SUBTITLE'),
+                                style: const TextStyle(color: grey)),
+                            _buildAboutBloc(FlutterI18n.translate(
+                                context, 'REGISTER_3.LOCATION')),
+                            _buildAboutBloc(FlutterI18n.translate(
+                                context, 'REGISTER_3.GENDER')),
+                            _buildAboutBloc(FlutterI18n.translate(
+                                context, 'REGISTER_3.PRONOUNS')),
+                            _buildAboutBloc(FlutterI18n.translate(
+                                context, 'REGISTER_3.SEXUAL_ORIENTATION')),
+                            _buildAboutBloc(
+                                FlutterI18n.translate(
+                                    context, 'REGISTER_3.EDUCATION'),
+                                placeholders: <String>[
+                                  FlutterI18n.translate(
+                                      context, 'REGISTER_3.SCHOOL'),
+                                  FlutterI18n.translate(
+                                      context, 'REGISTER_3.DEGREE')
+                                ]),
+                            _buildAboutBloc(
+                                FlutterI18n.translate(
+                                    context, 'REGISTER_3.OCCUPATION'),
+                                placeholders: <String>[
+                                  FlutterI18n.translate(
+                                      context, 'REGISTER_3.POSITION'),
+                                  FlutterI18n.translate(
+                                      context, 'REGISTER_3.EMPLOYER')
+                                ]),
                           ])),
                       Expanded(
                           child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: <Widget>[
                             Button(
-                                text: 'BACK',
+                                text: FlutterI18n.translate(
+                                    context, 'REGISTER_3.BACK'),
                                 width: MediaQuery.of(context).size.width * 0.4,
                                 onPressed: () =>
                                     dispatch(NavigateAction<AppState>.pop())),
                             Button(
-                                text: 'NEXT',
+                                text: FlutterI18n.translate(
+                                    context, 'REGISTER_3.NEXT'),
                                 width: MediaQuery.of(context).size.width * 0.4,
                                 onPressed: () {
                                   user = state.loginState.user

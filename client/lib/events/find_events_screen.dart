@@ -10,13 +10,14 @@ import 'package:date_utils/date_utils.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:outloud/events/event_screen.dart';
 import 'package:outloud/functions/loader_animation.dart';
 import 'package:outloud/theme.dart';
 import 'package:outloud/widgets/cached_image.dart';
-import 'package:outloud/widgets/multiselect_dropdown.dart';
+//import 'package:outloud/widgets/multiselect_dropdown.dart';
 import 'package:intl/intl.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:provider_for_redux/provider_for_redux.dart';
@@ -35,7 +36,7 @@ class _FindEventsScreen extends State<FindEventsScreen>
   final Map<String, Marker> _markers = <String, Marker>{};
   // final GlobalKey _interestFilterKey = GlobalKey();
   //final LayerLink _interestLink = LayerLink();
-  final List<CheckBoxContent> _interests = <CheckBoxContent>[];
+  //final List<CheckBoxContent> _interests = <CheckBoxContent>[];
 
   CameraPosition _initialMapLocation =
       const CameraPosition(target: LatLng(48.85902056, 2.34637398), zoom: 14);
@@ -44,8 +45,8 @@ class _FindEventsScreen extends State<FindEventsScreen>
   int _flexFactorListEvent = 5;
   //OverlayEntry _interestsCheckBox;
   // bool _checkBoxDisplayed = false;
-  String _distanceValue = 'Any distance';
-  String _timeValue = 'Any time';
+  String _distanceValue;
+  String _timeValue;
   List<Event> _events;
   List<Event> _eventsDisplayed;
 
@@ -55,11 +56,6 @@ class _FindEventsScreen extends State<FindEventsScreen>
   @override
   void initState() {
     super.initState();
-    _interests.add(CheckBoxContent(checked: false, name: 'Contemporary art'));
-    _interests.add(CheckBoxContent(checked: false, name: 'Techno'));
-    _interests.add(CheckBoxContent(checked: false, name: 'Food'));
-    _interests.add(CheckBoxContent(checked: false, name: 'Gay Community'));
-    _interests.add(CheckBoxContent(checked: false, name: 'Books'));
     _getPosition();
   }
 
@@ -93,60 +89,58 @@ class _FindEventsScreen extends State<FindEventsScreen>
 
     _eventsDisplayed = _events.where((Event event) {
       final DateTime eventDateStart = event.dateStart;
-      switch (_distanceValue) {
-        case 'Within 5km':
-          if (event.distance == null || event.distance > 5.0) {
-            return false;
-          }
-          break;
-        case 'Within 10km':
-          if (event.distance == null || event.distance > 5.0) {
-            return false;
-          }
-          break;
-        case 'Within 50km':
-          if (event.distance == null || event.distance > 5.0) {
-            return false;
-          }
-          break;
-        case 'Within 100km':
-          if (event.distance == null || event.distance > 5.0) {
-            return false;
-          }
-          break;
+      if (_distanceValue == FlutterI18n.translate(context, 'FIND_EVENTS.5KM')) {
+        if (event.distance == null || event.distance > 5.0) {
+          return false;
+        }
+      } else if (_distanceValue ==
+          FlutterI18n.translate(context, 'FIND_EVENTS.10KM')) {
+        if (event.distance == null || event.distance > 10.0) {
+          return false;
+        }
+      } else if (_distanceValue ==
+          FlutterI18n.translate(context, 'FIND_EVENTS.50KM')) {
+        if (event.distance == null || event.distance > 50.0) {
+          return false;
+        }
+      } else if (_distanceValue ==
+          FlutterI18n.translate(context, 'FIND_EVENTS.100KM')) {
+        if (event.distance == null || event.distance > 100.0) {
+          return false;
+        }
       }
 
-      switch (_timeValue) {
-        case 'This week':
-          if (!Utils.isSameWeek(now, eventDateStart) ||
-              eventDateStart.weekday > 5) {
-            return false;
-          }
-          break;
-        case 'This weekend':
-          if (!Utils.isSameWeek(now, eventDateStart) ||
-              eventDateStart.weekday < 5) {
-            return false;
-          }
-          break;
-        case 'Next week':
-          if (!Utils.isSameWeek(Utils.nextWeek(now), eventDateStart)) {
-            return false;
-          }
-          break;
-        case 'This month':
-          if (now.year != eventDateStart.year ||
-              now.month != eventDateStart.month) {
-            return false;
-          }
-          break;
-        case 'Next month':
-          if (now.year != eventDateStart.year ||
-              Utils.nextMonth(now).month != eventDateStart.month) {
-            return false;
-          }
-          break;
+      if (_timeValue ==
+          FlutterI18n.translate(context, 'FIND_EVENTS.THIS_WEEK')) {
+        if (!Utils.isSameWeek(now, eventDateStart) ||
+            eventDateStart.weekday > 5) {
+          return false;
+        }
+      } else if (_timeValue ==
+          FlutterI18n.translate(context, 'FIND_EVENTS.THIS_WEEKEND')) {
+        if (!Utils.isSameWeek(now, eventDateStart) ||
+            eventDateStart.weekday < 5) {
+          return false;
+        }
+      } else if (_timeValue ==
+          FlutterI18n.translate(context, 'FIND_EVENTS.NEXT_WEEK')) {
+        if (!Utils.isSameWeek(Utils.nextWeek(now), eventDateStart)) {
+          return false;
+        }
+      } else if (_timeValue ==
+          FlutterI18n.translate(context, 'FIND_EVENTS.THIS_MONTH')) {
+        if (now.year != eventDateStart.year ||
+            now.month != eventDateStart.month) {
+          return false;
+        }
+      } else if (_timeValue ==
+          FlutterI18n.translate(context, 'FIND_EVENTS.NEXT_MONTH')) {
+        if (now.year != eventDateStart.year ||
+            Utils.nextMonth(now).month != eventDateStart.month) {
+          return false;
+        }
       }
+
       return true;
     }).toList();
   }
@@ -156,20 +150,15 @@ class _FindEventsScreen extends State<FindEventsScreen>
         padding: const EdgeInsets.all(10),
         decoration: const BoxDecoration(color: white),
         child: GoogleMap(
-            onTap: (_) {
-              _growMap();
-            },
-            onCameraMoveStarted: () {
-              _growMap();
-            },
+            onTap: (_) => _growMap(),
+            onCameraMoveStarted: () => _growMap(),
             mapType: MapType.normal,
             zoomGesturesEnabled: true,
             myLocationButtonEnabled: true,
             myLocationEnabled: true,
             gestureRecognizers: <Factory<OneSequenceGestureRecognizer>>{
               Factory<OneSequenceGestureRecognizer>(
-                () => EagerGestureRecognizer(),
-              )
+                  () => EagerGestureRecognizer())
             },
             initialCameraPosition: _initialMapLocation,
             markers: _markers.values.toSet(),
@@ -186,10 +175,9 @@ class _FindEventsScreen extends State<FindEventsScreen>
         constraints: BoxConstraints.expand(
             height: Theme.of(context).textTheme.display1.fontSize * 1.1),
         padding: const EdgeInsets.only(bottom: 10),
-        child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: <Widget>[
-              /*  CompositedTransformTarget(
+        child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: <
+            Widget>[
+          /*  CompositedTransformTarget(
                   link: _interestLink,
                   child: Container(
                       decoration: BoxDecoration(
@@ -218,50 +206,50 @@ class _FindEventsScreen extends State<FindEventsScreen>
                               Overlay.of(context).insert(_interestsCheckBox);
                             }
                           }))), */
-              Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 5.0),
-                  decoration: BoxDecoration(border: Border.all(color: black)),
-                  child: DropdownButton<String>(
-                      underline: Container(),
-                      value: _distanceValue,
-                      items: <String>[
-                        'Any distance',
-                        'Within 5km',
-                        'Within 10km',
-                        'Within 50km',
-                        'Within 100km',
-                      ]
-                          .map<DropdownMenuItem<String>>((String value) =>
-                              DropdownMenuItem<String>(
-                                  value: value, child: Text(value)))
-                          .toList(),
-                      onChanged: (String newValue) => setState(() {
-                            _distanceValue = newValue;
-                            _refreshEvents();
-                          }))),
-              Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 5.0),
-                  decoration: BoxDecoration(border: Border.all(color: black)),
-                  child: DropdownButton<String>(
-                      underline: Container(),
-                      value: _timeValue,
-                      items: <String>[
-                        'Any time',
-                        'This week',
-                        'This weekend',
-                        'Next week',
-                        'This month',
-                        'Next month'
-                      ]
-                          .map<DropdownMenuItem<String>>((String value) =>
-                              DropdownMenuItem<String>(
-                                  value: value, child: Text(value)))
-                          .toList(),
-                      onChanged: (String newValue) => setState(() {
-                            _timeValue = newValue;
-                            _refreshEvents();
-                          })))
-            ]));
+          Container(
+              padding: const EdgeInsets.symmetric(horizontal: 5.0),
+              decoration: BoxDecoration(border: Border.all(color: black)),
+              child: DropdownButton<String>(
+                  underline: Container(),
+                  value: _distanceValue,
+                  items: <String>[
+                    FlutterI18n.translate(context, 'FIND_EVENTS.ANY_DISTANCE'),
+                    FlutterI18n.translate(context, 'FIND_EVENTS.5KM'),
+                    FlutterI18n.translate(context, 'FIND_EVENTS.10KM'),
+                    FlutterI18n.translate(context, 'FIND_EVENTS.50KM'),
+                    FlutterI18n.translate(context, 'FIND_EVENTS.100KM'),
+                  ]
+                      .map<DropdownMenuItem<String>>((String value) =>
+                          DropdownMenuItem<String>(
+                              value: value, child: Text(value)))
+                      .toList(),
+                  onChanged: (String newValue) => setState(() {
+                        _distanceValue = newValue;
+                        _refreshEvents();
+                      }))),
+          Container(
+              padding: const EdgeInsets.symmetric(horizontal: 5.0),
+              decoration: BoxDecoration(border: Border.all(color: black)),
+              child: DropdownButton<String>(
+                  underline: Container(),
+                  value: _timeValue,
+                  items: <String>[
+                    FlutterI18n.translate(context, 'FIND_EVENTS.ANY_TIME'),
+                    FlutterI18n.translate(context, 'FIND_EVENTS.THIS_WEEK'),
+                    FlutterI18n.translate(context, 'FIND_EVENTS.THIS_WEEKEND'),
+                    FlutterI18n.translate(context, 'FIND_EVENTS.NEXT_WEEK'),
+                    FlutterI18n.translate(context, 'FIND_EVENTS.THIS_MONTH'),
+                    FlutterI18n.translate(context, 'FIND_EVENTS.NEXT_MONTH'),
+                  ]
+                      .map<DropdownMenuItem<String>>((String value) =>
+                          DropdownMenuItem<String>(
+                              value: value, child: Text(value)))
+                      .toList(),
+                  onChanged: (String newValue) => setState(() {
+                        _timeValue = newValue;
+                        _refreshEvents();
+                      })))
+        ]));
   }
 
 /*   OverlayEntry _createInterestsCheckBox() {
@@ -348,11 +336,9 @@ class _FindEventsScreen extends State<FindEventsScreen>
                                     Text('$time - $timeEnd',
                                         style: const TextStyle(color: orange)),
                                     if (event.distance != null)
-                                      Container(
-                                          child: Text(
-                                              '${event.distance.toString()}km away',
-                                              style: const TextStyle(
-                                                  color: orange)))
+                                      Text(
+                                          '${event.distance.toString()}${FlutterI18n.translate(context, 'FIND_EVENTS.AWAY')}',
+                                          style: const TextStyle(color: orange))
                                   ]),
                               Wrap(children: <Widget>[
                                 for (String interest in event.interests)
@@ -474,6 +460,10 @@ class _FindEventsScreen extends State<FindEventsScreen>
       if (_events == null) {
         return const CircularProgressIndicator();
       }
+
+      _distanceValue ??=
+          FlutterI18n.translate(context, 'FIND_EVENTS.ANY_DISTANCE');
+      _timeValue ??= FlutterI18n.translate(context, 'FIND_EVENTS.ANY_TIME');
       _refreshEvents();
       for (final Event event in _events) {
         if (event.location != null) {

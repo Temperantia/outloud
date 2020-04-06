@@ -7,6 +7,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:business/lounges/actions/lounge_create_meetup_action.dart';
+import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:google_maps_webservice/places.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:outloud/widgets/button.dart';
@@ -220,66 +221,64 @@ class _LoungeCreateMeetupScreenState extends State<LoungeCreateMeetupScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: <Widget>[
                           FlatButton(
-                            color: white,
-                            // padding: const EdgeInsets.all(5),
-                            onPressed: () async {
-                              setState(() {
-                                _moovingMarker = false;
-                              });
-                              if (_savedMarker != null) {
-                                final String _previousAdress =
+                              color: white,
+                              // padding: const EdgeInsets.all(5),
+                              onPressed: () async {
+                                setState(() => _moovingMarker = false);
+                                if (_savedMarker != null) {
+                                  final String _previousAdress =
+                                      await _getAdressFromCoordinates(
+                                          _savedMarker.position.latitude,
+                                          _savedMarker.position.longitude);
+                                  setState(() {
+                                    _positionOfPlace = _savedMarker;
+                                    _markers.clear();
+                                    _markers[_positionOfPlace.markerId
+                                        .toString()] = _positionOfPlace;
+                                    _searchTextController.text =
+                                        _previousAdress;
+                                  });
+                                  _moveCameraToPosition(
+                                      _positionOfPlace.position, 15);
+                                } else {
+                                  setState(() {
+                                    _markers.clear();
+                                    _searchTextController.text = '';
+                                    _positionOfPlace = null;
+                                  });
+                                }
+                                _mapButtonsOverlay.remove();
+                              },
+                              child: Text(FlutterI18n.translate(
+                                  context, 'LOUNGE_CREATE_MEETUP.CANCEL'))),
+                          FlatButton(
+                              color: white,
+                              // padding: const EdgeInsets.all(5),
+                              onPressed: () async {
+                                setState(() => _moovingMarker = false);
+                                final String _address =
                                     await _getAdressFromCoordinates(
-                                        _savedMarker.position.latitude,
-                                        _savedMarker.position.longitude);
+                                        _positionOfPlace.position.latitude,
+                                        _positionOfPlace.position.longitude);
                                 setState(() {
-                                  _positionOfPlace = _savedMarker;
+                                  _positionOfPlace = Marker(
+                                      markerId: _positionOfPlace.markerId,
+                                      position: _positionOfPlace.position,
+                                      infoWindow: InfoWindow(
+                                          title: FlutterI18n.translate(context,
+                                              'LOUNGE_CREATE_MEETUP.MEETING_POINT'),
+                                          snippet: _address));
                                   _markers.clear();
                                   _markers[_positionOfPlace.markerId
                                       .toString()] = _positionOfPlace;
-                                  _searchTextController.text = _previousAdress;
+                                  _searchTextController.text = _address;
                                 });
-                                _moveCameraToPosition(
-                                    _positionOfPlace.position, 15);
-                              } else {
-                                setState(() {
-                                  _markers.clear();
-                                  _searchTextController.text = '';
-                                  _positionOfPlace = null;
-                                });
-                              }
-                              _mapButtonsOverlay.remove();
-                            },
-                            child: const Text('Cancel'),
-                          ),
-                          FlatButton(
-                            color: white,
-                            // padding: const EdgeInsets.all(5),
-                            onPressed: () async {
-                              setState(() {
-                                _moovingMarker = false;
-                              });
-                              final String _address =
-                                  await _getAdressFromCoordinates(
-                                      _positionOfPlace.position.latitude,
-                                      _positionOfPlace.position.longitude);
-                              setState(() {
-                                _positionOfPlace = Marker(
-                                    markerId: _positionOfPlace.markerId,
-                                    position: _positionOfPlace.position,
-                                    infoWindow: InfoWindow(
-                                        title: 'Meeting point',
-                                        snippet: _address));
-                                _markers.clear();
-                                _markers[_positionOfPlace.markerId.toString()] =
-                                    _positionOfPlace;
-                                _searchTextController.text = _address;
-                              });
-                              // _moveCameraToPosition(
-                              //     _positionOfPlace.position, 15);
-                              _mapButtonsOverlay.remove();
-                            },
-                            child: const Text('Ok'),
-                          )
+                                // _moveCameraToPosition(
+                                //     _positionOfPlace.position, 15);
+                                _mapButtonsOverlay.remove();
+                              },
+                              child: Text(FlutterI18n.translate(
+                                  context, 'LOUNGE_CREATE_MEETUP.OK')))
                         ])))));
   }
 
@@ -322,7 +321,8 @@ class _LoungeCreateMeetupScreenState extends State<LoungeCreateMeetupScreen> {
                 position: LatLng(_choosenPlace.geometry.location.lat,
                     _choosenPlace.geometry.location.lng),
                 infoWindow: InfoWindow(
-                    title: 'Meeting point',
+                    title: FlutterI18n.translate(
+                        context, 'LOUNGE_CREATE_MEETUP.MEETING_POINT'),
                     snippet: _choosenPlace.formattedAddress));
           });
           _markers.clear();
@@ -348,8 +348,10 @@ class _LoungeCreateMeetupScreenState extends State<LoungeCreateMeetupScreen> {
               constraints: BoxConstraints.expand(
                 height: Theme.of(context).textTheme.display1.fontSize * 1.1,
               ),
-              child: const Text('LOUNGE DESIGNATED MEETUP',
-                  style: TextStyle(
+              child: Text(
+                  FlutterI18n.translate(
+                      context, 'LOUNGE_CREATE_MEETUP.LOUNGE_DESIGNATED_MEETUP'),
+                  style: const TextStyle(
                       color: black,
                       fontSize: 15,
                       fontWeight: FontWeight.w700))),
@@ -380,14 +382,13 @@ class _LoungeCreateMeetupScreenState extends State<LoungeCreateMeetupScreen> {
                                 LatLng(position.latitude, position.longitude),
                             infoWindow: InfoWindow(
                                 snippet: position.toString(),
-                                title: 'Meeting point'));
+                                title: FlutterI18n.translate(context,
+                                    'LOUNGE_CREATE_MEETUP.MEETING_POINT')));
 
                         final GoogleMapController controller =
                             await _controller.future;
                         // final double _zoom = await controller.getZoomLevel();
-                        setState(() {
-                          _moovingMarker = false;
-                        });
+                        setState(() => _moovingMarker = false);
                         controller
                             .animateCamera(CameraUpdate.newCameraPosition(
                                 CameraPosition(
@@ -409,9 +410,7 @@ class _LoungeCreateMeetupScreenState extends State<LoungeCreateMeetupScreen> {
                             _searchTextController.text = _address;
                           });
                           Timer(const Duration(milliseconds: 800), () {
-                            setState(() {
-                              _moovingMarker = true;
-                            });
+                            setState(() => _moovingMarker = true);
                             Overlay.of(context).insert(_mapButtonsOverlay);
                           });
                         });
@@ -423,21 +422,21 @@ class _LoungeCreateMeetupScreenState extends State<LoungeCreateMeetupScreen> {
                         final String _address = await _getAdressFromCoordinates(
                             _positionOfPlace.position.latitude,
                             _positionOfPlace.position.longitude);
-                        setState(() {
-                          _searchTextController.text = _address;
-                        });
+                        setState(() => _searchTextController.text = _address);
                       },
                       onCameraMove: (CameraPosition position) {
                         if (!_moovingMarker) {
                           return;
                         }
                         _positionOfPlace = Marker(
-                            markerId: MarkerId('Meeting point'),
+                            markerId: MarkerId(FlutterI18n.translate(
+                                context, 'LOUNGE_CREATE_MEETUP.MEETING_POINT')),
                             position: LatLng(position.target.latitude,
                                 position.target.longitude),
                             infoWindow: InfoWindow(
                                 snippet: position.toString(),
-                                title: 'Meeting point'));
+                                title: FlutterI18n.translate(context,
+                                    'LOUNGE_CREATE_MEETUP.MEETING_POINT')));
                         setState(() {
                           _markers.clear();
                           _markers[_positionOfPlace.markerId.toString()] =
@@ -477,7 +476,8 @@ class _LoungeCreateMeetupScreenState extends State<LoungeCreateMeetupScreen> {
                         prefixIcon: Icon(Icons.location_on),
                         hintStyle: const TextStyle(
                             color: orange, fontWeight: FontWeight.bold),
-                        hintText: 'Select place...'))),
+                        hintText: FlutterI18n.translate(
+                            context, 'LOUNGE_CREATE_MEETUP.SELECT_PLACE')))),
             link: _layerLink));
   }
 
@@ -490,8 +490,10 @@ class _LoungeCreateMeetupScreenState extends State<LoungeCreateMeetupScreen> {
           Container(
               constraints: BoxConstraints.expand(
                   height: Theme.of(context).textTheme.display1.fontSize * 1.1),
-              child: const Text('MEETUP TIME',
-                  style: TextStyle(
+              child: Text(
+                  FlutterI18n.translate(
+                      context, 'LOUNGE_CREATE_MEETUP.MEETING_POINT'),
+                  style: const TextStyle(
                       color: black,
                       fontSize: 15,
                       fontWeight: FontWeight.w700))),
@@ -509,9 +511,7 @@ class _LoungeCreateMeetupScreenState extends State<LoungeCreateMeetupScreen> {
                                     MainAxisAlignment.spaceBetween,
                                 children: <Widget>[
                                   GestureDetector(
-                                      onTap: () {
-                                        _updateTimeOfEvent();
-                                      },
+                                      onTap: () => _updateTimeOfEvent(),
                                       child: Container(
                                           color: whiteAlt,
                                           height: 40,
@@ -523,11 +523,9 @@ class _LoungeCreateMeetupScreenState extends State<LoungeCreateMeetupScreen> {
                                                   color: orange,
                                                   fontWeight:
                                                       FontWeight.bold)))),
-                                  Container(child: const Text(':')),
+                                  const Text(':'),
                                   GestureDetector(
-                                      onTap: () {
-                                        _updateTimeOfEvent();
-                                      },
+                                      onTap: () => _updateTimeOfEvent(),
                                       child: Container(
                                           color: whiteAlt,
                                           height: 40,
@@ -539,9 +537,7 @@ class _LoungeCreateMeetupScreenState extends State<LoungeCreateMeetupScreen> {
                                                   fontWeight:
                                                       FontWeight.bold)))),
                                   GestureDetector(
-                                      onTap: () {
-                                        _updateTimeOfEvent();
-                                      },
+                                      onTap: () => _updateTimeOfEvent(),
                                       child: Container(
                                         color: whiteAlt,
                                         height: 40,
@@ -566,9 +562,7 @@ class _LoungeCreateMeetupScreenState extends State<LoungeCreateMeetupScreen> {
                                       lastDate: DateTime.now()
                                           .add(const Duration(days: 100)));
                               if (dateSelected != null) {
-                                setState(() {
-                                  _dateEvent = dateSelected;
-                                });
+                                setState(() => _dateEvent = dateSelected);
                               }
                             },
                             child: Container(
@@ -595,8 +589,10 @@ class _LoungeCreateMeetupScreenState extends State<LoungeCreateMeetupScreen> {
           Container(
               constraints: BoxConstraints.expand(
                   height: Theme.of(context).textTheme.display1.fontSize * 1.1),
-              child: const Text('MEETUP NOTES',
-                  style: TextStyle(
+              child: Text(
+                  FlutterI18n.translate(
+                      context, 'LOUNGE_CREATE_MEETUP.MEETUP_NOTES'),
+                  style: const TextStyle(
                       color: black,
                       fontSize: 15,
                       fontWeight: FontWeight.w700))),
@@ -608,12 +604,12 @@ class _LoungeCreateMeetupScreenState extends State<LoungeCreateMeetupScreen> {
                       controller: _notesTextController,
                       focusNode: _focusNodeNotes,
                       keyboardType: TextInputType.text,
-                      decoration: const InputDecoration(
+                      decoration: InputDecoration(
                           border: InputBorder.none,
-                          hintStyle: TextStyle(color: orange),
+                          hintStyle: const TextStyle(color: orange),
                           hintMaxLines: 2,
-                          hintText:
-                              'Notes for your group to easily find each other.')))),
+                          hintText: FlutterI18n.translate(context,
+                              'LOUNGE_CREATE_MEETUP.NOTES_TO_FIND'))))),
         ]));
   }
 
@@ -625,7 +621,8 @@ class _LoungeCreateMeetupScreenState extends State<LoungeCreateMeetupScreen> {
         void Function(ReduxAction<AppState>) dispatch,
         Widget child) {
       return View(
-          title: 'CREATE LOUNGE',
+          title: FlutterI18n.translate(
+              context, 'LOUNGE_CREATE_MEETUP.CREATE_LOUNGE'),
           onBack: () => Navigator.popUntil(
               context, (Route<dynamic> route) => route.isFirst),
           backIcon: Icons.close,
@@ -651,14 +648,16 @@ class _LoungeCreateMeetupScreenState extends State<LoungeCreateMeetupScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       Button(
-                          text: 'BACK',
+                          text: FlutterI18n.translate(
+                              context, 'LOUNGE_CREATE_MEETUP.BACK'),
                           width: 150,
                           paddingRight: 5.0,
                           onPressed: () {
                             dispatch(NavigateAction<AppState>.pop());
                           }),
                       Button(
-                          text: 'CREATE',
+                          text: FlutterI18n.translate(
+                              context, 'LOUNGE_CREATE_MEETUP.CREATE'),
                           width: 150,
                           onPressed: () async {
                             _focusNodeNotes.unfocus();
@@ -672,24 +671,27 @@ class _LoungeCreateMeetupScreenState extends State<LoungeCreateMeetupScreen> {
                             if (_positionOfPlace == null) {
                               showDialog(
                                   context: context,
-                                  builder: (BuildContext context) {
-                                    return AlertDialog(
-                                        title:
-                                            const Text('MISSING INFORMATION'),
-                                        content: const Text(
-                                            'PLEASE PROVIDE A POSITION TO YOUR LOUNGE'),
-                                        actions: <Widget>[
-                                          FlatButton(
-                                              onPressed: () {
-                                                _dismissDialog();
-                                                _scrollController.animateTo(0,
-                                                    duration: const Duration(
-                                                        seconds: 1),
-                                                    curve: Curves.ease);
-                                              },
-                                              child: const Text('OK'))
-                                        ]);
-                                  });
+                                  builder: (BuildContext context) =>
+                                      AlertDialog(
+                                          title: Text(FlutterI18n.translate(
+                                              context,
+                                              'LOUNGE_CREATE_MEETUP.MISSING_INFORMATION')),
+                                          content: Text(FlutterI18n.translate(
+                                              context,
+                                              'LOUNGE_CREATE_MEETUP.POSITION_TO_PROVIDE')),
+                                          actions: <Widget>[
+                                            FlatButton(
+                                                onPressed: () {
+                                                  _dismissDialog();
+                                                  _scrollController.animateTo(0,
+                                                      duration: const Duration(
+                                                          seconds: 1),
+                                                      curve: Curves.ease);
+                                                },
+                                                child: Text(FlutterI18n.translate(
+                                                    context,
+                                                    'LOUNGE_CREATE_MEETUP.OK')))
+                                          ]));
                               return;
                             }
                             final GeoPoint _location = GeoPoint(

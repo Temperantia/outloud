@@ -2,10 +2,12 @@ import 'package:async_redux/async_redux.dart';
 import 'package:flutter/material.dart';
 import 'package:business/app_persistor.dart';
 import 'package:business/app_state.dart';
+import 'package:flutter_i18n/flutter_i18n_delegate.dart';
+import 'package:flutter_i18n/loaders/file_translation_loader.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:outloud/home_screen.dart';
 import 'package:outloud/register/login.dart';
 import 'package:business/login/actions/login_action.dart';
-
 import 'package:outloud/routes.dart';
 
 import 'package:outloud/theme.dart';
@@ -61,6 +63,12 @@ class _AppState extends State<App> {
                 dynamic model,
                 Widget child) {
               return MaterialApp(
+                  localizationsDelegates: <LocalizationsDelegate<dynamic>>[
+                    FlutterI18nDelegate(
+                        translationLoader: FileTranslationLoader()),
+                    GlobalMaterialLocalizations.delegate,
+                    GlobalWidgetsLocalizations.delegate
+                  ],
                   debugShowCheckedModeBanner: false,
                   theme: theme(state.theme),
                   title: 'Inc•lusive',

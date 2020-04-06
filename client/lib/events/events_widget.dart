@@ -1,6 +1,7 @@
 import 'package:async_redux/async_redux.dart' as redux;
 import 'package:business/app_state.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:outloud/events/find_events_screen.dart';
 import 'package:outloud/events/my_events_screen.dart';
 import 'package:outloud/theme.dart';
@@ -34,13 +35,15 @@ class _EventsWidgetState extends State<EventsWidget>
       return DefaultTabController(
           length: 2,
           child: Column(children: <Widget>[
-            const Expanded(
+            Expanded(
                 child: TabBar(
                     labelColor: white,
                     indicatorColor: Colors.transparent,
                     tabs: <Widget>[
-                  Tab(text: 'MY EVENTS'),
-                  Tab(text: 'FIND EVENTS'),
+                  Tab(text: FlutterI18n.translate(context, 'EVENTS.MY_EVENTS')),
+                  Tab(
+                      text:
+                          FlutterI18n.translate(context, 'EVENTS.FIND_EVENTS'))
                 ])),
             Expanded(
                 flex: 8,

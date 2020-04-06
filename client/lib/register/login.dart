@@ -4,6 +4,7 @@ import 'package:business/login/actions/login_google_action.dart';
 import 'package:business/login/actions/login_facebook_action.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:outloud/register/register_1.dart';
 import 'package:outloud/theme.dart';
 import 'package:outloud/widgets/button.dart';
@@ -49,11 +50,15 @@ class LoginScreen extends StatelessWidget {
                             Container(
                                 width: 200.0,
                                 child: Image.asset('images/OL-blue.png')),
-                            Column(children: const <Widget>[
-                              Text('Meet colorful people',
-                                  style: TextStyle(color: grey)),
-                              Text('Events • Activities • Experiences',
-                                  style: TextStyle(color: grey))
+                            Column(children: <Widget>[
+                              Text(
+                                  FlutterI18n.translate(
+                                      context, 'LOGIN.MOTTO_1'),
+                                  style: const TextStyle(color: grey)),
+                              Text(
+                                  FlutterI18n.translate(
+                                      context, 'LOGIN.MOTTO_2'),
+                                  style: const TextStyle(color: grey))
                             ]),
                             Column(children: <Widget>[
                               Container(
@@ -65,7 +70,8 @@ class LoginScreen extends StatelessWidget {
                                       'images/illustrationSplash.png',
                                       fit: BoxFit.fitWidth)),
                               Button(
-                                  text: 'CONTINUE WITH FACEBOOK',
+                                  text: FlutterI18n.translate(
+                                      context, 'LOGIN.FACEBOOK'),
                                   fontWeight: FontWeight.bold,
                                   width: 300.0,
                                   backgroundColor: blueDark,
@@ -77,7 +83,8 @@ class LoginScreen extends StatelessWidget {
                                   }),
                             ]),
                             Button(
-                                text: 'SIGN IN WITH GOOGLE',
+                                text: FlutterI18n.translate(
+                                    context, 'LOGIN.GOOGLE'),
                                 fontWeight: FontWeight.bold,
                                 width: 300.0,
                                 onPressed: () async {

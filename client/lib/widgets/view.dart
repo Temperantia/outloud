@@ -5,6 +5,7 @@ import 'package:business/classes/user.dart';
 import 'package:business/events/actions/events_get_action.dart';
 import 'package:business/actions/app_disconnect_action.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:outloud/profile/profile_screen.dart';
 
 import 'package:outloud/theme.dart';
@@ -143,71 +144,76 @@ class _ViewState extends State<View> {
                       image: AssetImage('images/menuExpanded.png'),
                       fit: BoxFit.fill)),
               child: Padding(
-                padding: const EdgeInsets.only(left: 150.0),
-                child: Column(children: <Widget>[
-                  GestureDetector(
-                      onTap: () {
-                        dispatch(NavigateAction<AppState>.pushNamed(
-                            ProfileScreen.id,
-                            arguments: <String, dynamic>{
-                              'user': user,
-                              'isEdition': false
-                            }));
-                        setState(() => _showUserSettings = false);
-                      },
-                      child: Row(children: <Widget>[
-                        Container(
-                            width: 20.0,
-                            height: 20.0,
-                            child: Image.asset('images/iconView.png',
-                                color: white)),
-                        const Padding(
-                            padding: EdgeInsets.only(left: 8.0),
-                            child: Text('View Profile',
-                                style: TextStyle(color: white))),
-                      ])),
-                  GestureDetector(
-                      onTap: () {
-                        dispatch(NavigateAction<AppState>.pushNamed(
-                            ProfileScreen.id,
-                            arguments: <String, dynamic>{
-                              'user': user,
-                              'isEdition': true
-                            }));
-                        setState(() => _showUserSettings = false);
-                      },
-                      child: Row(children: <Widget>[
-                        Container(
-                            width: 20.0,
-                            height: 20.0,
-                            child: Image.asset('images/iconEdit.png',
-                                color: white)),
-                        const Padding(
-                            padding: EdgeInsets.only(left: 8.0),
-                            child: Text('Edit Profile',
-                                style: TextStyle(color: white))),
-                      ])),
-                  const Divider(),
-                  GestureDetector(
-                      onTap: () {
-                        Navigator.of(context)
-                            .popUntil((Route<dynamic> route) => route.isFirst);
-                        dispatch(AppDisconnectAction());
-                        setState(() => _showUserSettings = false);
-                      },
-                      child: Row(children: <Widget>[
-                        Container(
-                            width: 20.0,
-                            height: 20.0,
-                            child: Image.asset('images/iconLeave.png',
-                                color: white)),
-                        const Padding(
-                            padding: EdgeInsets.only(left: 8.0),
-                            child: Text('Log out',
-                                style: TextStyle(color: white))),
-                      ]))
-                ]),
-              )))
+                  padding: const EdgeInsets.only(left: 150.0),
+                  child: Column(children: <Widget>[
+                    GestureDetector(
+                        onTap: () {
+                          dispatch(NavigateAction<AppState>.pushNamed(
+                              ProfileScreen.id,
+                              arguments: <String, dynamic>{
+                                'user': user,
+                                'isEdition': false
+                              }));
+                          setState(() => _showUserSettings = false);
+                        },
+                        child: Row(children: <Widget>[
+                          Container(
+                              width: 20.0,
+                              height: 20.0,
+                              child: Image.asset('images/iconView.png',
+                                  color: white)),
+                          Padding(
+                              padding: const EdgeInsets.only(left: 8.0),
+                              child: Text(
+                                  FlutterI18n.translate(
+                                      context, 'MENU_USER.OPTION_1'),
+                                  style: const TextStyle(color: white))),
+                        ])),
+                    GestureDetector(
+                        onTap: () {
+                          dispatch(NavigateAction<AppState>.pushNamed(
+                              ProfileScreen.id,
+                              arguments: <String, dynamic>{
+                                'user': user,
+                                'isEdition': true
+                              }));
+                          setState(() => _showUserSettings = false);
+                        },
+                        child: Row(children: <Widget>[
+                          Container(
+                              width: 20.0,
+                              height: 20.0,
+                              child: Image.asset('images/iconEdit.png',
+                                  color: white)),
+                          Padding(
+                              padding: const EdgeInsets.only(left: 8.0),
+                              child: Text(
+                                  FlutterI18n.translate(
+                                      context, 'MENU_USER.OPTION_2'),
+                                  style: const TextStyle(color: white))),
+                        ])),
+                    const Divider(),
+                    GestureDetector(
+                        onTap: () {
+                          Navigator.of(context).popUntil(
+                              (Route<dynamic> route) => route.isFirst);
+                          dispatch(AppDisconnectAction());
+                          setState(() => _showUserSettings = false);
+                        },
+                        child: Row(children: <Widget>[
+                          Container(
+                              width: 20.0,
+                              height: 20.0,
+                              child: Image.asset('images/iconLeave.png',
+                                  color: white)),
+                          Padding(
+                              padding: const EdgeInsets.only(left: 8.0),
+                              child: Text(
+                                  FlutterI18n.translate(
+                                      context, 'MENU_USER.OPTION_3'),
+                                  style: const TextStyle(color: white))),
+                        ]))
+                  ]))))
     ]);
   }
 

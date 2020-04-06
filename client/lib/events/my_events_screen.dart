@@ -4,6 +4,7 @@ import 'package:business/classes/event.dart';
 import 'package:business/classes/lounge.dart';
 import 'package:business/classes/user_event_state.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:outloud/events/event_screen.dart';
 import 'package:outloud/lounges/lounge_chat_screen.dart';
 import 'package:outloud/lounges/lounges_screen.dart';
@@ -46,9 +47,9 @@ class _MyEventsScreen extends State<MyEventsScreen>
 
     String stateMessage = '';
     if (state == UserEventState.Attending) {
-      stateMessage = 'Going';
+      stateMessage = FlutterI18n.translate(context, 'MY_EVENTS.GOING');
     } else if (state == UserEventState.Liked) {
-      stateMessage = 'Liked';
+      stateMessage = FlutterI18n.translate(context, 'MY_EVENTS.LIKED');
     }
 
     final Lounge lounge = userLounges.firstWhere(
@@ -114,7 +115,8 @@ class _MyEventsScreen extends State<MyEventsScreen>
                             ]),
                         if (lounge == null)
                           Button(
-                              text: 'FIND LOUNGES',
+                              text: FlutterI18n.translate(
+                                  context, 'MY_EVENTS.FIND_LOUNGES'),
                               height: 30.0,
                               backgroundColor: orange,
                               backgroundOpacity: 1.0,
@@ -124,7 +126,8 @@ class _MyEventsScreen extends State<MyEventsScreen>
                                       arguments: event)))
                         else
                           Button(
-                              text: 'VIEW LOUNGE',
+                              text: FlutterI18n.translate(
+                                  context, 'MY_EVENTS.VIEW_LOUNGE'),
                               height: 30.0,
                               backgroundColor: pinkBright,
                               backgroundOpacity: 1.0,
@@ -159,7 +162,9 @@ class _MyEventsScreen extends State<MyEventsScreen>
               child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-            Button(text: 'VIEW CALENDAR', onPressed: () => null)
+            Button(
+                text: FlutterI18n.translate(context, 'MY_EVENTS.VIEW_CALENDAR'),
+                onPressed: () => null)
           ])))
     ]);
   }
