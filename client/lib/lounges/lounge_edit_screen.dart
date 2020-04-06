@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:business/app_state.dart';
 import 'package:business/lounges/actions/lounge_remove_action.dart';
+import 'package:business/lounges/actions/lounge_kick_user_action.dart';
 import 'package:business/lounges/actions/lounge_edit_details_action.dart';
 import 'package:business/lounges/actions/lounge_edit_meetup_action.dart';
 import 'package:async_redux/async_redux.dart' as redux;
@@ -53,7 +54,8 @@ class _LoungeEditScreenState extends State<LoungeEditScreen>
     super.dispose();
   }
 
-  void _showConfirmPopup(void Function(redux.ReduxAction<AppState>) dispatch) {
+  void _showConfirmPopup(void Function(redux.ReduxAction<AppState>) dispatch,
+      Future<void> Function(redux.ReduxAction<AppState>) dispatchFuture) {
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -142,8 +144,15 @@ class _LoungeEditScreenState extends State<LoungeEditScreen>
                                           await showLoaderAnimation(
                                               context, this,
                                               animationDuration: 600);
+                                          for (final String memberId
+                                              in widget.lounge.memberIds) {
+                                            await dispatchFuture(
+                                                LoungeKickUserAction(
+                                                    memberId, widget.lounge));
+                                          }
                                           dispatch(LoungeRemoveAction(
                                               widget.lounge));
+
                                           Navigator.pop(context);
                                           dispatch(redux
                                               .NavigateAction<AppState>.pop());
@@ -170,7 +179,9 @@ class _LoungeEditScreenState extends State<LoungeEditScreen>
   }
 
   Widget _buildHeader(
-      AppState state, void Function(redux.ReduxAction<AppState>) dispatch) {
+      AppState state,
+      void Function(redux.ReduxAction<AppState>) dispatch,
+      Future<void> Function(redux.ReduxAction<AppState>) dispatchFuture) {
     final User owner = widget.lounge.members.firstWhere(
         (User member) => member.id == widget.lounge.owner,
         orElse: () => null);
@@ -241,7 +252,7 @@ class _LoungeEditScreenState extends State<LoungeEditScreen>
               flex: 2,
               child: GestureDetector(
                   onTap: () async {
-                    _showConfirmPopup(dispatch);
+                    _showConfirmPopup(dispatch, dispatchFuture);
                   },
                   child: Container(
                       margin:
@@ -319,28 +330,6 @@ class _LoungeEditScreenState extends State<LoungeEditScreen>
                                       color: black,
                                       fontSize: 15,
                                       fontWeight: FontWeight.w700)))
-                        ])),
-                    Container(
-                        child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                          Container(
-                              child: GestureDetector(
-                                  child: const Text('vote to KICK',
-                                      style: TextStyle(
-                                          color: orange,
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.w700)))),
-                          Container(
-                              margin: const EdgeInsets.only(left: 20),
-                              padding:
-                                  const EdgeInsets.only(left: 10, right: 10),
-                              child: GestureDetector(
-                                  child: const Text('BAN',
-                                      style: TextStyle(
-                                          color: Colors.red,
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.w700))))
                         ]))
                   ]))
           ])),
@@ -455,7 +444,7 @@ class _LoungeEditScreenState extends State<LoungeEditScreen>
           child: Column(children: <Widget>[
             Expanded(
                 child: Column(children: <Widget>[
-              _buildHeader(state, dispatch),
+              _buildHeader(state, dispatch, store.dispatchFuture),
               Container(color: white, child: const Divider()),
               Expanded(
                   flex: 8,
