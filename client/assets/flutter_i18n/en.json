@@ -300,6 +300,7 @@
     "MEMBER": "member",
     "MEMBERS": "MEMBERS",
     "PUBLIC": "PUBLIC",
+    "ADMIN": "ADMIN",
     "VOTE_TO_KICK": "vote to KICK",
     "INVITE_MORE_PEOPLE": "INVITE MORE PEOPLE",
     "MAX_PEOPLE_COUNT": "MAX PEOPLE COUNT",

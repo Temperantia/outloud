@@ -3,6 +3,7 @@ import 'package:business/app_state.dart';
 import 'package:business/classes/chat.dart';
 import 'package:business/classes/user.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:outloud/people/people_chat_screen.dart';
 import 'package:outloud/people/people_friends_screen.dart';
 import 'package:outloud/theme.dart';
