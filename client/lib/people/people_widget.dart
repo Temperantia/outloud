@@ -44,8 +44,8 @@ class _PeopleWidgetState extends State<PeopleWidget>
                     tabs: <Widget>[
                   Tab(
                       text:
-                          FlutterI18n.translate(context, 'PEOPLE_TAB.FRIENDS')),
-                  Tab(text: FlutterI18n.translate(context, 'PEOPLE_TAB.CHATS')),
+                          FlutterI18n.translate(context, 'PEOPLE_TAB.CHATS')),
+                  Tab(text: FlutterI18n.translate(context, 'PEOPLE_TAB.FRIENDS')),
                 ])),
             Expanded(
                 flex: 8,

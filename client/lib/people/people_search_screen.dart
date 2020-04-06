@@ -99,8 +99,8 @@ class _PeopleSearchScreenState extends State<PeopleSearchScreen> {
               padding: const EdgeInsets.all(15),
               child: GestureDetector(
                 onTap: () async{
-                  await dispatchFuture(UserSendFriendRequest(
-                                  state.userState.user.id, user.id));
+                  // await dispatchFuture(UserSendFriendRequest(
+                  //                 state.userState.user.id, user.id));
                 },
                 child:Icon(
                 Icons.add,
