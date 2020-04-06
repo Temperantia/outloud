@@ -35,7 +35,6 @@ class LoginFacebookAction extends ReduxAction<AppState> {
         /* final DateTime birthdate =
             DateFormat.yMd('en_US').parse(data['birthday'] as String);
  */
-        print(data);
         final AuthResult authResult =
             await firebaseAuth.signInWithCredential(credential);
         final User user = User(

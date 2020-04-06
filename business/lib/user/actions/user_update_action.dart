@@ -24,6 +24,9 @@ class UserUpdateAction extends redux.ReduxAction<AppState> {
 
   @override
   AppState reduce() {
+    if (_user == null) {
+      return null;
+    }
     _reset();
     loungesSub = streamLounges(ids: _user.lounges).listen(
         (List<Lounge> lounges) => dispatch(UserLoungesUpdateAction(lounges)));

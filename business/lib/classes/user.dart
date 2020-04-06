@@ -89,7 +89,7 @@ class User extends Entity {
       'email': email,
       'home': home,
       'location': location,
-      'birthDate': Timestamp.fromDate(birthDate),
+      'birthDate': birthDate == null ? null : Timestamp.fromDate(birthDate),
       'interests': interests,
       'pics': pics,
       'gender': gender,
@@ -108,6 +108,10 @@ class User extends Entity {
   }
 
   int getAge() {
+    if (birthDate == null) {
+      return null;
+    }
+
     final DateTime currentDate = DateTime.now();
     final int month1 = currentDate.month;
     final int month2 = birthDate.month;

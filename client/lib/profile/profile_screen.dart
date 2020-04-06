@@ -105,6 +105,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Widget _buildPicture(String userId) {
+    final int age = _user.getAge();
+    String name = _user.name;
+    if (age != null) {
+      name += '• $age';
+    }
     return Container(
         height: MediaQuery.of(context).size.height,
         child: Stack(alignment: Alignment.center, children: <Widget>[
@@ -167,7 +172,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
                             Wrap(children: <Widget>[
-                              Text('${_user.name} • ${_user.getAge()}',
+                              Text(name,
                                   style: const TextStyle(
                                       color: white,
                                       fontSize: 24.0,

@@ -21,14 +21,6 @@ class _Register2ScreenState extends State<Register2Screen> {
 
   final Map<String, bool> _selected = <String, bool>{};
 
-  @override
-  void initState() {
-    super.initState();
-    for (final String interest in _interests) {
-      _selected[interest] = false;
-    }
-  }
-
   Widget _buildInterest(MapEntry<String, bool> interest) {
     return interest.value
         ? GestureDetector(
@@ -92,6 +84,11 @@ class _Register2ScreenState extends State<Register2Screen> {
         FlutterI18n.translate(context, 'INTERESTS.PET'),
         FlutterI18n.translate(context, 'INTERESTS.CRAFT'),
       ];
+      for (final String interest in _interests) {
+        if (_selected[interest] == null) {
+          _selected[interest] = false;
+        }
+      }
       return View(
           showAppBar: false,
           showNavBar: false,
