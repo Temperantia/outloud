@@ -86,9 +86,7 @@ Future<void> updateUser(User data) async {
 }
 
 Future<void> updateUserLounge(User user, List<String> lounges) {
-  final Map<String, dynamic> data = user.toJson();
-  data['lounges'] = lounges;
-  return _api.updateDocument(data, user.id);
+  return _api.updateDocument(<String, List<String>>{'lounges': lounges}, user.id);
 }
 
 Future<void> updateLocation(GeoPoint location, String userId) async {

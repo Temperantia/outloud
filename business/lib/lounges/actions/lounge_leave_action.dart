@@ -16,19 +16,15 @@ class LoungeLeaveAction extends ReduxAction<AppState> {
       // TODO(robin): this is good to check, still a lounge is displayed after the user joined it in browsing lounges = bug
       return null;
     }
-    final int _indexOfUserId = lounge.memberIds.indexOf(userId);
 
-    final List<String> _userIdes = lounge.memberIds.sublist(0, _indexOfUserId) +
-        lounge.memberIds.sublist(_indexOfUserId, lounge.memberIds.length - 1);
+    final List<String> _userIdes = List<String>.from(lounge.memberIds);
+    _userIdes.remove(userId);
 
     await updateLoungeUser(lounge, _userIdes);
-
-    final int _indexLounge = state.userState.user.lounges.indexOf(lounge.id);
-    final List<String> _newLounges =
-        state.userState.user.lounges.sublist(0, _indexLounge) +
-            state.userState.user.lounges
-                .sublist(_indexLounge, state.userState.user.lounges.length - 1);
-    await updateUserLounge(state.userState.user, _newLounges);
+    final List<String> _goodLounges =
+        List<String>.from(state.userState.user.lounges);
+    _goodLounges.remove(lounge.id);
+    await updateUserLounge(state.userState.user, _goodLounges);
     return null;
   }
 }
