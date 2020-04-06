@@ -9,7 +9,7 @@ import 'package:business/user/actions/user_listen_action.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:http/http.dart';
-import 'package:intl/intl.dart';
+//import 'package:intl/intl.dart';
 
 class LoginFacebookAction extends ReduxAction<AppState> {
   static final FacebookLogin facebookSignIn = FacebookLogin();
@@ -17,7 +17,7 @@ class LoginFacebookAction extends ReduxAction<AppState> {
   @override
   Future<AppState> reduce() async {
     final FacebookLoginResult result = await facebookSignIn
-        .logIn(<String>['user_birthday']).catchError((Object error) => null);
+        .logIn(<String>['email']).catchError((Object error) => null);
     if (result == null) {
       return null;
     }
@@ -31,13 +31,13 @@ class LoginFacebookAction extends ReduxAction<AppState> {
             'https://graph.facebook.com/v2.12/me?fields=name,birthday,picture.height(1000)&access_token=$token');
         final Map<String, dynamic> data =
             json.decode(graphResponse.body) as Map<String, dynamic>;
-        final DateTime birthdate =
+        /* final DateTime birthdate =
             DateFormat.yMd('en_US').parse(data['birthday'] as String);
-
+ */
         final AuthResult authResult =
             await firebaseAuth.signInWithCredential(credential);
         final User user = User(
-            birthDate: birthdate,
+            //birthDate: birthdate,
             name: authResult.user.displayName,
             id: authResult.user.uid,
             pics: <String>[data['picture']['data']['url'] as String]);
