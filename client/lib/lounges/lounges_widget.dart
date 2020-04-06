@@ -74,23 +74,24 @@ class _LoungesWidgetState extends State<LoungesWidget>
                           fontSize: 13,
                           fontWeight: FontWeight.w500))),
             ]),
-          Row(children: <Widget>[
-            RichText(
-                text: TextSpan(
-                    text:
-                        '${lounge.members.length.toString()} ${FlutterI18n.translate(context, "LOUNGES_TAB.MEMBER")}${lounge.members.length > 1 ? 's ' : ' '}',
-                    style: const TextStyle(
-                        color: black,
-                        fontSize: 13,
-                        fontWeight: FontWeight.w500),
-                    children: <TextSpan>[
+          Wrap(children: <Widget>[
+            Container(
+                child: RichText(
+                    text: TextSpan(
+                        text:
+                            '${lounge.members.length.toString()} ${FlutterI18n.translate(context, "LOUNGES_TAB.MEMBER")}${lounge.members.length > 1 ? 's ' : ' '}',
+                        style: const TextStyle(
+                            color: black,
+                            fontSize: 13,
+                            fontWeight: FontWeight.w500),
+                        children: <TextSpan>[
                   TextSpan(
                       text: lounge.event.name,
                       style: TextStyle(
                           color: orange,
                           fontSize: 14,
                           fontWeight: FontWeight.w800)),
-                ]))
+                ])))
           ]),
           Container(
               child: GestureDetector(

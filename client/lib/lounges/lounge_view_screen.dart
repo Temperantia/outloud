@@ -91,11 +91,11 @@ class _LoungeViewScreenState extends State<LoungeViewScreen> {
                                     fontSize: 13,
                                     fontWeight: FontWeight.w500)))
                       ]),
-                    Row(children: <Widget>[
+                    Wrap(children: <Widget>[
                       RichText(
                           text: TextSpan(
                               text:
-                                  '${widget.lounge.members.length.toString()} ${FlutterI18n.translate(context, "LOUNGE.MEMBER")}${widget.lounge.members.length > 1 ? 's' : ''}',
+                                  '${widget.lounge.members.length.toString()} ${FlutterI18n.translate(context, "LOUNGE.MEMBER")}${widget.lounge.members.length > 1 ? 's' : ''} ',
                               style: const TextStyle(
                                   color: black,
                                   fontSize: 13,
@@ -145,39 +145,37 @@ class _LoungeViewScreenState extends State<LoungeViewScreen> {
           Column(children: <Widget>[
             for (User member in widget.lounge.members)
               // if (member.id != lounge.owner)
-              Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Container(
-                        padding: const EdgeInsets.only(left: 5),
-                        child: Row(children: <Widget>[
-                          CachedImage(
-                              member.pics.isEmpty ? null : member.pics[0],
-                              width: 40.0,
-                              height: 40.0,
-                              borderRadius: BorderRadius.circular(20.0),
-                              imageType: ImageType.User),
-                          Container(
-                              padding: const EdgeInsets.only(left: 10),
-                              child: Text(member.name,
-                                  style: const TextStyle(
-                                      color: black,
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.w700)))
-                        ])),
-                    Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          GestureDetector(
-                              child: Text(
-                                  FlutterI18n.translate(
-                                      context, 'LOUNGE.VOTE_TO_KICK'),
-                                  style: const TextStyle(
-                                      color: orange,
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.w700))),
-                        ])
-                  ])
+              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: <
+                  Widget>[
+                Container(
+                    padding: const EdgeInsets.only(left: 5),
+                    child: Row(children: <Widget>[
+                      CachedImage(member.pics.isEmpty ? null : member.pics[0],
+                          width: 40.0,
+                          height: 40.0,
+                          borderRadius: BorderRadius.circular(20.0),
+                          imageType: ImageType.User),
+                      Container(
+                          padding: const EdgeInsets.only(left: 10),
+                          child: Text(member.name,
+                              style: const TextStyle(
+                                  color: black,
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w700)))
+                    ])),
+                if (member.id == widget.lounge.owner)
+                  Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        GestureDetector(
+                            child: Text(
+                                FlutterI18n.translate(context, 'LOUNGE.ADMIN'),
+                                style: const TextStyle(
+                                    color: orange,
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w700))),
+                      ])
+              ])
           ]),
           Row(children: <Widget>[
             IconButton(
