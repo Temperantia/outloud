@@ -8,8 +8,8 @@ import 'package:business/models/user.dart';
 import 'package:business/user/actions/user_listen_action.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
-import 'package:intl/intl.dart';
 import 'package:http/http.dart';
+import 'package:intl/intl.dart';
 
 class LoginFacebookAction extends ReduxAction<AppState> {
   static final FacebookLogin facebookSignIn = FacebookLogin();

@@ -3,6 +3,7 @@ import 'package:business/app_state.dart';
 import 'package:business/classes/event.dart';
 import 'package:business/classes/user.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:outloud/theme.dart';
 import 'package:outloud/widgets/cached_image.dart';
 import 'package:outloud/widgets/view.dart';
@@ -23,9 +24,11 @@ class _EventAttendingScreenState extends State<EventAttendingScreen> {
     return Container(
         padding: const EdgeInsets.all(15),
         child: Column(children: <Widget>[
-          Row(children: const <Widget>[
-            Text('FOR THE EVENT',
-                style: TextStyle(
+          Row(children: <Widget>[
+            Text(
+                FlutterI18n.translate(
+                    context, 'EVENTS_ATTENDING.FOR_THE_EVENT'),
+                style: const TextStyle(
                     color: black, fontSize: 13, fontWeight: FontWeight.w500)),
           ]),
           Container(
@@ -61,7 +64,7 @@ class _EventAttendingScreenState extends State<EventAttendingScreen> {
               Container(
                   padding: const EdgeInsets.all(5.0),
                   child: Text(
-                      '${memberNumber.toString()} ${memberNumber <= 1 ? 'person is' : 'people are'} attending this event',
+                      '${memberNumber.toString()} ${memberNumber <= 1 ? FlutterI18n.translate(context, "EVENTS_ATTENDING.PEOPLE_SINGULAR") : FlutterI18n.translate(context, "EVENTS_ATTENDING.PEOPLE_PLURAL")} ${FlutterI18n.translate(context, "EVENTS_ATTENDING.ATTENDING")}',
                       style: const TextStyle(
                           color: orange, fontWeight: FontWeight.bold))),
               Expanded(

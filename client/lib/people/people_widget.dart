@@ -4,6 +4,7 @@ import 'package:business/classes/chat.dart';
 import 'package:business/classes/message.dart';
 import 'package:business/classes/user.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:outloud/chats/chat_screen.dart';
 import 'package:outloud/people/people_search_screen.dart';
 import 'package:outloud/profile/profile_screen.dart';
@@ -63,7 +64,7 @@ class _PeopleWidgetState extends State<PeopleWidget>
                       _buildPerson(friends[index], theme, dispatch))),
           Expanded(
               child: Button(
-                  text: 'Find more',
+                  text: FlutterI18n.translate(context, 'PEOPLE_TAB.FIND_MORE'),
                   onPressed: () => dispatch(NavigateAction<AppState>.pushNamed(
                       PeopleSearchScreen.id)))),
         ]));
@@ -141,13 +142,15 @@ class _PeopleWidgetState extends State<PeopleWidget>
       return DefaultTabController(
           length: 2,
           child: Column(children: <Widget>[
-            const Expanded(
+            Expanded(
                 child: TabBar(
                     labelColor: white,
                     indicatorColor: Colors.transparent,
                     tabs: <Widget>[
-                  Tab(text: 'Friends'),
-                  Tab(text: 'Chats'),
+                  Tab(
+                      text:
+                          FlutterI18n.translate(context, 'PEOPLE_TAB.FRIENDS')),
+                  Tab(text: FlutterI18n.translate(context, 'PEOPLE_TAB.CHATS')),
                 ])),
             Expanded(
                 flex: 8,

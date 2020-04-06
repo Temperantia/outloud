@@ -9,6 +9,7 @@ import 'package:business/lounges/actions/lounge_edit_meetup_action.dart';
 import 'package:async_redux/async_redux.dart' as redux;
 import 'package:business/classes/lounge.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:outloud/functions/loader_animation.dart';
 import 'package:outloud/theme.dart';
 import 'package:outloud/widgets/button.dart';
@@ -55,118 +56,103 @@ class _LoungeEditScreenState extends State<LoungeEditScreen>
 
   void _showConfirmPopup(void Function(redux.ReduxAction<AppState>) dispatch) {
     showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return Dialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) => Dialog(
             elevation: 0.0,
             backgroundColor: Colors.transparent,
-            child: Stack(
-              children: <Widget>[
-                Container(
+            child: Stack(children: <Widget>[
+              Container(
                   decoration: BoxDecoration(
                       color: Colors.white,
                       shape: BoxShape.rectangle,
                       borderRadius: BorderRadius.circular(5),
                       boxShadow: <BoxShadow>[
                         BoxShadow(
-                          color: Colors.black26,
-                          blurRadius: 10.0,
-                          offset: const Offset(0.0, 10.0),
-                        )
+                            color: Colors.black26,
+                            blurRadius: 10.0,
+                            offset: const Offset(0.0, 10.0))
                       ]),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      const Icon(
-                        MdiIcons.trashCan,
-                        color: orange,
-                        size: 60,
-                      ),
-                      const Text('Delete Lounge?',
-                          style: TextStyle(
-                              color: orange,
-                              fontSize: 26,
-                              fontWeight: FontWeight.w700)),
-                      const SizedBox(
-                        height: 15,
-                      ),
-                      Container(
+                  child:
+                      Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
+                    const Icon(MdiIcons.trashCan, color: orange, size: 60),
+                    Text(
+                        FlutterI18n.translate(
+                            context, 'LOUNGE_EDIT.DELETE_LOUNGE'),
+                        style: const TextStyle(
+                            color: orange,
+                            fontSize: 26,
+                            fontWeight: FontWeight.w700)),
+                    const SizedBox(height: 15),
+                    Container(
                         padding: const EdgeInsets.only(left: 18, right: 18),
-                        child: const Text(
-                            'This will permanently delete the lounge and kick all its members.',
+                        child: Text(
+                            FlutterI18n.translate(
+                                context, 'LOUNGE_EDIT.PERMANENT_DELETE'),
                             textAlign: TextAlign.center,
-                            style: TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.w500)),
-                      ),
-                      Container(
+                            style: const TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.w500))),
+                    Container(
                         padding: const EdgeInsets.only(
                             left: 18, right: 18, bottom: 15),
-                        child: const Text('Are you sure?',
+                        child: Text(
+                            FlutterI18n.translate(
+                                context, 'LOUNGE_EDIT.DELETE_CONFIRMATION'),
                             textAlign: TextAlign.justify,
-                            style: TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.w500)),
-                      ),
-                      SizedBox(
+                            style: const TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.w500))),
+                    SizedBox(
                         child: Container(
-                          color: orange,
-                          child: Column(
-                            children: <Widget>[
+                            color: orange,
+                            child: Column(children: <Widget>[
                               Container(
                                   padding: const EdgeInsets.only(top: 10),
                                   child: Align(
-                                    alignment: Alignment.bottomCenter,
-                                    child: FlatButton(
-                                        color: white,
-                                        onPressed: () {
-                                          Navigator.pop(context);
-                                        },
-                                        child: Container(
-                                            padding: const EdgeInsets.only(
-                                                left: 20, right: 20),
-                                            child: const Text(
-                                                'No, Take Me Back',
-                                                style: TextStyle(
-                                                    color: orange,
-                                                    fontSize: 16,
-                                                    fontWeight:
-                                                        FontWeight.w500)))),
-                                  )),
+                                      alignment: Alignment.bottomCenter,
+                                      child: FlatButton(
+                                          color: white,
+                                          onPressed: () =>
+                                              Navigator.pop(context),
+                                          child: Container(
+                                              padding: const EdgeInsets.only(
+                                                  left: 20, right: 20),
+                                              child: Text(
+                                                  FlutterI18n.translate(context,
+                                                      'LOUNGE_EDIT.TAKE_ME_BACK'),
+                                                  style: const TextStyle(
+                                                      color: orange,
+                                                      fontSize: 16,
+                                                      fontWeight:
+                                                          FontWeight.w500)))))),
                               Container(
                                   padding:
                                       const EdgeInsets.only(bottom: 5, top: 5),
                                   child: Align(
-                                    alignment: Alignment.bottomCenter,
-                                    child: FlatButton(
-                                        onPressed: () async {
-                                          await showLoaderAnimation(
-                                              context, this,
-                                              animationDuration: 600);
-                                          dispatch(LoungeRemoveAction(
-                                              widget.lounge));
-                                          Navigator.pop(context);
-                                          dispatch(redux
-                                              .NavigateAction<AppState>.pop());
-                                          dispatch(redux
-                                              .NavigateAction<AppState>.pop());
-                                        },
-                                        child: const Text('YES, Delete Lounge',
-                                            style: TextStyle(
-                                                color: white,
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.w500))),
-                                  ))
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                )
-              ],
-            ));
-      },
-    );
+                                      alignment: Alignment.bottomCenter,
+                                      child: FlatButton(
+                                          onPressed: () async {
+                                            await showLoaderAnimation(
+                                                context, this,
+                                                animationDuration: 600);
+                                            dispatch(LoungeRemoveAction(
+                                                widget.lounge));
+                                            Navigator.pop(context);
+                                            dispatch(redux.NavigateAction<
+                                                AppState>.pop());
+                                            dispatch(redux.NavigateAction<
+                                                AppState>.pop());
+                                          },
+                                          child: Text(
+                                              FlutterI18n.translate(context,
+                                                  'LOUNGE_EDIT.DELETE_YES'),
+                                              style: const TextStyle(
+                                                  color: white,
+                                                  fontSize: 16,
+                                                  fontWeight:
+                                                      FontWeight.w500)))))
+                            ])))
+                  ]))
+            ])));
   }
 
   Widget _buildHeader(
@@ -199,8 +185,7 @@ class _LoungeEditScreenState extends State<LoungeEditScreen>
                   padding: const EdgeInsets.only(left: 20),
                   child: Column(children: <Widget>[
                     if (owner != null)
-                      Container(
-                          child: Row(children: <Widget>[
+                      Row(children: <Widget>[
                         CachedImage(owner.pics.isEmpty ? null : owner.pics[0],
                             width: 20.0,
                             height: 20.0,
@@ -209,20 +194,22 @@ class _LoungeEditScreenState extends State<LoungeEditScreen>
                         Container(
                             padding: const EdgeInsets.only(left: 10),
                             child: Text(
-                              state.userState.user.id == owner.id
-                                  ? 'Your Lounge'
-                                  : owner.name + '\'s Lounge',
-                              style: const TextStyle(
-                                  color: black,
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.w500),
-                            ))
-                      ])),
+                                state.userState.user.id == owner.id
+                                    ? FlutterI18n.translate(
+                                        context, 'LOUNGE_EDIT.YOUR_LOUNGE')
+                                    : owner.name +
+                                        FlutterI18n.translate(context,
+                                            'LOUNGE_EDIT.SOMEONES_LOUNGE'),
+                                style: const TextStyle(
+                                    color: black,
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.w500)))
+                      ]),
                     Row(children: <Widget>[
                       RichText(
                           text: TextSpan(
                               text:
-                                  '${widget.lounge.members.length.toString()} member${widget.lounge.members.length > 1 ? 's' : ''}',
+                                  '${widget.lounge.members.length.toString()} ${FlutterI18n.translate(context, 'LOUNGE_EDIT.MEMBER')}${widget.lounge.members.length > 1 ? 's' : ''}',
                               style: const TextStyle(
                                   color: black,
                                   fontSize: 13,
@@ -240,21 +227,23 @@ class _LoungeEditScreenState extends State<LoungeEditScreen>
           Flexible(
               flex: 2,
               child: GestureDetector(
-                  onTap: () async {
-                    _showConfirmPopup(dispatch);
-                  },
+                  onTap: () async => _showConfirmPopup(dispatch),
                   child: Container(
                       margin:
                           const EdgeInsets.only(left: 5, right: 10, top: 10),
-                      child: Column(children: const <Widget>[
-                        Icon(MdiIcons.trashCan, color: orange),
-                        Text('REMOVE',
-                            style: TextStyle(
+                      child: Column(children: <Widget>[
+                        const Icon(MdiIcons.trashCan, color: orange),
+                        Text(
+                            FlutterI18n.translate(
+                                context, 'LOUNGE_EDIT.REMOVE'),
+                            style: const TextStyle(
                                 color: orange,
                                 fontSize: 10,
                                 fontWeight: FontWeight.bold)),
-                        Text('LOUNGE',
-                            style: TextStyle(
+                        Text(
+                            FlutterI18n.translate(
+                                context, 'LOUNGE_EDIT.LOUNGE'),
+                            style: const TextStyle(
                                 color: orange,
                                 fontSize: 10,
                                 fontWeight: FontWeight.bold))
@@ -268,41 +257,34 @@ class _LoungeEditScreenState extends State<LoungeEditScreen>
         child: Column(children: <Widget>[
           Container(
               constraints: BoxConstraints.expand(
-                height: Theme.of(context).textTheme.display1.fontSize * 1.1,
-              ),
+                  height: Theme.of(context).textTheme.display1.fontSize * 1.1),
               child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    Container(
-                        child: const Text('MEMBERS',
-                            style: TextStyle(
-                                color: black,
-                                fontSize: 15,
-                                fontWeight: FontWeight.w700))),
-                    Container(
-                        child: GestureDetector(
-                            child: Row(children: <Widget>[
-                      Container(
-                          child: const Text('PUBLIC',
-                              style: TextStyle(
-                                  color: Colors.orange,
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.w500))),
-                      Container(
-                          child: IconButton(
-                              iconSize: 20,
-                              icon: Icon(Icons.lock_open, color: Colors.orange),
-                              onPressed: null))
-                    ])))
+                    Text(FlutterI18n.translate(context, 'LOUNGE_EDIT.MEMBERS'),
+                        style: const TextStyle(
+                            color: black,
+                            fontSize: 15,
+                            fontWeight: FontWeight.w700)),
+                    GestureDetector(
+                        child: Row(children: <Widget>[
+                      Text(FlutterI18n.translate(context, 'LOUNGE_EDIT.PUBLIC'),
+                          style: const TextStyle(
+                              color: Colors.orange,
+                              fontSize: 15,
+                              fontWeight: FontWeight.w500)),
+                      IconButton(
+                          iconSize: 20,
+                          icon: Icon(Icons.lock_open, color: Colors.orange),
+                          onPressed: null)
+                    ]))
                   ])),
-          Container(
-              child: Column(children: <Widget>[
+          Column(children: <Widget>[
             for (User member in widget.lounge.members)
               // if (member.id != lounge.owner)
-              Container(
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
+              Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
                     Container(
                         padding: const EdgeInsets.only(left: 5),
                         child: Row(children: <Widget>[
@@ -320,42 +302,42 @@ class _LoungeEditScreenState extends State<LoungeEditScreen>
                                       fontSize: 15,
                                       fontWeight: FontWeight.w700)))
                         ])),
-                    Container(
-                        child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                          Container(
-                              child: GestureDetector(
-                                  child: const Text('vote to KICK',
-                                      style: TextStyle(
-                                          color: orange,
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.w700)))),
+                    Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          GestureDetector(
+                              child: Text(
+                                  FlutterI18n.translate(
+                                      context, 'LOUNGE_EDIT.VOTE_TO_KICK'),
+                                  style: const TextStyle(
+                                      color: orange,
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w700))),
                           Container(
                               margin: const EdgeInsets.only(left: 20),
                               padding:
                                   const EdgeInsets.only(left: 10, right: 10),
                               child: GestureDetector(
-                                  child: const Text('BAN',
-                                      style: TextStyle(
+                                  child: Text(
+                                      FlutterI18n.translate(
+                                          context, 'LOUNGE_EDIT.BAN'),
+                                      style: const TextStyle(
                                           color: Colors.red,
                                           fontSize: 15,
                                           fontWeight: FontWeight.w700))))
-                        ]))
-                  ]))
-          ])),
+                        ])
+                  ])
+          ]),
           Row(children: <Widget>[
-            Container(
-                child: IconButton(
-                    iconSize: 40,
-                    icon: Icon(Icons.add_circle, color: orange),
-                    onPressed: null)),
-            Container(
-                child: const Text('INVITE MORE PEOPLE',
-                    style: TextStyle(
-                        color: orange,
-                        fontSize: 15,
-                        fontWeight: FontWeight.w700)))
+            IconButton(
+                iconSize: 40,
+                icon: Icon(Icons.add_circle, color: orange),
+                onPressed: null),
+            Text(
+                FlutterI18n.translate(
+                    context, 'LOUNGE_EDIT.INVITE_MORE_PEOPLE'),
+                style: const TextStyle(
+                    color: orange, fontSize: 15, fontWeight: FontWeight.w700))
           ])
         ]));
   }
@@ -371,8 +353,10 @@ class _LoungeEditScreenState extends State<LoungeEditScreen>
               child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    const Text('MAX MEMBER COUNT',
-                        style: TextStyle(
+                    Text(
+                        FlutterI18n.translate(
+                            context, 'LOUNGE_EDIT.MAX_PEOPLE_COUNT'),
+                        style: const TextStyle(
                             color: black,
                             fontSize: 15,
                             fontWeight: FontWeight.w700)),
@@ -380,8 +364,10 @@ class _LoungeEditScreenState extends State<LoungeEditScreen>
                         padding: const EdgeInsets.all(10),
                         color: pinkLight.withOpacity(0.4),
                         child: GestureDetector(
-                            child: const Text('UPGRADE FOR MORE!',
-                                style: TextStyle(
+                            child: Text(
+                                FlutterI18n.translate(
+                                    context, 'LOUNGE_EDIT.UPGRADE_FOR_MORE'),
+                                style: const TextStyle(
                                     color: pink,
                                     fontSize: 12,
                                     fontWeight: FontWeight.w500)))),
@@ -403,11 +389,7 @@ class _LoungeEditScreenState extends State<LoungeEditScreen>
               activeColor: orange,
               inactiveColor: orangeLight,
               divisions: 3,
-              onChanged: (double value) {
-                setState(() {
-                  _limit = value;
-                });
-              })
+              onChanged: (double value) => setState(() => _limit = value))
         ]));
   }
 
@@ -419,16 +401,17 @@ class _LoungeEditScreenState extends State<LoungeEditScreen>
               constraints: BoxConstraints.expand(
                 height: Theme.of(context).textTheme.display1.fontSize * 1.1,
               ),
-              child: const Text('LOUNGE DESCRIPTION',
-                  style: TextStyle(
+              child: Text(
+                  FlutterI18n.translate(
+                      context, 'LOUNGE_EDIT.LOUNGE_DESCRIPTION'),
+                  style: const TextStyle(
                       color: black,
                       fontSize: 15,
                       fontWeight: FontWeight.w700))),
           Container(
               constraints: BoxConstraints.expand(
-                height:
-                    Theme.of(context).textTheme.display1.fontSize * 1.1 + 100,
-              ),
+                  height: Theme.of(context).textTheme.display1.fontSize * 1.1 +
+                      100),
               padding: const EdgeInsets.only(left: 10.0, top: 1.0, right: 10.0),
               color: orangeLight,
               child: TextField(
@@ -437,9 +420,10 @@ class _LoungeEditScreenState extends State<LoungeEditScreen>
                   inputFormatters: <TextInputFormatter>[
                     LengthLimitingTextInputFormatter(100),
                   ],
-                  decoration: const InputDecoration(
+                  decoration: InputDecoration(
                       border: InputBorder.none,
-                      hintText: 'Brief description of your group.')))
+                      hintText: FlutterI18n.translate(
+                          context, 'LOUNGE_EDIT.GROUP_DESCRIPTION'))))
         ]));
   }
 
@@ -451,7 +435,7 @@ class _LoungeEditScreenState extends State<LoungeEditScreen>
         void Function(redux.ReduxAction<dynamic>) dispatch,
         Widget child) {
       return View(
-          title: 'EDIT LOUNGE',
+          title: FlutterI18n.translate(context, 'LOUNGE_EDIT.EDIT_LOUNGE'),
           child: Column(children: <Widget>[
             Expanded(
                 child: Column(children: <Widget>[
@@ -472,12 +456,12 @@ class _LoungeEditScreenState extends State<LoungeEditScreen>
                         ])
                       ]))),
               Expanded(
-                  child: Container(
-                      child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
                     Button(
-                        text: 'SAVE CHANGES',
+                        text:
+                            FlutterI18n.translate(context, 'LOUNGE_EDIT.SAVE'),
                         onPressed: () {
                           final Map<String, dynamic> _meetupEdits =
                               _meetupWidget.currentState.saveMeetupOptions();
@@ -494,7 +478,7 @@ class _LoungeEditScreenState extends State<LoungeEditScreen>
                           dispatch(redux.NavigateAction<AppState>.pop());
                         },
                         paddingLeft: 5)
-                  ])))
+                  ]))
             ]))
           ]));
     });

@@ -4,7 +4,6 @@ import 'package:business/classes/lounge.dart';
 import 'package:business/classes/user.dart';
 import 'package:outloud/chats/chat_screen.dart';
 import 'package:outloud/events/event_attending_screen.dart';
-import 'package:outloud/events/event_create_screen.dart';
 import 'package:outloud/events/event_screen.dart';
 import 'package:outloud/lounges/lounge_chat_screen.dart';
 import 'package:outloud/lounges/lounge_create_detail_screen.dart';
@@ -36,7 +35,6 @@ final Map<String, Widget Function(Object)> routes =
   EventScreen.id: (dynamic event) => EventScreen(event as Event),
   EventAttendingScreen.id: (dynamic event) =>
       EventAttendingScreen(event as Event),
-  EventCreateScreen.id: (_) => EventCreateScreen(),
   LoungesScreen.id: (dynamic event) => LoungesScreen(event as Event),
   LoungeChatScreen.id: (dynamic lounge) => LoungeChatScreen(lounge as Lounge),
   LoungeCreateScreen.id: (_) => LoungeCreateScreen(),

@@ -3,6 +3,7 @@ import 'package:business/app_state.dart';
 import 'package:business/classes/user.dart';
 import 'package:business/people/actions/people_get_action.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:outloud/profile/profile_screen.dart';
 import 'package:outloud/widgets/cached_image.dart';
 import 'package:outloud/widgets/loading.dart';
@@ -10,7 +11,7 @@ import 'package:outloud/widgets/view.dart';
 import 'package:provider_for_redux/provider_for_redux.dart';
 import 'package:business/people/people_state.dart';
 
-import '../theme.dart';
+import 'package:outloud/theme.dart';
 
 class PeopleSearchScreen extends StatefulWidget {
   static const String id = 'PeopleSearch';
@@ -72,7 +73,10 @@ class _PeopleSearchScreenState extends State<PeopleSearchScreen> {
                       child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
-                            Text('People', style: textStyleTitle(state.theme)),
+                            Text(
+                                FlutterI18n.translate(
+                                    context, 'PEOPLE_SEARCH.PEOPLE'),
+                                style: textStyleTitle(state.theme)),
                             Expanded(
                                 child: ListView.builder(
                                     itemCount: people.length,

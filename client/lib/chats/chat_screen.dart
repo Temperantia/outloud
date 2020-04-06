@@ -4,6 +4,7 @@ import 'package:business/classes/chat.dart';
 import 'package:business/classes/message.dart';
 import 'package:business/models/message.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:outloud/theme.dart';
 import 'package:outloud/widgets/view.dart';
@@ -34,7 +35,8 @@ class _ChatScreenState extends State<ChatScreen> {
 
   void _onSendMessage(String text, String userId) {
     if (text.trim().isEmpty) {
-      Fluttertoast.showToast(msg: 'Nothing to send');
+      Fluttertoast.showToast(
+          msg: FlutterI18n.translate(context, 'CHAT.NO_MESSAGE'));
     } else {
       _textController.clear();
       addMessage(widget.chat.id, userId, text.trim(), MessageType.Text);

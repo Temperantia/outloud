@@ -5,6 +5,7 @@ import 'package:business/classes/lounge.dart';
 import 'package:business/classes/user.dart';
 import 'package:business/classes/user_event_state.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:outloud/events/event_screen.dart';
 import 'package:outloud/lounges/lounge_chat_screen.dart';
 import 'package:outloud/lounges/lounge_create_screen.dart';
@@ -61,47 +62,50 @@ class _LoungesWidgetState extends State<LoungesWidget>
                       borderRadius: BorderRadius.circular(20.0),
                       imageType: ImageType.User)),
               Expanded(
-                  child: RichText(
-                      text: TextSpan(
-                text: state.userState.user.id == owner.id
-                    ? 'Your Lounge'
-                    : owner.name + '\'s Lounge',
-                style: const TextStyle(
-                    color: black, fontSize: 13, fontWeight: FontWeight.w500),
-              ))),
+                  child: Text(
+                      state.userState.user.id == owner.id
+                          ? FlutterI18n.translate(
+                              context, 'LOUNGES_TAB.YOUR_LOUNGE')
+                          : owner.name +
+                              FlutterI18n.translate(
+                                  context, 'LOUNGES_TAB.SOMEONES_LOUNGE'),
+                      style: const TextStyle(
+                          color: black,
+                          fontSize: 13,
+                          fontWeight: FontWeight.w500))),
             ]),
           Row(children: <Widget>[
-            Container(
-                child: RichText(
-                    text: TextSpan(
-                        text:
-                            '${lounge.members.length.toString()} member${lounge.members.length > 1 ? 's ' : ' '}',
-                        style: const TextStyle(
-                            color: black,
-                            fontSize: 13,
-                            fontWeight: FontWeight.w500),
-                        children: <TextSpan>[
+            RichText(
+                text: TextSpan(
+                    text:
+                        '${lounge.members.length.toString()} ${FlutterI18n.translate(context, "LOUNGES_TAB.MEMBER")}${lounge.members.length > 1 ? 's ' : ' '}',
+                    style: const TextStyle(
+                        color: black,
+                        fontSize: 13,
+                        fontWeight: FontWeight.w500),
+                    children: <TextSpan>[
                   TextSpan(
                       text: lounge.event.name,
                       style: TextStyle(
                           color: orange,
                           fontSize: 14,
                           fontWeight: FontWeight.w800)),
-                ]))),
+                ]))
           ]),
           Container(
               child: GestureDetector(
-                  onTap: () {
-                    dispatch(redux.NavigateAction<AppState>.pushNamed(
-                        EventScreen.id,
-                        arguments: lounge.event));
-                  },
+                  onTap: () => dispatch(
+                      redux.NavigateAction<AppState>.pushNamed(EventScreen.id,
+                          arguments: lounge.event)),
                   child: Row(children: <Widget>[
                     // TODO(robin): go to event listing gesture detector
                     Image.asset('images/arrowForward.png',
                         width: 10.0, height: 10.0),
-                    const Text(' GO TO EVENT LISTING',
-                        style: TextStyle(
+                    Text(
+                        ' ' +
+                            FlutterI18n.translate(
+                                context, 'LOUNGES_TAB.GO_EVENT_LISTING'),
+                        style: const TextStyle(
                             color: orange, fontWeight: FontWeight.bold))
                   ])))
         ]);
@@ -183,16 +187,16 @@ class _LoungesWidgetState extends State<LoungesWidget>
     final UserEventState state = userEventStates[event.id];
     String stateMessage;
     if (state == UserEventState.Attending) {
-      stateMessage = 'You\'re attending this event';
+      stateMessage =
+          FlutterI18n.translate(context, 'LOUNGES_TAB.ATTENDING_EVENT');
     } else if (state == UserEventState.Liked) {
-      stateMessage = 'You liked this event';
+      stateMessage = FlutterI18n.translate(context, 'LOUNGES_TAB.LIKED_EVENT');
     }
 
     return GestureDetector(
-        onTap: () {
-          dispatch(redux.NavigateAction<AppState>.pushNamed(LoungesScreen.id,
-              arguments: event));
-        },
+        onTap: () => dispatch(redux.NavigateAction<AppState>.pushNamed(
+            LoungesScreen.id,
+            arguments: event)),
         child: Container(
             margin: const EdgeInsets.symmetric(vertical: 10.0),
             child: Row(children: <Widget>[
@@ -232,9 +236,12 @@ class _LoungesWidgetState extends State<LoungesWidget>
                             Row(children: <Widget>[
                               Image.asset('images/arrowForward.png',
                                   width: 10.0, height: 10.0),
-                              const Expanded(
-                                  child: Text(' FIND LOUNGES ',
-                                      style: TextStyle(
+                              Expanded(
+                                  child: Text(
+                                      ' ' +
+                                          FlutterI18n.translate(context,
+                                              'LOUNGES_TAB.FIND_LOUNGES'),
+                                      style: const TextStyle(
                                           color: blue,
                                           fontWeight: FontWeight.bold,
                                           fontSize: 14)))
@@ -281,13 +288,17 @@ class _LoungesWidgetState extends State<LoungesWidget>
       return DefaultTabController(
           length: 2,
           child: Column(children: <Widget>[
-            const Expanded(
+            Expanded(
                 child: TabBar(
                     labelColor: white,
                     indicatorColor: Colors.transparent,
                     tabs: <Widget>[
-                  Tab(text: 'MY LOUNGES'),
-                  Tab(text: 'FIND LOUNGES'),
+                  Tab(
+                      text: FlutterI18n.translate(
+                          context, 'LOUNGES_TAB.MY_LOUNGES')),
+                  Tab(
+                      text: FlutterI18n.translate(
+                          context, 'LOUNGES_TAB.FIND_LOUNGES')),
                 ])),
             Expanded(
                 flex: 8,
@@ -305,18 +316,18 @@ class _LoungesWidgetState extends State<LoungesWidget>
                           themeStyle),
                     ])),
             Expanded(
-                child: Container(
-                    child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
                   Button(
-                      text: 'CREATE LOUNGE',
+                      text: FlutterI18n.translate(
+                          context, 'LOUNGES_TAB.CREATE_LOUNGE'),
                       width: 250,
                       icon: Icon(Icons.add),
                       onPressed: () => dispatch(
                           redux.NavigateAction<AppState>.pushNamed(
                               LoungeCreateScreen.id))),
-                ]))),
+                ]))
           ]));
     });
   }

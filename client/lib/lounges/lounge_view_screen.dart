@@ -5,6 +5,7 @@ import 'package:business/app_state.dart';
 import 'package:async_redux/async_redux.dart' as redux;
 import 'package:business/classes/lounge.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:outloud/theme.dart';
 import 'package:outloud/widgets/cached_image.dart';
 import 'package:outloud/widgets/meetup_widget.dart';
@@ -70,8 +71,7 @@ class _LoungeViewScreenState extends State<LoungeViewScreen> {
                   padding: const EdgeInsets.only(left: 20),
                   child: Column(children: <Widget>[
                     if (owner != null)
-                      Container(
-                          child: Row(children: <Widget>[
+                      Row(children: <Widget>[
                         CachedImage(owner.pics.isEmpty ? null : owner.pics[0],
                             width: 20.0,
                             height: 20.0,
@@ -81,18 +81,21 @@ class _LoungeViewScreenState extends State<LoungeViewScreen> {
                             padding: const EdgeInsets.only(left: 10),
                             child: Text(
                                 state.userState.user.id == owner.id
-                                    ? 'Your Lounge'
-                                    : owner.name + '\'s Lounge',
+                                    ? FlutterI18n.translate(
+                                        context, 'LOUNGE.YOUR_LOUNGE')
+                                    : owner.name +
+                                        FlutterI18n.translate(
+                                            context, 'LOUNGE.SOMEONES_LOUNGE'),
                                 style: const TextStyle(
                                     color: black,
                                     fontSize: 13,
                                     fontWeight: FontWeight.w500)))
-                      ])),
+                      ]),
                     Row(children: <Widget>[
                       RichText(
                           text: TextSpan(
                               text:
-                                  '${widget.lounge.members.length.toString()} member${widget.lounge.members.length > 1 ? 's' : ''}',
+                                  '${widget.lounge.members.length.toString()} ${FlutterI18n.translate(context, "LOUNGE.MEMBER")}${widget.lounge.members.length > 1 ? 's' : ''}',
                               style: const TextStyle(
                                   color: black,
                                   fontSize: 13,
@@ -121,19 +124,19 @@ class _LoungeViewScreenState extends State<LoungeViewScreen> {
               child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    const Text('MEMBERS',
-                        style: TextStyle(
+                    Text(FlutterI18n.translate(context, 'LOUNGE.MEMBERS'),
+                        style: const TextStyle(
                             color: black,
                             fontSize: 15,
                             fontWeight: FontWeight.w700)),
                     GestureDetector(
-                        child: Row(children: const <Widget>[
-                      Text('PUBLIC',
-                          style: TextStyle(
+                        child: Row(children: <Widget>[
+                      Text(FlutterI18n.translate(context, 'LOUNGE.PUBLIC'),
+                          style: const TextStyle(
                               color: Colors.orange,
                               fontSize: 15,
                               fontWeight: FontWeight.w500)),
-                      IconButton(
+                      const IconButton(
                           iconSize: 20,
                           icon: Icon(Icons.lock_open, color: Colors.orange),
                           onPressed: null)
@@ -166,8 +169,10 @@ class _LoungeViewScreenState extends State<LoungeViewScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
                           GestureDetector(
-                              child: const Text('vote to KICK',
-                                  style: TextStyle(
+                              child: Text(
+                                  FlutterI18n.translate(
+                                      context, 'LOUNGE.VOTE_TO_KICK'),
+                                  style: const TextStyle(
                                       color: orange,
                                       fontSize: 15,
                                       fontWeight: FontWeight.w700))),
@@ -179,8 +184,8 @@ class _LoungeViewScreenState extends State<LoungeViewScreen> {
                 iconSize: 40,
                 icon: Icon(Icons.add_circle, color: orange),
                 onPressed: null),
-            const Text('INVITE MORE PEOPLE',
-                style: TextStyle(
+            Text(FlutterI18n.translate(context, 'LOUNGE.INVITE_MORE_PEOPLE'),
+                style: const TextStyle(
                     color: orange, fontSize: 15, fontWeight: FontWeight.w700))
           ])
         ]));
@@ -197,7 +202,8 @@ class _LoungeViewScreenState extends State<LoungeViewScreen> {
               child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    Text('MAX MEMBER COUNT : $_limit',
+                    Text(
+                        '${FlutterI18n.translate(context, "LOUNGE.MAX_PEOPLE_COUNT")} : $_limit',
                         style: const TextStyle(
                             color: black,
                             fontSize: 15,
@@ -214,8 +220,9 @@ class _LoungeViewScreenState extends State<LoungeViewScreen> {
               constraints: BoxConstraints.expand(
                 height: Theme.of(context).textTheme.display1.fontSize * 1.1,
               ),
-              child: const Text('LOUNGE DESCRIPTION',
-                  style: TextStyle(
+              child: Text(
+                  FlutterI18n.translate(context, 'LOUNGE.LOUNGE_DESCRIPTION'),
+                  style: const TextStyle(
                       color: black,
                       fontSize: 15,
                       fontWeight: FontWeight.w700))),
@@ -238,12 +245,10 @@ class _LoungeViewScreenState extends State<LoungeViewScreen> {
         void Function(redux.ReduxAction<dynamic>) dispatch,
         Widget child) {
       return View(
-          title: 'VIEW LOUNGE DETAILS',
+          title: FlutterI18n.translate(context, 'LOUNGE.VIEW_LOUNGE_DETAILS'),
           child: Column(children: <Widget>[
             Expanded(
-                child: Container(
-                    child: Container(
-                        child: Column(children: <Widget>[
+                child: Column(children: <Widget>[
               _buildHeader(state, dispatch),
               Container(color: white, child: const Divider()),
               Expanded(
@@ -259,28 +264,7 @@ class _LoungeViewScreenState extends State<LoungeViewScreen> {
                           _meetupWidget
                         ])
                       ]))),
-              Expanded(
-                  child: Container(
-                      child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: const <Widget>[
-                    // Button(
-                    //     text: 'SAVE CHANGES',
-                    //     onPressed: () {
-                    //       final Map<String, dynamic> _meetupEdits =
-                    //           _meetupWidget.saveMeetupOptions();
-                    //       dispatch(LoungeEditMeetupAction(
-                    //           lounge,
-                    //           _meetupEdits['date'] as DateTime,
-                    //           _meetupEdits['location'] as GeoPoint,
-                    //           _meetupEdits['notes'] as String));
-                    //       dispatch(LoungeEditDetailsAction(lounge, _visibility,
-                    //           _limit.toInt(), _descriptionController.text));
-                    //       dispatch(NavigateAction<AppState>.pop());
-                    //     },
-                    //     paddingLeft: 5)
-                  ])))
-            ]))))
+            ]))
           ]));
     });
   }

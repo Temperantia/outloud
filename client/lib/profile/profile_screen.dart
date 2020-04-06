@@ -9,6 +9,7 @@ import 'package:business/models/user.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:outloud/theme.dart';
 import 'package:outloud/widgets/bubble_bar.dart';
@@ -37,29 +38,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   bool _isEdition;
   Map<String, List<dynamic>> _controllers;
   final TextEditingController _interestController = TextEditingController();
-  final List<Map<String, String>> _interestSuggestions = <Map<String, String>>[
-    <String, String>{'name': 'Food & Drink'},
-    <String, String>{'name': 'Art'},
-    <String, String>{'name': 'Fashion & Beauty'},
-    <String, String>{'name': 'Outdoors & Adventure'},
-    <String, String>{'name': 'Sport'},
-    <String, String>{'name': 'Fitness'},
-    <String, String>{'name': 'Tech'},
-    <String, String>{'name': 'Health & Wellness'},
-    <String, String>{'name': 'Self Growth'},
-    <String, String>{'name': 'Photography'},
-    <String, String>{'name': 'Writing'},
-    <String, String>{'name': 'Culture & Language'},
-    <String, String>{'name': 'Music'},
-    <String, String>{'name': 'Activism'},
-    <String, String>{'name': 'Film'},
-    <String, String>{'name': 'Gaming'},
-    <String, String>{'name': 'Beliefs'},
-    <String, String>{'name': 'Books'},
-    <String, String>{'name': 'Dance'},
-    <String, String>{'name': 'Pet'},
-    <String, String>{'name': 'Craft'}
-  ];
+  List<Map<String, String>> _interestSuggestions;
   final List<dynamic> _pictures = <dynamic>[];
 
   @override
@@ -71,90 +50,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
       'LOCATION': <TextEditingController>[
         TextEditingController()..text = _user.home
       ],
-      'GENDER': <dynamic>[
-        _user.gender ?? '',
-        <String>[
-          '',
-          'Agender',
-          'Androgyne',
-          'Androgynous',
-          'Bigender',
-          'Cis',
-          'Cisgender',
-          'Cis Female',
-          'Cis Male',
-          'Cis Man',
-          'Cis Woman',
-          'Cisgender Female',
-          'Cisgender Male',
-          'Cisgender Man',
-          'Cisgender Woman',
-          'Female',
-          'FTM',
-          'Gender Fluid',
-          'Gender Nonconforming',
-          'Gender Questioning',
-          'Gender Variant',
-          'Genderqueer',
-          'Intersex',
-          'Male',
-          'MTF',
-          'Neither',
-          'Neutrois',
-          'Non-binary',
-          'Other',
-          'Pangender',
-          'Trans',
-          'Trans Female',
-          'Trans Male',
-          'Trans Man',
-          'Trans Person',
-          'Trans Woman',
-          'Transfeminine',
-          'Transgender',
-          'Transgender Female',
-          'Transgender Male',
-          'Transgender Man',
-          'Transgender Person',
-          'Transgender Woman',
-          'Transmasculine',
-          'Transsexual',
-          'Transsexual Female',
-          'Transsexual Male',
-          'Transsexual Man',
-          'Transsexual Person',
-          'Transsexual Woman',
-          'Two-Spirit'
-        ]
-      ],
+      'GENDER': <dynamic>[_user.gender ?? ''],
       'PRONOUNS': <TextEditingController>[
         TextEditingController()..text = _user.pronoun
       ],
-      'SEXUAL ORIENTATION': <dynamic>[
-        _user.orientation ?? '',
-        <String>[
-          '',
-          'Gay',
-          'Lesbian',
-          'Bi (Bisexual)',
-          'Pan (Pansexual)',
-          'Queer',
-          'Asexual',
-          'Allosexual',
-          'Aromantic',
-          'Heterosexual',
-          'Closeted',
-          'Androsexual',
-          'Bicurious',
-          'Demiromantic',
-          'Demisexual',
-          'Gynesexual',
-          'Polyamorous',
-          'Skoliosexual',
-          'Graysexual',
-          'Sapiosexual'
-        ]
-      ],
+      'SEXUAL ORIENTATION': <dynamic>[_user.orientation ?? ''],
       'EDUCATION': <TextEditingController>[
         TextEditingController()..text = _user.school,
         TextEditingController()..text = _user.degree
@@ -232,9 +132,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               children: <Widget>[
                                 _buildPictureSlot(
                                     _pictures.isEmpty ? null : _pictures[0], 0),
-                                const Expanded(
-                                    child: Text('MAIN',
-                                        style: TextStyle(color: white)))
+                                Expanded(
+                                    child: Text(
+                                        FlutterI18n.translate(
+                                            context, 'PROFILE.MAIN'),
+                                        style: const TextStyle(color: white)))
                               ]))),
                   for (int i = 1; i < 4; i += 1)
                     Expanded(
@@ -301,21 +203,39 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(children: <Widget>[
-          Row(children: const <Widget>[
+          Row(children: <Widget>[
             Padding(
-                padding: EdgeInsets.all(8.0),
-                child: Text('ABOUT',
-                    style: TextStyle(color: pinkBright, fontSize: 20.0)))
+                padding: const EdgeInsets.all(8.0),
+                child: Text(FlutterI18n.translate(context, 'PROFILE.ABOUT'),
+                    style: const TextStyle(color: pinkBright, fontSize: 20.0)))
           ]),
-          _buildAboutBloc('LOCATION', <String>[_user.home]),
-          _buildAboutBloc('GENDER', <String>[_user.gender]),
-          _buildAboutBloc('PRONOUNS', <String>[_user.pronoun]),
-          _buildAboutBloc('SEXUAL ORIENTATION', <String>[_user.orientation]),
-          _buildAboutBloc('EDUCATION', <String>[_user.school, _user.degree],
-              placeholders: <String>['School', 'Degree']),
+          _buildAboutBloc(FlutterI18n.translate(context, 'PROFILE.LOCATION'),
+              <String>[_user.home]),
+          _buildAboutBloc(FlutterI18n.translate(context, 'PROFILE.GENDER'),
+              <String>[_user.gender]),
+          _buildAboutBloc(FlutterI18n.translate(context, 'PROFILE.PRONOUNS'),
+              <String>[_user.pronoun]),
           _buildAboutBloc(
-              'OCCUPATION', <String>[_user.position, _user.employer],
-              placeholders: <String>['Position', 'Employer']),
+              FlutterI18n.translate(context, 'PROFILE.SEXUAL_ORIENTATION'),
+              <String>[_user.orientation]),
+          _buildAboutBloc(
+              FlutterI18n.translate(context, 'PROFILE.EDUCATION'), <String>[
+            _user.school,
+            _user.degree
+          ],
+              placeholders: <String>[
+                FlutterI18n.translate(context, 'PROFILE.SCHOOL'),
+                FlutterI18n.translate(context, 'PROFILE.DEGREE')
+              ]),
+          _buildAboutBloc(
+              FlutterI18n.translate(context, 'PROFILE.OCCUPATION'), <String>[
+            _user.position,
+            _user.employer
+          ],
+              placeholders: <String>[
+                FlutterI18n.translate(context, 'PROFILE.POSITION'),
+                FlutterI18n.translate(context, 'PROFILE.EMPLOYER')
+              ]),
         ]));
   }
 
@@ -403,11 +323,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
         padding: const EdgeInsets.all(8.0),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: <
             Widget>[
-          Row(children: const <Widget>[
+          Row(children: <Widget>[
             Padding(
-                padding: EdgeInsets.all(8.0),
-                child: Text('INTERESTS',
-                    style: TextStyle(color: pinkBright, fontSize: 20.0)))
+                padding: const EdgeInsets.all(8.0),
+                child: Text(FlutterI18n.translate(context, 'PROFILE.INTERESTS'),
+                    style: const TextStyle(color: pinkBright, fontSize: 20.0)))
           ]),
           Wrap(alignment: WrapAlignment.start, children: <Widget>[
             for (final MapEntry<int, String> interest
@@ -442,11 +362,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 autoFlipDirection: true,
                 textFieldConfiguration: TextFieldConfiguration<String>(
                     onEditingComplete: () => FocusScope.of(context).unfocus(),
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                         isDense: true,
-                        contentPadding: EdgeInsets.only(left: 10.0, top: 10.0),
-                        border: UnderlineInputBorder(),
-                        hintText: 'Add more interests',
+                        contentPadding:
+                            const EdgeInsets.only(left: 10.0, top: 10.0),
+                        border: const UnderlineInputBorder(),
+                        hintText: FlutterI18n.translate(
+                            context, 'PROFILE.ADD_INTERESTS'),
                         suffixIcon: Icon(Icons.search)),
                     controller: _interestController),
                 suggestionsCallback: (String pattern) => pattern.isEmpty
@@ -507,6 +429,150 @@ class _ProfileScreenState extends State<ProfileScreen> {
         AppState state,
         void Function(ReduxAction<dynamic>) dispatch,
         Widget child) {
+      _interestSuggestions = <Map<String, String>>[
+        <String, String>{
+          'name': FlutterI18n.translate(context, 'INTERESTS.FOOD_AND_DRINK')
+        },
+        <String, String>{
+          'name': FlutterI18n.translate(context, 'INTERESTS.ART')
+        },
+        <String, String>{
+          'name': FlutterI18n.translate(context, 'INTERESTS.FASHION_AND_BEAUTY')
+        },
+        <String, String>{
+          'name':
+              FlutterI18n.translate(context, 'INTERESTS.OUTDOORS_AND_ADVENTURE')
+        },
+        <String, String>{
+          'name': FlutterI18n.translate(context, 'INTERESTS.SPORT')
+        },
+        <String, String>{
+          'name': FlutterI18n.translate(context, 'INTERESTS.FITNESS')
+        },
+        <String, String>{
+          'name': FlutterI18n.translate(context, 'INTERESTS.TECH')
+        },
+        <String, String>{
+          'name':
+              FlutterI18n.translate(context, 'INTERESTS.HEALTH_AND_WELLNESS')
+        },
+        <String, String>{
+          'name': FlutterI18n.translate(context, 'INTERESTS.SELF_GROWTH')
+        },
+        <String, String>{
+          'name': FlutterI18n.translate(context, 'INTERESTS.PHOTOGRAPHY')
+        },
+        <String, String>{
+          'name': FlutterI18n.translate(context, 'INTERESTS.WRITING')
+        },
+        <String, String>{
+          'name':
+              FlutterI18n.translate(context, 'INTERESTS.CULTURE_AND_LANGUAGE')
+        },
+        <String, String>{
+          'name': FlutterI18n.translate(context, 'INTERESTS.MUSIC')
+        },
+        <String, String>{
+          'name': FlutterI18n.translate(context, 'INTERESTS.ACTIVISM')
+        },
+        <String, String>{
+          'name': FlutterI18n.translate(context, 'INTERESTS.FILM')
+        },
+        <String, String>{
+          'name': FlutterI18n.translate(context, 'INTERESTS.GAMING')
+        },
+        <String, String>{
+          'name': FlutterI18n.translate(context, 'INTERESTS.BELIEFS')
+        },
+        <String, String>{
+          'name': FlutterI18n.translate(context, 'INTERESTS.BOOKS')
+        },
+        <String, String>{
+          'name': FlutterI18n.translate(context, 'INTERESTS.DANCE')
+        },
+        <String, String>{
+          'name': FlutterI18n.translate(context, 'INTERESTS.PET')
+        },
+        <String, String>{
+          'name': FlutterI18n.translate(context, 'INTERESTS.CRAFT')
+        },
+      ];
+      _controllers['GENDER'].add(<String>[
+        '',
+        FlutterI18n.translate(context, 'GENDERS.AGENDER'),
+        FlutterI18n.translate(context, 'GENDERS.ANDROGYNE'),
+        FlutterI18n.translate(context, 'GENDERS.ANDROGYNOUS'),
+        FlutterI18n.translate(context, 'GENDERS.BIGENDER'),
+        FlutterI18n.translate(context, 'GENDERS.CIS'),
+        FlutterI18n.translate(context, 'GENDERS.CISGENDER'),
+        FlutterI18n.translate(context, 'GENDERS.CIS_FEMALE'),
+        FlutterI18n.translate(context, 'GENDERS.CIS_MALE'),
+        FlutterI18n.translate(context, 'GENDERS.CIS_MAN'),
+        FlutterI18n.translate(context, 'GENDERS.CIS_WOMAN'),
+        FlutterI18n.translate(context, 'GENDERS.CIS_GENDER_FEMALE'),
+        FlutterI18n.translate(context, 'GENDERS.CISGENDER_MALE'),
+        FlutterI18n.translate(context, 'GENDERS.CISGENDER_MAN'),
+        FlutterI18n.translate(context, 'GENDERS.CISGENDER_WOMAN'),
+        FlutterI18n.translate(context, 'GENDERS.FEMALE'),
+        FlutterI18n.translate(context, 'GENDERS.FTM'),
+        FlutterI18n.translate(context, 'GENDERS.GENDER_FLUID'),
+        FlutterI18n.translate(context, 'GENDERS.GENDER_NONCONFORMING'),
+        FlutterI18n.translate(context, 'GENDERS.GENDER_QUESTIONING'),
+        FlutterI18n.translate(context, 'GENDERS.GENDER_VARIANT'),
+        FlutterI18n.translate(context, 'GENDERS.GENDERQUEER'),
+        FlutterI18n.translate(context, 'GENDERS.INTERSEX'),
+        FlutterI18n.translate(context, 'GENDERS.MALE'),
+        FlutterI18n.translate(context, 'GENDERS.MTF'),
+        FlutterI18n.translate(context, 'GENDERS.NEITHER'),
+        FlutterI18n.translate(context, 'GENDERS.NEUTROIS'),
+        FlutterI18n.translate(context, 'GENDERS.NON_BINARY'),
+        FlutterI18n.translate(context, 'GENDERS.OTHER'),
+        FlutterI18n.translate(context, 'GENDERS.PANGENDER'),
+        FlutterI18n.translate(context, 'GENDERS.TRANS'),
+        FlutterI18n.translate(context, 'GENDERS.TRANS_FEMALE'),
+        FlutterI18n.translate(context, 'GENDERS.TRANS_MALE'),
+        FlutterI18n.translate(context, 'GENDERS.TRANS_MAN'),
+        FlutterI18n.translate(context, 'GENDERS.TRANS_PERSON'),
+        FlutterI18n.translate(context, 'GENDERS.TRANS_WOMAN'),
+        FlutterI18n.translate(context, 'GENDERS.TRANSFEMININE'),
+        FlutterI18n.translate(context, 'GENDERS.TRANSGENDER'),
+        FlutterI18n.translate(context, 'GENDERS.TRANSGENDER_FEMALE'),
+        FlutterI18n.translate(context, 'GENDERS.TRANSGENDER_MALE'),
+        FlutterI18n.translate(context, 'GENDERS.TRANSGENDER_MAN'),
+        FlutterI18n.translate(context, 'GENDERS.TRANSGENDER_PERSON'),
+        FlutterI18n.translate(context, 'GENDERS.TRANSGENDER_WOMAN'),
+        FlutterI18n.translate(context, 'GENDERS.TRANSMASCULINE'),
+        FlutterI18n.translate(context, 'GENDERS.TRANSSEXUAL'),
+        FlutterI18n.translate(context, 'GENDERS.TRANSSEXUAL_FEMALE'),
+        FlutterI18n.translate(context, 'GENDERS.TRANSSEXUAL_MALE'),
+        FlutterI18n.translate(context, 'GENDERS.TRANSSEXUAL_MAN'),
+        FlutterI18n.translate(context, 'GENDERS.TRANSSEXUAL_PERSON'),
+        FlutterI18n.translate(context, 'GENDERS.TRANSSEXUAL_WOMAN'),
+        FlutterI18n.translate(context, 'GENDERS.TWO_SPIRIT'),
+      ]);
+
+      _controllers['SEXUAL ORIENTATION'].add(<String>[
+        '',
+        FlutterI18n.translate(context, 'SEXUAL_ORIENTATIONS.GAY'),
+        FlutterI18n.translate(context, 'SEXUAL_ORIENTATIONS.LESBIAN'),
+        FlutterI18n.translate(context, 'SEXUAL_ORIENTATIONS.BI'),
+        FlutterI18n.translate(context, 'SEXUAL_ORIENTATIONS.PAN'),
+        FlutterI18n.translate(context, 'SEXUAL_ORIENTATIONS.QUEER'),
+        FlutterI18n.translate(context, 'SEXUAL_ORIENTATIONS.ASEXUAL'),
+        FlutterI18n.translate(context, 'SEXUAL_ORIENTATIONS.ALLOSEXUAL'),
+        FlutterI18n.translate(context, 'SEXUAL_ORIENTATIONS.AROMANTIC'),
+        FlutterI18n.translate(context, 'SEXUAL_ORIENTATIONS.HETEROSEXUAL'),
+        FlutterI18n.translate(context, 'SEXUAL_ORIENTATIONS.CLOSETED'),
+        FlutterI18n.translate(context, 'SEXUAL_ORIENTATIONS.ANDROSEXUAL'),
+        FlutterI18n.translate(context, 'SEXUAL_ORIENTATIONS.BICURIOUS'),
+        FlutterI18n.translate(context, 'SEXUAL_ORIENTATIONS.DEMIROMANTIC'),
+        FlutterI18n.translate(context, 'SEXUAL_ORIENTATIONS.DEMISEXUAL'),
+        FlutterI18n.translate(context, 'SEXUAL_ORIENTATIONS.GYNESEXUAL'),
+        FlutterI18n.translate(context, 'SEXUAL_ORIENTATIONS.POLYAMOROUS'),
+        FlutterI18n.translate(context, 'SEXUAL_ORIENTATIONS.SKOLIOSEXUAL'),
+        FlutterI18n.translate(context, 'SEXUAL_ORIENTATIONS.GRAYSEXUAL'),
+        FlutterI18n.translate(context, 'SEXUAL_ORIENTATIONS.SAPIOSEXUAL'),
+      ]);
       return View(
           isProfileScreen: true,
           isEditing: _isEdition,
@@ -519,7 +585,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             if (_isEdition)
               Button(
                   width: 200.0,
-                  text: 'SAVE CHANGES',
+                  text: FlutterI18n.translate(context, 'PROFILE.SAVE'),
                   onPressed: () async {
                     _user.home =
                         (_controllers['LOCATION'][0] as TextEditingController)

@@ -17,9 +17,9 @@ dependencies:
   async_redux: ^2.5.2
   provider_for_redux: ^1.1.0
   connectivity: ^0.4.6+2
-  intl: ^0.16.1
   timeago: ^2.0.24
   firebase_storage: ^3.1.1
+  flutter_i18n: ^0.13.0
 
   badges: ^1.1.0
   carousel_slider: ^1.3.0
@@ -50,6 +50,7 @@ dependencies:
 flutter:
   uses-material-design: true
   assets:
+    - assets/flutter_i18n/
     - images/
   fonts:
     - family: Hiragino

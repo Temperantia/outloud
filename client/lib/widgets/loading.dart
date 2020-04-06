@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 
 import 'package:outloud/theme.dart';
-import 'package:outloud/widgets/background.dart';
-import 'package:outloud/widgets/logo.dart';
 
 class Loading extends StatelessWidget {
   @override
@@ -11,12 +9,10 @@ class Loading extends StatelessWidget {
         body: Center(
             child: Container(
                 width: MediaQuery.of(context).size.width,
-                decoration: background,
                 child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: <Widget>[
-                      logo(context),
-                      const CircularProgressIndicator(backgroundColor: orange),
+                    children: const <Widget>[
+                      CircularProgressIndicator(backgroundColor: orange),
                     ]))));
   }
 }

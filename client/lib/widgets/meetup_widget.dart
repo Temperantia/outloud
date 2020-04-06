@@ -7,6 +7,7 @@ import 'package:business/classes/lounge.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:google_maps_webservice/places.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
@@ -16,7 +17,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:outloud/theme.dart';
 
-const String googleApiKey = 'AIzaSyCO8sI1kmXRQXqvwQRGrnbAW3IX-VTcCDw';
+const String googleApiKey =
+    'AIzaSyCO8sI1kmXRQXqvwQRGrnbAW3IX-VTcCDw'; // TODO(robin): this should be somewhere else
 
 class LoungeMeetupWidget extends StatefulWidget {
   const LoungeMeetupWidget(this.lounge, this.readMode, {Key key})
@@ -86,7 +88,10 @@ class LoungeMeetupWidgetState extends State<LoungeMeetupWidget> {
         markerId: MarkerId(_address),
         position: LatLng(
             widget.lounge.location.latitude, widget.lounge.location.longitude),
-        infoWindow: InfoWindow(snippet: _address, title: 'Meeting point'));
+        infoWindow: InfoWindow(
+            snippet: _address,
+            title: FlutterI18n.translate(
+                context, 'LOUNGE_CREATE_MEETUP.MEETING_POINT')));
 
     _markers.clear();
     _markers[_positionOfPlace.markerId.toString()] = _positionOfPlace;
@@ -249,14 +254,13 @@ class LoungeMeetupWidgetState extends State<LoungeMeetupWidget> {
                                 }
                                 _mapButtonsOverlay.remove();
                               },
-                              child: const Text('Cancel')),
+                              child: Text(FlutterI18n.translate(
+                                  context, 'LOUNGE_CREATE_MEETUP.CANCEL'))),
                           FlatButton(
                               color: white,
                               // padding: const EdgeInsets.all(5),
                               onPressed: () async {
-                                setState(() {
-                                  _moovingMarker = false;
-                                });
+                                setState(() => _moovingMarker = false);
                                 final String _address =
                                     await _getAdressFromCoordinates(
                                         _positionOfPlace.position.latitude,
@@ -266,7 +270,8 @@ class LoungeMeetupWidgetState extends State<LoungeMeetupWidget> {
                                       markerId: _positionOfPlace.markerId,
                                       position: _positionOfPlace.position,
                                       infoWindow: InfoWindow(
-                                          title: 'Meeting point',
+                                          title: FlutterI18n.translate(context,
+                                              'LOUNGE_CREATE_MEETUP.MEETING_POINT'),
                                           snippet: _address));
                                   _markers.clear();
                                   _markers[_positionOfPlace.markerId
@@ -277,7 +282,8 @@ class LoungeMeetupWidgetState extends State<LoungeMeetupWidget> {
                                 //     _positionOfPlace.position, 15);
                                 _mapButtonsOverlay.remove();
                               },
-                              child: const Text('Ok'))
+                              child: Text(FlutterI18n.translate(
+                                  context, 'LOUNGE_CREATE_MEETUP.OK')))
                         ])))));
   }
 
@@ -319,7 +325,8 @@ class LoungeMeetupWidgetState extends State<LoungeMeetupWidget> {
                 position: LatLng(_choosenPlace.geometry.location.lat,
                     _choosenPlace.geometry.location.lng),
                 infoWindow: InfoWindow(
-                    title: 'Meeting point',
+                    title: FlutterI18n.translate(
+                        context, 'LOUNGE_CREATE_MEETUP.MEETING_POINT'),
                     snippet: _choosenPlace.formattedAddress));
           });
           _markers.clear();
@@ -345,8 +352,10 @@ class LoungeMeetupWidgetState extends State<LoungeMeetupWidget> {
               constraints: BoxConstraints.expand(
                 height: Theme.of(context).textTheme.display1.fontSize * 1.1,
               ),
-              child: const Text('LOUNGE DESIGNATED MEETUP',
-                  style: TextStyle(
+              child: Text(
+                  FlutterI18n.translate(
+                      context, 'LOUNGE_CREATE_MEETUP.LOUNGE_DESIGNATED_MEETUP'),
+                  style: const TextStyle(
                       color: black,
                       fontSize: 15,
                       fontWeight: FontWeight.w700))),
@@ -361,8 +370,7 @@ class LoungeMeetupWidgetState extends State<LoungeMeetupWidget> {
                       gestureRecognizers: <
                           Factory<OneSequenceGestureRecognizer>>{
                         Factory<OneSequenceGestureRecognizer>(
-                          () => EagerGestureRecognizer(),
-                        )
+                            () => EagerGestureRecognizer())
                       },
                       onLongPress: (LatLng position) async {
                         if (widget.readMode) {
@@ -381,14 +389,13 @@ class LoungeMeetupWidgetState extends State<LoungeMeetupWidget> {
                                 LatLng(position.latitude, position.longitude),
                             infoWindow: InfoWindow(
                                 snippet: position.toString(),
-                                title: 'Meeting point'));
+                                title: FlutterI18n.translate(context,
+                                    'LOUNGE_CREATE_MEETUP.MEETING_POINT')));
 
                         final GoogleMapController controller =
                             await _controller.future;
                         // final double _zoom = await controller.getZoomLevel();
-                        setState(() {
-                          _moovingMarker = false;
-                        });
+                        setState(() => _moovingMarker = false);
                         controller
                             .animateCamera(CameraUpdate.newCameraPosition(
                                 CameraPosition(
@@ -429,12 +436,14 @@ class LoungeMeetupWidgetState extends State<LoungeMeetupWidget> {
                           return;
                         }
                         _positionOfPlace = Marker(
-                            markerId: MarkerId('Meeting point'),
+                            markerId: MarkerId(FlutterI18n.translate(
+                                context, 'LOUNGE_CREATE_MEETUP.MEETING_POINT')),
                             position: LatLng(position.target.latitude,
                                 position.target.longitude),
                             infoWindow: InfoWindow(
                                 snippet: position.toString(),
-                                title: 'Meeting point'));
+                                title: FlutterI18n.translate(context,
+                                    'LOUNGE_CREATE_MEETUP.MEETING_POINT')));
                         setState(() {
                           _markers.clear();
                           _markers[_positionOfPlace.markerId.toString()] =
@@ -471,7 +480,8 @@ class LoungeMeetupWidgetState extends State<LoungeMeetupWidget> {
                     decoration: InputDecoration(
                         border: InputBorder.none,
                         prefixIcon: Icon(Icons.location_on),
-                        hintText: 'Select place...'))),
+                        hintText: FlutterI18n.translate(
+                            context, 'LOUNGE_CREATE_MEETUP.SELECT_PLACE')))),
             link: _layerLink));
   }
 
@@ -484,10 +494,11 @@ class LoungeMeetupWidgetState extends State<LoungeMeetupWidget> {
         child: Column(children: <Widget>[
           Container(
               constraints: BoxConstraints.expand(
-                height: Theme.of(context).textTheme.display1.fontSize * 1.1,
-              ),
-              child: const Text('MEETUP TIME',
-                  style: TextStyle(
+                  height: Theme.of(context).textTheme.display1.fontSize * 1.1),
+              child: Text(
+                  FlutterI18n.translate(
+                      context, 'LOUNGE_CREATE_MEETUP.MEETUP_TIME'),
+                  style: const TextStyle(
                       color: black,
                       fontSize: 15,
                       fontWeight: FontWeight.w700))),
@@ -524,11 +535,11 @@ class LoungeMeetupWidgetState extends State<LoungeMeetupWidget> {
                                     _updateTimeOfEvent();
                                   },
                                   child: Container(
-                                    color: orangeLight,
-                                    height: 40,
-                                    padding: const EdgeInsets.all(10.0),
-                                    child: Text(_timeEvent.minute.toString()),
-                                  )),
+                                      color: orangeLight,
+                                      height: 40,
+                                      padding: const EdgeInsets.all(10.0),
+                                      child:
+                                          Text(_timeEvent.minute.toString()))),
                               GestureDetector(
                                   onTap: () {
                                     if (widget.readMode) {
@@ -558,9 +569,7 @@ class LoungeMeetupWidgetState extends State<LoungeMeetupWidget> {
                               lastDate: DateTime.now()
                                   .add(const Duration(days: 100)));
                           if (dateSelected != null) {
-                            setState(() {
-                              _dateEvent = dateSelected;
-                            });
+                            setState(() => _dateEvent = dateSelected);
                           }
                         },
                         child: Container(
@@ -575,30 +584,34 @@ class LoungeMeetupWidgetState extends State<LoungeMeetupWidget> {
 
   Widget _buildNotesField(BuildContext context) {
     return Container(
-      constraints: BoxConstraints.expand(
-          height: Theme.of(context).textTheme.display1.fontSize * 1.1 + 300),
-      padding: const EdgeInsets.all(15),
-      child: Column(children: <Widget>[
-        Container(
-            constraints: BoxConstraints.expand(
-                height: Theme.of(context).textTheme.display1.fontSize * 1.1),
-            child: const Text('MEETUP NOTES',
-                style: TextStyle(
-                    color: black, fontSize: 15, fontWeight: FontWeight.w700))),
-        Expanded(
-            child: Container(
-                padding: const EdgeInsets.all(15.0),
-                color: orangeLight,
-                child: TextField(
-                    readOnly: widget.readMode,
-                    controller: _notesTextController,
-                    focusNode: _focusNodeNotes,
-                    keyboardType: TextInputType.text,
-                    decoration: const InputDecoration(
-                        border: InputBorder.none,
-                        hintText: 'Notes for your group...'))))
-      ]),
-    );
+        constraints: BoxConstraints.expand(
+            height: Theme.of(context).textTheme.display1.fontSize * 1.1 + 300),
+        padding: const EdgeInsets.all(15),
+        child: Column(children: <Widget>[
+          Container(
+              constraints: BoxConstraints.expand(
+                  height: Theme.of(context).textTheme.display1.fontSize * 1.1),
+              child: Text(
+                  FlutterI18n.translate(
+                      context, 'LOUNGE_CREATE_MEETUP.MEETUP_NOTES'),
+                  style: const TextStyle(
+                      color: black,
+                      fontSize: 15,
+                      fontWeight: FontWeight.w700))),
+          Expanded(
+              child: Container(
+                  padding: const EdgeInsets.all(15.0),
+                  color: orangeLight,
+                  child: TextField(
+                      readOnly: widget.readMode,
+                      controller: _notesTextController,
+                      focusNode: _focusNodeNotes,
+                      keyboardType: TextInputType.text,
+                      decoration: InputDecoration(
+                          border: InputBorder.none,
+                          hintText: FlutterI18n.translate(context,
+                              'LOUNGE_CREATE_MEETUP.NOTES_FOR_GROUP')))))
+        ]));
   }
 
   @override
