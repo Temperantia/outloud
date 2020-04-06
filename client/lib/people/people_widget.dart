@@ -30,7 +30,7 @@ class _PeopleWidgetState extends State<PeopleWidget>
         Widget child) {
       final User user = state.userState.user;
       final List<User> friends = state.userState.friends;
-      final List<Chat> chats = state.chatsState.chats;
+      final List<Chat> chats = state.chatsState.chats;     
       if (user == null || friends == null || chats == null) {
         return Loading();
       }

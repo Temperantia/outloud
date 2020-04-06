@@ -46,7 +46,7 @@ class _PeopleFriendsScreenState extends State<PeopleFriendsScreen>
             ])));
   }
 
-  Widget _buildFriends(List<User> friends, ThemeStyle theme,
+  Widget _buildFriends(List<User> friends, List<User> pendingFriends,ThemeStyle theme,
       void Function(redux.ReduxAction<AppState>) dispatch) {
     return Container(
         padding: const EdgeInsets.all(10.0),
@@ -75,7 +75,7 @@ class _PeopleFriendsScreenState extends State<PeopleFriendsScreen>
         void Function(redux.ReduxAction<dynamic>) dispatch,
         Widget child) {
       return Container(
-          child: _buildFriends(state.userState.friends, state.theme, dispatch));
+          child: _buildFriends(state.userState.friends, state.userState.pendingFriends, state.theme, dispatch));
     });
   }
 }

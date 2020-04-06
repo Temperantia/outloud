@@ -22,6 +22,7 @@ class User extends Entity {
       this.position = '',
       this.employer = '',
       this.friends = const <String>[],
+      this.pendingFriends = const <String>[],
       this.events = const <String, UserEventState>{},
       this.lounges = const <String>[]})
       : super(id: id, name: name, location: location, interests: interests);
@@ -45,6 +46,9 @@ class User extends Entity {
         friends = snapshot['friends'] == null
             ? <String>[]
             : snapshot['friends'].cast<String>() as List<String>,
+        pendingFriends = snapshot['pendingFriends'] == null
+            ? <String>[]
+            : snapshot['pendingFriends'].cast<String>() as List<String>,
         events = snapshot['events'] == null
             ? <String, UserEventState>{}
             : Map<String, String>.from(
@@ -75,6 +79,7 @@ class User extends Entity {
   String position;
   String employer;
   List<String> friends;
+  List<String> pendingFriends;
   Map<String, UserEventState> events;
   List<String> lounges;
 
@@ -95,6 +100,7 @@ class User extends Entity {
       'position': position,
       'employer': employer,
       'friends': friends,
+      'pendingFriends': pendingFriends,
       'events': events.map<String, String>((String key, UserEventState value) =>
           MapEntry<String, String>(key, EnumToString.parse(value))),
       'lounges': lounges
