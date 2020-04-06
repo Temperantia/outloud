@@ -2,7 +2,6 @@ import 'package:async_redux/async_redux.dart' as redux;
 import 'package:business/app_state.dart';
 import 'package:business/classes/user.dart';
 import 'package:business/people/actions/people_get_action.dart';
-import 'package:business/user/actions/user_send_friend_request_action.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:outloud/profile/profile_screen.dart';
@@ -21,11 +20,14 @@ class PeopleSearchScreen extends StatefulWidget {
 }
 
 class _PeopleSearchScreenState extends State<PeopleSearchScreen> {
-
-  Widget _buildPerson(User user, String distance,
-  Future<void> Function(redux.ReduxAction<AppState>) dispatchFuture,
-      void Function(redux.ReduxAction<AppState>) dispatch, ThemeStyle theme,             AppState state,
-) {
+  Widget _buildPerson(
+    User user,
+    String distance,
+    Future<void> Function(redux.ReduxAction<AppState>) dispatchFuture,
+    void Function(redux.ReduxAction<AppState>) dispatch,
+    ThemeStyle theme,
+    AppState state,
+  ) {
     return Container(
         decoration: BoxDecoration(
             color: white, borderRadius: BorderRadius.circular(10.0)),
@@ -78,14 +80,17 @@ class _PeopleSearchScreenState extends State<PeopleSearchScreen> {
                                 children: <Widget>[
                                   for (final String _interest in user.interests)
                                     Container(
-                                        padding: const EdgeInsets.only(left:2.0, right: 2.0),
-                                        margin: const EdgeInsets.only(left:2.0, right: 2.0),
+                                        padding: const EdgeInsets.only(
+                                            left: 2.0, right: 2.0),
+                                        margin: const EdgeInsets.only(
+                                            left: 2.0, right: 2.0),
                                         decoration: BoxDecoration(
                                             border:
                                                 Border.all(color: pinkBright)),
                                         child: Text(_interest.toUpperCase(),
                                             style: const TextStyle(
-                                                color: pinkBright, fontSize: 12)))
+                                                color: pinkBright,
+                                                fontSize: 12)))
                                 ],
                               ),
                               scrollDirection: Axis.horizontal,
@@ -98,18 +103,16 @@ class _PeopleSearchScreenState extends State<PeopleSearchScreen> {
           Container(
               padding: const EdgeInsets.all(15),
               child: GestureDetector(
-                onTap: () async{
+                onTap: () async {
                   // await dispatchFuture(UserSendFriendRequest(
                   //                 state.userState.user.id, user.id));
                 },
-                child:Icon(
-                Icons.add,
-                size: 40,
-                color: blue,
-              ) ,
-              ) 
-              
-              )
+                child: Icon(
+                  Icons.add,
+                  size: 40,
+                  color: blue,
+                ),
+              ))
         ]));
   }
 

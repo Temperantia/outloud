@@ -16,8 +16,9 @@ class LoginFacebookAction extends ReduxAction<AppState> {
 
   @override
   Future<AppState> reduce() async {
+    facebookSignIn.logOut();
     final FacebookLoginResult result = await facebookSignIn
-        .logIn(<String>['email']).catchError((Object error) => null);
+        .logIn(<String>['email']).catchError((Object error) => print(error));
     if (result == null) {
       return null;
     }
@@ -34,6 +35,7 @@ class LoginFacebookAction extends ReduxAction<AppState> {
         /* final DateTime birthdate =
             DateFormat.yMd('en_US').parse(data['birthday'] as String);
  */
+        print(data);
         final AuthResult authResult =
             await firebaseAuth.signInWithCredential(credential);
         final User user = User(
