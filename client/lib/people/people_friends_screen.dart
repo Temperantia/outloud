@@ -2,6 +2,7 @@ import 'package:async_redux/async_redux.dart' as redux;
 import 'package:business/app_state.dart';
 import 'package:business/classes/user.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:outloud/people/people_search_screen.dart';
 import 'package:outloud/profile/profile_screen.dart';
 import 'package:outloud/widgets/button.dart';
@@ -46,7 +47,7 @@ class _PeopleFriendsScreenState extends State<PeopleFriendsScreen>
             ])));
   }
 
-  Widget _buildFriends(List<User> friends, ThemeStyle theme,
+  Widget _buildFriends(List<User> friends, List<User> pendingFriends,ThemeStyle theme,
       void Function(redux.ReduxAction<AppState>) dispatch) {
     return Container(
         padding: const EdgeInsets.all(10.0),
@@ -59,7 +60,7 @@ class _PeopleFriendsScreenState extends State<PeopleFriendsScreen>
                       _buildPerson(friends[index], theme, dispatch))),
           Expanded(
               child: Button(
-                  text: 'Find moOOOOOre',
+                  text: FlutterI18n.translate(context, 'PEOPLE_TAB.FIND_MORE'),
                   onPressed: () => dispatch(
                       redux.NavigateAction<AppState>.pushNamed(
                           PeopleSearchScreen.id)))),
@@ -75,7 +76,7 @@ class _PeopleFriendsScreenState extends State<PeopleFriendsScreen>
         void Function(redux.ReduxAction<dynamic>) dispatch,
         Widget child) {
       return Container(
-          child: _buildFriends(state.userState.friends, state.theme, dispatch));
+          child: _buildFriends(state.userState.friends, state.userState.pendingFriends, state.theme, dispatch));
     });
   }
 }

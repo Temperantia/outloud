@@ -11,6 +11,7 @@ import 'package:business/models/user.dart';
 import 'package:business/user/actions/user_events_update_action.dart';
 import 'package:business/user/actions/user_friends_update_action.dart';
 import 'package:business/user/actions/user_lounges_update_action.dart';
+import 'package:business/user/actions/user_pending_friends_update_action.dart';
 
 class UserUpdateAction extends redux.ReduxAction<AppState> {
   UserUpdateAction(this._user);
@@ -27,8 +28,10 @@ class UserUpdateAction extends redux.ReduxAction<AppState> {
     loungesSub = streamLounges(ids: _user.lounges).listen(
         (List<Lounge> lounges) => dispatch(UserLoungesUpdateAction(lounges)));
 
-    usersSub = streamUsers(ids: _user.friends).listen(
-        (List<User> friends) => dispatch(UserFriendsUpdateAction(friends)));
+    usersSub = streamUsers(ids: _user.friends).listen((List<User> friends) {
+      dispatch(UserFriendsUpdateAction(friends));
+      dispatch(UserPendingFriendsUpdateAction(friends));
+    });
 
     eventsSub = streamEvents(_user.events.keys.toList()).listen(
         (List<Event> events) => dispatch(UserEventsUpdateAction(events)));

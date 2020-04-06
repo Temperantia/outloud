@@ -1,7 +1,8 @@
-import 'package:async_redux/async_redux.dart';
+import 'package:async_redux/async_redux.dart' as redux;
 import 'package:business/app_state.dart';
 import 'package:business/classes/user.dart';
 import 'package:business/people/actions/people_get_action.dart';
+import 'package:business/user/actions/user_send_friend_request_action.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:outloud/profile/profile_screen.dart';
@@ -20,32 +21,96 @@ class PeopleSearchScreen extends StatefulWidget {
 }
 
 class _PeopleSearchScreenState extends State<PeopleSearchScreen> {
+
   Widget _buildPerson(User user, String distance,
-      void Function(ReduxAction<AppState>) dispatch, ThemeStyle theme) {
-    return GestureDetector(
-        onTap: () => dispatch(NavigateAction<AppState>.pushNamed(
-            ProfileScreen.id,
-            arguments: <String, dynamic>{'user': user, 'isEdition': false})),
-        child: Container(
-            decoration: BoxDecoration(
-                color: primary(theme),
-                borderRadius: BorderRadius.circular(10.0)),
-            padding: const EdgeInsets.all(10.0),
-            margin: const EdgeInsets.symmetric(vertical: 10.0),
-            child: Row(children: <Widget>[
-              CachedImage(user.pics.isEmpty ? null : user.pics[0],
-                  width: 50.0,
-                  height: 50.0,
-                  borderRadius: BorderRadius.circular(20.0),
-                  imageType: ImageType.User),
-              Expanded(
-                  flex: 3,
-                  child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 5.0),
-                      child: Text(user.name))),
-              if (distance != null) Expanded(child: Text(distance)),
-              Icon(Icons.add),
-            ])));
+  Future<void> Function(redux.ReduxAction<AppState>) dispatchFuture,
+      void Function(redux.ReduxAction<AppState>) dispatch, ThemeStyle theme,             AppState state,
+) {
+    return Container(
+        decoration: BoxDecoration(
+            color: white, borderRadius: BorderRadius.circular(10.0)),
+        padding: const EdgeInsets.all(10.0),
+        margin: const EdgeInsets.symmetric(vertical: 10.0),
+        child: Row(children: <Widget>[
+          Expanded(
+              child: GestureDetector(
+            onTap: () => dispatch(redux.NavigateAction<AppState>.pushNamed(
+                ProfileScreen.id,
+                arguments: <String, dynamic>{
+                  'user': user,
+                  'isEdition': false
+                })),
+            child: Row(
+              children: <Widget>[
+                CachedImage(user.pics.isEmpty ? null : user.pics[0],
+                    width: 50.0,
+                    height: 50.0,
+                    borderRadius: BorderRadius.circular(20.0),
+                    imageType: ImageType.User),
+                Expanded(
+                    // flex: 2,
+                    child: Container(
+                        padding: const EdgeInsets.only(left: 15),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text(
+                              user.name,
+                              style: const TextStyle(
+                                  color: black,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 14),
+                            ),
+                            const Text(
+                              'many shared intests',
+                              style: TextStyle(
+                                  color: orange, fontWeight: FontWeight.w400),
+                            ),
+                            Text(
+                              distance != null
+                                  ? ' somewhere : $distance away'
+                                  : 'somewhere',
+                              style: const TextStyle(
+                                  color: orange, fontWeight: FontWeight.w400),
+                            ),
+                            SingleChildScrollView(
+                              child: Row(
+                                children: <Widget>[
+                                  for (final String _interest in user.interests)
+                                    Container(
+                                        padding: const EdgeInsets.only(left:2.0, right: 2.0),
+                                        margin: const EdgeInsets.only(left:2.0, right: 2.0),
+                                        decoration: BoxDecoration(
+                                            border:
+                                                Border.all(color: pinkBright)),
+                                        child: Text(_interest.toUpperCase(),
+                                            style: const TextStyle(
+                                                color: pinkBright, fontSize: 12)))
+                                ],
+                              ),
+                              scrollDirection: Axis.horizontal,
+                            )
+                          ],
+                        ))),
+              ],
+            ),
+          )),
+          Container(
+              padding: const EdgeInsets.all(15),
+              child: GestureDetector(
+                onTap: () async{
+                  // await dispatchFuture(UserSendFriendRequest(
+                  //                 state.userState.user.id, user.id));
+                },
+                child:Icon(
+                Icons.add,
+                size: 40,
+                color: blue,
+              ) ,
+              ) 
+              
+              )
+        ]));
   }
 
   @override
@@ -53,9 +118,9 @@ class _PeopleSearchScreenState extends State<PeopleSearchScreen> {
     return ReduxSelector<AppState, PeopleState>(
         selector: (BuildContext context, AppState state) => state.peopleState,
         builder: (BuildContext context,
-            Store<AppState> store,
+            redux.Store<AppState> store,
             AppState state,
-            void Function(ReduxAction<AppState>) dispatch,
+            void Function(redux.ReduxAction<AppState>) dispatch,
             PeopleState peopleState,
             Widget child) {
           final List<User> people = peopleState.people;
@@ -85,8 +150,10 @@ class _PeopleSearchScreenState extends State<PeopleSearchScreen> {
                                             _buildPerson(
                                                 people[index],
                                                 distances[people[index].id],
+                                                store.dispatchFuture,
                                                 dispatch,
-                                                state.theme))),
+                                                state.theme,
+                                                state))),
                           ]))));
         });
   }
