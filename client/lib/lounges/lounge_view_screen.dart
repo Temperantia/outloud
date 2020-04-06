@@ -88,11 +88,11 @@ class _LoungeViewScreenState extends State<LoungeViewScreen> {
                                     fontSize: 13,
                                     fontWeight: FontWeight.w500)))
                       ])),
-                    Row(children: <Widget>[
+                    Wrap(children: <Widget>[
                       RichText(
                           text: TextSpan(
                               text:
-                                  '${widget.lounge.members.length.toString()} member${widget.lounge.members.length > 1 ? 's' : ''}',
+                                  '${widget.lounge.members.length.toString()} member${widget.lounge.members.length > 1 ? 's' : ''} ',
                               style: const TextStyle(
                                   color: black,
                                   fontSize: 13,
@@ -162,11 +162,12 @@ class _LoungeViewScreenState extends State<LoungeViewScreen> {
                                       fontSize: 15,
                                       fontWeight: FontWeight.w700)))
                         ])),
-                    Row(
+                    if (member.id == widget.lounge.owner)
+                      Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
                           GestureDetector(
-                              child: const Text('vote to KICK',
+                              child: const Text('ADMIN',
                                   style: TextStyle(
                                       color: orange,
                                       fontSize: 15,
@@ -197,7 +198,7 @@ class _LoungeViewScreenState extends State<LoungeViewScreen> {
               child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    Text('MAX MEMBER COUNT : $_limit',
+                    Text('MAX MEMBER COUNT : ${_limit.toInt()}',
                         style: const TextStyle(
                             color: black,
                             fontSize: 15,

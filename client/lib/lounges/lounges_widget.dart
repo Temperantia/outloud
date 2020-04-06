@@ -70,7 +70,7 @@ class _LoungesWidgetState extends State<LoungesWidget>
                     color: black, fontSize: 13, fontWeight: FontWeight.w500),
               ))),
             ]),
-          Row(children: <Widget>[
+          Wrap(children: <Widget>[
             Container(
                 child: RichText(
                     text: TextSpan(

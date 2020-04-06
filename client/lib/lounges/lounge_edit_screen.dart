@@ -218,11 +218,11 @@ class _LoungeEditScreenState extends State<LoungeEditScreen>
                                   fontWeight: FontWeight.w500),
                             ))
                       ])),
-                    Row(children: <Widget>[
+                    Wrap(children: <Widget>[
                       RichText(
                           text: TextSpan(
                               text:
-                                  '${widget.lounge.members.length.toString()} member${widget.lounge.members.length > 1 ? 's' : ''}',
+                                  '${widget.lounge.members.length.toString()} member${widget.lounge.members.length > 1 ? 's' : ''} ',
                               style: const TextStyle(
                                   color: black,
                                   fontSize: 13,

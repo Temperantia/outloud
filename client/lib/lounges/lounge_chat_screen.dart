@@ -97,7 +97,7 @@ class _LoungeChatScreenState extends State<LoungeChatScreen>
                                 ))
                           ]))
                     ])),
-                    Row(children: <Widget>[
+                    Wrap(children: <Widget>[
                       RichText(
                           text: TextSpan(
                               text: _lounge.members.length.toString() +
