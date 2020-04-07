@@ -12,6 +12,7 @@ import 'package:business/user/actions/user_events_update_action.dart';
 import 'package:business/user/actions/user_friends_update_action.dart';
 import 'package:business/user/actions/user_lounges_update_action.dart';
 import 'package:business/user/actions/user_pending_friends_update_action.dart';
+import 'package:business/user/actions/user_requested_friends_update_action.dart';
 
 class UserUpdateAction extends redux.ReduxAction<AppState> {
   UserUpdateAction(this._user);
@@ -19,6 +20,8 @@ class UserUpdateAction extends redux.ReduxAction<AppState> {
   final User _user;
 
   static StreamSubscription<List<User>> usersSub;
+  static StreamSubscription<List<User>> usersPendingSub;
+  static StreamSubscription<List<User>> usersRequestSub;
   static StreamSubscription<List<Event>> eventsSub;
   static StreamSubscription<List<Lounge>> loungesSub;
 
@@ -33,7 +36,16 @@ class UserUpdateAction extends redux.ReduxAction<AppState> {
 
     usersSub = streamUsers(ids: _user.friends).listen((List<User> friends) {
       dispatch(UserFriendsUpdateAction(friends));
+    });
+
+    usersPendingSub =
+        streamUsers(ids: _user.pendingFriends).listen((List<User> friends) {
       dispatch(UserPendingFriendsUpdateAction(friends));
+    });
+
+    usersRequestSub =
+        streamUsers(ids: _user.requestedFriends).listen((List<User> friends) {
+      dispatch(UserRequestedFriendsUpdateAction(friends));
     });
 
     eventsSub = streamEvents(_user.events.keys.toList()).listen(
@@ -43,6 +55,14 @@ class UserUpdateAction extends redux.ReduxAction<AppState> {
   }
 
   void _reset() {
+    if (usersRequestSub != null) {
+      usersRequestSub.cancel();
+    }
+
+    if (usersPendingSub != null) {
+      usersPendingSub.cancel();
+    }
+
     if (usersSub != null) {
       usersSub.cancel();
     }

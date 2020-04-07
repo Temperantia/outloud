@@ -2,6 +2,7 @@ import 'package:async_redux/async_redux.dart' as redux;
 import 'package:business/app_state.dart';
 import 'package:business/classes/user.dart';
 import 'package:business/people/actions/people_get_action.dart';
+import 'package:business/user/actions/user_send_friend_request_action.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:outloud/profile/profile_screen.dart';
@@ -100,19 +101,31 @@ class _PeopleSearchScreenState extends State<PeopleSearchScreen> {
               ],
             ),
           )),
-          Container(
-              padding: const EdgeInsets.all(15),
-              child: GestureDetector(
-                onTap: () async {
-                  // await dispatchFuture(UserSendFriendRequest(
-                  //                 state.userState.user.id, user.id));
-                },
-                child: Icon(
-                  Icons.add,
-                  size: 40,
-                  color: blue,
-                ),
-              ))
+          if (!state.userState.user.requestedFriends.contains(user.id))
+            Container(
+                padding: const EdgeInsets.all(15),
+                child: GestureDetector(
+                  onTap: () async {
+                    await dispatchFuture(UserSendFriendRequest(
+                                    state.userState.user.id, user.id));
+                  },
+                  child: Icon(
+                    Icons.add,
+                    size: 40,
+                    color: blue,
+                  ),
+                ))
+            else
+              Container(
+                  padding: const EdgeInsets.all(15),
+                  child: GestureDetector(
+                    child: Icon(
+                      Icons.check,
+                      size: 40,
+                      color: blue,
+                    ),
+                  ))
+
         ]));
   }
 
@@ -126,7 +139,10 @@ class _PeopleSearchScreenState extends State<PeopleSearchScreen> {
             void Function(redux.ReduxAction<AppState>) dispatch,
             PeopleState peopleState,
             Widget child) {
-          final List<User> people = peopleState.people;
+
+          final List<User> people = state.peopleState.people.where((User _user) {
+            return !state.userState.user.friends.contains(_user.id) && _user.id != state.userState.user.id;
+          }).toList();
           final Map<String, String> distances = peopleState.distances;
           if (people == null || distances == null) {
             return Loading();
