@@ -202,9 +202,6 @@ class _LoungesScreenState extends State<LoungesScreen>
       Future<void> Function(redux.ReduxAction<AppState>) dispatchFuture,
       void Function(redux.ReduxAction<AppState>) dispatch,
       AppState state) {
-    if (lounges == null) {
-      return Container(); // TODO(robin): handle no lounge @anthony
-    }
     return Container(
         padding: const EdgeInsets.only(left: 10, right: 30),
         child: ListView.builder(
@@ -243,8 +240,9 @@ class _LoungesScreenState extends State<LoungesScreen>
           child: Column(children: <Widget>[
             _buildHeader(context),
             const Divider(),
-            if (lounges == null) _noLoungeWidget(dispatch),
-            if (lounges != null && lounges.isNotEmpty)
+            if (lounges == null)
+              _noLoungeWidget(dispatch)
+            else if (lounges.isNotEmpty)
               Container(
                   margin: const EdgeInsets.only(top: 10, bottom: 20),
                   child: Text(

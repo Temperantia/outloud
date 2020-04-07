@@ -6,6 +6,7 @@ import 'package:async_redux/async_redux.dart' as redux;
 import 'package:business/classes/lounge.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
+import 'package:outloud/profile/profile_screen.dart';
 import 'package:outloud/theme.dart';
 import 'package:outloud/widgets/cached_image.dart';
 import 'package:outloud/widgets/meetup_widget.dart';
@@ -113,7 +114,8 @@ class _LoungeViewScreenState extends State<LoungeViewScreen> {
         ]));
   }
 
-  Widget _buildMembers(BuildContext context, AppState state) {
+  Widget _buildMembers(BuildContext context, AppState state,
+      void Function(ReduxAction<AppState>) dispatch) {
     return Container(
         padding: const EdgeInsets.all(15),
         child: Column(children: <Widget>[
@@ -147,22 +149,30 @@ class _LoungeViewScreenState extends State<LoungeViewScreen> {
               // if (member.id != lounge.owner)
               Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: <
                   Widget>[
-                Container(
-                    padding: const EdgeInsets.only(left: 5),
-                    child: Row(children: <Widget>[
-                      CachedImage(member.pics.isEmpty ? null : member.pics[0],
-                          width: 40.0,
-                          height: 40.0,
-                          borderRadius: BorderRadius.circular(20.0),
-                          imageType: ImageType.User),
-                      Container(
-                          padding: const EdgeInsets.only(left: 10),
-                          child: Text(member.name,
-                              style: const TextStyle(
-                                  color: black,
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.w700)))
-                    ])),
+                GestureDetector(
+                  onTap: () => dispatch(NavigateAction<AppState>.pushNamed(
+                      ProfileScreen.id,
+                      arguments: <String, dynamic>{
+                        'user': member,
+                        'isEdition': false
+                      })),
+                  child: Container(
+                      padding: const EdgeInsets.only(left: 5),
+                      child: Row(children: <Widget>[
+                        CachedImage(member.pics.isEmpty ? null : member.pics[0],
+                            width: 40.0,
+                            height: 40.0,
+                            borderRadius: BorderRadius.circular(20.0),
+                            imageType: ImageType.User),
+                        Container(
+                            padding: const EdgeInsets.only(left: 10),
+                            child: Text(member.name,
+                                style: const TextStyle(
+                                    color: black,
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w700)))
+                      ])),
+                ),
                 if (member.id == widget.lounge.owner)
                   Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -177,7 +187,7 @@ class _LoungeViewScreenState extends State<LoungeViewScreen> {
                       ])
               ])
           ]),
-          Row(children: <Widget>[
+          /*  Row(children: <Widget>[
             IconButton(
                 iconSize: 40,
                 icon: Icon(Icons.add_circle, color: orange),
@@ -185,7 +195,7 @@ class _LoungeViewScreenState extends State<LoungeViewScreen> {
             Text(FlutterI18n.translate(context, 'LOUNGE.INVITE_MORE_PEOPLE'),
                 style: const TextStyle(
                     color: orange, fontSize: 15, fontWeight: FontWeight.w700))
-          ])
+          ]) */
         ]));
   }
 
@@ -256,7 +266,7 @@ class _LoungeViewScreenState extends State<LoungeViewScreen> {
                           controller: _scrollController,
                           children: <Widget>[
                         Column(children: <Widget>[
-                          _buildMembers(context, state),
+                          _buildMembers(context, state, dispatch),
                           _buildLoungeMaxMemberCount(context, state),
                           _buildLoungeDescription(context, state),
                           _meetupWidget
