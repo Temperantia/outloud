@@ -86,7 +86,8 @@ Future<void> updateUser(User data) async {
 }
 
 Future<void> updateUserLounge(User user, List<String> lounges) {
-  return _api.updateDocument(<String, List<String>>{'lounges': lounges}, user.id);
+  return _api
+      .updateDocument(<String, List<String>>{'lounges': lounges}, user.id);
 }
 
 Future<void> updateLocation(GeoPoint location, String userId) async {

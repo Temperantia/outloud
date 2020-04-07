@@ -465,7 +465,8 @@ class _FindEventsScreen extends State<FindEventsScreen>
           FlutterI18n.translate(context, 'FIND_EVENTS.ANY_DISTANCE');
       _timeValue ??= FlutterI18n.translate(context, 'FIND_EVENTS.ANY_TIME');
       _refreshEvents();
-      for (final Event event in _events) {
+
+      for (final Event event in _eventsDisplayed) {
         if (event.location != null) {
           _markers[event.id] = Marker(
               markerId: MarkerId(event.id),

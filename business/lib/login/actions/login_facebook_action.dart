@@ -17,8 +17,8 @@ class LoginFacebookAction extends ReduxAction<AppState> {
   @override
   Future<AppState> reduce() async {
     facebookSignIn.logOut();
-    final FacebookLoginResult result = await facebookSignIn
-        .logIn(<String>['email']).catchError((Object error) => print(error));
+    final FacebookLoginResult result =
+        await facebookSignIn.logIn(<String>['email']);
     if (result == null) {
       return null;
     }

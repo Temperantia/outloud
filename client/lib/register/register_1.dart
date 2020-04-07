@@ -27,6 +27,7 @@ class _Register1ScreenState extends State<Register1Screen> {
         void Function(ReduxAction<dynamic>) dispatch,
         Widget child) {
       final User user = state.loginState.user;
+
       return View(
           showAppBar: false,
           showNavBar: false,
@@ -44,7 +45,7 @@ class _Register1ScreenState extends State<Register1Screen> {
                       bottomRight: Radius.circular(30.0))),
             ),
             if (user == null)
-              Container()
+              const CircularProgressIndicator()
             else
               Container(
                   constraints: const BoxConstraints.expand(),

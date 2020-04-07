@@ -75,8 +75,7 @@ class _LoungeChatScreenState extends State<LoungeChatScreen>
               child: Container(
                   padding: const EdgeInsets.only(left: 20),
                   child: Column(children: <Widget>[
-                    Container(
-                        child: Row(children: <Widget>[
+                    Row(children: <Widget>[
                       CachedImage(owner.pics.isEmpty ? null : owner.pics[0],
                           width: 20.0,
                           height: 20.0,
@@ -89,19 +88,18 @@ class _LoungeChatScreenState extends State<LoungeChatScreen>
                             Container(
                                 padding: const EdgeInsets.only(left: 10),
                                 child: Text(
-                                  state.userState.user.id == owner.id
-                                      ? FlutterI18n.translate(
-                                          context, 'LOUNGE_CHAT.YOUR_LOUNGE')
-                                      : owner.name +
-                                          FlutterI18n.translate(context,
-                                              'LOUNGE_CHAT.SOMEONES_LOUNGE'),
-                                  style: const TextStyle(
-                                      color: black,
-                                      fontSize: 13,
-                                      fontWeight: FontWeight.w500),
-                                ))
+                                    state.userState.user.id == owner.id
+                                        ? FlutterI18n.translate(
+                                            context, 'LOUNGE_CHAT.YOUR_LOUNGE')
+                                        : owner.name +
+                                            FlutterI18n.translate(context,
+                                                'LOUNGE_CHAT.SOMEONES_LOUNGE'),
+                                    style: const TextStyle(
+                                        color: black,
+                                        fontSize: 13,
+                                        fontWeight: FontWeight.w500)))
                           ]))
-                    ])),
+                    ]),
                     Wrap(children: <Widget>[
                       RichText(
                           text: TextSpan(
@@ -199,13 +197,12 @@ class _LoungeChatScreenState extends State<LoungeChatScreen>
   }
 
   Widget _buildChat(
-      Chat chat, void Function(redux.ReduxAction<dynamic>) dispatch) {
-    return ListView.builder(
-        reverse: false,
-        itemCount: chat.messages.length,
-        itemBuilder: (BuildContext context, int index) => _buildMessage(
-            chat.messages[chat.messages.length - index - 1], dispatch));
-  }
+          Chat chat, void Function(redux.ReduxAction<dynamic>) dispatch) =>
+      ListView.builder(
+          reverse: false,
+          itemCount: chat.messages.length,
+          itemBuilder: (BuildContext context, int index) => _buildMessage(
+              chat.messages[chat.messages.length - index - 1], dispatch));
 
   String _dateFormatter(int timestamp) {
     final DateTime time = DateTime.fromMillisecondsSinceEpoch(timestamp);
@@ -261,26 +258,21 @@ class _LoungeChatScreenState extends State<LoungeChatScreen>
                       child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
-                            Container(
-                                child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: <Widget>[
-                                  Container(
-                                      child: Text(user.name,
-                                          style: const TextStyle(
-                                              color: black,
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.w600))),
-                                  Container(
-                                      child: Text(
-                                    _dateFormatter(message.timestamp),
-                                    style: const TextStyle(
-                                        color: black,
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w400),
-                                  ))
-                                ])),
+                            Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: <Widget>[
+                                  Text(user.name,
+                                      style: const TextStyle(
+                                          color: black,
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w600)),
+                                  Text(_dateFormatter(message.timestamp),
+                                      style: const TextStyle(
+                                          color: black,
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w400))
+                                ]),
                             Container(
                                 padding: const EdgeInsets.only(top: 5),
                                 child: Text(
@@ -340,11 +332,11 @@ class _LoungeChatScreenState extends State<LoungeChatScreen>
                                   context, 'LOUNGE_CHAT.MESSAGE'),
                               hintStyle: const TextStyle(color: white)))),
                   Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: GestureDetector(
-                        onTap: () {},
-                        child: const Icon(MdiIcons.stickerEmoji, color: white)),
-                  ),
+                      padding: const EdgeInsets.all(8.0),
+                      child: GestureDetector(
+                          onTap: () {},
+                          child:
+                              const Icon(MdiIcons.stickerEmoji, color: white))),
                   Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: GestureDetector(
