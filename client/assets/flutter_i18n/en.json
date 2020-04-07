@@ -318,7 +318,10 @@
     "CREATE_LOUNGE": "CREATE YOUR OWN LOUNGE",
     "BROWSING_LOUNGES": "BROWSING LOUNGES",
     "LOUNGE": "lounge",
-    "AVAILABLE_FOR_EVENT": "available for this event"
+    "AVAILABLE_FOR_EVENT": "available for this event",
+    "EMPTY_TITLE": "Hmmm...",
+    "EMPTY_DESCRIPTION": "Seems like there's nothing here."
+
   },
   "LOUNGES_TAB": {
     "YOUR_LOUNGE": "Your Lounge",
@@ -329,7 +332,11 @@
     "LIKED_EVENT": "You liked this event",
     "MY_LOUNGES": "MY LOUNGES",
     "FIND_LOUNGES": "FIND LOUNGES",
-    "CREATE_LOUNGE": "CREATE LOUNGE"
+    "CREATE_LOUNGE": "CREATE LOUNGE",
+    "MY_LOUNGES_EMPTY_TITLE": "Nothing on the menu",
+    "MY_LOUNGES_EMPTY_DESCRIPTION": "You haven't joined a lounge yet! Be sure to like and attend events to gain access to lounges.",
+    "FIND_LOUNGES_EMPTY_TITLE": "Hold Up",
+    "FIND_LOUNGES_EMPTY_DESCRIPTION": "You need to attend an event before you can have access to lounges."
   },
   "PEOPLE_SEARCH": {
     "PEOPLE": "People"
