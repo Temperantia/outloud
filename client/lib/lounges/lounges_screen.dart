@@ -3,7 +3,6 @@ import 'package:business/app_state.dart';
 import 'package:business/classes/event.dart';
 import 'package:business/classes/lounge.dart';
 import 'package:business/classes/user.dart';
-import 'package:business/lounges/actions/lounge_create_action.dart';
 import 'package:business/models/user.dart';
 import 'package:flutter/material.dart';
 import 'package:business/lounges/actions/lounge_join_action.dart';
@@ -11,10 +10,8 @@ import 'package:business/lounges/actions/lounge_leave_action.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:outloud/functions/loader_animation.dart';
 import 'package:outloud/lounges/lounge_chat_screen.dart';
-import 'package:outloud/lounges/lounge_create_detail_screen.dart';
 
 import 'package:outloud/theme.dart';
-import 'package:outloud/widgets/button.dart';
 import 'package:outloud/widgets/cached_image.dart';
 import 'package:outloud/widgets/view.dart';
 import 'package:provider_for_redux/provider_for_redux.dart';
@@ -172,7 +169,7 @@ class _LoungesScreenState extends State<LoungesScreen>
                   style: const TextStyle(
                       color: black,
                       fontSize: 13,
-                      fontWeight: FontWeight.w500))),
+                      fontWeight: FontWeight.bold))),
           Row(children: <Widget>[
             Flexible(
                 child: Container(
@@ -205,9 +202,6 @@ class _LoungesScreenState extends State<LoungesScreen>
       Future<void> Function(redux.ReduxAction<AppState>) dispatchFuture,
       void Function(redux.ReduxAction<AppState>) dispatch,
       AppState state) {
-    if (lounges == null) {
-      return Container(); // TODO(robin): handle no lounge @anthony
-    }
     return Container(
         padding: const EdgeInsets.only(left: 10, right: 30),
         child: ListView.builder(
@@ -219,25 +213,16 @@ class _LoungesScreenState extends State<LoungesScreen>
   }
 
   Widget _noLoungeWidget(void Function(redux.ReduxAction<AppState>) dispatch) {
-    return Column(children: <Widget>[
-      Container(
-          width: 320,
-          height: 300,
-          child: Image.asset('images/lounges_empty_cat.png')),
-      Container(
-          margin: const EdgeInsets.only(top: 10),
-          child: Button(
-              text: FlutterI18n.translate(context, 'LOUNGES.CREATE_LOUNGE'),
-              backgroundColor: blueDark,
-              backgroundOpacity: 1,
-              fontWeight: FontWeight.w700,
-              onPressed: () {
-                dispatch(LoungeCreateAction(
-                  widget.event.id,
-                ));
-                dispatch(redux.NavigateAction<AppState>.pushNamed(
-                    LoungeCreateDetailScreen.id));
-              }))
+    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: <
+        Widget>[
+      Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
+        Text(FlutterI18n.translate(context, 'LOUNGES.EMPTY_TITLE'),
+            style:
+                const TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold)),
+        Text(FlutterI18n.translate(context, 'LOUNGES.EMPTY_DESCRIPTION'),
+            style: const TextStyle(color: grey))
+      ]),
+      Image.asset('images/catsIllus3.png')
     ]);
   }
 
@@ -253,29 +238,27 @@ class _LoungesScreenState extends State<LoungesScreen>
       return View(
           title: FlutterI18n.translate(context, 'LOUNGES.BROWSING_LOUNGES'),
           child: Column(children: <Widget>[
-            Expanded(
-                child: Column(children: <Widget>[
-              _buildHeader(context),
-              const Divider(),
-              if (lounges == null) _noLoungeWidget(dispatch),
-              if (lounges != null && lounges.isNotEmpty)
-                Container(
-                    margin: const EdgeInsets.only(top: 10, bottom: 20),
-                    child: Text(
-                        '${lounges.length} ${FlutterI18n.translate(context, "LOUNGES.LOUNGE")}' +
-                            (lounges.length > 1 ? 's' : '') +
-                            ' ' +
-                            FlutterI18n.translate(
-                                context, 'LOUNGES.AVAILABLE_FOR_EVENT'),
-                        style: const TextStyle(
-                            color: orange,
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600))),
-              if (lounges != null && lounges.isNotEmpty)
-                Expanded(
-                    child: _buildListLounges(
-                        lounges, store.dispatchFuture, dispatch, state)),
-            ]))
+            _buildHeader(context),
+            const Divider(),
+            if (lounges == null)
+              _noLoungeWidget(dispatch)
+            else if (lounges.isNotEmpty)
+              Container(
+                  margin: const EdgeInsets.only(top: 10, bottom: 20),
+                  child: Text(
+                      '${lounges.length} ${FlutterI18n.translate(context, "LOUNGES.LOUNGE")}' +
+                          (lounges.length > 1 ? 's' : '') +
+                          ' ' +
+                          FlutterI18n.translate(
+                              context, 'LOUNGES.AVAILABLE_FOR_EVENT'),
+                      style: const TextStyle(
+                          color: orange,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600))),
+            if (lounges != null && lounges.isNotEmpty)
+              Expanded(
+                  child: _buildListLounges(
+                      lounges, store.dispatchFuture, dispatch, state)),
           ]));
     });
   }

@@ -13,6 +13,7 @@ import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:outloud/functions/loader_animation.dart';
 import 'package:outloud/lounges/lounge_edit_screen.dart';
 import 'package:outloud/lounges/lounge_view_screen.dart';
+import 'package:outloud/profile/profile_screen.dart';
 import 'package:outloud/theme.dart';
 import 'package:outloud/widgets/cached_image.dart';
 import 'package:outloud/widgets/view.dart';
@@ -197,12 +198,13 @@ class _LoungeChatScreenState extends State<LoungeChatScreen>
         ]));
   }
 
-  Widget _buildChat(Chat chat) {
+  Widget _buildChat(
+      Chat chat, void Function(redux.ReduxAction<dynamic>) dispatch) {
     return ListView.builder(
         reverse: false,
         itemCount: chat.messages.length,
-        itemBuilder: (BuildContext context, int index) =>
-            _buildMessage(chat.messages[chat.messages.length - index - 1]));
+        itemBuilder: (BuildContext context, int index) => _buildMessage(
+            chat.messages[chat.messages.length - index - 1], dispatch));
   }
 
   String _dateFormatter(int timestamp) {
@@ -214,7 +216,8 @@ class _LoungeChatScreenState extends State<LoungeChatScreen>
     return date_formater.DateFormat('yyyy-MM-dd \'at\' kk:mm').format(time);
   }
 
-  Widget _buildMessage(Message message) {
+  Widget _buildMessage(
+      Message message, void Function(redux.ReduxAction<dynamic>) dispatch) {
     final User user = _lounge.members.firstWhere(
         (User user) => user.id == message.idFrom,
         orElse: () => null);
@@ -231,13 +234,21 @@ class _LoungeChatScreenState extends State<LoungeChatScreen>
                 ? TextDirection.rtl
                 : TextDirection.ltr,
             children: <Widget>[
-              Container(
-                  padding: const EdgeInsets.all(5),
-                  child: CachedImage(user.pics.isEmpty ? null : user.pics[0],
-                      width: 35.0,
-                      height: 35.0,
-                      borderRadius: BorderRadius.circular(20.0),
-                      imageType: ImageType.User)),
+              GestureDetector(
+                  onTap: () => dispatch(NavigateAction<AppState>.pushNamed(
+                          ProfileScreen.id,
+                          arguments: <String, dynamic>{
+                            'user': user,
+                            'isEdition': false
+                          })),
+                  child: Container(
+                      padding: const EdgeInsets.all(5),
+                      child: CachedImage(
+                          user.pics.isEmpty ? null : user.pics[0],
+                          width: 35.0,
+                          height: 35.0,
+                          borderRadius: BorderRadius.circular(20.0),
+                          imageType: ImageType.User))),
               Expanded(
                   child: Container(
                       decoration: BoxDecoration(
@@ -308,7 +319,7 @@ class _LoungeChatScreenState extends State<LoungeChatScreen>
                 child: Column(children: <Widget>[
               _buildHeader(state, dispatch),
               const Divider(),
-              if (chat != null) Expanded(child: _buildChat(chat))
+              if (chat != null) Expanded(child: _buildChat(chat, dispatch))
             ])),
             Container(
                 margin: const EdgeInsets.all(10.0),

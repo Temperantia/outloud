@@ -33,15 +33,41 @@ class _LoungesWidgetState extends State<LoungesWidget>
       Map<String, List<Lounge>> userEventLounges,
       void Function(redux.ReduxAction<AppState>) dispatch,
       ThemeStyle themeStyle) {
-    return Container(
-        padding: const EdgeInsets.symmetric(horizontal: 50.0),
-        child: ListView.builder(
-            itemCount: lounges.length,
-            itemBuilder: (BuildContext context, int index) => Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      _buildLounge(state, lounges[index], dispatch, themeStyle)
-                    ])));
+    return lounges.isEmpty
+        ? Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
+                Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Container(
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 20.0),
+                              child: Text(
+                                  FlutterI18n.translate(context,
+                                      'LOUNGES_TAB.MY_LOUNGES_EMPTY_TITLE'),
+                                  style: const TextStyle(
+                                      fontSize: 20.0,
+                                      fontWeight: FontWeight.bold))),
+                          Text(
+                              FlutterI18n.translate(context,
+                                  'LOUNGES_TAB.MY_LOUNGES_EMPTY_DESCRIPTION'),
+                              style: const TextStyle(color: grey))
+                        ])),
+                Image.asset('images/catsIllus1.png')
+              ])
+        : Container(
+            padding: const EdgeInsets.symmetric(horizontal: 50.0),
+            child: ListView.builder(
+                itemCount: lounges.length,
+                itemBuilder: (BuildContext context, int index) => Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          _buildLounge(
+                              state, lounges[index], dispatch, themeStyle)
+                        ])));
   }
 
   Widget _buildInfoLoungeLayout(AppState state, Lounge lounge,
@@ -161,21 +187,46 @@ class _LoungesWidgetState extends State<LoungesWidget>
       Map<String, List<Lounge>> userEventLounges,
       void Function(redux.ReduxAction<AppState>) dispatch,
       ThemeStyle themeStyle) {
-    return Container(
-        padding: const EdgeInsets.symmetric(horizontal: 50.0),
-        child: ListView.builder(
-            itemCount: userEvents.length,
-            itemBuilder: (BuildContext context, int index) => Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      _buildEvent(
-                          userLounges,
-                          userEvents[index],
-                          userEventStates,
-                          userEventLounges,
-                          dispatch,
-                          themeStyle),
-                    ])));
+    return userEvents.isEmpty
+        ? Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
+                Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Container(
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 20.0),
+                              child: Text(
+                                  FlutterI18n.translate(context,
+                                      'LOUNGES_TAB.FIND_LOUNGES_EMPTY_TITLE'),
+                                  style: const TextStyle(
+                                      fontSize: 20.0,
+                                      fontWeight: FontWeight.bold))),
+                          Text(
+                              FlutterI18n.translate(context,
+                                  'LOUNGES_TAB.FIND_LOUNGES_EMPTY_DESCRIPTION'),
+                              style: const TextStyle(color: grey))
+                        ])),
+                Image.asset('images/catsIllus2.png')
+              ])
+        : Container(
+            padding: const EdgeInsets.symmetric(horizontal: 50.0),
+            child: ListView.builder(
+                itemCount: userEvents.length,
+                itemBuilder: (BuildContext context, int index) => Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          _buildEvent(
+                              userLounges,
+                              userEvents[index],
+                              userEventStates,
+                              userEventLounges,
+                              dispatch,
+                              themeStyle),
+                        ])));
   }
 
   Widget _buildEvent(

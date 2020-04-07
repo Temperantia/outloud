@@ -168,22 +168,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   padding: const EdgeInsets.only(bottom: 50.0),
                   child: Container(
                       padding: const EdgeInsets.all(20.0),
-                      child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Wrap(children: <Widget>[
-                              Text(name,
-                                  style: const TextStyle(
-                                      color: white,
-                                      fontSize: 24.0,
-                                      fontWeight: FontWeight.bold)),
-                            ]),
-                            if (_user.id == userId && !_isEdition)
-                              GestureDetector(
-                                  onTap: () =>
-                                      setState(() => _isEdition = true),
-                                  child: Icon(Icons.edit, color: white)),
-                          ]))))
+                      child: Wrap(children: <Widget>[
+                        Text(name,
+                            style: const TextStyle(
+                                color: white,
+                                fontSize: 24.0,
+                                fontWeight: FontWeight.bold)),
+                        if (_user.id == userId && !_isEdition)
+                          GestureDetector(
+                              onTap: () => setState(() => _isEdition = true),
+                              child: Icon(Icons.edit, color: white)),
+                      ]))))
         ]));
   }
 

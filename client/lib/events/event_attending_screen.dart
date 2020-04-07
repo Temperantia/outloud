@@ -29,7 +29,7 @@ class _EventAttendingScreenState extends State<EventAttendingScreen> {
                 FlutterI18n.translate(
                     context, 'EVENTS_ATTENDING.FOR_THE_EVENT'),
                 style: const TextStyle(
-                    color: black, fontSize: 13, fontWeight: FontWeight.w500)),
+                    color: black, fontSize: 13, fontWeight: FontWeight.bold)),
           ]),
           Container(
               child: Row(children: <Widget>[
