@@ -155,111 +155,102 @@ class _LoungesScreenState extends State<LoungesScreen>
     ]);
   }
 
-  Widget _buildHeader(BuildContext context) {
-    return Container(
-        padding: const EdgeInsets.all(15),
-        child: Column(children: <Widget>[
-          Container(
-              constraints: BoxConstraints.expand(
-                height: Theme.of(context).textTheme.display1.fontSize * 1.1,
-              ),
-              child: Text(
-                  FlutterI18n.translate(context, 'LOUNGES.FOR_THE_EVENT'),
-                  textAlign: TextAlign.left,
-                  style: const TextStyle(
-                      color: black,
-                      fontSize: 13,
-                      fontWeight: FontWeight.bold))),
-          Row(children: <Widget>[
-            Flexible(
-                child: Container(
-                    decoration: const BoxDecoration(
-                        border: Border(
-                            left: BorderSide(color: orange, width: 3.0))),
-                    child: CachedImage(widget.event.pic,
-                        width: 30.0,
-                        height: 30.0,
-                        borderRadius: const BorderRadius.only(
-                            bottomRight: Radius.circular(5.0),
-                            topRight: Radius.circular(5.0)),
-                        imageType: ImageType.Event))),
-            Expanded(
-                flex: 8,
-                child: Container(
-                    padding: const EdgeInsets.only(left: 10),
-                    child: Text(widget.event.name,
-                        textAlign: TextAlign.justify,
-                        style: const TextStyle(
-                            color: orange,
-                            fontSize: 12,
-                            fontWeight: FontWeight.w700)))),
-          ])
-        ]));
-  }
-
-  Widget _buildListLounges(
-      List<Lounge> lounges,
-      Future<void> Function(redux.ReduxAction<AppState>) dispatchFuture,
-      void Function(redux.ReduxAction<AppState>) dispatch,
-      AppState state) {
-    return Container(
-        padding: const EdgeInsets.only(left: 10, right: 30),
-        child: ListView.builder(
-            itemCount: lounges.length,
-            itemBuilder: (BuildContext context, int index) => Container(
-                padding: const EdgeInsets.all(10.0),
-                child: _buildLounge(
-                    lounges[index], dispatchFuture, dispatch, state))));
-  }
-
-  Widget _noLoungeWidget(void Function(redux.ReduxAction<AppState>) dispatch) {
-    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: <
-        Widget>[
-      Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
-        Text(FlutterI18n.translate(context, 'LOUNGES.EMPTY_TITLE'),
-            style:
-                const TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold)),
-        Text(FlutterI18n.translate(context, 'LOUNGES.EMPTY_DESCRIPTION'),
-            style: const TextStyle(color: grey))
-      ]),
-      Image.asset('images/catsIllus3.png')
-    ]);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return ReduxConsumer<AppState>(builder: (BuildContext context,
-        redux.Store<AppState> store,
-        AppState state,
-        void Function(redux.ReduxAction<AppState>) dispatch,
-        Widget child) {
-      final List<Lounge> lounges =
-          state.userState.eventLounges[widget.event.id];
-      return View(
-          title: FlutterI18n.translate(context, 'LOUNGES.BROWSING_LOUNGES'),
-          child: Column(children: <Widget>[
-            _buildHeader(context),
-            const Divider(),
-            if (lounges == null)
-              _noLoungeWidget(dispatch)
-            else if (lounges.isNotEmpty)
-              Container(
-                  margin: const EdgeInsets.only(top: 10, bottom: 20),
-                  child: Text(
-                      '${lounges.length} ${FlutterI18n.translate(context, "LOUNGES.LOUNGE")}' +
-                          (lounges.length > 1 ? 's' : '') +
-                          ' ' +
-                          FlutterI18n.translate(
-                              context, 'LOUNGES.AVAILABLE_FOR_EVENT'),
+  Widget _buildHeader(BuildContext context) => Container(
+      padding: const EdgeInsets.all(15),
+      child: Column(children: <Widget>[
+        Container(
+            constraints: BoxConstraints.expand(
+              height: Theme.of(context).textTheme.display1.fontSize * 1.1,
+            ),
+            child: Text(FlutterI18n.translate(context, 'LOUNGES.FOR_THE_EVENT'),
+                textAlign: TextAlign.left,
+                style: const TextStyle(
+                    color: black, fontSize: 13, fontWeight: FontWeight.bold))),
+        Row(children: <Widget>[
+          Flexible(
+              child: Container(
+                  decoration: const BoxDecoration(
+                      border:
+                          Border(left: BorderSide(color: orange, width: 3.0))),
+                  child: CachedImage(widget.event.pic,
+                      width: 30.0,
+                      height: 30.0,
+                      borderRadius: const BorderRadius.only(
+                          bottomRight: Radius.circular(5.0),
+                          topRight: Radius.circular(5.0)),
+                      imageType: ImageType.Event))),
+          Expanded(
+              flex: 8,
+              child: Container(
+                  padding: const EdgeInsets.only(left: 10),
+                  child: Text(widget.event.name,
+                      textAlign: TextAlign.justify,
                       style: const TextStyle(
                           color: orange,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600))),
-            if (lounges != null && lounges.isNotEmpty)
-              Expanded(
-                  child: _buildListLounges(
-                      lounges, store.dispatchFuture, dispatch, state)),
-          ]));
-    });
-  }
+                          fontSize: 12,
+                          fontWeight: FontWeight.w700)))),
+        ])
+      ]));
+
+  Widget _buildListLounges(
+          List<Lounge> lounges,
+          Future<void> Function(redux.ReduxAction<AppState>) dispatchFuture,
+          void Function(redux.ReduxAction<AppState>) dispatch,
+          AppState state) =>
+      Container(
+          padding: const EdgeInsets.only(left: 10, right: 30),
+          child: ListView.builder(
+              itemCount: lounges.length,
+              itemBuilder: (BuildContext context, int index) => Container(
+                  padding: const EdgeInsets.all(10.0),
+                  child: _buildLounge(
+                      lounges[index], dispatchFuture, dispatch, state))));
+
+  Widget _noLoungeWidget(void Function(redux.ReduxAction<AppState>) dispatch) =>
+      Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
+        Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
+          Text(FlutterI18n.translate(context, 'LOUNGES.EMPTY_TITLE'),
+              style:
+                  const TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold)),
+          Text(FlutterI18n.translate(context, 'LOUNGES.EMPTY_DESCRIPTION'),
+              style: const TextStyle(color: grey))
+        ]),
+        Image.asset('images/catsIllus3.png')
+      ]);
+
+  @override
+  Widget build(BuildContext context) =>
+      ReduxConsumer<AppState>(builder: (BuildContext context,
+          redux.Store<AppState> store,
+          AppState state,
+          void Function(redux.ReduxAction<AppState>) dispatch,
+          Widget child) {
+        final List<Lounge> lounges =
+            state.userState.eventLounges[widget.event.id];
+        return View(
+            title: FlutterI18n.translate(context, 'LOUNGES.BROWSING_LOUNGES'),
+            child: Column(children: <Widget>[
+              _buildHeader(context),
+              const Divider(),
+              if (lounges == null)
+                _noLoungeWidget(dispatch)
+              else if (lounges.isNotEmpty)
+                Container(
+                    margin: const EdgeInsets.only(top: 10, bottom: 20),
+                    child: Text(
+                        '${lounges.length} ${FlutterI18n.translate(context, "LOUNGES.LOUNGE")}' +
+                            (lounges.length > 1 ? 's' : '') +
+                            ' ' +
+                            FlutterI18n.translate(
+                                context, 'LOUNGES.AVAILABLE_FOR_EVENT'),
+                        style: const TextStyle(
+                            color: orange,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600))),
+              if (lounges != null && lounges.isNotEmpty)
+                Expanded(
+                    child: _buildListLounges(
+                        lounges, store.dispatchFuture, dispatch, state)),
+            ]));
+      });
 }

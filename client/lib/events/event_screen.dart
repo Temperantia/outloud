@@ -418,7 +418,7 @@ class _EventScreenState extends State<EventScreen>
                                 color: pink,
                                 fontSize: 14,
                                 fontWeight: FontWeight.w600))),
-                  Container(
+                  /*   Container(
                       margin: const EdgeInsets.all(5),
                       padding: const EdgeInsets.all(5),
                       color: Colors.pink[100],
@@ -426,7 +426,7 @@ class _EventScreenState extends State<EventScreen>
                           style: const TextStyle(
                               color: pink,
                               fontSize: 14,
-                              fontWeight: FontWeight.w600)))
+                              fontWeight: FontWeight.w600))) */
                 ])
               ]))
     ]);
@@ -444,11 +444,9 @@ class _EventScreenState extends State<EventScreen>
           margin: const EdgeInsets.only(right: 5.0),
           color: blueDark,
           child: InkWell(
-              onTap: () {
-                dispatch(redux.NavigateAction<AppState>.pushNamed(
-                    LoungeChatScreen.id,
-                    arguments: userLounge));
-              },
+              onTap: () => dispatch(redux.NavigateAction<AppState>.pushNamed(
+                  LoungeChatScreen.id,
+                  arguments: userLounge)),
               child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
@@ -534,8 +532,7 @@ class _EventScreenState extends State<EventScreen>
       void Function(redux.ReduxAction<dynamic>) dispatch) {
     return Expanded(
         child: isUserAttending
-            ? Container(
-                child: Row(children: <Widget>[
+            ? Row(children: <Widget>[
                 Expanded(
                     child: Container(
                         color: orange,
@@ -581,7 +578,7 @@ class _EventScreenState extends State<EventScreen>
                                       context, 'EVENT.VIEW_LIST'),
                                   style: const TextStyle(color: white))
                             ]))))
-              ]))
+              ])
             : Container(
                 padding: const EdgeInsets.all(5),
                 color: orange,
@@ -596,18 +593,16 @@ class _EventScreenState extends State<EventScreen>
                     child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
-                          Container(
-                              child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
-                                  children: <Widget>[
+                          Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: <Widget>[
                                 Icon(Icons.check, color: white, size: 16),
                                 Text(widget.event.memberIds.length.toString(),
                                     style: const TextStyle(
                                         color: white,
                                         fontSize: 16,
                                         fontWeight: FontWeight.w400))
-                              ])),
+                              ]),
                           Container(
                               padding: const EdgeInsets.only(bottom: 5),
                               child: Text(
@@ -621,20 +616,18 @@ class _EventScreenState extends State<EventScreen>
   }
 
   Widget _buildDescription() {
-    return Container(
-        child: ExpandablePanel(
-            header: Container(
-              color: orange,
-              padding: const EdgeInsets.all(10),
-              child: Text(
-                  FlutterI18n.translate(context, 'EVENT.EVENT_DESCRIPTION'),
-                  style: const TextStyle(
-                      color: white, fontSize: 16, fontWeight: FontWeight.w600)),
-            ),
-            theme: const ExpandableThemeData(iconColor: orange),
-            expanded: Container(
-                padding: const EdgeInsets.all(20.0),
-                child: Text(widget.event.description, softWrap: true))));
+    return ExpandablePanel(
+        header: Container(
+          color: orange,
+          padding: const EdgeInsets.all(10),
+          child: Text(FlutterI18n.translate(context, 'EVENT.EVENT_DESCRIPTION'),
+              style: const TextStyle(
+                  color: white, fontSize: 16, fontWeight: FontWeight.w600)),
+        ),
+        theme: const ExpandableThemeData(iconColor: orange),
+        expanded: Container(
+            padding: const EdgeInsets.all(20.0),
+            child: Text(widget.event.description, softWrap: true)));
   }
 
   Widget _buildBanner() {
@@ -651,8 +644,7 @@ class _EventScreenState extends State<EventScreen>
                   myLocationEnabled: true,
                   gestureRecognizers: <Factory<OneSequenceGestureRecognizer>>{
                     Factory<OneSequenceGestureRecognizer>(
-                      () => EagerGestureRecognizer(),
-                    )
+                        () => EagerGestureRecognizer())
                   },
                   initialCameraPosition: _intialMapLocation,
                   markers: _markers.values.toSet(),

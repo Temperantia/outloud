@@ -79,13 +79,16 @@ class EventsGetAction extends redux.ReduxAction<AppState> {
     }
     _messagesSubs.clear();
 
-    final List<Chat> chats = <Chat>[];
+    for (final StreamSubscription<List<User>> memberSub
+        in ChatsEventUpdateAction.memberSubs) {
+      memberSub.cancel();
+    }
+    ChatsEventUpdateAction.memberSubs.clear();
+
     for (final Event event in events) {
-      final Chat chat = Chat(event.id, state.loginState.id);
-      chats.add(chat);
-      _messagesSubs.add(streamEventMessages(chat.id).listen(
+      _messagesSubs.add(streamEventMessages(event.id).listen(
           (List<Message> messages) =>
-              dispatch(ChatsEventUpdateAction(messages, chat.id))));
+              dispatch(ChatsEventUpdateAction(messages, event.id))));
     }
   }
 }

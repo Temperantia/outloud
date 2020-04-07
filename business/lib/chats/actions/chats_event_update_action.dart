@@ -14,7 +14,7 @@ class ChatsEventUpdateAction extends redux.ReduxAction<AppState> {
   final List<Message> _messages;
   final String _chatId;
 
-  static final List<StreamSubscription<List<User>>> _memberSubs =
+  static final List<StreamSubscription<List<User>>> memberSubs =
       <StreamSubscription<List<User>>>[];
 
   @override
@@ -36,11 +36,7 @@ class ChatsEventUpdateAction extends redux.ReduxAction<AppState> {
         }
       }
 
-      for (final StreamSubscription<List<User>> memberSub in _memberSubs) {
-        memberSub.cancel();
-      }
-      _memberSubs.clear();
-      _memberSubs.add(streamUsers(ids: users).listen((List<User> users) =>
+      memberSubs.add(streamUsers(ids: users).listen((List<User> users) =>
           dispatch(ChatsEventUsersUpdateAction(users, _chatId))));
     }
 

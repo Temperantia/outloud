@@ -20,8 +20,7 @@ class LoginGoogleAction extends ReduxAction<AppState> {
   @override
   Future<AppState> reduce() async {
     try {
-      final GoogleSignInAccount account =
-          await googleSignIn.signIn().catchError((Object error) => null);
+      final GoogleSignInAccount account = await googleSignIn.signIn();
       if (account == null) {
         return null;
       }

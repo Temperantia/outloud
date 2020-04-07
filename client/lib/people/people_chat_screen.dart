@@ -9,7 +9,6 @@ import 'package:outloud/theme.dart';
 import 'package:outloud/widgets/cached_image.dart';
 import 'package:provider_for_redux/provider_for_redux.dart';
 
-
 class PeopleChatScreen extends StatefulWidget {
   @override
   _PeopleChatScreenState createState() => _PeopleChatScreenState();
@@ -63,8 +62,8 @@ class _PeopleChatScreenState extends State<PeopleChatScreen>
                                 Text(lastMessage.content,
                                     maxLines: 2,
                                     overflow: TextOverflow.ellipsis)
-                              ]),
-                          ]))),
+                              ])
+                          ])))
             ])));
   }
 
