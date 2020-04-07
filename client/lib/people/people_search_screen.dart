@@ -55,7 +55,6 @@ class _PeopleSearchScreenState extends State<PeopleSearchScreen>
                     borderRadius: BorderRadius.circular(20.0),
                     imageType: ImageType.User),
                 Expanded(
-                    // flex: 2,
                     child: Container(
                         padding: const EdgeInsets.only(left: 15),
                         child: Column(
@@ -235,15 +234,15 @@ class _PeopleSearchScreenState extends State<PeopleSearchScreen>
             void Function(redux.ReduxAction<AppState>) dispatch,
             PeopleState peopleState,
             Widget child) {
-
-          final List<User> people = state.peopleState.people.where((User _user) {
-            return !state.userState.user.friends.contains(_user.id) && _user.id != state.userState.user.id;
+          final List<User> people =
+              state.peopleState.people.where((User _user) {
+            return !state.userState.user.friends.contains(_user.id) &&
+                _user.id != state.userState.user.id;
           }).toList();
           final Map<String, String> distances = peopleState.distances;
           if (people == null || distances == null) {
             return Loading();
           }
-
           return View(
               child: RefreshIndicator(
                   onRefresh: () => store.dispatchFuture(PeopleGetAction()),

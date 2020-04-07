@@ -3,6 +3,7 @@ import 'package:business/app_state.dart';
 import 'package:business/classes/user.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
+import 'package:outloud/chats/chat_screen.dart';
 import 'package:outloud/functions/loader_animation.dart';
 import 'package:outloud/people/people_search_screen.dart';
 import 'package:business/user/actions/user_accept_friend_request_action.dart';
@@ -20,34 +21,69 @@ class PeopleFriendsScreen extends StatefulWidget {
 }
 
 class _PeopleFriendsScreenState extends State<PeopleFriendsScreen>
-    with AutomaticKeepAliveClientMixin<PeopleFriendsScreen>, TickerProviderStateMixin {
+    with
+        AutomaticKeepAliveClientMixin<PeopleFriendsScreen>,
+        TickerProviderStateMixin {
   @override
   bool get wantKeepAlive => true;
 
   Widget _buildPerson(User user, ThemeStyle theme,
       void Function(redux.ReduxAction<AppState>) dispatch) {
-    return GestureDetector(
-        onTap: () => dispatch(redux.NavigateAction<AppState>.pushNamed(
-            ProfileScreen.id,
-            arguments: <String, dynamic>{'user': user, 'isEdition': false})),
-        child: Container(
-            decoration: BoxDecoration(
-                color: primary(theme),
-                borderRadius: BorderRadius.circular(10.0)),
-            padding: const EdgeInsets.all(10.0),
-            margin: const EdgeInsets.symmetric(vertical: 10.0),
-            child: Row(children: <Widget>[
-              CachedImage(user.pics.isEmpty ? null : user.pics[0],
-                  width: 50.0,
-                  height: 50.0,
-                  borderRadius: BorderRadius.circular(20.0),
-                  imageType: ImageType.User),
-              Expanded(
-                  flex: 3,
-                  child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 5.0),
-                      child: Text(user.name))),
-            ])));
+    return Container(
+      margin: const EdgeInsets.only(bottom: 5, top: 5),
+      child: Row(
+        children: <Widget>[
+          Expanded(
+              child: GestureDetector(
+                  onTap: () => dispatch(
+                          redux.NavigateAction<AppState>.pushNamed(
+                              ProfileScreen.id,
+                              arguments: <String, dynamic>{
+                            'user': user,
+                            'isEdition': false
+                          })),
+                  child: Row(
+                    children: <Widget>[
+                      CachedImage(user.pics.isEmpty ? null : user.pics[0],
+                          width: 40.0,
+                          height: 40.0,
+                          borderRadius: BorderRadius.circular(20.0),
+                          imageType: ImageType.User),
+                      Expanded(
+                          child: Container(
+                        padding: const EdgeInsets.only(left: 15.0),
+                        child: Wrap(
+                          children: <Widget>[
+                            Text(user.name,
+                                style: const TextStyle(
+                                    color: black,
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 15))
+                          ],
+                        ),
+                      )),
+                    ],
+                  ))),
+          GestureDetector(
+              onTap: () {
+// dispatch(redux.NavigateAction<AppState>.pushNamed(
+//             ChatScreen.id,
+//             arguments: chat))
+                print('create chat or join existing chat :) ');
+              },
+              child: Container(
+                  padding: const EdgeInsets.only(left: 5.0, right: 5.0),
+                  margin: const EdgeInsets.only(left: 2.0, right: 2.0),
+                  decoration: BoxDecoration(
+                      color: orange, border: Border.all(color: orange)),
+                  child: const Text('SEND MESSAGE',
+                      style: TextStyle(
+                          color: white,
+                          fontSize: 15,
+                          fontWeight: FontWeight.w600))))
+        ],
+      ),
+    );
   }
 
   Widget _buildFriendRequest(User user, ThemeStyle theme,
@@ -79,9 +115,8 @@ class _PeopleFriendsScreenState extends State<PeopleFriendsScreen>
               padding: const EdgeInsets.all(10),
               child: GestureDetector(
                   onTap: () async {
-                    await showLoaderAnimation(
-                                              context, this,
-                                              animationDuration: 600);
+                    await showLoaderAnimation(context, this,
+                        animationDuration: 600);
                     dispatch(UserAcceptFriendRequestAction(
                         user.id, state.userState.user.id));
                   },
@@ -105,9 +140,8 @@ class _PeopleFriendsScreenState extends State<PeopleFriendsScreen>
               padding: const EdgeInsets.all(10),
               child: GestureDetector(
                   onTap: () async {
-                    await showLoaderAnimation(
-                                              context, this,
-                                              animationDuration: 600);
+                    await showLoaderAnimation(context, this,
+                        animationDuration: 600);
                     dispatch(UserDenyFriendRequestAction(
                         user.id, state.userState.user.id));
                   },
@@ -174,8 +208,12 @@ class _PeopleFriendsScreenState extends State<PeopleFriendsScreen>
         padding: const EdgeInsets.all(10.0),
         child: ListView.builder(
             itemCount: friends.length,
-            itemBuilder: (BuildContext context, int index) =>
-                _buildPerson(friends[index], theme, dispatch)));
+            itemBuilder: (BuildContext context, int index) => Column(
+                  children: <Widget>[
+                    _buildPerson(friends[index], theme, dispatch),
+                    const Divider(color: black)
+                  ],
+                )));
   }
 
   @override
@@ -186,15 +224,21 @@ class _PeopleFriendsScreenState extends State<PeopleFriendsScreen>
         AppState state,
         void Function(redux.ReduxAction<dynamic>) dispatch,
         Widget child) {
+          print('chats : '+ state.chatsState.chatIds.toString());
+          print('lounge chats : ' + state.chatsState.loungeChats.toString());
       return Container(
           child: Column(children: <Widget>[
         if (state.userState.pendingFriends.isNotEmpty)
           Flexible(
-              flex: state.userState.pendingFriends.length > 1? 4 : 3,
-              child: _buildPendingFriends(state.userState.friends,
-                  state.userState.pendingFriends, state.theme, dispatch, state)),
+              flex: state.userState.pendingFriends.length > 1 ? 4 : 3,
+              child: _buildPendingFriends(
+                  state.userState.friends,
+                  state.userState.pendingFriends,
+                  state.theme,
+                  dispatch,
+                  state)),
         Expanded(
-            flex: state.userState.pendingFriends.length > 1 ? 6 : 7 ,
+            flex: state.userState.pendingFriends.length > 1 ? 6 : 7,
             child: _buildFriends(state.userState.friends,
                 state.userState.pendingFriends, state.theme, dispatch)),
         Expanded(
