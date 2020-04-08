@@ -102,7 +102,7 @@
   },
   "LOGIN": {
     "MOTTO_1": "Rencontre des gens plein de couleurs",
-    "MOTTO_2": "Evénements • Activités • Expériences",
+    "MOTTO_2": "Events • Activités • Expériences",
     "FACEBOOK": "CONTINUER AVEC FACEBOOK",
     "GOOGLE": "SE CONNECTER AVEC GOOGLE"
   },
@@ -115,7 +115,7 @@
   "REGISTER_2": {
     "SKIP": "Passer >",
     "TITLE": "Raconte-nous ce qui ta passionne",
-    "SUBTITLE": "Aide-nous à trouver des personnes et événements que tu appréciera.",
+    "SUBTITLE": "Aide-nous à trouver des personnes et events que tu appréciera.",
     "BACK": "RETOUR",
     "NEXT": "SUIVANT"
   },
@@ -138,15 +138,15 @@
   },
   "REGISTER_4": {
     "TITLE": "Trouve d'excitants",
-    "TITLE_BIG": "EVENEMENTS",
-    "SUBTITLE": "Trouve les meilleurs événements, locaux ou exotiques, et emplie ta vie de bonheur",
+    "TITLE_BIG": "EVENTS",
+    "SUBTITLE": "Trouve les meilleurs events, locaux ou exotiques, et emplie ta vie de bonheur",
     "BACK": "RETOUR",
     "NEXT": "SUIVANT"
   },
   "REGISTER_5": {
     "TITLE": "Rencontre des gens dans",
     "TITLE_BIG": "SALON",
-    "SUBTITLE": "Après avoir rejoint un événement, trouve un salon pour trouver tes fidèles compagnons",
+    "SUBTITLE": "Après avoir rejoint un event, trouve un salon pour trouver tes fidèles compagnons",
     "BACK": "RETOUR",
     "NEXT": "SUIVANT"
   },
@@ -177,19 +177,19 @@
     "NO_MESSAGE": "Rien à envoyer"
   },
   "EVENTS_ATTENDING": {
-    "FOR_THE_EVENT": "POUR L'EVENEMENT",
-    "PEOPLE_SINGULAR": "la personne va",
-    "PEOPLE_PLURAL": "les personnes vont",
-    "ATTENDING": "aller à cet événement"
+    "FOR_THE_EVENT": "POUR L'EVENT",
+    "PEOPLE_SINGULAR": "personne va",
+    "PEOPLE_PLURAL": "personnes vont",
+    "ATTENDING": "aller à cet event"
   },
   "EVENT": {
     "HOLD_UP": "Attends",
-    "UNATTEND_WARNING": "Si tu ne vas plus à l'événement ça va supprimer/quitter les salons que tu as joint pour cet événement",
+    "UNATTEND_WARNING": "Si tu ne vas plus à l'event ça va supprimer/quitter les salons que tu as rejoint pour cet event",
     "CONTINUE": "Tu veux toujours continuer?",
     "TAKE_ME_BACK": "Non",
-    "UNATTEND": "OUI, Evénement supprimé",
+    "UNATTEND": "OUI, Event supprimé",
     "LOUNGES_AVAILABLE": "Salons disponibles!",
-    "JOINING": "Tu peux joindre un salon. Joindre un salon te permet d'apprécier les événements avec des gens tout comme toi",
+    "JOINING": "Tu peux rejoindre un salon. Joindre un salon te permet d'apprécier les events avec des gens tout comme toi",
     "GOT_IT": "COMPRIS",
     "VIEW_MY": "VOIR MON",
     "LOUNGE": "SALON",
@@ -197,13 +197,13 @@
     "VIEW_LIST": "VOIR LA LISTE",
     "ATTENDING": "CONNECTE AU SALON",
     "LIVE_FEED": "LIVE FEED",
-    "EVENT_DESCRIPTION": "DESCRIPTION DE L'EVENEMENT",
-    "EVENT_DETAILS": "DETAILS DE L'EVENEMENT",
+    "EVENT_DESCRIPTION": "DESCRIPTION DE L'EVENT",
+    "EVENT_DETAILS": "DETAILS DE L'EVENT",
     "MESSAGE": "Rejoins-nous!"
   },
   "EVENTS": {
-    "MY_EVENTS": "MES EVENEMENTS",
-    "FIND_EVENTS": "TROUVER DES EVENEMENTS"
+    "MY_EVENTS": "MES EVENTS",
+    "FIND_EVENTS": "TROUVER DES EVENTS"
   },
   "FIND_EVENTS": {
     "ANY_DISTANCE": "Toutes distances",
@@ -233,7 +233,7 @@
     "EDIT": "EDITER",
     "LEAVE": "SORTIR",
     "LOUNGE": "SALON",
-    "VIEW": "VUE",
+    "VIEW": "VOIR",
     "DETAILS": "DETAILS",
     "LOUNGE_CHAT": "LOUNGE CHAT",
     "MESSAGE": "Message Salon"
@@ -268,7 +268,7 @@
   },
   "LOUNGE_CREATE": {
     "CREATE_LOUNGE": "CREER LE SALON",
-    "CHOOSE_EVENT": "CHOISIS UN EVENEMENT POUR CE SALON",
+    "CHOOSE_EVENT": "CHOISIS UN EVENT POUR CE SALON",
     "NEXT": "SUIVANT"
   },
   "LOUNGE_EDIT": {
@@ -314,11 +314,11 @@
     "JOIN": " > REJOINDRE",
     "SLOT": "place",
     "AVAILABLE": "disponible",
-    "FOR_THE_EVENT": "POUR L'EVENEMENT",
+    "FOR_THE_EVENT": "POUR L'EVENT",
     "CREATE_LOUNGE": "CREER TON PROPRE SALON",
     "BROWSING_LOUNGES": "EXPLORATION DES SALONS",
     "LOUNGE": "salon",
-    "AVAILABLE_FOR_EVENT": "disponible pour cet événement",
+    "AVAILABLE_FOR_EVENT": "disponible pour cet event",
     "EMPTY_TITLE": "Hmmm...",
     "EMPTY_DESCRIPTION": "On dirait qu'il n'y a rien ici."
   },
@@ -326,16 +326,16 @@
     "YOUR_LOUNGE": "Ton Salon",
     "SOMEONES_LOUNGE": "Le Salon de {user}",
     "MEMBER": "membre",
-    "GO_EVENT_LISTING": "ALLER A L'EVENEMENT",
-    "ATTENDING_EVENT": "Tu vas à cet événement",
-    "LIKED_EVENT": "Tu as aimé cet événement",
+    "GO_EVENT_LISTING": "ALLER A L'EVENT",
+    "ATTENDING_EVENT": "Tu vas à cet event",
+    "LIKED_EVENT": "Tu as aimé cet event",
     "MY_LOUNGES": "MES SALONS",
     "FIND_LOUNGES": "TROUVER DES SALONS",
     "CREATE_LOUNGE": "CREER LE SALON",
     "MY_LOUNGES_EMPTY_TITLE": "Rien sur la carte",
-    "MY_LOUNGES_EMPTY_DESCRIPTION": "Tu n'as pas encore rejoint de salon ! Assure toi d'aller à un événement pour gagner accès aux salons.",
+    "MY_LOUNGES_EMPTY_DESCRIPTION": "Tu n'as pas encore rejoint de salon ! Assure toi d'aller à un event pour gagner accès aux salons.",
     "FIND_LOUNGES_EMPTY_TITLE": "Stop",
-    "FIND_LOUNGES_EMPTY_DESCRIPTION": "Tu as besoin d'aller à un événement avant d'avoir accès aux salons."
+    "FIND_LOUNGES_EMPTY_DESCRIPTION": "Tu as besoin d'aller à un event avant d'avoir accès aux salons."
   },
   "PEOPLE_SEARCH": {
     "PEOPLE": "Personnes"
