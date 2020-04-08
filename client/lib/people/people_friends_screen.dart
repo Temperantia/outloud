@@ -76,10 +76,10 @@ class _PeopleFriendsScreenState extends State<PeopleFriendsScreen>
                   margin: const EdgeInsets.only(left: 2.0, right: 2.0),
                   decoration: BoxDecoration(
                       color: orange, border: Border.all(color: orange)),
-                  child: const Text('SEND MESSAGE',
-                      style: TextStyle(
+                  child:  Text(FlutterI18n.translate(context, 'PEOPLE_TAB.SEND_MESSAGE').toUpperCase(),
+                      style: const TextStyle(
                           color: white,
-                          fontSize: 15,
+                          fontSize: 14,
                           fontWeight: FontWeight.w600))))
         ],
       ),
