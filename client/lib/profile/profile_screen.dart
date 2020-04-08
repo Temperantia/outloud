@@ -292,7 +292,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             style: const TextStyle(color: orange))),
                     if (textEditingController.value.text.isNotEmpty)
                       GestureDetector(
-                          onTap: () => textEditingController.value.clear(),
+                          onTap: () => setState(
+                              () => textEditingController.value.clear()),
                           child: Icon(Icons.close, color: orange)),
                   ]))
       else if (controller is List<dynamic>)

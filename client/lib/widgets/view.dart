@@ -2,7 +2,6 @@ import 'package:async_redux/async_redux.dart';
 import 'package:business/app_state.dart';
 import 'package:business/actions/app_navigate_action.dart';
 import 'package:business/classes/user.dart';
-import 'package:business/events/actions/events_get_action.dart';
 import 'package:business/actions/app_disconnect_action.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
@@ -25,7 +24,8 @@ class View extends StatefulWidget {
       this.user,
       this.onBack,
       this.backIcon = Icons.keyboard_arrow_left,
-      this.actions});
+      this.actions,
+      this.buttons});
 
   final Widget child;
   final bool showAppBar;
@@ -38,6 +38,7 @@ class View extends StatefulWidget {
   final void Function() onBack;
   final IconData backIcon;
   final Widget actions;
+  final Widget buttons;
 
   @override
   _ViewState createState() => _ViewState();
@@ -50,9 +51,10 @@ class _ViewState extends State<View> {
       AppState state, void Function(ReduxAction<dynamic>) dispatch) {
     EdgeInsetsGeometry margin;
     if (widget.isRoot) {
-      margin = const EdgeInsets.fromLTRB(0.0, 40.0, 0.0, 50.0);
+      margin = const EdgeInsets.fromLTRB(0.0, 45.0, 0.0, 65.0);
     } else if (widget.showAppBar && widget.showNavBar) {
-      margin = const EdgeInsets.fromLTRB(0.0, 88.0, 0.0, 50.0);
+      margin = EdgeInsets.fromLTRB(
+          0.0, 95.0, 0.0, widget.buttons == null ? 50.0 : 120.0);
     }
 
     if (widget.isProfileScreen) {
@@ -71,14 +73,30 @@ class _ViewState extends State<View> {
 
     return SafeArea(
         child: Stack(children: <Widget>[
-      if (widget.showAppBar && widget.showNavBar)
+      SizedBox.expand(
+          child: Container(
+              decoration: const BoxDecoration(
+                  gradient: LinearGradient(colors: <Color>[pinkLight, pink])))),
+      if (widget.isRoot || widget.showNavBar || widget.buttons != null)
+        SizedBox.expand(
+            child: Container(
+                margin: EdgeInsets.only(
+                    bottom: widget.isRoot ||
+                            (widget.showNavBar && widget.buttons != null)
+                        ? 120.0
+                        : 50.0),
+                decoration: const BoxDecoration(color: white))),
+      if (widget.showAppBar)
         Row(children: <Widget>[
           Expanded(
-              child: Image.asset('images/screenFull.png', fit: BoxFit.fill))
+              child: Image.asset('images/screenTop.png', fit: BoxFit.fitWidth))
         ]),
-      if (widget.showNavBar) _buildNavBar(state, dispatch),
       Container(margin: margin, child: widget.child),
       if (widget.showAppBar) _buildAppBar(state.userState.user, dispatch),
+      Column(mainAxisAlignment: MainAxisAlignment.end, children: <Widget>[
+        if (widget.buttons != null) widget.buttons,
+        if (widget.showNavBar) _buildNavBar(state, dispatch),
+      ])
     ]));
   }
 
@@ -105,7 +123,8 @@ class _ViewState extends State<View> {
                           height: 40.0,
                           borderRadius: BorderRadius.circular(20.0),
                           imageType: ImageType.User)),
-                Icon(Icons.menu),
+                Container(width: 40, height: 40),
+                //Icon(Icons.menu),
               ])),
       if (_showUserSettings || !widget.isRoot)
         Stack(children: <Widget>[
@@ -219,28 +238,23 @@ class _ViewState extends State<View> {
 
   Widget _buildNavBar(
       AppState state, void Function(ReduxAction<dynamic>) dispatch) {
-    return Align(
-        alignment: Alignment.bottomCenter,
-        child: Theme(
-            data: Theme.of(context).copyWith(canvasColor: Colors.transparent),
-            child: BottomNavigationBar(
-                elevation: 0,
-                type: BottomNavigationBarType.fixed,
-                showSelectedLabels: false,
-                showUnselectedLabels: false,
-                currentIndex: state.homePageIndex,
-                items: bubbleBar(context, 0, state.theme),
-                onTap: (int index) async {
-                  if (index == state.homePageIndex) {
-                    return;
-                  }
-                  dispatch(AppNavigateAction(index));
-                  if (index == 1) {
-                    dispatch(EventsGetAction());
-                  }
-                  Navigator.of(context)
-                      .popUntil((Route<dynamic> route) => route.isFirst);
-                })));
+    return Theme(
+        data: Theme.of(context).copyWith(canvasColor: Colors.transparent),
+        child: BottomNavigationBar(
+            elevation: 0,
+            type: BottomNavigationBarType.fixed,
+            showSelectedLabels: false,
+            showUnselectedLabels: false,
+            currentIndex: state.homePageIndex,
+            items: bubbleBar(context, 0, state.theme),
+            onTap: (int index) async {
+              if (index == state.homePageIndex) {
+                return;
+              }
+              dispatch(AppNavigateAction(index));
+              Navigator.of(context)
+                  .popUntil((Route<dynamic> route) => route.isFirst);
+            }));
   }
 
   @override

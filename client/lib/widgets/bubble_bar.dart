@@ -29,7 +29,7 @@ final List<BottomNavigationBarItem> Function(
     BuildContext, int, ThemeStyle) bubbleBar = (BuildContext context, int pings,
         ThemeStyle themeStyle) =>
     <BottomNavigationBarItem>[
-      _buildItem('images/OL-draft1aWhite.png', themeStyle),
+      //_buildItem('images/OL-draft1aWhite.png', themeStyle),
       _buildItem('images/iconEvent.png', themeStyle),
       _buildItem('images/iconLounge.png', themeStyle),
       BottomNavigationBarItem(

@@ -80,17 +80,18 @@ class _LoungeViewScreenState extends State<LoungeViewScreen> {
                             imageType: ImageType.User),
                         Container(
                             padding: const EdgeInsets.only(left: 10),
-                            child: Text(
+                            child: I18nText(
                                 state.userState.user.id == owner.id
-                                    ? FlutterI18n.translate(
-                                        context, 'LOUNGE.YOUR_LOUNGE')
-                                    : owner.name +
-                                        FlutterI18n.translate(
-                                            context, 'LOUNGE.SOMEONES_LOUNGE'),
-                                style: const TextStyle(
-                                    color: black,
-                                    fontSize: 13,
-                                    fontWeight: FontWeight.w500)))
+                                    ? 'LOUNGE_CHAT.YOUR_LOUNGE'
+                                    : 'LOUNGE_CHAT.SOMEONES_LOUNGE',
+                                child: const Text('',
+                                    style: TextStyle(
+                                        color: black,
+                                        fontSize: 13,
+                                        fontWeight: FontWeight.w500)),
+                                translationParams: <String, String>{
+                                  'user': owner.name
+                                }))
                       ]),
                     Wrap(children: <Widget>[
                       RichText(

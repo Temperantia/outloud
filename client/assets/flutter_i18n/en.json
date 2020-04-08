@@ -228,7 +228,7 @@
   },
   "LOUNGE_CHAT": {
     "YOUR_LOUNGE": "Your Lounge",
-    "SOMEONES_LOUNGE": "'s Lounge",
+    "SOMEONES_LOUNGE": "{user}'s Lounge",
     "MEMBER": "member",
     "EDIT": "EDIT",
     "LEAVE": "LEAVE",
@@ -278,7 +278,7 @@
     "TAKE_ME_BACK": "No, Take Me Back",
     "DELETE_YES": "YES, Delete Lounge",
     "YOUR_LOUNGE": "Your Lounge",
-    "SOMEONES_LOUNGE": "'s Lounge",
+    "SOMEONES_LOUNGE": "{user}'s Lounge",
     "MEMBER": "member",
     "REMOVE": "REMOVE",
     "LOUNGE": "LOUNGE",
@@ -296,7 +296,7 @@
   },
   "LOUNGE": {
     "YOUR_LOUNGE": "Your Lounge",
-    "SOMEONES_LOUNGE": "'s Lounge",
+    "SOMEONES_LOUNGE": "{user}'s Lounge",
     "MEMBER": "member",
     "MEMBERS": "MEMBERS",
     "PUBLIC": "PUBLIC",
@@ -309,7 +309,7 @@
   },
   "LOUNGES": {
     "YOUR_LOUNGE": "Your Lounge",
-    "SOMEONES_LOUNGE": "'s Lounge",
+    "SOMEONES_LOUNGE": "{user}'s Lounge",
     "LEAVE": "< LEAVE",
     "JOIN": " > JOIN",
     "SLOT": "slot",
@@ -325,7 +325,7 @@
   },
   "LOUNGES_TAB": {
     "YOUR_LOUNGE": "Your Lounge",
-    "SOMEONES_LOUNGE": "'s Lounge",
+    "SOMEONES_LOUNGE": "{user}'s Lounge",
     "MEMBER": "member",
     "GO_EVENT_LISTING": "GO TO EVENT LISTING",
     "ATTENDING_EVENT": "You're attending this event",
@@ -334,7 +334,7 @@
     "FIND_LOUNGES": "FIND LOUNGES",
     "CREATE_LOUNGE": "CREATE LOUNGE",
     "MY_LOUNGES_EMPTY_TITLE": "Nothing on the menu",
-    "MY_LOUNGES_EMPTY_DESCRIPTION": "You haven't joined a lounge yet! Be sure to like and attend events to gain access to lounges.",
+    "MY_LOUNGES_EMPTY_DESCRIPTION": "You haven't joined a lounge yet! Be sure to attend events to gain access to lounges.",
     "FIND_LOUNGES_EMPTY_TITLE": "Hold Up",
     "FIND_LOUNGES_EMPTY_DESCRIPTION": "You need to attend an event before you can have access to lounges."
   },

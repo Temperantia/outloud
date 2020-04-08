@@ -480,10 +480,9 @@ class _EventScreenState extends State<EventScreen>
               child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    Container(
-                        child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: <Widget>[
+                    Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: <Widget>[
                           Container(
                               width: 20.0,
                               height: 20.0,
@@ -494,7 +493,7 @@ class _EventScreenState extends State<EventScreen>
                                   color: white,
                                   fontSize: 16,
                                   fontWeight: FontWeight.w400)),
-                        ])),
+                        ]),
                     Container(
                         padding: const EdgeInsets.only(bottom: 5),
                         child: Text(
@@ -802,58 +801,51 @@ class _EventScreenState extends State<EventScreen>
                             child: Text(widget.event.likes.length.toString(),
                                 style: const TextStyle(color: white)))
                       ]))),
+          buttons: Container(
+              margin: const EdgeInsets.symmetric(horizontal: 5.0),
+              decoration: BoxDecoration(
+                  color: orangeLight.withOpacity(0.5),
+                  borderRadius: BorderRadius.circular(5.0)),
+              child: Row(children: <Widget>[
+                Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: GestureDetector(
+                        onTap: () {
+                          _sendImage(state.userState.user.id);
+                          _scrollController.jumpTo(
+                              _scrollController.position.maxScrollExtent);
+                        },
+                        child: Icon(Icons.panorama, color: white))),
+                Expanded(
+                    child: TextField(
+                        controller: _messageController,
+                        decoration: InputDecoration.collapsed(
+                            hintText:
+                                FlutterI18n.translate(context, 'EVENT.MESSAGE'),
+                            hintStyle: const TextStyle(color: white)))),
+                Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: GestureDetector(
+                        onTap: () {
+                          addEventMessage(
+                              widget.event.id,
+                              state.userState.user.id,
+                              _messageController.text.trim(),
+                              MessageType.Text);
+                          _messageController.clear();
+                          _scrollController.jumpTo(
+                              _scrollController.position.maxScrollExtent);
+                        },
+                        child: Icon(Icons.send, color: white)))
+              ])),
           child: widget.event == null
               ? const CircularProgressIndicator()
-              : Column(children: <Widget>[
-                  Expanded(
-                      child: Container(
-                          color: white,
-                          child: ListView(
-                              controller: _scrollController,
-                              children: <Widget>[
-                                _buildEventInfo(state, dispatch),
-                                _buildDescription(),
-                                _buildBanner(),
-                                //_buildLiveFeedSponsor(),
-                                _buildLiveFeed()
-                              ]))),
-                  Container(
-                      margin: const EdgeInsets.all(5.0),
-                      decoration: BoxDecoration(
-                          color: orangeLight.withOpacity(0.5),
-                          borderRadius: BorderRadius.circular(5.0)),
-                      child: Row(children: <Widget>[
-                        Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: GestureDetector(
-                                onTap: () {
-                                  _sendImage(state.userState.user.id);
-                                  _scrollController.jumpTo(_scrollController
-                                      .position.maxScrollExtent);
-                                },
-                                child: Icon(Icons.panorama, color: white))),
-                        Expanded(
-                            child: TextField(
-                                controller: _messageController,
-                                decoration: InputDecoration.collapsed(
-                                    hintText: FlutterI18n.translate(
-                                        context, 'EVENT.MESSAGE'),
-                                    hintStyle: const TextStyle(color: white)))),
-                        Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: GestureDetector(
-                                onTap: () {
-                                  addEventMessage(
-                                      widget.event.id,
-                                      state.userState.user.id,
-                                      _messageController.text.trim(),
-                                      MessageType.Text);
-                                  _messageController.clear();
-                                  _scrollController.jumpTo(_scrollController
-                                      .position.maxScrollExtent);
-                                },
-                                child: Icon(Icons.send, color: white)))
-                      ]))
+              : ListView(controller: _scrollController, children: <Widget>[
+                  _buildEventInfo(state, dispatch),
+                  _buildDescription(),
+                  _buildBanner(),
+                  //_buildLiveFeedSponsor(),
+                  _buildLiveFeed()
                 ]));
     });
   }

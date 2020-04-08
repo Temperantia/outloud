@@ -216,43 +216,37 @@ class _LoungeCreateDetailScreenState extends State<LoungeCreateDetailScreen> {
           onBack: () => Navigator.popUntil(
               context, (Route<dynamic> route) => route.isFirst),
           backIcon: Icons.close,
-          child: Column(children: <Widget>[
-            Expanded(
-                flex: 8,
-                child: Container(
-                    child: Scrollbar(
-                        controller: _scrollController,
-                        child: ListView(children: <Widget>[
-                          Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                _buildLoungeVisibility(state),
-                                _buildLoungeMaxMemberCount(state),
-                                _buildLoungeUpgradeSection(state),
-                                _buildLoungeDescription(state)
-                              ])
-                        ])))),
-            Expanded(
-                child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+          buttons: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Button(
+                    text: FlutterI18n.translate(
+                        context, 'LOUNGE_CREATE_DETAIL.BACK'),
+                    onPressed: () => dispatch(NavigateAction<AppState>.pop()),
+                    paddingRight: 5),
+                Button(
+                    text: FlutterI18n.translate(
+                        context, 'LOUNGE_CREATE_DETAIL.NEXT'),
+                    onPressed: () {
+                      dispatch(LoungeCreateDetailAction(_visibility,
+                          _limit.toInt(), _descriptionController.text));
+                      dispatch(NavigateAction<AppState>.pushNamed(
+                          LoungeCreateMeetupScreen.id));
+                    },
+                    paddingLeft: 5)
+              ]),
+          child: Scrollbar(
+              controller: _scrollController,
+              child: ListView(children: <Widget>[
+                Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                  Button(
-                      text: FlutterI18n.translate(
-                          context, 'LOUNGE_CREATE_DETAIL.BACK'),
-                      onPressed: () => dispatch(NavigateAction<AppState>.pop()),
-                      paddingRight: 5),
-                  Button(
-                      text: FlutterI18n.translate(
-                          context, 'LOUNGE_CREATE_DETAIL.NEXT'),
-                      onPressed: () {
-                        dispatch(LoungeCreateDetailAction(_visibility,
-                            _limit.toInt(), _descriptionController.text));
-                        dispatch(NavigateAction<AppState>.pushNamed(
-                            LoungeCreateMeetupScreen.id));
-                      },
-                      paddingLeft: 5)
-                ]))
-          ]));
+                      _buildLoungeVisibility(state),
+                      _buildLoungeMaxMemberCount(state),
+                      _buildLoungeUpgradeSection(state),
+                      _buildLoungeDescription(state)
+                    ])
+              ])));
     });
   }
 }

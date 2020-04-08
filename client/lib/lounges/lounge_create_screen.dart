@@ -71,46 +71,40 @@ class _LoungeCreateScreenState extends State<LoungeCreateScreen> {
           onBack: () => Navigator.popUntil(
               context, (Route<dynamic> route) => route.isFirst),
           backIcon: Icons.close,
-          child: Column(children: <Widget>[
-            Expanded(
-                flex: 8,
-                child: Container(
-                    padding: const EdgeInsets.all(20.0),
-                    child: Column(children: <Widget>[
-                      Row(children: <Widget>[
-                        Container(
-                            padding: const EdgeInsets.symmetric(vertical: 10.0),
-                            child: Text(
-                                FlutterI18n.translate(
-                                    context, 'LOUNGE_CREATE.CHOOSE_EVENT'),
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.w900)))
-                      ]),
-                      Expanded(
-                          child: ListView.builder(
-                              itemCount: userEvents.length,
-                              itemBuilder: (BuildContext context, int index) =>
-                                  _buildUserEvent(
-                                      userEvents[index], state.theme))),
-                    ]))),
-            if (_selected != null)
-              Expanded(
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                    Button(
-                        text: FlutterI18n.translate(
-                            context, 'LOUNGE_CREATE.NEXT'),
-                        width: 150.0,
-                        onPressed: () {
-                          dispatch(LoungeCreateAction(
-                            _selected.id,
-                          ));
-                          dispatch(redux.NavigateAction<AppState>.pushNamed(
-                              LoungeCreateDetailScreen.id));
-                        }),
-                  ])),
-          ]));
+          buttons: _selected == null
+              ? null
+              : Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                      Button(
+                          text: FlutterI18n.translate(
+                              context, 'LOUNGE_CREATE.NEXT'),
+                          width: 150.0,
+                          onPressed: () {
+                            dispatch(LoungeCreateAction(
+                              _selected.id,
+                            ));
+                            dispatch(redux.NavigateAction<AppState>.pushNamed(
+                                LoungeCreateDetailScreen.id));
+                          }),
+                    ]),
+          child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              child: Column(children: <Widget>[
+                Row(children: <Widget>[
+                  Container(
+                      padding: const EdgeInsets.symmetric(vertical: 10.0),
+                      child: Text(
+                          FlutterI18n.translate(
+                              context, 'LOUNGE_CREATE.CHOOSE_EVENT'),
+                          style: const TextStyle(fontWeight: FontWeight.w900)))
+                ]),
+                Expanded(
+                    child: ListView.builder(
+                        itemCount: userEvents.length,
+                        itemBuilder: (BuildContext context, int index) =>
+                            _buildUserEvent(userEvents[index], state.theme))),
+              ])));
     });
   }
 }

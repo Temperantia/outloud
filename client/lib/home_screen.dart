@@ -5,7 +5,7 @@ import 'package:business/app_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:outloud/events/events_widget.dart';
-import 'package:outloud/home_widget.dart';
+//import 'package:outloud/home_widget.dart';
 import 'package:outloud/lounges/lounges_widget.dart';
 import 'package:outloud/people/people_widget.dart';
 import 'package:outloud/widgets/view.dart';
@@ -24,7 +24,7 @@ class _HomeScreenState extends State<HomeScreen>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(vsync: this, length: 4);
+    _tabController = TabController(vsync: this, length: 3 /*4*/);
     _requestLocationPermission();
   }
 
@@ -69,7 +69,7 @@ class _HomeScreenState extends State<HomeScreen>
 
   Widget _buildBody() {
     return TabBarView(controller: _tabController, children: <Widget>[
-      HomeWidget(),
+      //HomeWidget(),
       EventsWidget(),
       LoungesWidget(),
       PeopleWidget(),

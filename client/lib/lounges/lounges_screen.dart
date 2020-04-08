@@ -10,8 +10,10 @@ import 'package:business/lounges/actions/lounge_leave_action.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:outloud/functions/loader_animation.dart';
 import 'package:outloud/lounges/lounge_chat_screen.dart';
+import 'package:outloud/lounges/lounge_create_screen.dart';
 
 import 'package:outloud/theme.dart';
+import 'package:outloud/widgets/button.dart';
 import 'package:outloud/widgets/cached_image.dart';
 import 'package:outloud/widgets/view.dart';
 import 'package:provider_for_redux/provider_for_redux.dart';
@@ -79,17 +81,18 @@ class _LoungesScreenState extends State<LoungesScreen>
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       if (owner != null)
-                        Text(
+                        I18nText(
                             state.userState.user.id == owner.id
-                                ? FlutterI18n.translate(
-                                    context, 'LOUNGES.YOUR_LOUNGE')
-                                : owner.name +
-                                    FlutterI18n.translate(
-                                        context, 'LOUNGES.SOMEONES_LOUNGE'),
-                            style: const TextStyle(
-                                color: black,
-                                fontSize: 13,
-                                fontWeight: FontWeight.w500)),
+                                ? 'LOUNGE_CHAT.YOUR_LOUNGE'
+                                : 'LOUNGE_CHAT.SOMEONES_LOUNGE',
+                            child: const Text('',
+                                style: TextStyle(
+                                    color: black,
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.w500)),
+                            translationParams: <String, String>{
+                              'user': owner.name
+                            }),
                       GestureDetector(
                           onTap: () async {
                             // TODO(robin): this shouldnt exist, the owner shouldnt see a join button on his own lounges and maybe not even see it here (ask @nadir)
@@ -229,6 +232,18 @@ class _LoungesScreenState extends State<LoungesScreen>
             state.userState.eventLounges[widget.event.id];
         return View(
             title: FlutterI18n.translate(context, 'LOUNGES.BROWSING_LOUNGES'),
+            buttons: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Button(
+                      text: FlutterI18n.translate(
+                          context, 'LOUNGES_TAB.CREATE_LOUNGE'),
+                      width: 250,
+                      icon: Icon(Icons.add),
+                      onPressed: () => dispatch(
+                          redux.NavigateAction<AppState>.pushNamed(
+                              LoungeCreateScreen.id)))
+                ]),
             child: Column(children: <Widget>[
               _buildHeader(context),
               const Divider(),

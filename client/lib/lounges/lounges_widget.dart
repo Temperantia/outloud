@@ -88,36 +88,34 @@ class _LoungesWidgetState extends State<LoungesWidget>
                       borderRadius: BorderRadius.circular(20.0),
                       imageType: ImageType.User)),
               Expanded(
-                  child: Text(
+                  child: I18nText(
                       state.userState.user.id == owner.id
-                          ? FlutterI18n.translate(
-                              context, 'LOUNGES_TAB.YOUR_LOUNGE')
-                          : owner.name +
-                              FlutterI18n.translate(
-                                  context, 'LOUNGES_TAB.SOMEONES_LOUNGE'),
-                      style: const TextStyle(
-                          color: black,
-                          fontSize: 13,
-                          fontWeight: FontWeight.w500))),
+                          ? 'LOUNGE_CHAT.YOUR_LOUNGE'
+                          : 'LOUNGE_CHAT.SOMEONES_LOUNGE',
+                      child: const Text('',
+                          style: TextStyle(
+                              color: black,
+                              fontSize: 13,
+                              fontWeight: FontWeight.w500)),
+                      translationParams: <String, String>{'user': owner.name})),
             ]),
           Wrap(children: <Widget>[
-            Container(
-                child: RichText(
-                    text: TextSpan(
-                        text:
-                            '${lounge.members.length.toString()} ${FlutterI18n.translate(context, "LOUNGES_TAB.MEMBER")}${lounge.members.length > 1 ? 's ' : ' '}',
-                        style: const TextStyle(
-                            color: black,
-                            fontSize: 13,
-                            fontWeight: FontWeight.w500),
-                        children: <TextSpan>[
+            RichText(
+                text: TextSpan(
+                    text:
+                        '${lounge.members.length.toString()} ${FlutterI18n.translate(context, "LOUNGES_TAB.MEMBER")}${lounge.members.length > 1 ? 's ' : ' '}',
+                    style: const TextStyle(
+                        color: black,
+                        fontSize: 13,
+                        fontWeight: FontWeight.w500),
+                    children: <TextSpan>[
                   TextSpan(
                       text: lounge.event.name,
                       style: TextStyle(
                           color: orange,
                           fontSize: 14,
                           fontWeight: FontWeight.w800)),
-                ])))
+                ]))
           ]),
           Container(
               child: GestureDetector(
@@ -133,7 +131,7 @@ class _LoungesWidgetState extends State<LoungesWidget>
                             FlutterI18n.translate(
                                 context, 'LOUNGES_TAB.GO_EVENT_LISTING'),
                         style: const TextStyle(
-                            color: orange, fontWeight: FontWeight.bold))
+                            color: blue, fontWeight: FontWeight.bold))
                   ])))
         ]);
   }
@@ -148,8 +146,7 @@ class _LoungesWidgetState extends State<LoungesWidget>
         child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              Container(
-                  child: Stack(alignment: Alignment.center, children: <Widget>[
+              Stack(alignment: Alignment.center, children: <Widget>[
                 Container(
                     decoration: const BoxDecoration(
                         border: Border(
@@ -170,7 +167,7 @@ class _LoungesWidgetState extends State<LoungesWidget>
                         width: 40.0,
                         height: 40.0,
                         child: Image.asset('images/chatIcon.png'))),
-              ])),
+              ]),
               if (lounge.members.isNotEmpty)
                 Expanded(
                     child: Container(

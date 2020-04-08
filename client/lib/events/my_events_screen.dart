@@ -157,15 +157,14 @@ class _MyEventsScreen extends State<MyEventsScreen>
                             userLounges, dispatch, themeStyle),
                         const Divider(color: orange),
                       ]))),
-      Expanded(
-          child: Container(
-              child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
+      /*  Expanded(
+          child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
             Button(
                 text: FlutterI18n.translate(context, 'MY_EVENTS.VIEW_CALENDAR'),
                 onPressed: () => null)
-          ])))
+          ])) */
     ]);
   }
 
@@ -177,13 +176,12 @@ class _MyEventsScreen extends State<MyEventsScreen>
         AppState state,
         void Function(redux.ReduxAction<dynamic>) dispatch,
         Widget child) {
-      return Container(
-          child: _buildUserEvents(
-              state.userState.events,
-              state.userState.user.events,
-              state.userState.lounges,
-              state.theme,
-              dispatch));
+      return _buildUserEvents(
+          state.userState.events,
+          state.userState.user.events,
+          state.userState.lounges,
+          state.theme,
+          dispatch);
     });
   }
 }

@@ -4,7 +4,6 @@ import 'package:async_redux/async_redux.dart' as redux;
 import 'package:business/app.dart';
 import 'package:business/app_state.dart';
 import 'package:business/chats/actions/chats_event_update_action.dart';
-import 'package:business/classes/chat.dart';
 import 'package:business/classes/event.dart';
 import 'package:business/classes/message.dart';
 import 'package:business/classes/user.dart';

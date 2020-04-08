@@ -626,82 +626,75 @@ class _LoungeCreateMeetupScreenState extends State<LoungeCreateMeetupScreen> {
           onBack: () => Navigator.popUntil(
               context, (Route<dynamic> route) => route.isFirst),
           backIcon: Icons.close,
-          child: Column(children: <Widget>[
-            Expanded(
-                child: Container(
-                    color: white,
-                    child: Scrollbar(
-                        child: ListView(
-                            controller: _scrollController,
-                            padding: const EdgeInsets.all(10),
-                            children: <Widget>[
-                          _buildMap(context),
-                          _buildAdressField(context),
-                          _buildTimeField(context),
-                          _buildNotesField(context),
-                        ])))),
-            Container(
-                height: 60,
-                margin: const EdgeInsets.all(10.0),
-                padding: const EdgeInsets.all(4.0),
-                child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Button(
-                          text: FlutterI18n.translate(
-                              context, 'LOUNGE_CREATE_MEETUP.BACK'),
-                          width: 150,
-                          paddingRight: 5.0,
-                          onPressed: () {
-                            dispatch(NavigateAction<AppState>.pop());
-                          }),
-                      Button(
-                          text: FlutterI18n.translate(
-                              context, 'LOUNGE_CREATE_MEETUP.CREATE'),
-                          width: 150,
-                          onPressed: () async {
-                            _focusNodeNotes.unfocus();
-                            _focusNodeAdress.unfocus();
-                            final DateTime _dateOfEvent = DateTime(
-                                _dateEvent.year,
-                                _dateEvent.month,
-                                _dateEvent.day,
-                                _timeEvent.hour,
-                                _timeEvent.minute);
-                            if (_positionOfPlace == null) {
-                              showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) =>
-                                      AlertDialog(
-                                          title: Text(FlutterI18n.translate(
-                                              context,
-                                              'LOUNGE_CREATE_MEETUP.MISSING_INFORMATION')),
-                                          content: Text(FlutterI18n.translate(
-                                              context,
-                                              'LOUNGE_CREATE_MEETUP.POSITION_TO_PROVIDE')),
-                                          actions: <Widget>[
-                                            FlatButton(
-                                                onPressed: () {
-                                                  _dismissDialog();
-                                                  _scrollController.animateTo(0,
-                                                      duration: const Duration(
-                                                          seconds: 1),
-                                                      curve: Curves.ease);
-                                                },
-                                                child: Text(FlutterI18n.translate(
-                                                    context,
-                                                    'LOUNGE_CREATE_MEETUP.OK')))
-                                          ]));
-                              return;
-                            }
-                            final GeoPoint _location = GeoPoint(
-                                _positionOfPlace.position.latitude,
-                                _positionOfPlace.position.longitude);
-                            dispatch(LoungeCreateMeetupAction(_location,
-                                _dateOfEvent, _notesTextController.text));
-                          }),
-                    ]))
-          ]));
+          buttons: Container(
+              margin: const EdgeInsets.symmetric(horizontal: 10.0),
+              padding: const EdgeInsets.all(4.0),
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Button(
+                        text: FlutterI18n.translate(
+                            context, 'LOUNGE_CREATE_MEETUP.BACK'),
+                        width: 150,
+                        paddingRight: 5.0,
+                        onPressed: () {
+                          dispatch(NavigateAction<AppState>.pop());
+                        }),
+                    Button(
+                        text: FlutterI18n.translate(
+                            context, 'LOUNGE_CREATE_MEETUP.CREATE'),
+                        width: 150,
+                        onPressed: () async {
+                          _focusNodeNotes.unfocus();
+                          _focusNodeAdress.unfocus();
+                          final DateTime _dateOfEvent = DateTime(
+                              _dateEvent.year,
+                              _dateEvent.month,
+                              _dateEvent.day,
+                              _timeEvent.hour,
+                              _timeEvent.minute);
+                          if (_positionOfPlace == null) {
+                            showDialog(
+                                context: context,
+                                builder: (BuildContext context) => AlertDialog(
+                                        title: Text(FlutterI18n.translate(
+                                            context,
+                                            'LOUNGE_CREATE_MEETUP.MISSING_INFORMATION')),
+                                        content: Text(FlutterI18n.translate(
+                                            context,
+                                            'LOUNGE_CREATE_MEETUP.POSITION_TO_PROVIDE')),
+                                        actions: <Widget>[
+                                          FlatButton(
+                                              onPressed: () {
+                                                _dismissDialog();
+                                                _scrollController.animateTo(0,
+                                                    duration: const Duration(
+                                                        seconds: 1),
+                                                    curve: Curves.ease);
+                                              },
+                                              child: Text(FlutterI18n.translate(
+                                                  context,
+                                                  'LOUNGE_CREATE_MEETUP.OK')))
+                                        ]));
+                            return;
+                          }
+                          final GeoPoint _location = GeoPoint(
+                              _positionOfPlace.position.latitude,
+                              _positionOfPlace.position.longitude);
+                          dispatch(LoungeCreateMeetupAction(_location,
+                              _dateOfEvent, _notesTextController.text));
+                        }),
+                  ])),
+          child: Scrollbar(
+              child: ListView(
+                  controller: _scrollController,
+                  padding: const EdgeInsets.all(10),
+                  children: <Widget>[
+                _buildMap(context),
+                _buildAdressField(context),
+                _buildTimeField(context),
+                _buildNotesField(context),
+              ])));
     });
   }
 }

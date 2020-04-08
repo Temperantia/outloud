@@ -55,22 +55,20 @@ class _LoungeChatScreenState extends State<LoungeChatScreen>
     return Container(
         padding: const EdgeInsets.all(15.0),
         child: Row(children: <Widget>[
-          Flexible(
-              flex: 2,
-              child: Stack(alignment: Alignment.center, children: <Widget>[
-                Container(
-                    decoration: const BoxDecoration(
-                        border: Border(
-                            left: BorderSide(color: orange, width: 5.0))),
-                    child: CachedImage(_lounge.event.pic,
-                        width: 40.0,
-                        height: 40.0,
-                        borderRadius: const BorderRadius.only(
-                            bottomRight: Radius.circular(5.0),
-                            topRight: Radius.circular(5.0)),
-                        imageType: ImageType.Event))
-              ])),
-          Flexible(
+          Stack(alignment: Alignment.center, children: <Widget>[
+            Container(
+                decoration: const BoxDecoration(
+                    border:
+                        Border(left: BorderSide(color: orange, width: 5.0))),
+                child: CachedImage(_lounge.event.pic,
+                    width: 40.0,
+                    height: 40.0,
+                    borderRadius: const BorderRadius.only(
+                        bottomRight: Radius.circular(5.0),
+                        topRight: Radius.circular(5.0)),
+                    imageType: ImageType.Event))
+          ]),
+          Expanded(
               flex: 11,
               child: Container(
                   padding: const EdgeInsets.only(left: 20),
@@ -81,24 +79,22 @@ class _LoungeChatScreenState extends State<LoungeChatScreen>
                           height: 20.0,
                           borderRadius: BorderRadius.circular(20.0),
                           imageType: ImageType.User),
-                      Expanded(
-                          child: Wrap(
-                              direction: Axis.horizontal,
-                              children: <Widget>[
-                            Container(
-                                padding: const EdgeInsets.only(left: 10),
-                                child: Text(
-                                    state.userState.user.id == owner.id
-                                        ? FlutterI18n.translate(
-                                            context, 'LOUNGE_CHAT.YOUR_LOUNGE')
-                                        : owner.name +
-                                            FlutterI18n.translate(context,
-                                                'LOUNGE_CHAT.SOMEONES_LOUNGE'),
-                                    style: const TextStyle(
+                      Wrap(children: <Widget>[
+                        Container(
+                            padding: const EdgeInsets.only(left: 10),
+                            child: I18nText(
+                                state.userState.user.id == owner.id
+                                    ? 'LOUNGE_CHAT.YOUR_LOUNGE'
+                                    : 'LOUNGE_CHAT.SOMEONES_LOUNGE',
+                                child: const Text('',
+                                    style: TextStyle(
                                         color: black,
                                         fontSize: 13,
-                                        fontWeight: FontWeight.w500)))
-                          ]))
+                                        fontWeight: FontWeight.w500)),
+                                translationParams: <String, String>{
+                                  'user': owner.name
+                                }))
+                      ])
                     ]),
                     Wrap(children: <Widget>[
                       RichText(
@@ -306,47 +302,44 @@ class _LoungeChatScreenState extends State<LoungeChatScreen>
 
       return View(
           title: FlutterI18n.translate(context, 'LOUNGE_CHAT.LOUNGE_CHAT'),
-          child: Column(children: <Widget>[
-            Expanded(
-                child: Column(children: <Widget>[
-              _buildHeader(state, dispatch),
-              const Divider(),
-              if (chat != null) Expanded(child: _buildChat(chat, dispatch))
-            ])),
-            Container(
-                margin: const EdgeInsets.all(10.0),
-                decoration: BoxDecoration(
-                    color: orangeLight.withOpacity(0.5),
-                    borderRadius: BorderRadius.circular(5.0)),
-                child: Row(children: <Widget>[
-                  Padding(
+          buttons: Container(
+              margin: const EdgeInsets.symmetric(horizontal: 10.0),
+              decoration: BoxDecoration(
+                  color: orangeLight.withOpacity(0.5),
+                  borderRadius: BorderRadius.circular(5.0)),
+              child: Row(children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: GestureDetector(
+                      onTap: () {}, child: Icon(Icons.add, color: white)),
+                ),
+                Expanded(
+                    child: TextField(
+                        controller: _messageController,
+                        decoration: InputDecoration.collapsed(
+                            hintText: FlutterI18n.translate(
+                                context, 'LOUNGE_CHAT.MESSAGE'),
+                            hintStyle: const TextStyle(color: white)))),
+                Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: GestureDetector(
-                        onTap: () {}, child: Icon(Icons.add, color: white)),
-                  ),
-                  Expanded(
-                      child: TextField(
-                          controller: _messageController,
-                          decoration: InputDecoration.collapsed(
-                              hintText: FlutterI18n.translate(
-                                  context, 'LOUNGE_CHAT.MESSAGE'),
-                              hintStyle: const TextStyle(color: white)))),
-                  Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: GestureDetector(
-                          onTap: () {},
-                          child:
-                              const Icon(MdiIcons.stickerEmoji, color: white))),
-                  Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: GestureDetector(
-                          onTap: () {
-                            addMessage(_lounge.id, state.loginState.id,
-                                _messageController.text, MessageType.Text);
-                            _messageController.clear();
-                          },
-                          child: Icon(Icons.send, color: white)))
-                ]))
+                        onTap: () {},
+                        child:
+                            const Icon(MdiIcons.stickerEmoji, color: white))),
+                Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: GestureDetector(
+                        onTap: () {
+                          addMessage(_lounge.id, state.loginState.id,
+                              _messageController.text, MessageType.Text);
+                          _messageController.clear();
+                        },
+                        child: Icon(Icons.send, color: white)))
+              ])),
+          child: Column(children: <Widget>[
+            _buildHeader(state, dispatch),
+            const Divider(),
+            if (chat != null) Expanded(child: _buildChat(chat, dispatch)),
           ]));
     });
   }
