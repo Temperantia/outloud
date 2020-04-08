@@ -22,15 +22,9 @@ class UserSendFriendRequest extends ReduxAction<AppState> {
     _userFrom..requestedFriends = _newRequestedFriendsListFrom;
     _userTo..pendingFriends = _newPendingFriendsListTo;
 
-    final List<User> _newRequestedFriendsUserList =
-        List<User>.from(state.userState.requestedFriends + <User>[_userTo]);
-
     await updateUser(_userTo);
     await updateUser(_userFrom);
 
-    return state.copy(
-        userState: state.userState.copy(
-            user: _userFrom,
-            requestedFriends: _newRequestedFriendsUserList));
+    return state;
   }
 }

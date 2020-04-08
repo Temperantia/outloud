@@ -3,8 +3,11 @@ import 'package:business/app_state.dart';
 import 'package:business/classes/user.dart';
 import 'package:business/people/actions/people_get_action.dart';
 import 'package:business/user/actions/user_send_friend_request_action.dart';
+import 'package:business/user/actions/user_accept_friend_request_action.dart';
+import 'package:business/user/actions/user_deny_friend_request_action.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
+import 'package:outloud/functions/loader_animation.dart';
 import 'package:outloud/profile/profile_screen.dart';
 import 'package:outloud/widgets/cached_image.dart';
 import 'package:outloud/widgets/loading.dart';
@@ -20,7 +23,8 @@ class PeopleSearchScreen extends StatefulWidget {
   _PeopleSearchScreenState createState() => _PeopleSearchScreenState();
 }
 
-class _PeopleSearchScreenState extends State<PeopleSearchScreen> {
+class _PeopleSearchScreenState extends State<PeopleSearchScreen>
+    with TickerProviderStateMixin {
   Widget _buildPerson(
     User user,
     String distance,
@@ -51,7 +55,6 @@ class _PeopleSearchScreenState extends State<PeopleSearchScreen> {
                     borderRadius: BorderRadius.circular(20.0),
                     imageType: ImageType.User),
                 Expanded(
-                    // flex: 2,
                     child: Container(
                         padding: const EdgeInsets.only(left: 15),
                         child: Column(
@@ -101,31 +104,123 @@ class _PeopleSearchScreenState extends State<PeopleSearchScreen> {
               ],
             ),
           )),
-          if (!state.userState.user.requestedFriends.contains(user.id))
+          if (state.userState.user.pendingFriends.contains(user.id))
             Container(
-                padding: const EdgeInsets.all(15),
-                child: GestureDetector(
-                  onTap: () async {
-                    await dispatchFuture(UserSendFriendRequest(
-                                    state.userState.user.id, user.id));
-                  },
-                  child: Icon(
-                    Icons.add,
-                    size: 40,
-                    color: blue,
-                  ),
-                ))
-            else
-              Container(
-                  padding: const EdgeInsets.all(15),
-                  child: GestureDetector(
-                    child: Icon(
-                      Icons.check,
-                      size: 40,
-                      color: blue,
-                    ),
-                  ))
-
+                child: Column(
+              children: <Widget>[
+                Container(
+                    padding: const EdgeInsets.only(left: 4.0, right: 4.0),
+                    margin: const EdgeInsets.only(
+                        left: 2.0, right: 2.0, bottom: 10),
+                    decoration: BoxDecoration(border: Border.all(color: blue)),
+                    child: const Text('PENDING REQUEST',
+                        style: TextStyle(
+                            fontSize: 10, fontWeight: FontWeight.w300))),
+                Row(
+                  children: <Widget>[
+                    Container(
+                        margin: const EdgeInsets.only(right: 15.0),
+                        child: GestureDetector(
+                            onTap: () async {
+                              await showLoaderAnimation(context, this,
+                                  animationDuration: 600);
+                              dispatch(UserAcceptFriendRequestAction(
+                                  user.id, state.userState.user.id));
+                            },
+                            child: Column(
+                              children: <Widget>[
+                                Icon(
+                                  Icons.add_circle_outline,
+                                  size: 20,
+                                  color: blue,
+                                ),
+                                const Text('Accept',
+                                    style: TextStyle(
+                                        color: blue,
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w400))
+                              ],
+                            ))),
+                    Container(
+                        margin: const EdgeInsets.only(left: 15.0),
+                        child: GestureDetector(
+                            onTap: () async {
+                              await showLoaderAnimation(context, this,
+                                  animationDuration: 600);
+                              dispatch(UserDenyFriendRequestAction(
+                                  user.id, state.userState.user.id));
+                            },
+                            child: Column(
+                              children: <Widget>[
+                                Icon(
+                                  Icons.remove_circle_outline,
+                                  size: 20,
+                                  color: blue,
+                                ),
+                                const Text('Deny',
+                                    style: TextStyle(
+                                        color: blue,
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w400))
+                              ],
+                            ))),
+                  ],
+                )
+              ],
+            ))
+          else if (!state.userState.user.requestedFriends.contains(user.id))
+            Container(
+                child: Container(
+                    padding: const EdgeInsets.all(15),
+                    child: GestureDetector(
+                      onTap: () async {
+                        await dispatchFuture(UserSendFriendRequest(
+                            state.userState.user.id, user.id));
+                      },
+                      child: Icon(
+                        Icons.add,
+                        size: 40,
+                        color: blue,
+                      ),
+                    )))
+          else
+            Container(
+                child: Column(
+              children: <Widget>[
+                Container(
+                    padding: const EdgeInsets.only(left: 2.0, right: 2.0),
+                    margin: const EdgeInsets.only(
+                        left: 2.0, right: 2.0, bottom: 10),
+                    decoration: BoxDecoration(border: Border.all(color: blue)),
+                    child: const Text('REQUEST SENT',
+                        style: TextStyle(
+                            fontSize: 10, fontWeight: FontWeight.w300))),
+                Container(
+                    child: GestureDetector(
+                        onTap: () async {
+                          await showLoaderAnimation(context, this,
+                              animationDuration: 600);
+                          dispatch(UserDenyFriendRequestAction(
+                              state.userState.user.id, user.id));
+                        },
+                        child: Row(
+                          children: <Widget>[
+                            const Text('Cancel',
+                                style: TextStyle(
+                                    color: blue,
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w400)),
+                            Container(
+                                margin: const EdgeInsets.only(left: 5),
+                                child: Icon(
+                                  Icons.remove_circle_outline,
+                                  size: 20,
+                                  color: blue,
+                                )),
+                          ],
+                        )))
+              ],
+            ))
         ]));
   }
 
@@ -139,15 +234,15 @@ class _PeopleSearchScreenState extends State<PeopleSearchScreen> {
             void Function(redux.ReduxAction<AppState>) dispatch,
             PeopleState peopleState,
             Widget child) {
-
-          final List<User> people = state.peopleState.people.where((User _user) {
-            return !state.userState.user.friends.contains(_user.id) && _user.id != state.userState.user.id;
+          final List<User> people =
+              state.peopleState.people.where((User _user) {
+            return !state.userState.user.friends.contains(_user.id) &&
+                _user.id != state.userState.user.id;
           }).toList();
           final Map<String, String> distances = peopleState.distances;
           if (people == null || distances == null) {
             return Loading();
           }
-
           return View(
               child: RefreshIndicator(
                   onRefresh: () => store.dispatchFuture(PeopleGetAction()),

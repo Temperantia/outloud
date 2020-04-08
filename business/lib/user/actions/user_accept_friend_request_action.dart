@@ -52,9 +52,6 @@ class UserAcceptFriendRequestAction extends ReduxAction<AppState> {
 
     await updateUser(_userFrom);
 
-    return state.copy(
-        userState: state.userState.copy(
-      user: _userTo,
-    ));
+    return state;
   }
 }
