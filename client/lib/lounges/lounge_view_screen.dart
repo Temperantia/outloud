@@ -212,7 +212,7 @@ class _LoungeViewScreenState extends State<LoungeViewScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     Text(
-                        '${FlutterI18n.translate(context, "LOUNGE.MAX_PEOPLE_COUNT")} : $_limit',
+                        '${FlutterI18n.translate(context, "LOUNGE.MAX_PEOPLE_COUNT")} : ${_limit.toInt()}',
                         style: const TextStyle(
                             color: black,
                             fontSize: 15,

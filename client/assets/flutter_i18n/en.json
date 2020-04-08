@@ -165,7 +165,8 @@
         "EMPLOYER": "Employer",
         "INTERESTS": "INTERESTS",
         "ADD_INTERESTS": "Add more interests",
-        "SAVE": "SAVE CHANGES"
+        "SAVE": "SAVE CHANGES",
+        "NO_ITEM_FOUND": "No Interest found"
     },
     "HOME": {
         "PERMISSION_WARNING": "PERMISSION WARNING",

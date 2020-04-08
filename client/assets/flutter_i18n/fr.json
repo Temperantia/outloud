@@ -165,7 +165,8 @@
         "EMPLOYER": "Employeur",
         "INTERESTS": "INTERETS",
         "ADD_INTERESTS": "Ajouter plus d'intérêts",
-        "SAVE": "SAUVEGARDER LES CHANGEMENTS"
+        "SAVE": "SAUVEGARDER LES CHANGEMENTS",
+        "NO_ITEM_FOUND": "Aucun intérêt trouvé"
     },
     "HOME": {
         "PERMISSION_WARNING": "ALERTE PERMISSION",
@@ -187,7 +188,7 @@
         "UNATTEND_WARNING": "Si tu ne vas plus à l'event ça va supprimer/quitter les salons que tu as rejoint pour cet event",
         "CONTINUE": "Tu veux toujours continuer?",
         "TAKE_ME_BACK": "Non",
-        "UNATTEND": "OUI, Event supprimé",
+        "UNATTEND": "OUI, se désinscrire",
         "LOUNGES_AVAILABLE": "Salons disponibles!",
         "JOINING": "Tu peux rejoindre un salon. Joindre un salon te permet d'apprécier les events avec des gens tout comme toi",
         "GOT_IT": "COMPRIS",
@@ -195,7 +196,7 @@
         "LOUNGE": "SALON",
         "ATTEND": "PARTICIPER",
         "VIEW_LIST": "VOIR LA LISTE",
-        "ATTENDING": "CONNECTE AU SALON",
+        "ATTENDING": "S'INSCRIRE",
         "LIVE_FEED": "LIVE FEED",
         "EVENT_DESCRIPTION": "DESCRIPTION DE L'EVENT",
         "EVENT_DETAILS": "DETAILS DE L'EVENT",

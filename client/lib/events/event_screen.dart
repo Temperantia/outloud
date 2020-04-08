@@ -375,9 +375,11 @@ class _EventScreenState extends State<EventScreen>
         ])
       ]),
       Container(
-          height: 60.0,
+          height: 85.0,
           margin: const EdgeInsets.all(10),
-          child: Row(children: <Widget>[
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
             Expanded(
                 child: Container(
                     margin: const EdgeInsets.only(right: 5.0),
@@ -575,7 +577,8 @@ class _EventScreenState extends State<EventScreen>
                               Text(
                                   FlutterI18n.translate(
                                       context, 'EVENT.VIEW_LIST'),
-                                  style: const TextStyle(color: white))
+                                      textAlign: TextAlign.center,
+                                  style: const TextStyle(color: white, fontSize: 16, fontWeight: FontWeight.w400))
                             ]))))
               ])
             : Container(
@@ -603,10 +606,11 @@ class _EventScreenState extends State<EventScreen>
                                         fontWeight: FontWeight.w400))
                               ]),
                           Container(
-                              padding: const EdgeInsets.only(bottom: 5),
+                              // padding: const EdgeInsets.only(bottom: 5),
                               child: Text(
                                   FlutterI18n.translate(
                                       context, 'EVENT.ATTENDING'),
+                                      textAlign: TextAlign.center,
                                   style: const TextStyle(
                                       color: white,
                                       fontSize: 12,

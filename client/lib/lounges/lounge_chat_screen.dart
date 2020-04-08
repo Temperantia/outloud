@@ -73,14 +73,14 @@ class _LoungeChatScreenState extends State<LoungeChatScreen>
               child: Container(
                   padding: const EdgeInsets.only(left: 20),
                   child: Column(children: <Widget>[
-                    Row(children: <Widget>[
-                      CachedImage(owner.pics.isEmpty ? null : owner.pics[0],
+                    Row(
+                      children: <Widget>[
+                      Container(child: CachedImage(owner.pics.isEmpty ? null : owner.pics[0],
                           width: 20.0,
                           height: 20.0,
                           borderRadius: BorderRadius.circular(20.0),
-                          imageType: ImageType.User),
-                      Wrap(children: <Widget>[
-                        Container(
+                          imageType: ImageType.User)),
+                        Expanded(child: Container(
                             padding: const EdgeInsets.only(left: 10),
                             child: I18nText(
                                 state.userState.user.id == owner.id
@@ -93,8 +93,7 @@ class _LoungeChatScreenState extends State<LoungeChatScreen>
                                         fontWeight: FontWeight.w500)),
                                 translationParams: <String, String>{
                                   'user': owner.name
-                                }))
-                      ])
+                                })))
                     ]),
                     Wrap(children: <Widget>[
                       RichText(

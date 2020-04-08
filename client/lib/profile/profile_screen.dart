@@ -210,28 +210,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     style: const TextStyle(color: pinkBright, fontSize: 20.0)))
           ]),
           _buildAboutBloc(FlutterI18n.translate(context, 'PROFILE.LOCATION'),
-              <String>[_user.home]),
+              <String>[_user.home], 'LOCATION'),
           _buildAboutBloc(FlutterI18n.translate(context, 'PROFILE.GENDER'),
-              <String>[_user.gender]),
+              <String>[_user.gender], 'GENDER'),
           _buildAboutBloc(FlutterI18n.translate(context, 'PROFILE.PRONOUNS'),
-              <String>[_user.pronoun]),
+              <String>[_user.pronoun], 'PRONOUNS'),
           _buildAboutBloc(
               FlutterI18n.translate(context, 'PROFILE.SEXUAL_ORIENTATION'),
-              <String>[_user.orientation]),
-          _buildAboutBloc(
-              FlutterI18n.translate(context, 'PROFILE.EDUCATION'), <String>[
-            _user.school,
-            _user.degree
-          ],
+              <String>[_user.orientation],
+              'SEXUAL ORIENTATION'),
+          _buildAboutBloc(FlutterI18n.translate(context, 'PROFILE.EDUCATION'),
+              <String>[_user.school, _user.degree], 'EDUCATION',
               placeholders: <String>[
                 FlutterI18n.translate(context, 'PROFILE.SCHOOL'),
                 FlutterI18n.translate(context, 'PROFILE.DEGREE')
               ]),
-          _buildAboutBloc(
-              FlutterI18n.translate(context, 'PROFILE.OCCUPATION'), <String>[
-            _user.position,
-            _user.employer
-          ],
+          _buildAboutBloc(FlutterI18n.translate(context, 'PROFILE.OCCUPATION'),
+              <String>[_user.position, _user.employer], 'OCCUPATION',
               placeholders: <String>[
                 FlutterI18n.translate(context, 'PROFILE.POSITION'),
                 FlutterI18n.translate(context, 'PROFILE.EMPLOYER')
@@ -239,7 +234,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ]));
   }
 
-  Widget _buildAboutBloc(String title, List<String> content,
+  Widget _buildAboutBloc(
+      String title, List<String> content, String controllerKey,
       {List<String> placeholders}) {
     final String display =
         content.where((String element) => element != '').toList().join(' • ');
@@ -254,7 +250,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       Text(title.toUpperCase(),
                           style: const TextStyle(fontWeight: FontWeight.bold)),
                       if (_isEdition)
-                        _buildAboutController(title, _controllers[title],
+                        _buildAboutController(
+                            title, _controllers[controllerKey],
                             placeholders: placeholders)
                       else
                         Text(display, style: const TextStyle(color: orange)),
@@ -360,6 +357,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ]),
           if (_isEdition)
             TypeAheadField<Map<String, String>>(
+                noItemsFoundBuilder: (BuildContext context) => Text(
+                    FlutterI18n.translate(context, 'PROFILE.NO_ITEM_FOUND'),
+                    style: TextStyle(
+                        color: Theme.of(context).errorColor, fontSize: 12)),
                 autoFlipDirection: true,
                 textFieldConfiguration: TextFieldConfiguration<String>(
                     onEditingComplete: () => FocusScope.of(context).unfocus(),
@@ -392,7 +393,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 onSuggestionSelected: (Map<String, String> suggestion) =>
                     setState(() {
                       _interestController.clear();
-                      _user.interests.add(suggestion['name']);
+                      _user.interests = List<String>.from(
+                          _user.interests + <String>[suggestion['name']]);
                     }))
         ]));
   }
