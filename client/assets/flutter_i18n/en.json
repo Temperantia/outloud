@@ -166,7 +166,7 @@
         "INTERESTS": "INTERESTS",
         "ADD_INTERESTS": "Add more interests",
         "SAVE": "SAVE CHANGES",
-        "NO_ITEM_FOUND": "No Interest found"
+        "NO_ITEM_FOUND": "No matching interest"
     },
     "HOME": {
         "PERMISSION_WARNING": "PERMISSION WARNING",
