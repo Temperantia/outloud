@@ -85,7 +85,8 @@ class _ViewState extends State<View> {
                             (widget.showNavBar && widget.buttons != null)
                         ? 120.0
                         : 50.0),
-                decoration: const BoxDecoration(color: white))),
+                decoration: BoxDecoration(
+                    color: white, borderRadius: BorderRadius.circular(40.0)))),
       if (widget.showAppBar)
         Row(children: <Widget>[
           Expanded(
