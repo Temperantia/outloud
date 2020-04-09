@@ -11,14 +11,14 @@ class ChatsCreateAction extends ReduxAction<AppState> {
   @override
   AppState reduce() {
     final List<Chat> loungeChats = state.chatsState.loungeChats;
-    final Chat chat = loungeChats.firstWhere((Chat chat) => chat.id == _chatId,
-        orElse: () => null);
+    // final Chat chat = loungeChats.firstWhere((Chat chat) => chat.id == _chatId,
+    //     orElse: () => null);
 
-    if (chat == null) {
-      return null;
-    }
+    // if (chat == null) {
+    //   return null;
+    // }
 
-    chat.messages = _messages;
+    // chat.messages = _messages;
 
     return state.copy(
         chatsState: state.chatsState.copy(loungeChats: loungeChats));

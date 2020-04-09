@@ -13,8 +13,8 @@ class ChatsState {
   final List<String> chatIds;
   final List<Chat> chats;
   final List<Chat> loungeChats;
-  final Map<String, Map<String, Map<int, Map<String, bool>>>>
-      usersChatsMessagesStates;
+  // final Map<String, Map<String, Map<int, Map<String, bool>>>>
+  //     usersChatsMessagesStates = [] as Map<String, Map<String, Map<int, Map<String, bool>>>>;
 
   static ChatsState initialState({List<String> chatIds = const <String>[]}) =>
       ChatsState(chatIds: chatIds);
