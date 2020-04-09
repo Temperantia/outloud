@@ -20,6 +20,7 @@ class AppState {
       this.chatsState,
       this.loading,
       this.homePageIndex,
+      this.eventsTabIndex,
       this.theme});
 
   AppState copy({
@@ -31,6 +32,7 @@ class AppState {
     ChatsState chatsState,
     bool loading,
     int homePageIndex,
+    int eventsTabIndex,
     ThemeStyle theme,
   }) =>
       AppState(
@@ -42,6 +44,7 @@ class AppState {
           chatsState: chatsState ?? this.chatsState,
           loading: loading ?? this.loading,
           homePageIndex: homePageIndex ?? this.homePageIndex,
+          eventsTabIndex: eventsTabIndex ?? this.eventsTabIndex,
           theme: theme ?? this.theme);
 
   final LoginState loginState;
@@ -52,6 +55,7 @@ class AppState {
   final ChatsState chatsState;
   final bool loading;
   final int homePageIndex;
+  final int eventsTabIndex;
   final ThemeStyle theme;
 
   static AppState initialState({ChatsState chatsState, ThemeStyle theme}) =>
@@ -64,5 +68,6 @@ class AppState {
           chatsState: chatsState ?? ChatsState.initialState(),
           loading: true,
           homePageIndex: 0,
+          eventsTabIndex: 0,
           theme: theme ?? ThemeStyle.Orange);
 }

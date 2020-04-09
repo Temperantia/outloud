@@ -145,19 +145,45 @@ class _MyEventsScreen extends State<MyEventsScreen>
       List<Lounge> userLounges,
       ThemeStyle themeStyle,
       void Function(redux.ReduxAction<AppState>) dispatch) {
-    return Column(children: <Widget>[
-      Expanded(
-          flex: 8,
-          child: ListView.builder(
-              itemCount: userEvents.length,
-              itemBuilder: (BuildContext context, int index) => Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        _buildUserEvent(userEvents[index], userEventStates,
-                            userLounges, dispatch, themeStyle),
-                        const Divider(color: orange),
-                      ]))),
-      /*  Expanded(
+    return userEvents.isEmpty
+        ? Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: <
+            Widget>[
+            Container(
+                padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Container(
+                          child: Text(
+                              FlutterI18n.translate(
+                                  context, 'MY_EVENTS.MY_EVENTS_EMPTY_TITLE'),
+                              style: const TextStyle(
+                                  fontSize: 20.0,
+                                  fontWeight: FontWeight.bold))),
+                      Text(
+                          FlutterI18n.translate(
+                              context, 'MY_EVENTS.MY_EVENTS_EMPTY_DESCRIPTION'),
+                          style: const TextStyle(color: grey))
+                    ])),
+            Image.asset('images/catsIllus4.png')
+          ])
+        : Column(children: <Widget>[
+            Expanded(
+                flex: 8,
+                child: ListView.builder(
+                    itemCount: userEvents.length,
+                    itemBuilder: (BuildContext context, int index) => Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              _buildUserEvent(
+                                  userEvents[index],
+                                  userEventStates,
+                                  userLounges,
+                                  dispatch,
+                                  themeStyle),
+                              const Divider(color: orange),
+                            ]))),
+            /*  Expanded(
           child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
@@ -165,7 +191,7 @@ class _MyEventsScreen extends State<MyEventsScreen>
                 text: FlutterI18n.translate(context, 'MY_EVENTS.VIEW_CALENDAR'),
                 onPressed: () => null)
           ])) */
-    ]);
+          ]);
   }
 
   @override

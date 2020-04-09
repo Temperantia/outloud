@@ -226,7 +226,9 @@
         "LIKED": "Aimé",
         "FIND_LOUNGES": "TROUVER DES SALONS",
         "VIEW_LOUNGE": "VOIR MON SALON",
-        "VIEW_CALENDAR": "VOIR LE CALENDRIER"
+        "VIEW_CALENDAR": "VOIR LE CALENDRIER",
+        "MY_EVENTS_EMPTY_TITLE": "C'est ennuyant ici",
+        "MY_EVENTS_EMPTY_DESCRIPTION": "Tu n'as aucun événement sauvegardé ! Aime et inscris-toi à des événements dans la section \"TROUVER DES EVENTS\""
     },
     "LOUNGE_CHAT": {
         "YOUR_LOUNGE": "Ton Salon",
@@ -269,6 +271,11 @@
         "POSITION_TO_PROVIDE": "MERCI DE FOURNIR UNE POSITION A TON SALON"
     },
     "LOUNGE_CREATE": {
+        "HELLO": "Hello!",
+        "NO_EVENT_WARNING": "Tu n'es inscrit à aucun événement! Tu ne peux donc pas créer de salon",
+        "CONINUE": "Veux-tu être redirigé(e) vers la recherche d'événements?",
+        "STAY_IN_LOUNGES": "Non, rester ici ",
+        "REDIRECT_TO_FIND_EVENTS": "Oui, aller vers \"FIND EVENTS\" ",
         "CREATE_LOUNGE": "CREER LE SALON",
         "CHOOSE_EVENT": "CHOISIS UN EVENT POUR CE SALON",
         "NEXT": "SUIVANT"
