@@ -4,7 +4,7 @@ import 'package:business/classes/chat.dart';
 import 'package:business/classes/message.dart';
 import 'package:business/classes/user.dart';
 import 'package:flutter/material.dart';
-import 'package:outloud/chats/chat_screen.dart';
+import 'package:outloud/people/chat_screen.dart';
 import 'package:outloud/theme.dart';
 import 'package:outloud/widgets/cached_image.dart';
 import 'package:provider_for_redux/provider_for_redux.dart';
@@ -21,6 +21,9 @@ class _PeopleChatScreenState extends State<PeopleChatScreen>
 
   Widget _buildChat(Chat chat, ThemeStyle theme,
       void Function(redux.ReduxAction<AppState>) dispatch) {
+    if (chat.entity == null) {
+      return Container();
+    }
     final Message lastMessage = chat.messages.isEmpty ? null : chat.messages[0];
     final String pic = (chat.entity as User).pics.isEmpty
         ? null
@@ -83,8 +86,8 @@ class _PeopleChatScreenState extends State<PeopleChatScreen>
         AppState state,
         void Function(redux.ReduxAction<dynamic>) dispatch,
         Widget child) {
-      return Container(
-          child: _buildChats(state.chatsState.chats, state.theme, dispatch));
+      print(state.chatsState.chats);
+      return _buildChats(state.chatsState.chats, state.theme, dispatch);
     });
   }
 }

@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:async_redux/async_redux.dart' as redux;
 import 'package:business/app_state.dart';
+import 'package:business/chats/actions/chats_listen_action.dart';
 import 'package:business/classes/event.dart';
 import 'package:business/classes/lounge.dart';
 import 'package:business/classes/user.dart';
@@ -34,22 +35,21 @@ class UserUpdateAction extends redux.ReduxAction<AppState> {
     loungesSub = streamLounges(ids: _user.lounges).listen(
         (List<Lounge> lounges) => dispatch(UserLoungesUpdateAction(lounges)));
 
-    usersSub = streamUsers(ids: _user.friends).listen((List<User> friends) {
-      dispatch(UserFriendsUpdateAction(friends));
-    });
+    usersSub = streamUsers(ids: _user.friends).listen(
+        (List<User> friends) => dispatch(UserFriendsUpdateAction(friends)));
 
-    usersPendingSub =
-        streamUsers(ids: _user.pendingFriends).listen((List<User> friends) {
-      dispatch(UserPendingFriendsUpdateAction(friends));
-    });
+    usersPendingSub = streamUsers(ids: _user.pendingFriends).listen(
+        (List<User> friends) =>
+            dispatch(UserPendingFriendsUpdateAction(friends)));
 
-    usersRequestSub =
-        streamUsers(ids: _user.requestedFriends).listen((List<User> friends) {
-      dispatch(UserRequestedFriendsUpdateAction(friends));
-    });
+    usersRequestSub = streamUsers(ids: _user.requestedFriends).listen(
+        (List<User> friends) =>
+            dispatch(UserRequestedFriendsUpdateAction(friends)));
 
     eventsSub = streamEvents(_user.events.keys.toList()).listen(
         (List<Event> events) => dispatch(UserEventsUpdateAction(events)));
+
+    dispatch(ChatsListenAction(_user.id, _user.chatIds));
 
     return state.copy(userState: state.userState.copy(user: _user));
   }

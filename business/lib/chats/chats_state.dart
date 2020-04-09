@@ -1,21 +1,25 @@
 import 'package:business/classes/chat.dart';
+import 'package:business/classes/chat_state.dart';
 
 class ChatsState {
-  ChatsState({this.chatIds, this.chats, this.loungeChats});
+  ChatsState({this.chats, this.loungeChats, this.usersChatsStates});
 
   ChatsState copy(
-          {List<String> chatIds, List<Chat> chats, List<Chat> loungeChats}) =>
+          {List<String> chatIds,
+          List<Chat> chats,
+          List<Chat> loungeChats,
+          Map<String, Map<String, ChatState>> usersChatsStates}) =>
       ChatsState(
-          chatIds: chatIds ?? this.chatIds,
           chats: chats ?? this.chats,
-          loungeChats: loungeChats ?? this.loungeChats);
+          loungeChats: loungeChats ?? this.loungeChats,
+          usersChatsStates: usersChatsStates ?? this.usersChatsStates);
 
-  final List<String> chatIds;
   final List<Chat> chats;
   final List<Chat> loungeChats;
-  final Map<String, Map<String, Map<int, Map<String, bool>>>>
-      usersChatsMessagesStates;
+  final Map<String, Map<String, ChatState>> usersChatsStates;
 
-  static ChatsState initialState({List<String> chatIds = const <String>[]}) =>
-      ChatsState(chatIds: chatIds);
+  static ChatsState initialState(
+          {Map<String, Map<String, ChatState>> usersChatsStates =
+              const <String, Map<String, ChatState>>{}}) =>
+      ChatsState(usersChatsStates: usersChatsStates);
 }

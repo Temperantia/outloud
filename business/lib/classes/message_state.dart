@@ -1,0 +1,1 @@
+enum MessageState { Sent }

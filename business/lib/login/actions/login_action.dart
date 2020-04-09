@@ -1,6 +1,5 @@
 import 'package:async_redux/async_redux.dart';
 import 'package:business/app_state.dart';
-import 'package:business/chats/actions/chats_listen_action.dart';
 import 'package:business/events/actions/events_get_action.dart';
 // import 'package:business/lounges/actions/lounges_listen_action.dart';
 import 'package:business/people/actions/people_get_action.dart';
@@ -15,7 +14,6 @@ class LoginAction extends ReduxAction<AppState> {
 
     if (id != null) {
       dispatch(UserListenAction(id));
-      dispatch(ChatsListenAction(id));
     }
     dispatch(EventsGetAction());
     //dispatch(

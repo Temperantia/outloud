@@ -25,7 +25,8 @@ class User extends Entity {
       this.pendingFriends = const <String>[],
       this.requestedFriends = const <String>[],
       this.events = const <String, UserEventState>{},
-      this.lounges = const <String>[]})
+      this.lounges = const <String>[],
+      this.chatIds = const <String>[]})
       : super(id: id, name: name, location: location, interests: interests);
 
   User.fromMap(Map<String, dynamic> snapshot, String id)
@@ -63,6 +64,9 @@ class User extends Entity {
         lounges = snapshot['lounges'] == null
             ? <String>[]
             : snapshot['lounges'].cast<String>() as List<String>,
+        chatIds = snapshot['chatIds'] == null
+            ? <String>[]
+            : snapshot['chatIds'].cast<String>() as List<String>,
         super(
             id: id ?? '',
             name: snapshot['name'] as String,
@@ -87,6 +91,7 @@ class User extends Entity {
   List<String> requestedFriends;
   Map<String, UserEventState> events;
   List<String> lounges;
+  List<String> chatIds;
 
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
@@ -109,7 +114,8 @@ class User extends Entity {
       'requestedFriends': requestedFriends,
       'events': events.map<String, String>((String key, UserEventState value) =>
           MapEntry<String, String>(key, EnumToString.parse(value))),
-      'lounges': lounges
+      'lounges': lounges,
+      'chatIds': chatIds
     };
   }
 

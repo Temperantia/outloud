@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'package:async_redux/async_redux.dart';
 import 'package:business/app.dart';
 import 'package:business/app_state.dart';
-import 'package:business/chats/actions/chats_listen_action.dart';
 import 'package:business/classes/user.dart';
 import 'package:business/models/user.dart';
 import 'package:business/user/actions/user_listen_action.dart';
@@ -45,7 +44,6 @@ class LoginFacebookAction extends ReduxAction<AppState> {
 
         if (getUser(user.id) != null) {
           dispatch(UserListenAction(user.id));
-          dispatch(ChatsListenAction(user.id));
         }
         return state.copy(
             loginState: state.loginState.copy(id: user.id, user: user));
