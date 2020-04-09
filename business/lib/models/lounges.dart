@@ -42,8 +42,6 @@ Future<void> updateLounge(Lounge lounge) async {
   return _api.updateDocument(lounge.toJson(), lounge.id);
 }
 
-Future<void> updateLoungeUser(Lounge lounge, List<String> _userIdes) {
-  final Map<String, dynamic> data = lounge.toJson();
-  data['memberIds'] = _userIdes;
-  return _api.updateDocument(data, lounge.id);
+Future<void> updateLoungeUser(Lounge lounge) {
+  return _api.updateDocument(lounge.toJson(), lounge.id);
 }

@@ -83,21 +83,22 @@ class LoungeMeetupWidgetState extends State<LoungeMeetupWidget> {
   Future<void> _initLounge() async {
     final String _address = await _getAdressFromCoordinates(
         widget.lounge.location.latitude, widget.lounge.location.longitude);
-    _searchTextController.text = _address;
-    _positionOfPlace = Marker(
-        markerId: MarkerId(_address),
-        position: LatLng(
-            widget.lounge.location.latitude, widget.lounge.location.longitude),
-        infoWindow: InfoWindow(
-            snippet: _address,
-            title: FlutterI18n.translate(
-                context, 'LOUNGE_CREATE_MEETUP.MEETING_POINT')));
-
-    _markers.clear();
-    _markers[_positionOfPlace.markerId.toString()] = _positionOfPlace;
-    _notesTextController.text = widget.lounge.notes;
-    _timeEvent = TimeOfDay.fromDateTime(widget.lounge.date);
-    _dateEvent = widget.lounge.date;
+    setState(() {
+      _searchTextController.text = _address;
+      _positionOfPlace = Marker(
+          markerId: MarkerId(_address),
+          position: LatLng(widget.lounge.location.latitude,
+              widget.lounge.location.longitude),
+          infoWindow: InfoWindow(
+              snippet: _address,
+              title: FlutterI18n.translate(
+                  context, 'LOUNGE_CREATE_MEETUP.MEETING_POINT')));
+      _notesTextController.text = widget.lounge.notes;
+      _timeEvent = TimeOfDay.fromDateTime(widget.lounge.date);
+      _dateEvent = widget.lounge.date;
+      _markers.clear();
+      _markers[_positionOfPlace.markerId.toString()] = _positionOfPlace;
+    });
     _moveCameraToPosition(_positionOfPlace.position, 15);
   }
 

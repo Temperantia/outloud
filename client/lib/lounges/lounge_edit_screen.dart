@@ -217,7 +217,7 @@ class _LoungeEditScreenState extends State<LoungeEditScreen>
                                   'user': owner.name
                                 }))
                       ]),
-                    Row(children: <Widget>[
+                    Wrap(children: <Widget>[
                       RichText(
                           text: TextSpan(
                               text:
@@ -236,15 +236,14 @@ class _LoungeEditScreenState extends State<LoungeEditScreen>
                           ]))
                     ])
                   ]))),
-          Flexible(
-              flex: 2,
+          Container(
               child: GestureDetector(
                   onTap: () async =>
                       _showConfirmPopup(dispatch, dispatchFuture),
                   child: Container(
-                      margin:
-                          const EdgeInsets.only(left: 5, right: 10, top: 10),
-                      child: Column(children: <Widget>[
+                      child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
                         const Icon(MdiIcons.trashCan, color: orange),
                         Text(
                             FlutterI18n.translate(
