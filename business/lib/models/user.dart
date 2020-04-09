@@ -85,6 +85,10 @@ Future<void> updateUser(User data) async {
   return _api.updateDocument(data.toJson(), data.id);
 }
 
+Future<void> updateUserData(Map<String, dynamic> data, String id) async {
+  return _api.updateDocument(data, id);
+}
+
 Future<void> updateUserLounge(User user, List<String> lounges) {
   return _api
       .updateDocument(<String, List<String>>{'lounges': lounges}, user.id);
