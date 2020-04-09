@@ -23,10 +23,11 @@ class LoungeJoinAction extends ReduxAction<AppState> {
 
     lounge..memberIds = _userIdes;
     lounge..members = _members;
+    lounge..memberIds = _userIdes;
+    await updateLoungeUser(lounge);
 
     state.userState.lounges.add(lounge);
 
-    await updateLoungeUser(lounge, _userIdes);
 
     final List<String> _newLounges =
         List<String>.from(state.userState.user.lounges + <String>[lounge.id]);

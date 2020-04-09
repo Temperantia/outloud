@@ -1,20 +1,13 @@
 import 'package:async_redux/async_redux.dart' as redux;
 import 'package:business/app_state.dart';
-import 'package:business/classes/event.dart';
-import 'package:business/classes/lounge.dart';
-import 'package:business/classes/user.dart';
-import 'package:business/classes/user_event_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
-import 'package:outloud/events/event_screen.dart';
-import 'package:outloud/lounges/lounge_chat_screen.dart';
+import 'package:outloud/lounges/find_lounges.dart';
 import 'package:outloud/lounges/lounge_create_screen.dart';
-import 'package:outloud/lounges/lounges_screen.dart';
+import 'package:outloud/lounges/my_lounges.dart';
 import 'package:outloud/theme.dart';
 import 'package:outloud/widgets/button.dart';
-import 'package:outloud/widgets/cached_image.dart';
 import 'package:outloud/widgets/loading.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:provider_for_redux/provider_for_redux.dart';
 
 class LoungesWidget extends StatefulWidget {
@@ -27,278 +20,6 @@ class _LoungesWidgetState extends State<LoungesWidget>
   @override
   bool get wantKeepAlive => true;
 
-  Widget _buildLounges(
-      AppState state,
-      List<Lounge> lounges,
-      Map<String, List<Lounge>> userEventLounges,
-      void Function(redux.ReduxAction<AppState>) dispatch,
-      ThemeStyle themeStyle) {
-    return lounges.isEmpty
-        ? Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: <Widget>[
-                Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 30.0),
-                    child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Container(
-                              padding:
-                                  const EdgeInsets.symmetric(vertical: 20.0),
-                              child: Text(
-                                  FlutterI18n.translate(context,
-                                      'LOUNGES_TAB.MY_LOUNGES_EMPTY_TITLE'),
-                                  style: const TextStyle(
-                                      fontSize: 20.0,
-                                      fontWeight: FontWeight.bold))),
-                          Text(
-                              FlutterI18n.translate(context,
-                                  'LOUNGES_TAB.MY_LOUNGES_EMPTY_DESCRIPTION'),
-                              style: const TextStyle(color: grey))
-                        ])),
-                Image.asset('images/catsIllus1.png')
-              ])
-        : Container(
-            padding: const EdgeInsets.symmetric(horizontal: 50.0),
-            child: ListView.builder(
-                itemCount: lounges.length,
-                itemBuilder: (BuildContext context, int index) => Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          _buildLounge(
-                              state, lounges[index], dispatch, themeStyle)
-                        ])));
-  }
-
-  Widget _buildInfoLoungeLayout(AppState state, Lounge lounge,
-      void Function(redux.ReduxAction<AppState>) dispatch) {
-    final User owner = lounge.members.firstWhere(
-        (User member) => member.id == lounge.owner,
-        orElse: () => null);
-    return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          if (owner != null)
-            Row(children: <Widget>[
-              Container(
-                  margin: const EdgeInsets.only(right: 5),
-                  child: CachedImage(owner.pics.isEmpty ? null : owner.pics[0],
-                      width: 20.0,
-                      height: 20.0,
-                      borderRadius: BorderRadius.circular(20.0),
-                      imageType: ImageType.User)),
-              Expanded(
-                  child: I18nText(
-                      state.userState.user.id == owner.id
-                          ? 'LOUNGE_CHAT.YOUR_LOUNGE'
-                          : 'LOUNGE_CHAT.SOMEONES_LOUNGE',
-                      child: const Text('',
-                          style: TextStyle(
-                              color: black,
-                              fontSize: 13,
-                              fontWeight: FontWeight.w500)),
-                      translationParams: <String, String>{'user': owner.name})),
-            ]),
-          Wrap(children: <Widget>[
-            RichText(
-                text: TextSpan(
-                    text:
-                        '${lounge.members.length.toString()} ${FlutterI18n.translate(context, "LOUNGES_TAB.MEMBER")}${lounge.members.length > 1 ? 's ' : ' '}',
-                    style: const TextStyle(
-                        color: black,
-                        fontSize: 13,
-                        fontWeight: FontWeight.w500),
-                    children: <TextSpan>[
-                  TextSpan(
-                      text: lounge.event.name,
-                      style: TextStyle(
-                          color: orange,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w800)),
-                ]))
-          ]),
-          Container(
-              child: GestureDetector(
-                  onTap: () => dispatch(
-                      redux.NavigateAction<AppState>.pushNamed(EventScreen.id,
-                          arguments: lounge.event)),
-                  child: Row(children: <Widget>[
-                    // TODO(robin): go to event listing gesture detector
-                    Image.asset('images/arrowForward.png',
-                        width: 10.0, height: 10.0),
-                    Text(
-                        ' ' +
-                            FlutterI18n.translate(
-                                context, 'LOUNGES_TAB.GO_EVENT_LISTING'),
-                        style: const TextStyle(
-                            color: blue, fontWeight: FontWeight.bold))
-                  ])))
-        ]);
-  }
-
-  Widget _buildLounge(AppState state, Lounge lounge,
-      void Function(redux.ReduxAction<AppState>) dispatch, ThemeStyle theme) {
-    if (lounge.event == null) {
-      return Container();
-    }
-    return Container(
-        margin: const EdgeInsets.symmetric(vertical: 10.0),
-        child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Stack(alignment: Alignment.center, children: <Widget>[
-                Container(
-                    decoration: const BoxDecoration(
-                        border: Border(
-                            left: BorderSide(color: orange, width: 7.0))),
-                    child: CachedImage(lounge.event.pic,
-                        width: 70.0,
-                        height: 70.0,
-                        borderRadius: const BorderRadius.only(
-                            bottomRight: Radius.circular(5.0),
-                            topRight: Radius.circular(5.0)),
-                        imageType: ImageType.Event)),
-                GestureDetector(
-                    onTap: () => dispatch(
-                        redux.NavigateAction<AppState>.pushNamed(
-                            LoungeChatScreen.id,
-                            arguments: lounge)),
-                    child: Container(
-                        width: 40.0,
-                        height: 40.0,
-                        child: Image.asset('images/chatIcon.png'))),
-              ]),
-              if (lounge.members.isNotEmpty)
-                Expanded(
-                    child: Container(
-                        padding: const EdgeInsets.all(10.0),
-                        child:
-                            _buildInfoLoungeLayout(state, lounge, dispatch))),
-            ]));
-  }
-
-  Widget _buildEvents(
-      List<Lounge> userLounges,
-      List<Event> userEvents,
-      Map<String, UserEventState> userEventStates,
-      Map<String, List<Lounge>> userEventLounges,
-      void Function(redux.ReduxAction<AppState>) dispatch,
-      ThemeStyle themeStyle) {
-    return userEvents.isEmpty
-        ? Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: <Widget>[
-                Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 30.0),
-                    child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Container(
-                              padding:
-                                  const EdgeInsets.symmetric(vertical: 20.0),
-                              child: Text(
-                                  FlutterI18n.translate(context,
-                                      'LOUNGES_TAB.FIND_LOUNGES_EMPTY_TITLE'),
-                                  style: const TextStyle(
-                                      fontSize: 20.0,
-                                      fontWeight: FontWeight.bold))),
-                          Text(
-                              FlutterI18n.translate(context,
-                                  'LOUNGES_TAB.FIND_LOUNGES_EMPTY_DESCRIPTION'),
-                              style: const TextStyle(color: grey))
-                        ])),
-                Image.asset('images/catsIllus2.png')
-              ])
-        : Container(
-            padding: const EdgeInsets.symmetric(horizontal: 50.0),
-            child: ListView.builder(
-                itemCount: userEvents.length,
-                itemBuilder: (BuildContext context, int index) => Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          _buildEvent(
-                              userLounges,
-                              userEvents[index],
-                              userEventStates,
-                              userEventLounges,
-                              dispatch,
-                              themeStyle),
-                        ])));
-  }
-
-  Widget _buildEvent(
-      List<Lounge> userLounges,
-      Event event,
-      Map<String, UserEventState> userEventStates,
-      Map<String, List<Lounge>> userEventLounges,
-      void Function(redux.ReduxAction<AppState>) dispatch,
-      ThemeStyle theme) {
-    final UserEventState state = userEventStates[event.id];
-    String stateMessage;
-    if (state == UserEventState.Attending) {
-      stateMessage =
-          FlutterI18n.translate(context, 'LOUNGES_TAB.ATTENDING_EVENT');
-    } else if (state == UserEventState.Liked) {
-      stateMessage = FlutterI18n.translate(context, 'LOUNGES_TAB.LIKED_EVENT');
-    }
-
-    return GestureDetector(
-        onTap: () => dispatch(redux.NavigateAction<AppState>.pushNamed(
-            LoungesScreen.id,
-            arguments: event)),
-        child: Container(
-            margin: const EdgeInsets.symmetric(vertical: 10.0),
-            child: Row(children: <Widget>[
-              Flexible(
-                  child: Stack(alignment: Alignment.center, children: <Widget>[
-                Container(
-                    decoration: const BoxDecoration(
-                        border: Border(
-                            left: BorderSide(color: orange, width: 7.0))),
-                    child: CachedImage(event.pic,
-                        width: 70.0,
-                        height: 70.0,
-                        borderRadius: const BorderRadius.only(
-                            bottomRight: Radius.circular(5.0),
-                            topRight: Radius.circular(5.0)),
-                        imageType: ImageType.Event)),
-                if (state == UserEventState.Attending)
-                  Icon(Icons.check, size: 40.0, color: white)
-                else if (state == UserEventState.Liked)
-                  Icon(MdiIcons.heart, size: 40.0, color: white),
-              ])),
-              Expanded(
-                  flex: 3,
-                  child: Padding(
-                      padding: const EdgeInsets.only(left: 10.0),
-                      child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Text(stateMessage,
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 13)),
-                            Text(event.name,
-                                style: const TextStyle(
-                                    color: orange,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 13)),
-                            Row(children: <Widget>[
-                              Image.asset('images/arrowForward.png',
-                                  width: 10.0, height: 10.0),
-                              Expanded(
-                                  child: Text(
-                                      ' ' +
-                                          FlutterI18n.translate(context,
-                                              'LOUNGES_TAB.FIND_LOUNGES'),
-                                      style: const TextStyle(
-                                          color: blue,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 14)))
-                            ])
-                          ]))),
-            ])));
-  }
-
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -307,32 +28,11 @@ class _LoungesWidgetState extends State<LoungesWidget>
         AppState state,
         void Function(redux.ReduxAction<dynamic>) dispatch,
         Widget child) {
-      final ThemeStyle themeStyle = state.theme;
-      final List<Lounge> userLounges = state.userState.lounges;
-      final List<Event> userEvents = state.userState.events;
-      final Map<String, UserEventState> userEventStates =
-          state.userState.user.events;
-      final Map<String, List<Lounge>> userEventLounges =
-          state.userState.eventLounges;
-      if (userEventStates == null ||
-          userEvents == null ||
-          userLounges == null) {
+      if (state.userState.user.events == null ||
+          state.userState.events == null ||
+          state.userState.lounges == null) {
         return Loading();
       }
-
-      final List<Event> eventsWithoutLounge = userEvents.where((Event _event) {
-        final List<Lounge> _lounges = userEventLounges[_event.id];
-        if (_lounges != null) {
-          for (final Lounge _lounge in _lounges) {
-            for (final Lounge _userLounge in userLounges) {
-              if (_userLounge.id == _lounge.id) {
-                return false;
-              }
-            }
-          }
-        }
-        return true;
-      }).toList();
 
       return DefaultTabController(
           length: 2,
@@ -354,15 +54,8 @@ class _LoungesWidgetState extends State<LoungesWidget>
                 child: TabBarView(
                     physics: const NeverScrollableScrollPhysics(),
                     children: <Widget>[
-                      _buildLounges(state, userLounges, userEventLounges,
-                          dispatch, themeStyle),
-                      _buildEvents(
-                          userLounges,
-                          eventsWithoutLounge,
-                          userEventStates,
-                          userEventLounges,
-                          dispatch,
-                          themeStyle),
+                      MyLoungesScreen(),
+                      FindLoungesScreen()
                     ])),
             Expanded(
                 child: Row(
