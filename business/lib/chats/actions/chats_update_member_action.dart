@@ -2,7 +2,6 @@ import 'package:async_redux/async_redux.dart';
 import 'package:business/app_state.dart';
 import 'package:business/classes/chat.dart';
 import 'package:business/classes/user.dart';
-import 'package:business/models/user.dart';
 
 class ChatsUpdateMemberAction extends ReduxAction<AppState> {
   ChatsUpdateMemberAction(this._member, this._chatId);
@@ -21,9 +20,6 @@ class ChatsUpdateMemberAction extends ReduxAction<AppState> {
     }
 
     chat.entity = _member;
-
-    updateUser(_member
-      ..chatIds = List<String>.from(_member.chatIds + <String>[chat.id]));
 
     return state.copy(chatsState: state.chatsState.copy(chats: chats));
   }

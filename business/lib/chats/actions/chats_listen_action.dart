@@ -10,6 +10,7 @@ import 'package:business/classes/message.dart';
 import 'package:business/classes/user.dart';
 import 'package:business/models/message.dart';
 import 'package:business/models/user.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ChatsListenAction extends ReduxAction<AppState> {
   ChatsListenAction(this._id, this._chatIds);
@@ -34,17 +35,21 @@ class ChatsListenAction extends ReduxAction<AppState> {
       final Chat chat = Chat(chatId, _id);
       chats.add(chat);
 
+      updateUserData(<String, dynamic>{
+        'chatIds': FieldValue.arrayUnion(<String>[chatId])
+      }, chat.idPeer);
+
+      final Map<String, Map<String, ChatState>> userChatsStates =
+          state.chatsState.usersChatsStates;
+
+      userChatsStates[_id][chatId] = ChatState();
+
       messagesSubs.add(streamMessages(chat.id).listen(
           (List<Message> messages) =>
               dispatch(ChatsUpdateAction(messages, chat.id))));
 
       userSubs.add(streamUser(chat.idPeer).listen(
           (User user) => dispatch(ChatsUpdateMemberAction(user, chat.id))));
-
-      final Map<String, Map<String, ChatState>> userChatsStates =
-          state.chatsState.usersChatsStates;
-
-      userChatsStates[_id][chatId] = ChatState();
     }
 
     return state.copy(

@@ -70,14 +70,6 @@ class _PeopleChatScreenState extends State<PeopleChatScreen>
             ])));
   }
 
-  Widget _buildChats(List<Chat> chats, ThemeStyle theme,
-      void Function(redux.ReduxAction<AppState>) dispatch) {
-    return ListView.builder(
-        itemCount: chats.length,
-        itemBuilder: (BuildContext context, int index) =>
-            _buildChat(chats[index], theme, dispatch));
-  }
-
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -86,8 +78,10 @@ class _PeopleChatScreenState extends State<PeopleChatScreen>
         AppState state,
         void Function(redux.ReduxAction<dynamic>) dispatch,
         Widget child) {
-      print(state.chatsState.chats);
-      return _buildChats(state.chatsState.chats, state.theme, dispatch);
+      return ListView.builder(
+          itemCount: state.chatsState.chats.length,
+          itemBuilder: (BuildContext context, int index) =>
+              _buildChat(state.chatsState.chats[index], state.theme, dispatch));
     });
   }
 }

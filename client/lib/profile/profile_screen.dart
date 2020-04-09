@@ -576,6 +576,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
         FlutterI18n.translate(context, 'SEXUAL_ORIENTATIONS.GRAYSEXUAL'),
         FlutterI18n.translate(context, 'SEXUAL_ORIENTATIONS.SAPIOSEXUAL'),
       ]);
+
+      // TODO(alexandre): remove navbar duplicate
       return View(
           isProfileScreen: true,
           isEditing: _isEdition,
