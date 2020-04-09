@@ -53,6 +53,7 @@ class _EventScreenState extends State<EventScreen>
   final Map<String, Marker> _markers = <String, Marker>{};
   final TextEditingController _messageController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
+  final ScrollController _feedEventScrollController = ScrollController();
 
   CameraPosition _intialMapLocation;
   String _adressEvent;
@@ -83,6 +84,7 @@ class _EventScreenState extends State<EventScreen>
   void dispose() {
     _messageController.dispose();
     _scrollController.dispose();
+    _feedEventScrollController.dispose();
     super.dispose();
   }
 
@@ -677,26 +679,28 @@ class _EventScreenState extends State<EventScreen>
   Widget _buildBanner() {
     return Row(children: <Widget>[
       Expanded(
-          child: Container(
-              height: 160.0,
-              padding: const EdgeInsets.all(5),
-              decoration: const BoxDecoration(color: white),
-              child: GoogleMap(
-                  mapType: MapType.normal,
-                  zoomGesturesEnabled: true,
-                  myLocationButtonEnabled: true,
-                  myLocationEnabled: true,
-                  gestureRecognizers: <Factory<OneSequenceGestureRecognizer>>{
-                    Factory<OneSequenceGestureRecognizer>(
-                        () => EagerGestureRecognizer())
-                  },
-                  initialCameraPosition: _intialMapLocation,
-                  markers: _markers.values.toSet(),
-                  onMapCreated: (GoogleMapController controller) {
-                    if (!_controller.isCompleted) {
-                      _controller.complete(controller);
-                    }
-                  })))
+          child: GestureDetector(
+              child: Container(
+                  height: 160.0,
+                  padding: const EdgeInsets.all(5),
+                  decoration: const BoxDecoration(color: white),
+                  child: GoogleMap(
+                      mapType: MapType.normal,
+                      zoomGesturesEnabled: true,
+                      myLocationButtonEnabled: true,
+                      myLocationEnabled: true,
+                      gestureRecognizers: <
+                          Factory<OneSequenceGestureRecognizer>>{
+                        Factory<OneSequenceGestureRecognizer>(
+                            () => EagerGestureRecognizer())
+                      },
+                      initialCameraPosition: _intialMapLocation,
+                      markers: _markers.values.toSet(),
+                      onMapCreated: (GoogleMapController controller) {
+                        if (!_controller.isCompleted) {
+                          _controller.complete(controller);
+                        }
+                      }))))
     ]);
   }
 
@@ -743,10 +747,27 @@ class _EventScreenState extends State<EventScreen>
     if (widget.event.chatMembers == null) {
       return Container();
     }
-    return Column(children: <Widget>[
-      for (final Message message in widget.event.messages)
-        _buildMessage(message)
-    ]);
+
+    return GestureDetector(
+        onVerticalDragCancel: () {
+          if (_feedEventScrollController.offset == 0.0)  {
+         _scrollController
+                .jumpTo(_scrollController.position.minScrollExtent);
+
+          } else {
+         _scrollController
+                .jumpTo(_scrollController.position.maxScrollExtent);
+          }
+        },
+        child: Container(
+            height: 300,
+            child: ListView.builder(
+                controller: _feedEventScrollController,
+                reverse: false,
+                itemCount: widget.event.messages.length,
+                itemBuilder: (BuildContext context, int index) => _buildMessage(
+                    widget.event
+                        .messages[index]))));
   }
 
   Widget _buildMessage(Message message) {
@@ -859,6 +880,8 @@ class _EventScreenState extends State<EventScreen>
                           _sendImage(state.userState.user.id);
                           _scrollController.jumpTo(
                               _scrollController.position.maxScrollExtent);
+                          _feedEventScrollController.jumpTo(
+                              _feedEventScrollController.position.maxScrollExtent);
                         },
                         child: Icon(Icons.panorama, color: white))),
                 Expanded(
@@ -880,6 +903,9 @@ class _EventScreenState extends State<EventScreen>
                           _messageController.clear();
                           _scrollController.jumpTo(
                               _scrollController.position.maxScrollExtent);
+                          _feedEventScrollController.jumpTo(
+                              _feedEventScrollController
+                                  .position.maxScrollExtent);
                         },
                         child: Icon(Icons.send, color: white)))
               ])),

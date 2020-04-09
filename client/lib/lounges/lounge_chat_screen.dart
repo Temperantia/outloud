@@ -34,9 +34,11 @@ class _LoungeChatScreenState extends State<LoungeChatScreen>
     with TickerProviderStateMixin {
   Lounge _lounge;
   final TextEditingController _messageController = TextEditingController();
+  final ScrollController _scrollController = ScrollController();
 
   @override
   void dispose() {
+    _scrollController.dispose();
     _messageController.dispose();
     super.dispose();
   }
@@ -118,8 +120,7 @@ class _LoungeChatScreenState extends State<LoungeChatScreen>
                     ])
                   ]))),
           if (state.userState.user.id == owner.id)
-            Flexible(
-                flex: 2,
+            Container(
                 child: GestureDetector(
                     onTap: () => dispatch(
                         redux.NavigateAction<AppState>.pushNamed(
@@ -194,6 +195,7 @@ class _LoungeChatScreenState extends State<LoungeChatScreen>
   Widget _buildChat(
           Chat chat, void Function(redux.ReduxAction<dynamic>) dispatch) =>
       ListView.builder(
+          controller: _scrollController,
           reverse: false,
           itemCount: chat.messages.length,
           itemBuilder: (BuildContext context, int index) => _buildMessage(
@@ -332,6 +334,7 @@ class _LoungeChatScreenState extends State<LoungeChatScreen>
                           addMessage(_lounge.id, state.loginState.id,
                               _messageController.text, MessageType.Text);
                           _messageController.clear();
+                          _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
                         },
                         child: Icon(Icons.send, color: white)))
               ])),

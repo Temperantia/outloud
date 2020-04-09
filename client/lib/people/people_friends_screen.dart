@@ -192,8 +192,8 @@ class _PeopleFriendsScreenState extends State<PeopleFriendsScreen>
         AppState state,
         void Function(redux.ReduxAction<dynamic>) dispatch,
         Widget child) {
-      print('chats : ' + state.chatsState.chatIds.toString());
-      print('lounge chats : ' + state.chatsState.loungeChats.toString());
+      // print('chats : ' + state.chatsState.chatIds.toString());
+      // print('lounge chats : ' + state.chatsState.loungeChats.toString());
       return Column(children: <Widget>[
         if (state.userState.pendingFriends.isNotEmpty)
           Flexible(
