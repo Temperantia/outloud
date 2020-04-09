@@ -2,7 +2,7 @@ import 'package:business/classes/chat.dart';
 import 'package:business/classes/event.dart';
 import 'package:business/classes/lounge.dart';
 import 'package:business/classes/user.dart';
-import 'package:outloud/chats/chat_screen.dart';
+import 'package:outloud/people/chat_screen.dart';
 import 'package:outloud/events/event_attending_screen.dart';
 import 'package:outloud/events/event_screen.dart';
 import 'package:outloud/lounges/lounge_chat_screen.dart';

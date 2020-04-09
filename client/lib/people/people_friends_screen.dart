@@ -3,7 +3,6 @@ import 'package:business/app_state.dart';
 import 'package:business/classes/user.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
-import 'package:outloud/chats/chat_screen.dart';
 import 'package:outloud/functions/loader_animation.dart';
 import 'package:outloud/people/people_search_screen.dart';
 import 'package:business/user/actions/user_accept_friend_request_action.dart';
@@ -60,13 +59,7 @@ class _PeopleFriendsScreenState extends State<PeopleFriendsScreen>
                             ])))
                   ]))),
           GestureDetector(
-              onTap: () {
-                dispatch(ChatsCreateAction(user.id));
-// dispatch(redux.NavigateAction<AppState>.pushNamed(
-//             ChatScreen.id,
-//             arguments: chat))
-                print('create chat or join existing chat :) ');
-              },
+              onTap: () => dispatch(ChatsCreateAction(user.id)),
               child: Container(
                   padding: const EdgeInsets.only(left: 5.0, right: 5.0),
                   margin: const EdgeInsets.only(left: 2.0, right: 2.0),
@@ -192,8 +185,6 @@ class _PeopleFriendsScreenState extends State<PeopleFriendsScreen>
         AppState state,
         void Function(redux.ReduxAction<dynamic>) dispatch,
         Widget child) {
-      // print('chats : ' + state.chatsState.chatIds.toString());
-      // print('lounge chats : ' + state.chatsState.loungeChats.toString());
       return Column(children: <Widget>[
         if (state.userState.pendingFriends.isNotEmpty)
           Flexible(

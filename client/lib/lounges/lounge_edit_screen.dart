@@ -285,7 +285,7 @@ class _LoungeEditScreenState extends State<LoungeEditScreen>
                               color: Colors.orange,
                               fontSize: 15,
                               fontWeight: FontWeight.w500)),
-                      IconButton(
+                      const IconButton(
                           iconSize: 20,
                           icon: Icon(Icons.lock_open, color: Colors.orange),
                           onPressed: null)

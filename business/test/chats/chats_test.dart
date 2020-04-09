@@ -10,7 +10,7 @@ const String loginId = 'b';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  storeTester.dispatch(ChatsListenAction(loginId));
+  storeTester.dispatch(ChatsListenAction(loginId, <String>[]));
   final TestInfo<AppState> _ =
       await storeTester.wait(ChatsListenAction) as TestInfo<AppState>;
   group('Chats', () {
