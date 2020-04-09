@@ -14,9 +14,24 @@ class EventsWidget extends StatefulWidget {
 }
 
 class _EventsWidgetState extends State<EventsWidget>
-    with AutomaticKeepAliveClientMixin<EventsWidget> {
+    with
+        AutomaticKeepAliveClientMixin<EventsWidget>,
+        SingleTickerProviderStateMixin {
   @override
   bool get wantKeepAlive => true;
+  TabController _tabController;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(vsync: this, length: 2);
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,6 +47,9 @@ class _EventsWidgetState extends State<EventsWidget>
               state.userState.lounges == null) {
         return Loading();
       }
+
+      _tabController.animateTo(state.eventsTabIndex);
+
       return DefaultTabController(
           length: 2,
           child: Column(children: <Widget>[
@@ -39,6 +57,7 @@ class _EventsWidgetState extends State<EventsWidget>
                 child: TabBar(
                     labelColor: white,
                     indicatorColor: Colors.transparent,
+                    controller: _tabController,
                     tabs: <Widget>[
                   Tab(text: FlutterI18n.translate(context, 'EVENTS.MY_EVENTS')),
                   Tab(
@@ -49,6 +68,7 @@ class _EventsWidgetState extends State<EventsWidget>
                 flex: 8,
                 child: Container(
                     child: TabBarView(
+                      controller: _tabController,
                         physics: const NeverScrollableScrollPhysics(),
                         children: <Widget>[
                       MyEventsScreen(),

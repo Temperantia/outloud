@@ -225,7 +225,9 @@
         "LIKED": "Liked",
         "FIND_LOUNGES": "FIND LOUNGES",
         "VIEW_LOUNGE": "VIEW LOUNGE",
-        "VIEW_CALENDAR": "VIEW CALENDAR"
+        "VIEW_CALENDAR": "VIEW CALENDAR",
+        "MY_EVENTS_EMPTY_TITLE": "Sure is boring in here",
+        "MY_EVENTS_EMPTY_DESCRIPTION": "You haven't bookmarked any events yet! Save events here by liking and attending them in \"FIND EVENTS\""
     },
     "LOUNGE_CHAT": {
         "YOUR_LOUNGE": "Your Lounge",
@@ -268,6 +270,11 @@
         "POSITION_TO_PROVIDE": "PLEASE PROVIDE A POSITION TO YOUR LOUNGE"
     },
     "LOUNGE_CREATE": {
+        "HELLO": "Hello!",
+        "NO_EVENT_WARNING": "You are not attending any event! There you cannot create a lounge",
+        "CONINUE": "Do you want to be redirected to event search?",
+        "STAY_IN_LOUNGES": "No, stay here",
+        "REDIRECT_TO_FIND_EVENTS": "Yes, redirect to \"FIND EVENTS\"",
         "CREATE_LOUNGE": "CREATE LOUNGE",
         "CHOOSE_EVENT": "CHOOSE AN EVENT FOR THIS LOUNGE",
         "NEXT": "NEXT"
