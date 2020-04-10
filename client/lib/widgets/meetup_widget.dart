@@ -139,7 +139,7 @@ class LoungeMeetupWidgetState extends State<LoungeMeetupWidget> {
         builder: (BuildContext context, Widget child) {
           return MediaQuery(
               data:
-                  MediaQuery.of(context).copyWith(alwaysUse24HourFormat: false),
+                  MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
               child: child);
         });
     if (timeSelected != null) {
@@ -512,7 +512,7 @@ class LoungeMeetupWidgetState extends State<LoungeMeetupWidget> {
                     Container(
                         width: 180,
                         child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: <Widget>[
                               GestureDetector(
                                   onTap: () {
@@ -526,7 +526,7 @@ class LoungeMeetupWidgetState extends State<LoungeMeetupWidget> {
                                       height: 40,
                                       padding: const EdgeInsets.all(10.0),
                                       child: Text(
-                                          _timeEvent.hourOfPeriod.toString()))),
+                                          _timeEvent.hour.toString()))),
                               const Text(':'),
                               GestureDetector(
                                   onTap: () {
@@ -540,22 +540,7 @@ class LoungeMeetupWidgetState extends State<LoungeMeetupWidget> {
                                       height: 40,
                                       padding: const EdgeInsets.all(10.0),
                                       child:
-                                          Text(_timeEvent.minute.toString()))),
-                              GestureDetector(
-                                  onTap: () {
-                                    if (widget.readMode) {
-                                      return;
-                                    }
-                                    _updateTimeOfEvent();
-                                  },
-                                  child: Container(
-                                      color: orangeLight,
-                                      height: 40,
-                                      padding: const EdgeInsets.all(10.0),
-                                      child: Text(
-                                          _timeEvent.period == DayPeriod.am
-                                              ? 'AM'
-                                              : 'PM')))
+                                          Text(_timeEvent.minute.toString())))
                             ])),
                     GestureDetector(
                         onTap: () async {

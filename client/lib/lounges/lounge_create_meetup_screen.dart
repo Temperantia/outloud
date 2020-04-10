@@ -123,7 +123,7 @@ class _LoungeCreateMeetupScreenState extends State<LoungeCreateMeetupScreen> {
         builder: (BuildContext context, Widget child) {
           return MediaQuery(
               data:
-                  MediaQuery.of(context).copyWith(alwaysUse24HourFormat: false),
+                  MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
               child: child);
         });
     if (timeSelected != null) {
@@ -508,7 +508,7 @@ class _LoungeCreateMeetupScreenState extends State<LoungeCreateMeetupScreen> {
                             width: 180,
                             child: Row(
                                 mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                    MainAxisAlignment.spaceEvenly,
                                 children: <Widget>[
                                   GestureDetector(
                                       onTap: () => _updateTimeOfEvent(),
@@ -517,7 +517,7 @@ class _LoungeCreateMeetupScreenState extends State<LoungeCreateMeetupScreen> {
                                           height: 40,
                                           padding: const EdgeInsets.all(10.0),
                                           child: Text(
-                                              _timeEvent.hourOfPeriod
+                                              _timeEvent.hour
                                                   .toString(),
                                               style: const TextStyle(
                                                   color: orange,
@@ -535,21 +535,7 @@ class _LoungeCreateMeetupScreenState extends State<LoungeCreateMeetupScreen> {
                                               style: const TextStyle(
                                                   color: orange,
                                                   fontWeight:
-                                                      FontWeight.bold)))),
-                                  GestureDetector(
-                                      onTap: () => _updateTimeOfEvent(),
-                                      child: Container(
-                                        color: whiteAlt,
-                                        height: 40,
-                                        padding: const EdgeInsets.all(10.0),
-                                        child: Text(
-                                            _timeEvent.period == DayPeriod.am
-                                                ? 'AM'
-                                                : 'PM',
-                                            style: const TextStyle(
-                                                color: orange,
-                                                fontWeight: FontWeight.bold)),
-                                      )),
+                                                      FontWeight.bold))))
                                 ])),
                         GestureDetector(
                             onTap: () async {
