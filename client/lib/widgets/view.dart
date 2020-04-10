@@ -5,6 +5,7 @@ import 'package:business/classes/chat_state.dart';
 import 'package:business/classes/user.dart';
 import 'package:business/actions/app_disconnect_action.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:outloud/profile/profile_screen.dart';
 
@@ -272,6 +273,8 @@ class _ViewState extends State<View> {
                 void Function(ReduxAction<dynamic>) dispatch,
                 dynamic model,
                 Widget w) =>
-            Scaffold(body: _buildBody(state, dispatch)));
+            AnnotatedRegion<SystemUiOverlayStyle>(
+                value: SystemUiOverlayStyle.dark,
+                child: Scaffold(body: _buildBody(state, dispatch))));
   }
 }
