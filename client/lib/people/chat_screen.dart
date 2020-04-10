@@ -29,7 +29,6 @@ class ChatScreen extends StatefulWidget {
 
 class _ChatScreenState extends State<ChatScreen> {
   void Function(ReduxAction<AppState>) _dispatch;
-  final DateFormat _messageTimeFormat = DateFormat.jm();
   final TextEditingController _messageController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
 

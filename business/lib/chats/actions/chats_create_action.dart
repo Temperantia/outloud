@@ -45,7 +45,7 @@ class ChatsCreateAction extends ReduxAction<AppState> {
     final Map<String, Map<String, ChatState>> usersChatsStates =
         state.chatsState.usersChatsStates;
 
-    usersChatsStates[myId][chat.id] = ChatState();
+    usersChatsStates[myId].putIfAbsent(chat.id, () => ChatState());
 
     dispatch(NavigateAction<AppState>.pushNamed('Chat', arguments: chat));
 
