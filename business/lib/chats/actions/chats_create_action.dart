@@ -19,18 +19,16 @@ class ChatsCreateAction extends ReduxAction<AppState> {
   AppState reduce() {
     final List<Chat> chats = state.chatsState.chats;
     final User user = state.userState.user;
-    final String myId = state.userState.user.id;
-    final String chatId = Chat.getUserChatId(myId, _userId);
+    final String myId = user.id;
+    final Chat chat = Chat.user(myId, _userId);
 
     final Chat chatFound =
-        chats.firstWhere((Chat chat) => chat.id == chatId, orElse: () => null);
+        chats.firstWhere((Chat c) => c.id == chat.id, orElse: () => null);
     if (chatFound != null) {
       dispatch(
           NavigateAction<AppState>.pushNamed('Chat', arguments: chatFound));
       return null;
     }
-
-    final Chat chat = Chat(_userId, myId);
 
     chats.add(chat);
 
@@ -44,10 +42,10 @@ class ChatsCreateAction extends ReduxAction<AppState> {
     ChatsListenAction.userSubs.add(streamUser(chat.idPeer).listen(
         (User user) => dispatch(ChatsUpdateMemberAction(user, chat.id))));
 
-    final Map<String, Map<String, ChatState>> userChatsStates =
+    final Map<String, Map<String, ChatState>> usersChatsStates =
         state.chatsState.usersChatsStates;
 
-    userChatsStates[myId][chatId] = ChatState();
+    usersChatsStates[myId][chat.id] = ChatState();
 
     dispatch(NavigateAction<AppState>.pushNamed('Chat', arguments: chat));
 

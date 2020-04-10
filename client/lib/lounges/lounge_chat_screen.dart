@@ -177,13 +177,11 @@ class _LoungeChatScreenState extends State<LoungeChatScreen>
                   padding: const EdgeInsets.only(left: 20),
                   child: Column(children: <Widget>[
                     Row(children: <Widget>[
-                      Container(
-                          child: CachedImage(
-                              owner.pics.isEmpty ? null : owner.pics[0],
-                              width: 20.0,
-                              height: 20.0,
-                              borderRadius: BorderRadius.circular(20.0),
-                              imageType: ImageType.User)),
+                      CachedImage(owner.pics.isEmpty ? null : owner.pics[0],
+                          width: 20.0,
+                          height: 20.0,
+                          borderRadius: BorderRadius.circular(20.0),
+                          imageType: ImageType.User),
                       Expanded(
                           child: Container(
                               padding: const EdgeInsets.only(left: 10),
@@ -223,21 +221,20 @@ class _LoungeChatScreenState extends State<LoungeChatScreen>
                     ])
                   ]))),
           if (state.userState.user.id == owner.id)
-            Container(
-                child: GestureDetector(
-                    onTap: () async {
-                      await showLoaderAnimation(context, this,
-                          animationDuration: 600);
-                      dispatch(redux.NavigateAction<AppState>.pushNamed(
-                          LoungeEditScreen.id,
-                          arguments: _lounge));
-                    },
-                    child: Column(children: <Widget>[
-                      const Icon(MdiIcons.calendarEdit, color: orange),
-                      Text(FlutterI18n.translate(context, 'LOUNGE_CHAT.EDIT'),
-                          style: const TextStyle(
-                              color: orange, fontWeight: FontWeight.bold))
-                    ])))
+            GestureDetector(
+                onTap: () async {
+                  await showLoaderAnimation(context, this,
+                      animationDuration: 600);
+                  dispatch(redux.NavigateAction<AppState>.pushNamed(
+                      LoungeEditScreen.id,
+                      arguments: _lounge));
+                },
+                child: Column(children: <Widget>[
+                  const Icon(MdiIcons.calendarEdit, color: orange),
+                  Text(FlutterI18n.translate(context, 'LOUNGE_CHAT.EDIT'),
+                      style: const TextStyle(
+                          color: orange, fontWeight: FontWeight.bold))
+                ]))
           else
             Flexible(
                 flex: 5,
@@ -336,11 +333,8 @@ class _LoungeChatScreenState extends State<LoungeChatScreen>
             children: <Widget>[
               GestureDetector(
                   onTap: () => dispatch(NavigateAction<AppState>.pushNamed(
-                          ProfileScreen.id,
-                          arguments: <String, dynamic>{
-                            'user': user,
-                            'isEdition': false
-                          })),
+                      ProfileScreen.id,
+                      arguments: <String, dynamic>{'user': user})),
                   child: Container(
                       padding: const EdgeInsets.all(5),
                       child: CachedImage(

@@ -30,7 +30,7 @@ class _PeopleWidgetState extends State<PeopleWidget>
         Widget child) {
       final User user = state.userState.user;
       final List<User> friends = state.userState.friends;
-      final List<Chat> chats = state.chatsState.chats;     
+      final List<Chat> chats = state.chatsState.chats;
       if (user == null || friends == null || chats == null) {
         return Loading();
       }
@@ -42,10 +42,10 @@ class _PeopleWidgetState extends State<PeopleWidget>
                     labelColor: white,
                     indicatorColor: Colors.transparent,
                     tabs: <Widget>[
+                  Tab(text: FlutterI18n.translate(context, 'PEOPLE_TAB.CHATS')),
                   Tab(
                       text:
-                          FlutterI18n.translate(context, 'PEOPLE_TAB.CHATS')),
-                  Tab(text: FlutterI18n.translate(context, 'PEOPLE_TAB.FRIENDS')),
+                          FlutterI18n.translate(context, 'PEOPLE_TAB.FRIENDS')),
                 ])),
             Expanded(
                 flex: 8,

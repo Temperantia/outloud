@@ -2,8 +2,8 @@ import 'package:business/classes/message_state.dart';
 import 'package:enum_to_string/enum_to_string.dart';
 
 class ChatState {
-  ChatState(
-      {this.lastRead = 0, this.messageStates = const <String, MessageState>{}});
+  ChatState({this.lastRead = 0, Map<String, MessageState> messageStates})
+      : messageStates = messageStates ?? <String, MessageState>{};
 
   ChatState.fromJson(Map<String, dynamic> data) {
     lastRead = data['lastRead'] as int;

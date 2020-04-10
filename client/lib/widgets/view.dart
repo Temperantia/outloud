@@ -54,7 +54,7 @@ class _ViewState extends State<View> {
       margin = const EdgeInsets.fromLTRB(0.0, 45.0, 0.0, 65.0);
     } else if (widget.showAppBar && widget.showNavBar) {
       margin = EdgeInsets.fromLTRB(
-          0.0, 95.0, 0.0, widget.buttons == null ? 50.0 : 120.0);
+          0.0, 105.0, 0.0, widget.buttons == null ? 50.0 : 120.0);
     }
 
     if (widget.isProfileScreen) {
@@ -170,10 +170,7 @@ class _ViewState extends State<View> {
                         onTap: () {
                           dispatch(NavigateAction<AppState>.pushNamed(
                               ProfileScreen.id,
-                              arguments: <String, dynamic>{
-                                'user': user,
-                                'isEdition': false
-                              }));
+                              arguments: <String, dynamic>{'user': user}));
                           setState(() => _showUserSettings = false);
                         },
                         child: Row(children: <Widget>[

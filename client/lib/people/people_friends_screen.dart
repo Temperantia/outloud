@@ -35,12 +35,8 @@ class _PeopleFriendsScreenState extends State<PeopleFriendsScreen>
           Expanded(
               child: GestureDetector(
                   onTap: () => dispatch(
-                          redux.NavigateAction<AppState>.pushNamed(
-                              ProfileScreen.id,
-                              arguments: <String, dynamic>{
-                            'user': user,
-                            'isEdition': false
-                          })),
+                      redux.NavigateAction<AppState>.pushNamed(ProfileScreen.id,
+                          arguments: <String, dynamic>{'user': user})),
                   child: Row(children: <Widget>[
                     CachedImage(user.pics.isEmpty ? null : user.pics[0],
                         width: 40.0,

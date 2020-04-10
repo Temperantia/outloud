@@ -153,10 +153,7 @@ class _LoungeViewScreenState extends State<LoungeViewScreen> {
                 GestureDetector(
                   onTap: () => dispatch(NavigateAction<AppState>.pushNamed(
                       ProfileScreen.id,
-                      arguments: <String, dynamic>{
-                        'user': member,
-                        'isEdition': false
-                      })),
+                      arguments: <String, dynamic>{'user': member})),
                   child: Container(
                       padding: const EdgeInsets.only(left: 5),
                       child: Row(children: <Widget>[

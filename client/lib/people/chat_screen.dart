@@ -1,12 +1,19 @@
 import 'package:async_redux/async_redux.dart';
 import 'package:business/app_state.dart';
+import 'package:business/chats/actions/chats_read_action.dart';
 import 'package:business/classes/chat.dart';
+import 'package:business/classes/chat_state.dart';
 import 'package:business/classes/message.dart';
+import 'package:business/classes/message_state.dart';
+import 'package:business/classes/user.dart';
 import 'package:business/models/message.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:outloud/profile/profile_screen.dart';
 import 'package:outloud/theme.dart';
+import 'package:outloud/widgets/cached_image.dart';
 import 'package:outloud/widgets/view.dart';
 import 'package:intl/intl.dart';
 import 'package:provider_for_redux/provider_for_redux.dart';
@@ -21,16 +28,34 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
+  void Function(ReduxAction<AppState>) _dispatch;
   final DateFormat _messageTimeFormat = DateFormat.jm();
-  final DateFormat _messageDateFormat = DateFormat.yMd();
-  final TextEditingController _textController = TextEditingController();
-  final ScrollController _listScrollController = ScrollController();
+  final TextEditingController _messageController = TextEditingController();
+  final ScrollController _scrollController = ScrollController();
 
   @override
   void dispose() {
-    _textController.dispose();
-    _listScrollController.dispose();
+    _messageController.dispose();
+    _scrollController.dispose();
     super.dispose();
+  }
+
+  void _markAsRead(Map<String, Map<String, ChatState>> usersChatsStates,
+      String userId, void Function(ReduxAction<AppState>) dispatch) {
+    if (usersChatsStates[userId][widget.chat.id]
+        .messageStates
+        .containsValue(MessageState.Received)) {
+      dispatch(ChatsReadAction(widget.chat.id));
+    }
+  }
+
+  String _dateFormatter(int timestamp) {
+    final DateTime time = DateTime.fromMillisecondsSinceEpoch(timestamp);
+    final int daysDifference = DateTime.now().difference(time).inDays;
+    if (daysDifference < 7) {
+      return DateFormat(' E \'at\' kk:mm').format(time);
+    }
+    return DateFormat('yyyy-MM-dd \'at\' kk:mm').format(time);
   }
 
   void _onSendMessage(String text, String userId) {
@@ -38,118 +63,86 @@ class _ChatScreenState extends State<ChatScreen> {
       Fluttertoast.showToast(
           msg: FlutterI18n.translate(context, 'CHAT.NO_MESSAGE'));
     } else {
-      _textController.clear();
+      _messageController.clear();
       addMessage(widget.chat.id, userId, text.trim(), MessageType.Text);
-      _listScrollController.animateTo(0.0,
+      _scrollController.animateTo(0.0,
           duration: const Duration(milliseconds: 300), curve: Curves.linear);
     }
   }
 
-  Widget _buildChat(String userId) {
+  Widget _buildChat(User user, String userId, String picture) {
     final List<Message> messages = widget.chat.messages;
-    return Expanded(
-        child: ListView.builder(
-            reverse: true,
-            itemBuilder: (BuildContext context, int index) => _buildItem(
-                messages[index],
-                index < messages.length - 1 ? messages[index + 1] : null,
-                userId),
-            itemCount: messages.length,
-            controller: _listScrollController));
+    return Container(
+      padding: const EdgeInsets.all(20.0),
+      child: ListView.builder(
+          itemBuilder: (BuildContext context, int index) =>
+              _buildItem(messages[index], user, userId, picture),
+          itemCount: messages.length,
+          controller: _scrollController),
+    );
   }
 
-  Widget _buildItem(Message message, Message nextMessage, String userId) {
-    final DateTime messageDateTime =
-        DateTime.fromMillisecondsSinceEpoch(message.timestamp);
-
-    final String messageTime = _messageTimeFormat.format(messageDateTime);
-    final List<Widget> items = <Widget>[];
-
-    if (nextMessage == null) {
-      items.add(Text(_messageDateFormat.format(messageDateTime),
-          style: Theme.of(context).textTheme.caption));
-    } else {
-      final DateTime nextMessageDateTime =
-          DateTime.fromMillisecondsSinceEpoch(nextMessage.timestamp);
-
-      if (nextMessageDateTime.day != messageDateTime.day ||
-          nextMessageDateTime.month != messageDateTime.month ||
-          nextMessageDateTime.year != messageDateTime.year) {
-        items.add(Text(_messageDateFormat.format(messageDateTime),
-            style: Theme.of(context).textTheme.caption));
-      }
-    }
-
-    Widget messageWidget;
-    if (userId == message.idFrom) {
-      messageWidget = Container(
-          margin: const EdgeInsets.only(bottom: 10.0),
-          child:
-              Row(mainAxisAlignment: MainAxisAlignment.end, children: <Widget>[
-            Text(messageTime, style: Theme.of(context).textTheme.caption),
-            Flexible(
-                child: Container(
-                    child: Text(
-                      message.content,
-                      style: const TextStyle(color: white),
-                    ),
-                    padding: const EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10.0),
-                    decoration: BoxDecoration(
-                        color: orange,
-                        borderRadius: BorderRadius.circular(20.0)),
-                    margin: const EdgeInsets.only(left: 10.0, right: 10.0)))
-          ]));
-    } else {
-      messageWidget = Container(
-          margin: const EdgeInsets.only(bottom: 10.0),
-          child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                Flexible(
-                    child: Container(
-                  child: Text(
-                    message.content,
-                    style: const TextStyle(color: orange),
-                  ),
-                  padding: const EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10.0),
-                  decoration: BoxDecoration(
-                      color: white, borderRadius: BorderRadius.circular(20.0)),
-                  margin: const EdgeInsets.only(left: 10.0, right: 10.0),
-                )),
-                Text(messageTime, style: Theme.of(context).textTheme.caption)
-              ]));
-      if (widget.chat.isGroup &&
-          (nextMessage == null || message.idFrom != nextMessage.idFrom)) {
-        items.add(Container(
-            margin: const EdgeInsets.only(left: 20.0),
-            child: Row(children: const <Widget>[])));
-      }
-    }
-
-    items.add(messageWidget);
-    return Column(children: items);
-  }
-
-  Widget _buildInput(String userId) {
-    return Row(children: <Widget>[
-      Flexible(
-          flex: 8,
-          child: Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: TextField(
-                  controller: _textController,
-                  maxLines: null,
-                  keyboardType: TextInputType.multiline))),
-      Material(
-          child: Container(
-              margin: const EdgeInsets.symmetric(horizontal: 8.0),
-              child: IconButton(
-                icon: Icon(Icons.send),
-                onPressed: () => _onSendMessage(_textController.text, userId),
-                color: orange,
-              )),
-          color: white)
-    ]);
+  Widget _buildItem(Message message, User user, String userId, String picture) {
+    final User userPeer = widget.chat.entity as User;
+    final List<String> pictures = userPeer.pics;
+    final String picturePeer = pictures.isEmpty ? null : pictures[0];
+    return Container(
+      padding: const EdgeInsets.all(5.0),
+      child: Row(children: <Widget>[
+        if (userId != message.idFrom)
+          Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: GestureDetector(
+                  onTap: () => _dispatch(NavigateAction<AppState>.pushNamed(
+                          ProfileScreen.id,
+                          arguments: <String, dynamic>{
+                            'user': userPeer,
+                          })),
+                  child: CachedImage(picturePeer,
+                      width: 35.0,
+                      height: 35.0,
+                      borderRadius: BorderRadius.circular(20.0),
+                      imageType: ImageType.User))),
+        Expanded(
+            child: Container(
+                padding: const EdgeInsets.all(15.0),
+                decoration: BoxDecoration(
+                    color: userId == message.idFrom
+                        ? pink.withOpacity(0.8)
+                        : pinkLight.withOpacity(0.8),
+                    borderRadius: BorderRadius.circular(5.0)),
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Text(
+                                userId == message.idFrom
+                                    ? user.name
+                                    : userPeer.name,
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold)),
+                            Text(_dateFormatter(message.timestamp))
+                          ]),
+                      Text(message.content),
+                    ]))),
+        if (userId == message.idFrom)
+          Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: GestureDetector(
+                  onTap: () => _dispatch(NavigateAction<AppState>.pushNamed(
+                          ProfileScreen.id,
+                          arguments: <String, dynamic>{
+                            'user': user,
+                          })),
+                  child: CachedImage(picture,
+                      width: 35.0,
+                      height: 35.0,
+                      borderRadius: BorderRadius.circular(20.0),
+                      imageType: ImageType.User))),
+      ]),
+    );
   }
 
   @override
@@ -159,11 +152,45 @@ class _ChatScreenState extends State<ChatScreen> {
         AppState state,
         void Function(ReduxAction<AppState>) dispatch,
         Widget child) {
+      _dispatch = dispatch;
+      final User user = state.userState.user;
+      final String picture = user.pics.isEmpty ? null : user.pics[0];
+      final String userId = user.id;
+      _markAsRead(state.chatsState.usersChatsStates, userId, dispatch);
       return View(
-          child: Column(children: <Widget>[
-        _buildChat(state.loginState.id),
-        _buildInput(state.loginState.id),
-      ]));
+          title:
+              'CHAT WITH ${(widget.chat.entity as User).name.split(' ')[0].toUpperCase()}',
+          buttons: Container(
+              margin: const EdgeInsets.symmetric(horizontal: 10.0),
+              decoration: BoxDecoration(
+                  color: orangeLight.withOpacity(0.5),
+                  borderRadius: BorderRadius.circular(5.0)),
+              child: Row(children: <Widget>[
+                Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: GestureDetector(
+                        onTap: () {}, child: Icon(Icons.add, color: white))),
+                Expanded(
+                    child: TextField(
+                        controller: _messageController,
+                        decoration: InputDecoration.collapsed(
+                            hintText: FlutterI18n.translate(
+                                context, 'LOUNGE_CHAT.MESSAGE'),
+                            hintStyle: const TextStyle(color: white)))),
+                Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: GestureDetector(
+                        onTap: () {},
+                        child:
+                            const Icon(MdiIcons.stickerEmoji, color: white))),
+                Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: GestureDetector(
+                        onTap: () => _onSendMessage(
+                            _messageController.text, state.userState.user.id),
+                        child: Icon(Icons.send, color: white)))
+              ])),
+          child: _buildChat(user, userId, picture));
     });
   }
 }

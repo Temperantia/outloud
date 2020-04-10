@@ -35,47 +35,61 @@ class _PeopleChatScreenState extends State<PeopleChatScreen>
     final String pic = (chat.entity as User).pics.isEmpty
         ? null
         : (chat.entity as User).pics[0];
-    return GestureDetector(
-        onTap: () => dispatch(redux.NavigateAction<AppState>.pushNamed(
-            ChatScreen.id,
-            arguments: chat)),
-        child: Container(
-            decoration: BoxDecoration(
-                color: primary(theme),
-                borderRadius: BorderRadius.circular(10.0)),
-            padding: const EdgeInsets.all(10.0),
-            margin: const EdgeInsets.symmetric(vertical: 10.0),
-            child: Row(children: <Widget>[
-              CachedImage(pic,
-                  width: 50.0,
-                  height: 50.0,
-                  borderRadius: BorderRadius.circular(20.0),
-                  imageType: ImageType.User),
-              Expanded(
-                  child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 5.0),
-                      child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+    return Column(children: <Widget>[
+      GestureDetector(
+          onTap: () => dispatch(redux.NavigateAction<AppState>.pushNamed(
+              ChatScreen.id,
+              arguments: chat)),
+          child: Container(
+              padding: const EdgeInsets.all(20.0),
+              child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    CachedImage(pic,
+                        width: 50.0,
+                        height: 50.0,
+                        borderRadius: BorderRadius.circular(60.0),
+                        imageType: ImageType.User),
+                    Expanded(
+                        child: Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 10.0),
+                            child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
                                   Text(chat.entity.name,
-                                      style: textStyleListItemTitle),
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.bold)),
                                   if (lastMessage != null)
                                     Text(lastMessage.getTimeAgo(),
                                         style: textStyleListItemSubtitle),
-                                  Text(newMessageCount.toString()),
-                                ]),
-                            if (lastMessage != null)
-                              Row(children: <Widget>[
-                                Text(lastMessage.content,
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis)
-                              ])
-                          ])))
-            ])));
+                                  if (lastMessage != null)
+                                    Row(children: <Widget>[
+                                      Text(lastMessage.content,
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: const TextStyle(
+                                              color: orange, fontSize: 20.0))
+                                    ])
+                                ]))),
+                    if (newMessageCount > 0)
+                      Container(
+                          width: 40.0,
+                          height: 40.0,
+                          margin: const EdgeInsets.symmetric(horizontal: 5.0),
+                          decoration: BoxDecoration(
+                              color: blue,
+                              borderRadius: BorderRadius.circular(60.0)),
+                          child: Center(
+                            child: Text(newMessageCount.toString(),
+                                textAlign: TextAlign.center,
+                                style: const TextStyle(
+                                    color: white, fontWeight: FontWeight.bold)),
+                          )),
+                    Image.asset('images/hamburger.png', color: orange),
+                  ]))),
+      const Divider()
+    ]);
   }
 
   @override

@@ -42,8 +42,8 @@ final Map<String, Widget Function(Object)> routes =
   LoungeCreateMeetupScreen.id: (_) => LoungeCreateMeetupScreen(),
   LoungeEditScreen.id: (dynamic lounge) => LoungeEditScreen(lounge as Lounge),
   LoungeViewScreen.id: (dynamic lounge) => LoungeViewScreen(lounge as Lounge),
-  ProfileScreen.id: (dynamic settings) =>
-      ProfileScreen(settings['user'] as User, settings['isEdition'] as bool),
+  ProfileScreen.id: (dynamic settings) => ProfileScreen(
+      settings['user'] as User, settings['isEdition'] as bool ?? false),
   ChatScreen.id: (dynamic chat) => ChatScreen(chat as Chat),
   PeopleSearchScreen.id: (_) => PeopleSearchScreen(),
 };

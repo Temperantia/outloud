@@ -19,7 +19,8 @@ class ChatsState {
   final Map<String, Map<String, ChatState>> usersChatsStates;
 
   static ChatsState initialState(
-          {Map<String, Map<String, ChatState>> usersChatsStates =
-              const <String, Map<String, ChatState>>{}}) =>
-      ChatsState(usersChatsStates: usersChatsStates);
+          {Map<String, Map<String, ChatState>> usersChatsStates}) =>
+      ChatsState(
+          usersChatsStates:
+              usersChatsStates ?? <String, Map<String, ChatState>>{});
 }

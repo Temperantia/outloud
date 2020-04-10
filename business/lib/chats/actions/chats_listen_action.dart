@@ -31,6 +31,8 @@ class ChatsListenAction extends ReduxAction<AppState> {
     final List<Chat> chats = <Chat>[];
     final Map<String, Map<String, ChatState>> usersChatStates =
         state.chatsState.usersChatsStates;
+
+    usersChatStates.putIfAbsent(_id, () => <String, ChatState>{});
     for (final String chatId in _chatIds) {
       final Chat chat = Chat(chatId, _id);
       chats.add(chat);
@@ -39,10 +41,10 @@ class ChatsListenAction extends ReduxAction<AppState> {
         'chatIds': FieldValue.arrayUnion(<String>[chatId])
       }, chat.idPeer);
 
-      final Map<String, Map<String, ChatState>> userChatsStates =
+      final Map<String, Map<String, ChatState>> usersChatsStates =
           state.chatsState.usersChatsStates;
 
-      userChatsStates[_id][chatId] = ChatState();
+      usersChatsStates[_id].putIfAbsent(chatId, () => ChatState());
 
       messagesSubs.add(streamMessages(chat.id).listen(
           (List<Message> messages) =>
