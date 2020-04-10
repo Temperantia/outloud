@@ -103,7 +103,7 @@ class _PeopleFriendsScreenState extends State<PeopleFriendsScreen>
                   },
                   child: Column(children: <Widget>[
                     Icon(Icons.add_circle_outline, size: 30, color: white),
-                    const Text('ACCEPT',
+                    const Text('ACCEPTER',
                         style: TextStyle(
                             color: white,
                             fontWeight: FontWeight.w300,
@@ -120,7 +120,7 @@ class _PeopleFriendsScreenState extends State<PeopleFriendsScreen>
                   },
                   child: Column(children: <Widget>[
                     Icon(Icons.remove_circle_outline, size: 30, color: white),
-                    const Text('DECLINE',
+                    const Text('REFUSER',
                         style: TextStyle(
                             color: white,
                             fontWeight: FontWeight.w300,
@@ -143,8 +143,8 @@ class _PeopleFriendsScreenState extends State<PeopleFriendsScreen>
             children: <Widget>[
               Text(
                   pendingFriends.length > 1
-                      ? 'NEW FRIEND REQUESTS'
-                      : 'NEW FIEND REQUEST',
+                      ? 'NOUVELLES DEMANDES D\'AMI'
+                      : 'NOUVELLE DEMANDE D\'AMI',
                   style: const TextStyle(
                       color: white, fontWeight: FontWeight.w600, fontSize: 12)),
               Expanded(

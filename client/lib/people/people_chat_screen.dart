@@ -41,6 +41,7 @@ class _PeopleChatScreenState extends State<PeopleChatScreen>
               ChatScreen.id,
               arguments: chat)),
           child: Container(
+              decoration: BoxDecoration(color: Colors.transparent),
               padding: const EdgeInsets.all(20.0),
               child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -86,7 +87,7 @@ class _PeopleChatScreenState extends State<PeopleChatScreen>
                                 style: const TextStyle(
                                     color: white, fontWeight: FontWeight.bold)),
                           )),
-                    Image.asset('images/hamburger.png', color: orange),
+/*                     Image.asset('images/hamburger.png', color: orange), */
                   ]))),
       const Divider()
     ]);

@@ -64,18 +64,18 @@ class _PeopleSearchScreenState extends State<PeopleSearchScreen>
                                   fontWeight: FontWeight.bold,
                                   fontSize: 14),
                             ),
-                            const Text(
+                            /*  const Text(
                               'many shared intests',
                               style: TextStyle(
                                   color: orange, fontWeight: FontWeight.w400),
-                            ),
-                            Text(
+                            ), */
+                            /* Text(
                               distance != null
                                   ? ' somewhere : $distance away'
                                   : 'somewhere',
                               style: const TextStyle(
                                   color: orange, fontWeight: FontWeight.w400),
-                            ),
+                            ), */
                             SingleChildScrollView(
                               child: Row(
                                 children: <Widget>[
