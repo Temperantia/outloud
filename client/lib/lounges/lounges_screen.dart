@@ -112,12 +112,11 @@ class _LoungesScreenState extends State<LoungesScreen>
                         dispatch(
                             LoungeLeaveAction(state.userState.user.id, lounge));
                       } else {
-                        await dispatchFuture(
-                            LoungeJoinAction(state.userState.user.id, lounge));
                         await showLoaderAnimation(context, this,
                             animationDuration: 600);
-                        await dispatchFuture(
-                            redux.NavigateAction<AppState>.pop());
+                        dispatch(
+                            LoungeJoinAction(state.userState.user.id, lounge));
+                        dispatch(redux.NavigateAction<AppState>.pop());
                         dispatch(redux.NavigateAction<AppState>.pushNamed(
                             LoungeChatScreen.id,
                             arguments: lounge));

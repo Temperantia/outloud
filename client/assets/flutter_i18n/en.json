@@ -230,6 +230,11 @@
         "MY_EVENTS_EMPTY_DESCRIPTION": "You haven't bookmarked any events yet! Save events here by liking and attending them in \"FIND EVENTS\""
     },
     "LOUNGE_CHAT": {
+        "LEAVE_LOUNGE": "Leave Lounge?",
+        "LEAVE_WARNING": "You will leave this lounge and not be able to see lounge messages.",
+        "LEAVE_CONFIRMATION": "Are you sure?",
+        "TAKE_ME_BACK": "No, Take Me Back",
+        "LEAVE_YES": "YES, Leave Lounge",
         "YOUR_LOUNGE": "Your Lounge",
         "SOMEONES_LOUNGE": "{user}'s Lounge",
         "MEMBER": "member",

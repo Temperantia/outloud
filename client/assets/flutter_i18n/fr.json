@@ -231,6 +231,11 @@
         "MY_EVENTS_EMPTY_DESCRIPTION": "Tu n'as aucun événement sauvegardé ! Aime et inscris-toi à des événements dans la section \"TROUVER DES EVENTS\""
     },
     "LOUNGE_CHAT": {
+        "LEAVE_LOUNGE": "Sortir du salon?",
+        "LEAVE_WARNING": "Vous quitterez le salon et ne pourrez plus voir les messages du salon",
+        "LEAVE_CONFIRMATION": "Êtes-vous sûr?",
+        "TAKE_ME_BACK": "Non, rester ici",
+        "LEAVE_YES": "Oui, sortir du salon",
         "YOUR_LOUNGE": "Ton Salon",
         "SOMEONES_LOUNGE": "Le Salon de {user}",
         "MEMBER": "membre",
