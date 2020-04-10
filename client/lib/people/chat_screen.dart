@@ -70,6 +70,9 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   Widget _buildChat(User user, String userId, String picture) {
+    if (widget.chat.entity == null) {
+      return Container();
+    }
     final List<Message> messages = widget.chat.messages;
     return Container(
       padding: const EdgeInsets.all(20.0),
