@@ -409,24 +409,25 @@ class _LoungeChatScreenState extends State<LoungeChatScreen>
                   color: orangeLight.withOpacity(0.5),
                   borderRadius: BorderRadius.circular(5.0)),
               child: Row(children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: GestureDetector(
-                      onTap: () {}, child: Icon(Icons.add, color: white)),
-                ),
+                /*   Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: GestureDetector(
+                        onTap: () {}, child: Icon(Icons.add, color: white))), */
                 Expanded(
-                    child: TextField(
-                        controller: _messageController,
-                        decoration: InputDecoration.collapsed(
-                            hintText: FlutterI18n.translate(
-                                context, 'LOUNGE_CHAT.MESSAGE'),
-                            hintStyle: const TextStyle(color: white)))),
-                Padding(
+                    child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        child: TextField(
+                            controller: _messageController,
+                            decoration: InputDecoration.collapsed(
+                                hintText: FlutterI18n.translate(
+                                    context, 'LOUNGE_CHAT.MESSAGE'),
+                                hintStyle: const TextStyle(color: white))))),
+                /*   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: GestureDetector(
                         onTap: () {},
                         child:
-                            const Icon(MdiIcons.stickerEmoji, color: white))),
+                            const Icon(MdiIcons.stickerEmoji, color: white))), */
                 Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: GestureDetector(
@@ -434,8 +435,8 @@ class _LoungeChatScreenState extends State<LoungeChatScreen>
                           addMessage(_lounge.id, state.loginState.id,
                               _messageController.text, MessageType.Text);
                           _messageController.clear();
-                          _scrollController.jumpTo(
-                              _scrollController.position.maxScrollExtent);
+                          _scrollController.jumpTo(_scrollController.position
+                              .maxScrollExtent); // TODO(alexandre): no no no
                         },
                         child: Icon(Icons.send, color: white)))
               ])),

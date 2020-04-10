@@ -10,7 +10,6 @@ import 'package:business/models/message.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:outloud/profile/profile_screen.dart';
 import 'package:outloud/theme.dart';
 import 'package:outloud/widgets/cached_image.dart';
@@ -70,9 +69,6 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   Widget _buildChat(User user, String userId, String picture) {
-    if (widget.chat.entity == null) {
-      return Container();
-    }
     final List<Message> messages = widget.chat.messages;
     return Container(
       padding: const EdgeInsets.all(20.0),
@@ -158,33 +154,37 @@ class _ChatScreenState extends State<ChatScreen> {
       final User user = state.userState.user;
       final String picture = user.pics.isEmpty ? null : user.pics[0];
       final String userId = user.id;
+      if (widget.chat.entity == null) {
+        return Container();
+      }
       _markAsRead(state.chatsState.usersChatsStates, userId, dispatch);
+      final String namePeer = (widget.chat.entity as User).name.split(' ')[0];
       return View(
-          title:
-              'CHAT WITH ${(widget.chat.entity as User).name.split(' ')[0].toUpperCase()}',
+          title: 'CHAT AVEC ${namePeer.toUpperCase()}',
           buttons: Container(
               margin: const EdgeInsets.symmetric(horizontal: 10.0),
               decoration: BoxDecoration(
                   color: orangeLight.withOpacity(0.5),
                   borderRadius: BorderRadius.circular(5.0)),
               child: Row(children: <Widget>[
-                Padding(
+                /*   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: GestureDetector(
-                        onTap: () {}, child: Icon(Icons.add, color: white))),
+                        onTap: () {}, child: Icon(Icons.add, color: white))), */
                 Expanded(
-                    child: TextField(
-                        controller: _messageController,
-                        decoration: InputDecoration.collapsed(
-                            hintText: FlutterI18n.translate(
-                                context, 'LOUNGE_CHAT.MESSAGE'),
-                            hintStyle: const TextStyle(color: white)))),
-                Padding(
+                    child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        child: TextField(
+                            controller: _messageController,
+                            decoration: InputDecoration.collapsed(
+                                hintText: 'Message pour $namePeer',
+                                hintStyle: const TextStyle(color: white))))),
+                /*   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: GestureDetector(
                         onTap: () {},
                         child:
-                            const Icon(MdiIcons.stickerEmoji, color: white))),
+                            const Icon(MdiIcons.stickerEmoji, color: white))), */
                 Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: GestureDetector(

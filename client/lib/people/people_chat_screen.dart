@@ -2,7 +2,6 @@ import 'package:async_redux/async_redux.dart' as redux;
 import 'package:business/app_state.dart';
 import 'package:business/classes/chat.dart';
 import 'package:business/classes/message.dart';
-import 'package:business/classes/message_state.dart';
 import 'package:business/classes/user.dart';
 import 'package:flutter/material.dart';
 import 'package:outloud/people/chat_screen.dart';
@@ -20,17 +19,12 @@ class _PeopleChatScreenState extends State<PeopleChatScreen>
   @override
   bool get wantKeepAlive => true;
 
-  Widget _buildChat(Chat chat, Map<String, MessageState> messageStates,
-      ThemeStyle theme, void Function(redux.ReduxAction<AppState>) dispatch) {
+  Widget _buildChat(Chat chat, int newMessageCount, ThemeStyle theme,
+      void Function(redux.ReduxAction<AppState>) dispatch) {
     if (chat.entity == null) {
       return Container();
     }
-    int newMessageCount = 0;
-    for (final MessageState messageState in messageStates.values) {
-      if (messageState == MessageState.Received) {
-        newMessageCount++;
-      }
-    }
+
     final Message lastMessage = chat.messages.isEmpty ? null : chat.messages[0];
     final String pic = (chat.entity as User).pics.isEmpty
         ? null
@@ -107,10 +101,9 @@ class _PeopleChatScreenState extends State<PeopleChatScreen>
             final Chat chat = state.chatsState.chats[index];
             return _buildChat(
                 chat,
-                state
-                    .chatsState
+                state.chatsState
                     .usersChatsStates[state.userState.user.id][chat.id]
-                    .messageStates,
+                    .countNewMessages(),
                 state.theme,
                 dispatch);
           });

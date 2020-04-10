@@ -30,6 +30,8 @@ class ChatsCreateAction extends ReduxAction<AppState> {
       return null;
     }
 
+    dispatch(NavigateAction<AppState>.pushNamed('Chat', arguments: chat));
+
     chats.add(chat);
 
     updateUser(
@@ -46,8 +48,6 @@ class ChatsCreateAction extends ReduxAction<AppState> {
         state.chatsState.usersChatsStates;
 
     usersChatsStates[myId].putIfAbsent(chat.id, () => ChatState());
-
-    dispatch(NavigateAction<AppState>.pushNamed('Chat', arguments: chat));
 
     return state.copy(chatsState: state.chatsState.copy(chats: chats));
   }

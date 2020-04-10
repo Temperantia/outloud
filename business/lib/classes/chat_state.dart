@@ -26,4 +26,14 @@ class ChatState {
               MapEntry<String, String>(key, EnumToString.parse(value)))
     };
   }
+
+  int countNewMessages() {
+    int count = 0;
+    for (final MessageState messageState in messageStates.values) {
+      if (messageState == MessageState.Received) {
+        ++count;
+      }
+    }
+    return count;
+  }
 }

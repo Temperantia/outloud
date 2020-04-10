@@ -1,6 +1,7 @@
 import 'package:async_redux/async_redux.dart';
 import 'package:business/app_state.dart';
 import 'package:business/actions/app_navigate_action.dart';
+import 'package:business/classes/chat_state.dart';
 import 'package:business/classes/user.dart';
 import 'package:business/actions/app_disconnect_action.dart';
 import 'package:flutter/material.dart';
@@ -236,6 +237,11 @@ class _ViewState extends State<View> {
 
   Widget _buildNavBar(
       AppState state, void Function(ReduxAction<dynamic>) dispatch) {
+    int newMessageCount = 0;
+    for (final ChatState chatState
+        in state.chatsState.usersChatsStates[state.userState.user.id].values) {
+      newMessageCount += chatState.countNewMessages();
+    }
     return Theme(
         data: Theme.of(context).copyWith(canvasColor: Colors.transparent),
         child: BottomNavigationBar(
@@ -244,7 +250,7 @@ class _ViewState extends State<View> {
             showSelectedLabels: false,
             showUnselectedLabels: false,
             currentIndex: state.homePageIndex,
-            items: bubbleBar(context, 0, state.theme),
+            items: bubbleBar(context, newMessageCount, state.theme),
             onTap: (int index) async {
               if (index == state.homePageIndex) {
                 return;
