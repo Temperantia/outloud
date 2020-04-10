@@ -73,8 +73,8 @@ class _ChatScreenState extends State<ChatScreen> {
     return Container(
       padding: const EdgeInsets.all(20.0),
       child: ListView.builder(
-          itemBuilder: (BuildContext context, int index) =>
-              _buildItem(messages[index], user, userId, picture),
+          itemBuilder: (BuildContext context, int index) => _buildItem(
+              messages[messages.length - index - 1], user, userId, picture),
           itemCount: messages.length,
           controller: _scrollController),
     );
