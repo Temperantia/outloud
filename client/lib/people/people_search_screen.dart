@@ -112,7 +112,7 @@ class _PeopleSearchScreenState extends State<PeopleSearchScreen>
                           left: 2.0, right: 2.0, bottom: 10),
                       decoration:
                           BoxDecoration(border: Border.all(color: blue)),
-                      child: const Text('PENDING REQUEST',
+                      child: const Text('REQUETE EN ATTENTE',
                           style: TextStyle(
                               fontSize: 10, fontWeight: FontWeight.w300))),
                   Row(
@@ -133,7 +133,7 @@ class _PeopleSearchScreenState extends State<PeopleSearchScreen>
                                     size: 20,
                                     color: blue,
                                   ),
-                                  const Text('Accept',
+                                  const Text('Accepter',
                                       style: TextStyle(
                                           color: blue,
                                           fontSize: 12,
@@ -156,7 +156,7 @@ class _PeopleSearchScreenState extends State<PeopleSearchScreen>
                                     size: 20,
                                     color: blue,
                                   ),
-                                  const Text('Deny',
+                                  const Text('Refuser',
                                       style: TextStyle(
                                           color: blue,
                                           fontSize: 12,
