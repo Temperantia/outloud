@@ -1,1 +1,1 @@
-enum MessageState { Sent }
+enum MessageState { Sent, Received, Read }

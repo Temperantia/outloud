@@ -10,7 +10,7 @@ Stream<List<Message>> streamEventMessages(String conversationId) {
       query: _api.querySubCollection(conversationId, conversationId,
           orderBy: <OrderConstraint>[OrderConstraint('timestamp', false)]),
       mapper: (DocumentSnapshot messageDoc) =>
-          Message.fromMap(messageDoc.data));
+          Message.fromMap(messageDoc.data, messageDoc.documentID));
 }
 
 void addEventMessage(String conversation, String idFrom, String content,

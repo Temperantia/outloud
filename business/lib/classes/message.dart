@@ -9,9 +9,13 @@ enum MessageType {
 
 class Message {
   Message(
-      {this.idFrom, this.content, this.timestamp, @required this.messageType});
+      {this.id,
+      this.idFrom,
+      this.content,
+      this.timestamp,
+      @required this.messageType});
 
-  Message.fromMap(Map<String, dynamic> snapshot)
+  Message.fromMap(Map<String, dynamic> snapshot, this.id)
       : idFrom = snapshot['idFrom'] as String ?? '',
         content = snapshot['content'] as String ?? '',
         timestamp = snapshot['timestamp'] as int ?? 0,
@@ -20,12 +24,14 @@ class Message {
             : EnumToString.fromString(
                 MessageType.values, snapshot['messageType'] as String);
 
+  final String id;
   final String idFrom;
   final int timestamp;
   final String content;
   final MessageType messageType;
 
   Map<String, dynamic> toJson() => <String, dynamic>{
+        'id': id,
         'idFrom': idFrom,
         'timestamp': timestamp,
         'content': content,

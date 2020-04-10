@@ -10,7 +10,7 @@ Stream<List<Message>> streamMessages(String conversationId) {
       query: _api.querySubCollection(conversationId, conversationId,
           orderBy: <OrderConstraint>[OrderConstraint('timestamp', true)]),
       mapper: (DocumentSnapshot messageDoc) =>
-          Message.fromMap(messageDoc.data));
+          Message.fromMap(messageDoc.data, messageDoc.documentID));
 }
 
 /* Stream<GroupPing> streamGroupPings(Conversation conversation, String idFrom) {
