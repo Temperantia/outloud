@@ -10,19 +10,21 @@ class Event extends Entity {
       String name = '',
       String description = '',
       GeoPoint location,
-      List<String> interests = const <String>[],
+      List<String> interests,
       this.dateStart,
       this.dateEnd,
-      this.memberIds = const <String>[],
-      this.likes = const <String>[],
+      List<String> memberIds,
+      List<String> likes,
       this.pic,
       this.price = ''})
-      : super(
+      : memberIds = memberIds ?? <String>[],
+        likes = likes ?? <String>[],
+        super(
             id: id,
             name: name,
             description: description,
             location: location,
-            interests: interests);
+            interests: interests ?? <String>[]);
 
   Event.fromMap(Map<String, dynamic> snapshot, String id)
       : dateStart = snapshot['dateStart'] == null
@@ -33,10 +35,10 @@ class Event extends Entity {
             : (snapshot['dateEnd'] as Timestamp).toDate(),
         memberIds = snapshot['memberIds'] == null
             ? <String>[]
-            : snapshot['memberIds'].cast<String>() as List<String>,
+            : List<String>.of(snapshot['memberIds'].cast<String>() as List<String>, growable: true),
         likes = snapshot['likes'] == null
             ? <String>[]
-            : snapshot['likes'].cast<String>() as List<String>,
+            : List<String>.of(snapshot['likes'].cast<String>() as List<String>, growable: true),
         pic = snapshot['pic'] as String,
         price = snapshot['price'] as String ?? '',
         super(
@@ -46,7 +48,7 @@ class Event extends Entity {
             location: snapshot['location'] as GeoPoint,
             interests: snapshot['interests'] == null
                 ? <String>[]
-                : snapshot['interests'].cast<String>() as List<String>);
+                : List<String>.of(snapshot['interests'].cast<String>() as List<String>, growable: true));
 
   DateTime dateStart;
   DateTime dateEnd;

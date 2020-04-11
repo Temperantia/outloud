@@ -34,8 +34,7 @@ class ChatsCreateAction extends ReduxAction<AppState> {
 
     chats.add(chat);
 
-    updateUser(
-        user..chatIds = List<String>.from(user.chatIds + <String>[chat.id]));
+    updateUser(user..chatIds.add(chat.id));
 
     ChatsListenAction.messagesSubs.add(streamMessages(chat.id).listen(
         (List<Message> messages) =>

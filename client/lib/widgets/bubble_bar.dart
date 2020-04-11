@@ -36,7 +36,7 @@ final List<BottomNavigationBarItem> Function(BuildContext, int, ThemeStyle)
           _buildItem('images/iconLounge.png', themeStyle),
           BottomNavigationBarItem(
               icon: Container(
-                  margin: const EdgeInsets.symmetric(vertical: 20.0),
+                  margin: const EdgeInsets.symmetric(vertical: 10.0),
                   child: pings > 0
                       ? Badge(
                           position: BadgePosition.bottomLeft(),
@@ -48,7 +48,7 @@ final List<BottomNavigationBarItem> Function(BuildContext, int, ThemeStyle)
                           child: _buildIcon('images/iconPeople.png'))
                       : _buildIcon('images/iconPeople.png')),
               activeIcon: Container(
-                  margin: const EdgeInsets.symmetric(vertical: 20.0),
+                  margin: const EdgeInsets.symmetric(vertical: 10.0),
                   child: pings > 0
                       ? Badge(
                           position: BadgePosition.bottomLeft(),

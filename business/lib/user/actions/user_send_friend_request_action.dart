@@ -14,13 +14,8 @@ class UserSendFriendRequest extends ReduxAction<AppState> {
     final User _userFrom = await getUser(userFrom);
     final User _userTo = await getUser(userTo);
 
-    final List<String> _newPendingFriendsListTo =
-        List<String>.from(_userTo.pendingFriends + <String>[_userFrom.id]);
-    final List<String> _newRequestedFriendsListFrom =
-        List<String>.from(_userFrom.requestedFriends + <String>[_userTo.id]);
-
-    _userFrom..requestedFriends = _newRequestedFriendsListFrom;
-    _userTo..pendingFriends = _newPendingFriendsListTo;
+    _userFrom..requestedFriends.add(_userTo.id);
+    _userTo..pendingFriends.add(_userFrom.id);
 
     await updateUser(_userTo);
     await updateUser(_userFrom);

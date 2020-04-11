@@ -16,8 +16,7 @@ class EventRegisterAction extends redux.ReduxAction<AppState> {
     user.events[_event.id] = UserEventState.Attending;
     updateUser(user);
 
-    _event.memberIds = List<String>.from(_event.memberIds + <String>[user.id]);
-    updateEvent(_event);
+    updateEvent(_event..memberIds.add(user.id));
 
     return null;
   }

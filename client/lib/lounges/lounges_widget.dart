@@ -2,6 +2,8 @@ import 'package:async_redux/async_redux.dart' as redux;
 import 'package:business/actions/app_navigate_action.dart';
 import 'package:business/actions/app_switch_events_tab.dart';
 import 'package:business/app_state.dart';
+import 'package:business/classes/event.dart';
+import 'package:business/classes/lounge.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -20,14 +22,17 @@ class LoungesWidget extends StatefulWidget {
 }
 
 class _LoungesWidgetState extends State<LoungesWidget>
-    with AutomaticKeepAliveClientMixin<LoungesWidget>, TickerProviderStateMixin {
+    with
+        AutomaticKeepAliveClientMixin<LoungesWidget>,
+        TickerProviderStateMixin {
   @override
   bool get wantKeepAlive => true;
 
   void _showNoEventPopup(
       void Function(redux.ReduxAction<AppState>) dispatch,
       Future<void> Function(redux.ReduxAction<AppState>) dispatchFuture,
-      AppState state) {
+      AppState state,
+      {bool hasAlreadyEvents = false}) {
     showDialog(
         context: context,
         barrierDismissible: false,
@@ -55,7 +60,8 @@ class _LoungesWidgetState extends State<LoungesWidget>
                         color: pink,
                         size: 60,
                       ),
-                      Text(FlutterI18n.translate(context, 'LOUNGE_CREATE.HELLO'),
+                      Text(
+                          FlutterI18n.translate(context, 'LOUNGE_CREATE.HELLO'),
                           style: const TextStyle(
                               color: pink,
                               fontSize: 28,
@@ -66,7 +72,10 @@ class _LoungesWidgetState extends State<LoungesWidget>
                             left: 18, right: 18, bottom: 10),
                         child: Text(
                             FlutterI18n.translate(
-                                context, 'LOUNGE_CREATE.NO_EVENT_WARNING'),
+                                context,
+                                hasAlreadyEvents
+                                    ? 'LOUNGE_CREATE.LOUNGE_ALREADY_WARNING'
+                                    : 'LOUNGE_CREATE.NO_EVENT_WARNING'),
                             textAlign: TextAlign.center,
                             style: const TextStyle(
                                 color: pink,
@@ -77,7 +86,8 @@ class _LoungesWidgetState extends State<LoungesWidget>
                         padding: const EdgeInsets.only(
                             left: 18, right: 18, bottom: 15),
                         child: Text(
-                            FlutterI18n.translate(context, 'LOUNGE_CREATE.CONTINUE'),
+                            FlutterI18n.translate(
+                                context, 'LOUNGE_CREATE.CONTINUE'),
                             textAlign: TextAlign.justify,
                             style: const TextStyle(
                                 color: pink,
@@ -125,8 +135,8 @@ class _LoungesWidgetState extends State<LoungesWidget>
                                               // redux.NavigateAction<AppState>.pushNamed('0');
                                             },
                                             child: Text(
-                                                FlutterI18n.translate(
-                                                    context, 'LOUNGE_CREATE.REDIRECT_TO_FIND_EVENTS'),
+                                                FlutterI18n.translate(context,
+                                                    'LOUNGE_CREATE.REDIRECT_TO_FIND_EVENTS'),
                                                 style: const TextStyle(
                                                     color: white,
                                                     fontSize: 16,
@@ -185,11 +195,34 @@ class _LoungesWidgetState extends State<LoungesWidget>
                       width: 250,
                       icon: Icon(Icons.add),
                       onPressed: () {
-                        if(state.userState.events.isNotEmpty)
+                        final List<Event> eventsWithoutLounge =
+                            state.userState.events.where((Event _event) {
+                          final List<Lounge> _lounges =
+                              state.userState.eventLounges[_event.id];
+                          if (_lounges != null) {
+                            for (final Lounge _lounge in _lounges) {
+                              for (final Lounge _userLounge
+                                  in state.userState.lounges) {
+                                if (_userLounge.id == _lounge.id) {
+                                  return false;
+                                }
+                              }
+                            }
+                          }
+                          return true;
+                        }).toList();
+                        if (eventsWithoutLounge.isEmpty &&
+                            state.userState.events.isNotEmpty) {
+                          _showNoEventPopup(
+                              dispatch, store.dispatchFuture, state,
+                              hasAlreadyEvents: true);
+                        } else if (state.userState.events.isNotEmpty)
                           dispatch(redux.NavigateAction<AppState>.pushNamed(
-                            LoungeCreateScreen.id));
-                        else
-                          _showNoEventPopup(dispatch, store.dispatchFuture, state);
+                              LoungeCreateScreen.id));
+                        else {
+                          _showNoEventPopup(
+                              dispatch, store.dispatchFuture, state);
+                        }
                       }),
                 ]))
           ]));

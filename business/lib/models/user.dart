@@ -101,24 +101,3 @@ Future<void> updateLocation(GeoPoint location, String userId) async {
 Future<void> createUser(User data) async {
   return _api.createDocument(data.toJson(), data.id);
 }
-
-Future<DocumentSnapshot> getPingsFrom(String id, String idSender) {
-  return _api.getSubCollectionDocument(id, 'pings', idSender);
-}
-
-Future<void> markPingAsRead(String id, String idSender) {
-  return _api.removeSubCollectionDocumentById(id, 'pings', idSender);
-}
-
-Future<void> ping(String idSender, String idNotified) async {
-  final DocumentSnapshot document = await getPingsFrom(idNotified, idSender);
-  int pings = 1;
-  if (document.data != null) {
-    pings += document.data['value'] as int;
-  }
-  return _api.createDocumentInSubCollection(
-      Map<String, dynamic>.from(<String, dynamic>{'value': pings}),
-      idNotified,
-      'pings',
-      idSender);
-}

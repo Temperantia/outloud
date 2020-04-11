@@ -14,40 +14,20 @@ class UserAcceptFriendRequestAction extends ReduxAction<AppState> {
     final User _userFrom = await getUser(userFrom);
     final User _userTo = await getUser(userTo);
 
-    final List<String> _newPendingFriendsListTo =
-        List<String>.from(_userTo.pendingFriends);
-    _newPendingFriendsListTo.remove(userFrom);
+    _userTo..pendingFriends.remove(userFrom);
+    _userTo..friends.add(userFrom);
 
-    final List<String> _newFriendsListTo =
-        List<String>.from(_userTo.friends + <String>[userFrom]);
-
-    _userTo..pendingFriends = _newPendingFriendsListTo;
-    _userTo..friends = _newFriendsListTo;
-
-    if (_userTo.requestedFriends.contains(_userFrom)) {
-      final List<String> _newRequestedFriendsListTo =
-          List<String>.from(_userTo.requestedFriends);
-      _newRequestedFriendsListTo.remove(userFrom);
-      _userTo..requestedFriends = _newRequestedFriendsListTo;
+    if (_userTo.requestedFriends.contains(userFrom)) {
+      _userTo..requestedFriends.remove(userFrom);
     }
 
     await updateUser(_userTo);
 
-    final List<String> _newRequestedFriendsListFrom =
-        List<String>.from(_userFrom.requestedFriends);
-    _newRequestedFriendsListFrom.remove(userTo);
+    _userFrom..requestedFriends.remove(userTo);
+    _userFrom..friends.add(userTo);
 
-    final List<String> _newFriendsListFrom =
-        List<String>.from(_userFrom.friends + <String>[userTo]);
-
-    _userFrom..requestedFriends = _newRequestedFriendsListFrom;
-    _userFrom..friends = _newFriendsListFrom;
-
-    if (_userFrom.pendingFriends.contains(_userTo)) {
-      final List<String> _newPendingFriendsListTo =
-          List<String>.from(_userFrom.pendingFriends);
-      _newPendingFriendsListTo.remove(userFrom);
-      _userFrom..requestedFriends = _newPendingFriendsListTo;
+    if (_userFrom.pendingFriends.contains(userTo)) {
+      _userFrom..pendingFriends.remove(userTo);
     }
 
     await updateUser(_userFrom);

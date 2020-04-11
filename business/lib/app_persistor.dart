@@ -18,7 +18,7 @@ class AppPersistor extends Persistor<AppState> {
     return AppState.initialState(
         chatsState: ChatsState.initialState(
             usersChatsStates: usersChatsStates == null
-                ? const <String, Map<String, ChatState>>{}
+                ? <String, Map<String, ChatState>>{}
                 : usersChatsStates.map((String key, dynamic value) =>
                     MapEntry<String, Map<String, ChatState>>(
                         key,

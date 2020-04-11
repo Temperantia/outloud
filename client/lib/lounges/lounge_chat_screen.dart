@@ -299,7 +299,6 @@ class _LoungeChatScreenState extends State<LoungeChatScreen>
           Chat chat, void Function(redux.ReduxAction<dynamic>) dispatch) =>
       ListView.builder(
           controller: _scrollController,
-          reverse: false,
           itemCount: chat.messages.length,
           itemBuilder: (BuildContext context, int index) => _buildMessage(
               chat.messages[chat.messages.length - index - 1], dispatch));

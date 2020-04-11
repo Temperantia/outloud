@@ -12,8 +12,8 @@ class User extends Entity {
       this.home = '',
       GeoPoint location,
       this.birthDate,
-      List<String> interests = const <String>[],
-      this.pics = const <String>[],
+      List<String> interests,
+      List<String> pics,
       this.gender = '',
       this.pronoun = '',
       this.orientation = '',
@@ -21,13 +21,24 @@ class User extends Entity {
       this.degree = '',
       this.position = '',
       this.employer = '',
-      this.friends = const <String>[],
-      this.pendingFriends = const <String>[],
-      this.requestedFriends = const <String>[],
-      this.events = const <String, UserEventState>{},
-      this.lounges = const <String>[],
-      this.chatIds = const <String>[]})
-      : super(id: id, name: name, location: location, interests: interests);
+      List<String> friends,
+      List<String> pendingFriends,
+      List<String> requestedFriends,
+      Map<String, UserEventState> events,
+      List<String> lounges,
+      List<String> chatIds})
+      : pics = pics ?? <String>[],
+        friends = friends ?? <String>[],
+        pendingFriends = pendingFriends ?? <String>[],
+        requestedFriends = requestedFriends ?? <String>[],
+        events = events ?? <String, UserEventState>{},
+        lounges = lounges ?? <String>[],
+        chatIds = chatIds ?? <String>[],
+        super(
+            id: id,
+            name: name,
+            location: location,
+            interests: interests ?? <String>[]);
 
   User.fromMap(Map<String, dynamic> snapshot, String id)
       : email = snapshot['email'] as String ?? '',
@@ -37,7 +48,7 @@ class User extends Entity {
             : (snapshot['birthDate'] as Timestamp).toDate(),
         pics = snapshot['pics'] == null
             ? <String>[]
-            : snapshot['pics'].cast<String>() as List<String>,
+            : List<String>.of(snapshot['pics'].cast<String>() as List<String>, growable: true),
         gender = snapshot['gender'] as String ?? '',
         pronoun = snapshot['pronoun'] as String ?? '',
         orientation = snapshot['orientation'] as String ?? '',
@@ -47,13 +58,13 @@ class User extends Entity {
         employer = snapshot['employer'] as String ?? '',
         friends = snapshot['friends'] == null
             ? <String>[]
-            : snapshot['friends'].cast<String>() as List<String>,
+            : List<String>.of(snapshot['friends'].cast<String>() as List<String>, growable: true),
         pendingFriends = snapshot['pendingFriends'] == null
             ? <String>[]
-            : snapshot['pendingFriends'].cast<String>() as List<String>,
+            : List<String>.of(snapshot['pendingFriends'].cast<String>() as List<String>, growable: true),
         requestedFriends = snapshot['requestedFriends'] == null
             ? <String>[]
-            : snapshot['requestedFriends'].cast<String>() as List<String>,
+            : List<String>.of(snapshot['requestedFriends'].cast<String>() as List<String>, growable: true),
         events = snapshot['events'] == null
             ? <String, UserEventState>{}
             : Map<String, String>.from(
@@ -63,17 +74,17 @@ class User extends Entity {
                         EnumToString.fromString(UserEventState.values, value))),
         lounges = snapshot['lounges'] == null
             ? <String>[]
-            : snapshot['lounges'].cast<String>() as List<String>,
+            : List<String>.of(snapshot['lounges'].cast<String>() as List<String>, growable: true) ,
         chatIds = snapshot['chatIds'] == null
             ? <String>[]
-            : snapshot['chatIds'].cast<String>() as List<String>,
+            : List<String>.of(snapshot['chatIds'].cast<String>() as List<String>, growable: true),
         super(
             id: id ?? '',
             name: snapshot['name'] as String,
             location: snapshot['location'] as GeoPoint,
             interests: snapshot['interests'] == null
                 ? <String>[]
-                : snapshot['interests'].cast<String>() as List<String>);
+                : List<String>.of(snapshot['interests'].cast<String>() as List<String>, growable: true));
 
   String email;
   String home;

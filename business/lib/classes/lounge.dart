@@ -17,9 +17,10 @@ class Lounge extends Entity {
       this.owner = '',
       this.memberLimit = 5,
       this.notes,
-      this.memberIds = const <String>[],
+      List<String> memberIds,
       this.members})
-      : super(id: id, name: name, description: description, location: location);
+      : memberIds = memberIds ?? <String>[],
+        super(id: id, name: name, description: description, location: location);
 
   Lounge.fromMap(Map<String, dynamic> snapshot, String id)
       : eventId = snapshot['eventId'] as String,
@@ -35,7 +36,7 @@ class Lounge extends Entity {
         notes = snapshot['notes'] as String ?? '',
         memberIds = snapshot['memberIds'] == null
             ? <String>[]
-            : snapshot['memberIds'].cast<String>() as List<String>,
+            : List<String>.of(snapshot['memberIds'].cast<String>() as List<String>, growable: true),
         members = <User>[],
         super(
             id: id ?? '',
