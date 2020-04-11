@@ -74,7 +74,7 @@ class User extends Entity {
                         EnumToString.fromString(UserEventState.values, value))),
         lounges = snapshot['lounges'] == null
             ? <String>[]
-            : snapshot['lounges'].cast<String>() as List<String>,
+            : List<String>.of(snapshot['lounges'].cast<String>() as List<String>, growable: true) ,
         chatIds = snapshot['chatIds'] == null
             ? <String>[]
             : snapshot['chatIds'].cast<String>() as List<String>,
