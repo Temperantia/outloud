@@ -46,6 +46,7 @@ dependencies:
   network_to_file_image: ^2.2.8
   dotted_border: ^1.0.5
   date_utils: ^0.1.0+3
+  gradient_bottom_navigation_bar: ^1.0.0+4
 
 flutter:
   uses-material-design: true

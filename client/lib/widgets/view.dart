@@ -7,6 +7,7 @@ import 'package:business/actions/app_disconnect_action.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
+import 'package:gradient_bottom_navigation_bar/gradient_bottom_navigation_bar.dart';
 import 'package:outloud/profile/profile_screen.dart';
 
 import 'package:outloud/theme.dart';
@@ -53,10 +54,10 @@ class _ViewState extends State<View> {
       AppState state, void Function(ReduxAction<dynamic>) dispatch) {
     EdgeInsetsGeometry margin;
     if (widget.isRoot) {
-      margin = const EdgeInsets.fromLTRB(0.0, 45.0, 0.0, 65.0);
+      margin = const EdgeInsets.fromLTRB(0.0, 45.0, 0.0, 0.0);
     } else if (widget.showAppBar && widget.showNavBar) {
       margin = EdgeInsets.fromLTRB(
-          0.0, 105.0, 0.0, widget.buttons == null ? 50.0 : 120.0);
+          0.0, 105.0, 0.0, widget.buttons == null ? 0.0 : 70.0);
     }
 
     if (widget.isProfileScreen) {
@@ -85,8 +86,8 @@ class _ViewState extends State<View> {
                 margin: EdgeInsets.only(
                     bottom: widget.isRoot ||
                             (widget.showNavBar && widget.buttons != null)
-                        ? 120.0
-                        : 50.0),
+                        ? 70.0
+                        : 0.0),
                 decoration: BoxDecoration(
                     color: white, borderRadius: BorderRadius.circular(40.0)))),
       if (widget.showAppBar)
@@ -98,7 +99,6 @@ class _ViewState extends State<View> {
       if (widget.showAppBar) _buildAppBar(state.userState.user, dispatch),
       Column(mainAxisAlignment: MainAxisAlignment.end, children: <Widget>[
         if (widget.buttons != null) widget.buttons,
-        if (widget.showNavBar) _buildNavBar(state, dispatch),
       ])
     ]));
   }
@@ -250,11 +250,10 @@ class _ViewState extends State<View> {
     }
     return Theme(
         data: Theme.of(context).copyWith(canvasColor: Colors.transparent),
-        child: BottomNavigationBar(
-            elevation: 0,
+        child: GradientBottomNavigationBar(
+            backgroundColorStart: pinkLight,
+            backgroundColorEnd: pink,
             type: BottomNavigationBarType.fixed,
-            showSelectedLabels: false,
-            showUnselectedLabels: false,
             currentIndex: state.homePageIndex,
             items: bubbleBar(context, newMessageCount, newMessageLoungeCount, state.theme),
             onTap: (int index) async {
@@ -278,8 +277,9 @@ class _ViewState extends State<View> {
                 void Function(ReduxAction<dynamic>) dispatch,
                 dynamic model,
                 Widget w) =>
-            AnnotatedRegion<SystemUiOverlayStyle>(
-                value: SystemUiOverlayStyle.dark,
-                child: Scaffold(body: _buildBody(state, dispatch))));
+            Scaffold(
+                bottomNavigationBar:
+                    widget.showNavBar ? _buildNavBar(state, dispatch) : null,
+                body: _buildBody(state, dispatch)));
   }
 }
