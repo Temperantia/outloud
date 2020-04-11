@@ -276,6 +276,7 @@
     },
     "LOUNGE_CREATE": {
         "HELLO": "Hello!",
+        "LOUNGE_ALREADY_WARNING": "You already joined or created lounges for every events you are attending",
         "NO_EVENT_WARNING": "You are not attending any event! There you cannot create a lounge",
         "CONTINUE": "Do you want to be redirected to event search?",
         "STAY_IN_LOUNGES": "No, stay here",

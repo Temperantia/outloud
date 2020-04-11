@@ -277,6 +277,7 @@
     },
     "LOUNGE_CREATE": {
         "HELLO": "Hello!",
+        "LOUNGE_ALREADY_WARNING": "Tu as déjà rejoint ou crée des salons pour tous les événements auxquels tu participes",
         "NO_EVENT_WARNING": "Tu n'es inscrit à aucun événement! Tu ne peux donc pas créer de salon",
         "CONTINUE": "Veux-tu être redirigé(e) vers la recherche d'événements?",
         "STAY_IN_LOUNGES": "Non, rester ici ",
