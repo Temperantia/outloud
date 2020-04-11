@@ -12,8 +12,8 @@ class User extends Entity {
       this.home = '',
       GeoPoint location,
       this.birthDate,
-      List<String> interests = const <String>[],
-      this.pics = const <String>[],
+      List<String> interests,
+      List<String> pics,
       this.gender = '',
       this.pronoun = '',
       this.orientation = '',
@@ -21,13 +21,24 @@ class User extends Entity {
       this.degree = '',
       this.position = '',
       this.employer = '',
-      this.friends = const <String>[],
-      this.pendingFriends = const <String>[],
-      this.requestedFriends = const <String>[],
-      this.events = const <String, UserEventState>{},
-      this.lounges = const <String>[],
-      this.chatIds = const <String>[]})
-      : super(id: id, name: name, location: location, interests: interests);
+      List<String> friends,
+      List<String> pendingFriends,
+      List<String> requestedFriends,
+      Map<String, UserEventState> events,
+      List<String> lounges,
+      List<String> chatIds})
+      : pics = pics ?? <String>[],
+        friends = friends ?? <String>[],
+        pendingFriends = pendingFriends ?? <String>[],
+        requestedFriends = requestedFriends ?? <String>[],
+        events = events ?? <String, UserEventState>{},
+        lounges = lounges ?? <String>[],
+        chatIds = chatIds ?? <String>[],
+        super(
+            id: id,
+            name: name,
+            location: location,
+            interests: interests ?? <String>[]);
 
   User.fromMap(Map<String, dynamic> snapshot, String id)
       : email = snapshot['email'] as String ?? '',

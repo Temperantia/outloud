@@ -17,15 +17,9 @@ class LoungeLeaveAction extends ReduxAction<AppState> {
       return null;
     }
 
-    final List<String> _userIdes = List<String>.from(lounge.memberIds);
-    _userIdes.remove(userId);
-    lounge..memberIds = _userIdes;
-
-    await updateLoungeUser(lounge);
-    final List<String> _goodLounges =
-        List<String>.from(state.userState.user.lounges);
-    _goodLounges.remove(lounge.id);
-    await updateUserLounge(state.userState.user, _goodLounges);
+    await updateLoungeUser(lounge..memberIds.remove(userId));
+    await updateUserLounge(
+        state.userState.user, state.userState.user.lounges..remove(lounge.id));
     return null;
   }
 }

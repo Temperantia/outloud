@@ -14,32 +14,18 @@ class UserDenyFriendRequestAction extends ReduxAction<AppState> {
     final User _userFrom = await getUser(userFrom);
     final User _userTo = await getUser(userTo);
 
-    final List<String> _newPendingFriendsListTo =
-        List<String>.from(_userTo.pendingFriends);
-    _newPendingFriendsListTo.remove(userFrom);
-
-    _userTo..pendingFriends = _newPendingFriendsListTo;
+    _userTo..pendingFriends.remove(userFrom);
 
     if (_userTo.requestedFriends.contains(_userFrom)) {
-      final List<String> _newRequestedFriendsListTo =
-          List<String>.from(_userTo.requestedFriends);
-      _newRequestedFriendsListTo.remove(userFrom);
-      _userTo..requestedFriends = _newRequestedFriendsListTo;
+      _userTo..requestedFriends.remove(userFrom);
     }
 
     await updateUser(_userTo);
 
-    final List<String> _newRequestedFriendsListFrom =
-        List<String>.from(_userFrom.requestedFriends);
-    _newRequestedFriendsListFrom.remove(userTo);
-
-    _userFrom..requestedFriends = _newRequestedFriendsListFrom;
+    _userFrom..requestedFriends.remove(userTo);
 
     if (_userFrom.pendingFriends.contains(_userTo)) {
-      final List<String> _newPendingFriendsListTo =
-          List<String>.from(_userFrom.pendingFriends);
-      _newPendingFriendsListTo.remove(userFrom);
-      _userFrom..requestedFriends = _newPendingFriendsListTo;
+      _userFrom..requestedFriends.remove(userFrom);
     }
 
     await updateUser(_userFrom);

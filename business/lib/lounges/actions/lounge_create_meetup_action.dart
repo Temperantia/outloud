@@ -23,10 +23,7 @@ class LoungeCreateMeetupAction extends ReduxAction<AppState> {
 
     loungeCreation = await createLounge(loungeCreation);
 
-    final User user = state.userState.user;
-
-    user.lounges =
-        List<String>.from(user.lounges + <String>[loungeCreation.id]);
+    final User user = state.userState.user..lounges.add(loungeCreation.id);
 
     updateUser(user);
 

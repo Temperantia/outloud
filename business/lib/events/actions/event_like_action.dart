@@ -18,9 +18,7 @@ class EventLikeAction extends redux.ReduxAction<AppState> {
     user.events[_event.id] = UserEventState.Liked;
     updateUser(user);
 
-    _event.likes =
-        List<String>.from(_event.likes + <String>[state.userState.user.id]);
-    updateEvent(_event);
+    updateEvent(_event..likes.add(state.userState.user.id));
     return null;
   }
 }

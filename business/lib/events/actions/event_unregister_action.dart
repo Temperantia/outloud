@@ -15,8 +15,7 @@ class EventUnRegisterAction extends redux.ReduxAction<AppState> {
     final User user = state.userState.user;
     updateUser(user..events.remove(_event.id));
 
-    updateEvent(_event
-      ..memberIds = (List<String>.from(_event.memberIds)..remove(user.id)));
+    updateEvent(_event..memberIds.remove(user.id));
 
     return null;
   }

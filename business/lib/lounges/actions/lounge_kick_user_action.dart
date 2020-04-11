@@ -19,13 +19,8 @@ class LoungeKickUserAction extends ReduxAction<AppState> {
     }
     final User _user = await getUser(userId);
 
-    final List<String> _userIdes = List<String>.from(lounge.memberIds);
-    _userIdes.remove(userId);
-    lounge..memberIds = _userIdes;
-    await updateLoungeUser(lounge);
-    final List<String> _goodLounges = List<String>.from(_user.lounges);
-    _goodLounges.remove(lounge.id);
-    await updateUserLounge(_user, _goodLounges);
+    await updateLoungeUser(lounge..memberIds.remove(userId));
+    await updateUserLounge(_user, _user.lounges..remove(lounge.id));
     return state;
   }
 }

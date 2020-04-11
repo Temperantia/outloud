@@ -15,11 +15,11 @@ class Chat {
   Chat.user(String idMy, this.idPeer, {this.pings = 0, this.pinned = false})
       : isGroup = false,
         id = getUserChatId(idMy, idPeer),
-        messages = const <Message>[];
+        messages = <Message>[];
   Chat.group(this.id, {this.pings = 0, this.pinned = false})
       : isGroup = true,
         idPeer = id,
-        messages = const <Message>[];
+        messages = <Message>[];
 
   final bool isGroup;
   final String id;

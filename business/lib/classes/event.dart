@@ -10,19 +10,21 @@ class Event extends Entity {
       String name = '',
       String description = '',
       GeoPoint location,
-      List<String> interests = const <String>[],
+      List<String> interests,
       this.dateStart,
       this.dateEnd,
-      this.memberIds = const <String>[],
-      this.likes = const <String>[],
+      List<String> memberIds,
+      List<String> likes,
       this.pic,
       this.price = ''})
-      : super(
+      : memberIds = memberIds ?? <String>[],
+        likes = likes ?? <String>[],
+        super(
             id: id,
             name: name,
             description: description,
             location: location,
-            interests: interests);
+            interests: interests ?? <String>[]);
 
   Event.fromMap(Map<String, dynamic> snapshot, String id)
       : dateStart = snapshot['dateStart'] == null

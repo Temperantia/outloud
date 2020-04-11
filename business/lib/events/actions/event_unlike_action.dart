@@ -11,10 +11,7 @@ class EventUnlikeAction extends redux.ReduxAction<AppState> {
   AppState reduce() {
     updateUser(state.userState.user..events.remove(_event.id));
 
-    final List<String> likes = List<String>.from(_event.likes)
-      ..remove(state.userState.user.id);
-    _event.likes = likes;
-    updateEvent(_event..likes);
+    updateEvent(_event..likes.remove(state.userState.user.id));
 
     return null;
   }

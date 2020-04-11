@@ -393,8 +393,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 onSuggestionSelected: (Map<String, String> suggestion) =>
                     setState(() {
                       _interestController.clear();
-                      _user.interests = List<String>.from(
-                          _user.interests + <String>[suggestion['name']]);
+                      _user.interests.add(suggestion['name']);
                     }))
         ]));
   }
