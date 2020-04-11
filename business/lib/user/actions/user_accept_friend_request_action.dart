@@ -17,7 +17,7 @@ class UserAcceptFriendRequestAction extends ReduxAction<AppState> {
     _userTo..pendingFriends.remove(userFrom);
     _userTo..friends.add(userFrom);
 
-    if (_userTo.requestedFriends.contains(_userFrom)) {
+    if (_userTo.requestedFriends.contains(userFrom)) {
       _userTo..requestedFriends.remove(userFrom);
     }
 
@@ -26,8 +26,8 @@ class UserAcceptFriendRequestAction extends ReduxAction<AppState> {
     _userFrom..requestedFriends.remove(userTo);
     _userFrom..friends.add(userTo);
 
-    if (_userFrom.pendingFriends.contains(_userTo)) {
-      _userFrom..requestedFriends.remove(userFrom);
+    if (_userFrom.pendingFriends.contains(userTo)) {
+      _userFrom..pendingFriends.remove(userTo);
     }
 
     await updateUser(_userFrom);
