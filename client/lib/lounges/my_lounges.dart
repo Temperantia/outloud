@@ -59,7 +59,21 @@ class _MyLoungesScreenState extends State<MyLoungesScreen>
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           _buildLounge(
-                              state, lounges[index], dispatch, themeStyle)
+                              state,
+                              state
+                                      .chatsState
+                                      .loungesChatsStates[
+                                          state.userState.user.id]
+                                      .isNotEmpty
+                                  ? state
+                                      .chatsState
+                                      .loungesChatsStates[state
+                                          .userState.user.id][lounges[index].id]
+                                      .countNewMessages()
+                                  : 0,
+                              lounges[index],
+                              dispatch,
+                              themeStyle)
                         ])));
   }
 
@@ -129,7 +143,7 @@ class _MyLoungesScreenState extends State<MyLoungesScreen>
         ]);
   }
 
-  Widget _buildLounge(AppState state, Lounge lounge,
+  Widget _buildLounge(AppState state, int newMessageCount, Lounge lounge,
       void Function(redux.ReduxAction<AppState>) dispatch, ThemeStyle theme) {
     if (lounge.event == null) {
       return Container();
@@ -160,6 +174,24 @@ class _MyLoungesScreenState extends State<MyLoungesScreen>
                         width: 40.0,
                         height: 40.0,
                         child: Image.asset('images/chatIcon.png'))),
+                if (newMessageCount > 0)
+                  Positioned(
+                    top: 0,
+                    left: 0,
+                    child: Container(
+                        width: 30.0,
+                        height: 30.0,
+                        margin: const EdgeInsets.symmetric(horizontal: 5.0),
+                        decoration: BoxDecoration(
+                            color: blue,
+                            borderRadius: BorderRadius.circular(60.0)),
+                        child: Center(
+                          child: Text(newMessageCount.toString(),
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(
+                                  color: white, fontWeight: FontWeight.bold)),
+                        )),
+                  )
               ]),
               if (lounge.members.isNotEmpty)
                 Expanded(
@@ -170,8 +202,6 @@ class _MyLoungesScreenState extends State<MyLoungesScreen>
             ]));
   }
 
-  
-
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -180,8 +210,8 @@ class _MyLoungesScreenState extends State<MyLoungesScreen>
         AppState state,
         void Function(redux.ReduxAction<dynamic>) dispatch,
         Widget child) {
-      return _buildLounges(state, state.userState.lounges, state.userState.eventLounges,
-                          dispatch, state.theme);
+      return _buildLounges(state, state.userState.lounges,
+          state.userState.eventLounges, dispatch, state.theme);
     });
   }
 }

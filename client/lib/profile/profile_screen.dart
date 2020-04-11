@@ -410,7 +410,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 showSelectedLabels: false,
                 showUnselectedLabels: false,
                 currentIndex: state.homePageIndex,
-                items: bubbleBar(context, 0, state.theme),
+                items: bubbleBar(context, 0, 0, state.theme),
                 onTap: (int index) async {
                   if (index == state.homePageIndex) {
                     return;

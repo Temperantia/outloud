@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 
 class AppPersistor extends Persistor<AppState> {
   final LocalPersist usersChatsStatesPersist = LocalPersist('usersChatsStates');
+  final LocalPersist loungesChatsStatesPersist = LocalPersist('loungesChatsStates');
   final LocalPersist themePersist = LocalPersist('theme');
 
   @override
@@ -14,12 +15,23 @@ class AppPersistor extends Persistor<AppState> {
     final List<Object> theme = await themePersist.load();
     final Map<String, dynamic> usersChatsStates =
         await usersChatsStatesPersist.loadAsObj();
+    final Map<String, dynamic> loungesChatsStates =
+        await loungesChatsStatesPersist.loadAsObj();
 
     return AppState.initialState(
         chatsState: ChatsState.initialState(
             usersChatsStates: usersChatsStates == null
                 ? <String, Map<String, ChatState>>{}
                 : usersChatsStates.map((String key, dynamic value) =>
+                    MapEntry<String, Map<String, ChatState>>(
+                        key,
+                        (value as Map<String, dynamic>).map<String, ChatState>(
+                            (String key, dynamic value) =>
+                                MapEntry<String, ChatState>(key,
+                                    ChatState.fromJson(value as Map<String, dynamic>))))),
+            loungesChatsStates: loungesChatsStates == null
+                ? <String, Map<String, ChatState>>{}
+                : loungesChatsStates.map((String key, dynamic value) =>
                     MapEntry<String, Map<String, ChatState>>(
                         key,
                         (value as Map<String, dynamic>).map<String, ChatState>(
@@ -39,6 +51,14 @@ class AppPersistor extends Persistor<AppState> {
     themePersist.save(<String>[EnumToString.parse(newState.theme)]);
     usersChatsStatesPersist.save(<Map<String, dynamic>>[
       newState.chatsState.usersChatsStates.map((String key,
+              Map<String, ChatState> value) =>
+          MapEntry<String, Map<String, dynamic>>(
+              key,
+              value.map<String, dynamic>((String key, ChatState value) =>
+                  MapEntry<String, Map<String, dynamic>>(key, value.toJson()))))
+    ]);
+    loungesChatsStatesPersist.save(<Map<String, dynamic>>[
+      newState.chatsState.loungesChatsStates.map((String key,
               Map<String, ChatState> value) =>
           MapEntry<String, Map<String, dynamic>>(
               key,

@@ -59,7 +59,8 @@ class _PeopleChatScreenState extends State<PeopleChatScreen>
                                     Text(lastMessage.getTimeAgo(),
                                         style: textStyleListItemSubtitle),
                                   if (lastMessage != null)
-                                    Row(children: <Widget>[
+                                    Wrap(
+                                      children: <Widget>[
                                       Text(lastMessage.content,
                                           maxLines: 1,
                                           overflow: TextOverflow.ellipsis,

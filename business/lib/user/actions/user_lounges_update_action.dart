@@ -4,6 +4,7 @@ import 'package:async_redux/async_redux.dart' as redux;
 import 'package:business/app_state.dart';
 import 'package:business/chats/actions/chats_lounge_update_action.dart';
 import 'package:business/classes/chat.dart';
+import 'package:business/classes/chat_state.dart';
 import 'package:business/classes/event.dart';
 import 'package:business/classes/lounge.dart';
 import 'package:business/classes/message.dart';
@@ -31,6 +32,9 @@ class UserLoungesUpdateAction extends redux.ReduxAction<AppState> {
     _reset();
 
     final List<Chat> chats = <Chat>[];
+    final Map<String, Map<String, ChatState>> loungesChatsStates =
+        state.chatsState.loungesChatsStates;
+    loungesChatsStates.putIfAbsent(state.userState.user.id, () => <String, ChatState>{});
     for (final Lounge lounge in _lounges) {
       final Chat chat = Chat(lounge.id, state.loginState.id);
       chats.add(chat);
