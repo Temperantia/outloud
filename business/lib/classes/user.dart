@@ -48,7 +48,7 @@ class User extends Entity {
             : (snapshot['birthDate'] as Timestamp).toDate(),
         pics = snapshot['pics'] == null
             ? <String>[]
-            : snapshot['pics'].cast<String>() as List<String>,
+            : List<String>.of(snapshot['pics'].cast<String>() as List<String>, growable: true),
         gender = snapshot['gender'] as String ?? '',
         pronoun = snapshot['pronoun'] as String ?? '',
         orientation = snapshot['orientation'] as String ?? '',
@@ -58,13 +58,13 @@ class User extends Entity {
         employer = snapshot['employer'] as String ?? '',
         friends = snapshot['friends'] == null
             ? <String>[]
-            : snapshot['friends'].cast<String>() as List<String>,
+            : List<String>.of(snapshot['friends'].cast<String>() as List<String>, growable: true),
         pendingFriends = snapshot['pendingFriends'] == null
             ? <String>[]
-            : snapshot['pendingFriends'].cast<String>() as List<String>,
+            : List<String>.of(snapshot['pendingFriends'].cast<String>() as List<String>, growable: true),
         requestedFriends = snapshot['requestedFriends'] == null
             ? <String>[]
-            : snapshot['requestedFriends'].cast<String>() as List<String>,
+            : List<String>.of(snapshot['requestedFriends'].cast<String>() as List<String>, growable: true),
         events = snapshot['events'] == null
             ? <String, UserEventState>{}
             : Map<String, String>.from(
@@ -77,14 +77,14 @@ class User extends Entity {
             : List<String>.of(snapshot['lounges'].cast<String>() as List<String>, growable: true) ,
         chatIds = snapshot['chatIds'] == null
             ? <String>[]
-            : snapshot['chatIds'].cast<String>() as List<String>,
+            : List<String>.of(snapshot['chatIds'].cast<String>() as List<String>, growable: true),
         super(
             id: id ?? '',
             name: snapshot['name'] as String,
             location: snapshot['location'] as GeoPoint,
             interests: snapshot['interests'] == null
                 ? <String>[]
-                : snapshot['interests'].cast<String>() as List<String>);
+                : List<String>.of(snapshot['interests'].cast<String>() as List<String>, growable: true));
 
   String email;
   String home;

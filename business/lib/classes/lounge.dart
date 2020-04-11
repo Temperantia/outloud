@@ -36,7 +36,7 @@ class Lounge extends Entity {
         notes = snapshot['notes'] as String ?? '',
         memberIds = snapshot['memberIds'] == null
             ? <String>[]
-            : List<String>.of(snapshot['memberIds'].cast<String>() as List<String>),
+            : List<String>.of(snapshot['memberIds'].cast<String>() as List<String>, growable: true),
         members = <User>[],
         super(
             id: id ?? '',
