@@ -32,7 +32,7 @@ packages:
   business:
     dependency: "direct main"
     description:
-      path: "../business"
+      path: "..\\business"
       relative: true
     source: path
     version: "0.0.0"
@@ -387,6 +387,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.8.4"
+  gradient_bottom_navigation_bar:
+    dependency: "direct main"
+    description:
+      name: gradient_bottom_navigation_bar
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.0+4"
   http:
     dependency: transitive
     description:
