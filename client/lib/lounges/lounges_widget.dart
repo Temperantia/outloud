@@ -169,7 +169,7 @@ class _LoungesWidgetState extends State<LoungesWidget>
                 children: <Widget>[MyLoungesScreen(), FindLoungesScreen()])),
         Container(
           padding: const EdgeInsets.only(top: 5.0),
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
               gradient: LinearGradient(colors: <Color>[pinkLight, pink])),
           child: Row(mainAxisAlignment: MainAxisAlignment.center, children: <
               Widget>[
