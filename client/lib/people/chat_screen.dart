@@ -169,13 +169,19 @@ class _ChatScreenState extends State<ChatScreen> {
                     child: GestureDetector(
                         onTap: () {}, child: Icon(Icons.add, color: white))), */
                 Expanded(
-                    child: Padding(
+                    child: Column(
+                  children: <Widget>[
+                    Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 8.0),
                         child: TextField(
+                            keyboardType: TextInputType.multiline,
+                            maxLines: null,
                             controller: _messageController,
                             decoration: InputDecoration.collapsed(
                                 hintText: 'Message pour $namePeer',
-                                hintStyle: const TextStyle(color: white))))),
+                                hintStyle: const TextStyle(color: white))))
+                  ],
+                )),
                 /*   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: GestureDetector(

@@ -428,14 +428,20 @@ class _LoungeChatScreenState extends State<LoungeChatScreen>
                     child: GestureDetector(
                         onTap: () {}, child: Icon(Icons.add, color: white))), */
                 Expanded(
-                    child: Padding(
+                    child: Column(
+                      children: <Widget>[
+                        Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 8.0),
                         child: TextField(
+                          keyboardType: TextInputType.multiline,
+                            maxLines: null,
                             controller: _messageController,
                             decoration: InputDecoration.collapsed(
                                 hintText: FlutterI18n.translate(
                                     context, 'LOUNGE_CHAT.MESSAGE'),
-                                hintStyle: const TextStyle(color: white))))),
+                                hintStyle: const TextStyle(color: white))))
+                      ],
+                    )),
                 /*   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: GestureDetector(
