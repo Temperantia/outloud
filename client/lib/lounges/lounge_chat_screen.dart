@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:async_redux/async_redux.dart';
 import 'package:business/classes/chat_state.dart';
 import 'package:business/classes/message_state.dart';
@@ -48,9 +50,10 @@ class _LoungeChatScreenState extends State<LoungeChatScreen>
 
   void _markAsRead(Map<String, Map<String, ChatState>> loungesChatsStates,
       String userId, void Function(ReduxAction<AppState>) dispatch) {
-    if (loungesChatsStates[userId].isNotEmpty && loungesChatsStates[userId][widget.lounge.id]
-        .messageStates
-        .containsValue(MessageState.Received)) {
+    final bool isReceived = loungesChatsStates[userId][widget.lounge.id]
+        ?.messageStates
+        ?.containsValue(MessageState.Received);
+    if (isReceived != null) {
       dispatch(ChatsLoungeReadAction(widget.lounge.id));
     }
   }
@@ -412,8 +415,8 @@ class _LoungeChatScreenState extends State<LoungeChatScreen>
             orElse: () => null);
       }
 
-      _markAsRead(
-          state.chatsState.loungesChatsStates, state.userState.user.id, dispatch);
+      _markAsRead(state.chatsState.loungesChatsStates, state.userState.user.id,
+          dispatch);
 
       return View(
           title: FlutterI18n.translate(context, 'LOUNGE_CHAT.LOUNGE_CHAT'),
@@ -429,19 +432,19 @@ class _LoungeChatScreenState extends State<LoungeChatScreen>
                         onTap: () {}, child: Icon(Icons.add, color: white))), */
                 Expanded(
                     child: Column(
-                      children: <Widget>[
-                        Padding(
+                  children: <Widget>[
+                    Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 8.0),
                         child: TextField(
-                          keyboardType: TextInputType.multiline,
+                            keyboardType: TextInputType.multiline,
                             maxLines: null,
                             controller: _messageController,
                             decoration: InputDecoration.collapsed(
                                 hintText: FlutterI18n.translate(
                                     context, 'LOUNGE_CHAT.MESSAGE'),
                                 hintStyle: const TextStyle(color: white))))
-                      ],
-                    )),
+                  ],
+                )),
                 /*   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: GestureDetector(
@@ -455,8 +458,10 @@ class _LoungeChatScreenState extends State<LoungeChatScreen>
                           addMessage(_lounge.id, state.loginState.id,
                               _messageController.text, MessageType.Text);
                           _messageController.clear();
-                          _scrollController.jumpTo(_scrollController.position
-                              .maxScrollExtent); // TODO(alexandre): no no no
+                          Timer(
+                              const Duration(milliseconds: 250),
+                              () => _scrollController.jumpTo(
+                                  _scrollController.position.maxScrollExtent));
                         },
                         child: Icon(Icons.send, color: white)))
               ])),

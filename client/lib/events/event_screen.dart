@@ -749,25 +749,24 @@ class _EventScreenState extends State<EventScreen>
     }
 
     return GestureDetector(
-        onVerticalDragCancel: () {
-          if (_feedEventScrollController.offset == 0.0)  {
-         _scrollController
-                .jumpTo(_scrollController.position.minScrollExtent);
+        // onVerticalDragCancel: () {
+        //   if (_feedEventScrollController.offset == 0.0)  {
+        //  _scrollController
+        //         .jumpTo(_scrollController.position.minScrollExtent);
 
-          } else {
-         _scrollController
-                .jumpTo(_scrollController.position.maxScrollExtent);
-          }
-        },
+        //   } else {
+        //  _scrollController
+        //         .jumpTo(_scrollController.position.maxScrollExtent);
+        //   }
+        // },
         child: Container(
-            height: 300,
+            height: 280,
             child: ListView.builder(
                 controller: _feedEventScrollController,
                 reverse: false,
                 itemCount: widget.event.messages.length,
-                itemBuilder: (BuildContext context, int index) => _buildMessage(
-                    widget.event
-                        .messages[index]))));
+                itemBuilder: (BuildContext context, int index) =>
+                    _buildMessage(widget.event.messages[index]))));
   }
 
   Widget _buildMessage(Message message) {
@@ -880,8 +879,11 @@ class _EventScreenState extends State<EventScreen>
                           _sendImage(state.userState.user.id);
                           _scrollController.jumpTo(
                               _scrollController.position.maxScrollExtent);
-                          _feedEventScrollController.jumpTo(
-                              _feedEventScrollController.position.maxScrollExtent);
+                          Timer(
+                              const Duration(milliseconds: 250),
+                              () => _feedEventScrollController.jumpTo(
+                                  _feedEventScrollController
+                                      .position.maxScrollExtent));
                         },
                         child: Icon(Icons.panorama, color: white))),
                 Expanded(
@@ -903,9 +905,11 @@ class _EventScreenState extends State<EventScreen>
                           _messageController.clear();
                           _scrollController.jumpTo(
                               _scrollController.position.maxScrollExtent);
-                          _feedEventScrollController.jumpTo(
-                              _feedEventScrollController
-                                  .position.maxScrollExtent);
+                          Timer(
+                              const Duration(milliseconds: 250),
+                              () => _feedEventScrollController.jumpTo(
+                                  _feedEventScrollController
+                                      .position.maxScrollExtent));
                         },
                         child: Icon(Icons.send, color: white)))
               ])),
