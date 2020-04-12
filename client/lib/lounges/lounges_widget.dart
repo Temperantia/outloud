@@ -177,7 +177,6 @@ class _LoungesWidgetState extends State<LoungesWidget>
                 text:
                     FlutterI18n.translate(context, 'LOUNGES_TAB.CREATE_LOUNGE'),
                 width: 250,
-                icon: Icon(Icons.add),
                 onPressed: () {
                   final List<Event> eventsWithoutLounge =
                       state.userState.events.where((Event _event) {

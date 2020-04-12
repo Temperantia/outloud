@@ -211,7 +211,6 @@ class _PeopleFriendsScreenState extends State<PeopleFriendsScreen>
                       text: FlutterI18n.translate(
                           context, 'PEOPLE_TAB.FIND_MORE'),
                       width: 250,
-                      icon: Icon(Icons.arrow_forward_ios),
                       onPressed: () => dispatch(
                           redux.NavigateAction<AppState>.pushNamed(
                               PeopleSearchScreen.id)))
