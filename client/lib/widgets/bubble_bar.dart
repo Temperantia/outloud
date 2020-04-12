@@ -28,13 +28,8 @@ final BottomNavigationBarItem Function(String, ThemeStyle) _buildItem =
           title: Container(),
         );
 
-final List<BottomNavigationBarItem> Function(BuildContext, int, ThemeStyle)
-    bubbleBar = (BuildContext context, int pings, ThemeStyle themeStyle) =>
-        <BottomNavigationBarItem>[
-          //_buildItem('images/OL-draft1aWhite.png', themeStyle),
-          _buildItem('images/iconEvent.png', themeStyle),
-          _buildItem('images/iconLounge.png', themeStyle),
-          BottomNavigationBarItem(
+final BottomNavigationBarItem Function(String, int, ThemeStyle) _buildItemWithPing = 
+    (String image, int pings, ThemeStyle themeStyle) => BottomNavigationBarItem(
               icon: Container(
                   margin: const EdgeInsets.symmetric(vertical: 10.0),
                   child: pings > 0
@@ -45,8 +40,8 @@ final List<BottomNavigationBarItem> Function(BuildContext, int, ThemeStyle)
                               textAlign: TextAlign.center,
                               style: const TextStyle(
                                   color: white, fontWeight: FontWeight.bold)),
-                          child: _buildIcon('images/iconPeople.png'))
-                      : _buildIcon('images/iconPeople.png')),
+                          child: _buildIcon(image))
+                      : _buildIcon(image)),
               activeIcon: Container(
                   margin: const EdgeInsets.symmetric(vertical: 10.0),
                   child: pings > 0
@@ -57,9 +52,17 @@ final List<BottomNavigationBarItem> Function(BuildContext, int, ThemeStyle)
                               textAlign: TextAlign.center,
                               style: const TextStyle(
                                   color: white, fontWeight: FontWeight.bold)),
-                          child: _buildIcon('images/iconPeople.png',
+                          child: _buildIcon(image,
                               themeStyle: themeStyle))
-                      : _buildIcon('images/iconPeople.png',
+                      : _buildIcon(image,
                           themeStyle: themeStyle)),
-              title: Container()),
+              title: Container());
+
+final List<BottomNavigationBarItem> Function(BuildContext, int, int, ThemeStyle)
+    bubbleBar = (BuildContext context, int pings, int loungePings,ThemeStyle themeStyle) =>
+        <BottomNavigationBarItem>[
+          //_buildItem('images/OL-draft1aWhite.png', themeStyle),
+          _buildItem('images/iconEvent.png', themeStyle),
+          _buildItemWithPing('images/iconLounge.png', loungePings ,themeStyle),
+          _buildItemWithPing('images/iconPeople.png', pings ,themeStyle)
         ];

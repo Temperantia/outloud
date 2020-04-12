@@ -1,5 +1,6 @@
 import 'package:async_redux/async_redux.dart';
 import 'package:business/app_state.dart';
+import 'package:business/classes/chat_state.dart';
 import 'package:business/classes/lounge.dart';
 import 'package:business/classes/user.dart';
 import 'package:business/models/lounges.dart';
@@ -31,6 +32,12 @@ class LoungeCreateMeetupAction extends ReduxAction<AppState> {
         'LoungeChatScreen',
         arguments: loungeCreation,
         predicate: (Route<dynamic> route) => route.isFirst));
+
+    final Map<String, Map<String, ChatState>> loungesChatsStates =
+        state.chatsState.loungesChatsStates;
+
+    loungesChatsStates[state.userState.user.id]
+        .putIfAbsent(loungeCreation.id, () => ChatState());
 
     return state.copy(
         loungesState: state.loungesState.copy(loungeCreation: loungeCreation));

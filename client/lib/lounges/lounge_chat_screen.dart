@@ -1,6 +1,9 @@
 import 'package:async_redux/async_redux.dart';
+import 'package:business/classes/chat_state.dart';
+import 'package:business/classes/message_state.dart';
 import 'package:business/classes/user.dart';
 import 'package:business/lounges/actions/lounge_leave_action.dart';
+import 'package:business/chats/actions/chats_lounge_read_action.dart';
 import 'package:flutter/widgets.dart';
 import 'package:business/app_state.dart';
 import 'package:async_redux/async_redux.dart' as redux;
@@ -41,6 +44,15 @@ class _LoungeChatScreenState extends State<LoungeChatScreen>
     _scrollController.dispose();
     _messageController.dispose();
     super.dispose();
+  }
+
+  void _markAsRead(Map<String, Map<String, ChatState>> loungesChatsStates,
+      String userId, void Function(ReduxAction<AppState>) dispatch) {
+    if (loungesChatsStates[userId].isNotEmpty && loungesChatsStates[userId][widget.lounge.id]
+        .messageStates
+        .containsValue(MessageState.Received)) {
+      dispatch(ChatsLoungeReadAction(widget.lounge.id));
+    }
   }
 
   void _showConfirmPopup(
@@ -399,6 +411,9 @@ class _LoungeChatScreenState extends State<LoungeChatScreen>
             (Chat chat) => chat.id == _lounge.id,
             orElse: () => null);
       }
+
+      _markAsRead(
+          state.chatsState.loungesChatsStates, state.userState.user.id, dispatch);
 
       return View(
           title: FlutterI18n.translate(context, 'LOUNGE_CHAT.LOUNGE_CHAT'),

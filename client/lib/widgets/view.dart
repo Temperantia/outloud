@@ -150,9 +150,14 @@ class _ViewState extends State<View> {
   Widget _buildNavBar(
       AppState state, void Function(ReduxAction<dynamic>) dispatch) {
     int newMessageCount = 0;
+    int newMessageLoungeCount = 0;
     for (final ChatState chatState
         in state.chatsState.usersChatsStates[state.userState.user.id].values) {
       newMessageCount += chatState.countNewMessages();
+    }
+    for (final ChatState chatState
+        in state.chatsState.loungesChatsStates[state.userState.user.id].values) {
+      newMessageLoungeCount += chatState.countNewMessages();
     }
     return Theme(
         data: Theme.of(context).copyWith(canvasColor: Colors.transparent),
@@ -161,7 +166,7 @@ class _ViewState extends State<View> {
             backgroundColorEnd: pink,
             type: BottomNavigationBarType.fixed,
             currentIndex: state.homePageIndex,
-            items: bubbleBar(context, newMessageCount, state.theme),
+            items: bubbleBar(context, newMessageCount, newMessageLoungeCount, state.theme),
             onTap: (int index) async {
               if (index == state.homePageIndex) {
                 return;
