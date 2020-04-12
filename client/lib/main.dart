@@ -20,8 +20,9 @@ GlobalKey<NavigatorState> navigatorKey;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  SystemChrome.setSystemUIOverlayStyle(
-      SystemUiOverlayStyle(statusBarColor: orange));
+  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent,
+      statusBarIconBrightness: Brightness.light));
 
   final AppPersistor persistor = AppPersistor();
   AppState initialState = await persistor.readState();

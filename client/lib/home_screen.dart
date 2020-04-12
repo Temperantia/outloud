@@ -8,6 +8,7 @@ import 'package:outloud/events/events_widget.dart';
 //import 'package:outloud/home_widget.dart';
 import 'package:outloud/lounges/lounges_widget.dart';
 import 'package:outloud/people/people_widget.dart';
+import 'package:outloud/theme.dart';
 import 'package:outloud/widgets/view.dart';
 import 'package:provider_for_redux/provider_for_redux.dart';
 
@@ -25,6 +26,7 @@ class _HomeScreenState extends State<HomeScreen>
   void initState() {
     super.initState();
     _tabController = TabController(vsync: this, length: 3 /*4*/);
+
     _requestLocationPermission();
   }
 
@@ -70,9 +72,43 @@ class _HomeScreenState extends State<HomeScreen>
   Widget _buildBody() {
     return TabBarView(controller: _tabController, children: <Widget>[
       //HomeWidget(),
-      EventsWidget(),
-      LoungesWidget(),
-      PeopleWidget(),
+      View(
+          title: TabBar(
+              labelStyle: const TextStyle(fontSize: 14.0),
+              labelPadding: const EdgeInsets.all(0.0),
+              labelColor: white,
+              indicator: const BoxDecoration(),
+              tabs: <Widget>[
+                Tab(text: FlutterI18n.translate(context, 'EVENTS.MY_EVENTS')),
+                Tab(text: FlutterI18n.translate(context, 'EVENTS.FIND_EVENTS'))
+              ]),
+          child: EventsWidget()),
+      View(
+          title: TabBar(
+              labelStyle: const TextStyle(fontSize: 14.0),
+              labelPadding: const EdgeInsets.all(0.0),
+              labelColor: white,
+              indicator: const BoxDecoration(),
+              tabs: <Widget>[
+                Tab(
+                    text: FlutterI18n.translate(
+                        context, 'LOUNGES_TAB.MY_LOUNGES')),
+                Tab(
+                    text: FlutterI18n.translate(
+                        context, 'LOUNGES_TAB.FIND_LOUNGES')),
+              ]),
+          child: LoungesWidget()),
+      View(
+          title: TabBar(
+              labelStyle: const TextStyle(fontSize: 14.0),
+              labelPadding: const EdgeInsets.all(0.0),
+              labelColor: white,
+              indicator: const BoxDecoration(),
+              tabs: <Widget>[
+                Tab(text: FlutterI18n.translate(context, 'PEOPLE_TAB.CHATS')),
+                Tab(text: FlutterI18n.translate(context, 'PEOPLE_TAB.FRIENDS')),
+              ]),
+          child: PeopleWidget()),
     ]);
   }
 
@@ -97,7 +133,7 @@ class _HomeScreenState extends State<HomeScreen>
           }
           _tabController.animateTo(state.homePageIndex);
 
-          return View(child: _buildBody(), isRoot: true);
+          return _buildBody();
         });
   }
 }
