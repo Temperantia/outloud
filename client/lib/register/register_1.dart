@@ -45,7 +45,7 @@ class _Register1ScreenState extends State<Register1Screen> {
                       bottomRight: Radius.circular(30.0))),
             ),
             if (user == null)
-              const CircularProgressIndicator()
+              const Center(child: CircularProgressIndicator())
             else
               Container(
                   constraints: const BoxConstraints.expand(),

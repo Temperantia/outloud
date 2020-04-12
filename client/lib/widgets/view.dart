@@ -57,7 +57,7 @@ class _ViewState extends State<View> {
             Expanded(child: widget.child),
             Container(
                 padding: const EdgeInsets.only(top: 5.0),
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                     gradient: LinearGradient(colors: <Color>[pinkLight, pink])),
                 child: widget.buttons)
           ]);
@@ -252,7 +252,7 @@ class _ViewState extends State<View> {
                             decoration: const BoxDecoration(
                                 gradient: LinearGradient(colors: <Color>[pinkLight, pink]))),
                     body: SafeArea(child: _buildBody(state, dispatch))),
-                if (widget.showAppBar && _showUserSettings)
+                if (_showUserSettings)
                   SafeArea(
                       child:
                           Material(child: _buildUserSettings(user, dispatch)))
