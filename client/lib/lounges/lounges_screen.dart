@@ -57,10 +57,10 @@ class _LoungesScreenState extends State<LoungesScreen>
     resolveOwner(lounge.id, lounge.owner);
     final User owner = _owners[lounge.id];
     if (owner == null) {
-      return Container();
+      return Container(width: 0.0, height: 0.0);
     }
     if (owner.id == state.userState.user.id) {
-      return Container();
+      return Container(width: 0.0, height: 0.0);
     }
     final int availableSlots = lounge.memberLimit - lounge.memberIds.length;
     final String s = availableSlots <= 1 ? '' : 's';

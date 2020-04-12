@@ -22,7 +22,7 @@ class _PeopleChatScreenState extends State<PeopleChatScreen>
   Widget _buildChat(Chat chat, int newMessageCount, ThemeStyle theme,
       void Function(redux.ReduxAction<AppState>) dispatch) {
     if (chat.entity == null) {
-      return Container();
+      return Container(width: 0.0, height: 0.0);
     }
 
     final Message lastMessage = chat.messages.isEmpty ? null : chat.messages[0];
@@ -59,8 +59,7 @@ class _PeopleChatScreenState extends State<PeopleChatScreen>
                                     Text(lastMessage.getTimeAgo(),
                                         style: textStyleListItemSubtitle),
                                   if (lastMessage != null)
-                                    Wrap(
-                                      children: <Widget>[
+                                    Wrap(children: <Widget>[
                                       Text(lastMessage.content,
                                           maxLines: 1,
                                           overflow: TextOverflow.ellipsis,

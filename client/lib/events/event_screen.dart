@@ -745,17 +745,16 @@ class _EventScreenState extends State<EventScreen>
 
   Widget _buildLiveFeed() {
     if (widget.event.chatMembers == null) {
-      return Container();
+      return Container(width: 0.0, height: 0.0);
     }
 
     return GestureDetector(
         onVerticalDragCancel: () {
-          if (_feedEventScrollController.offset == 0.0)  {
-         _scrollController
+          if (_feedEventScrollController.offset == 0.0) {
+            _scrollController
                 .jumpTo(_scrollController.position.minScrollExtent);
-
           } else {
-         _scrollController
+            _scrollController
                 .jumpTo(_scrollController.position.maxScrollExtent);
           }
         },
@@ -765,9 +764,8 @@ class _EventScreenState extends State<EventScreen>
                 controller: _feedEventScrollController,
                 reverse: false,
                 itemCount: widget.event.messages.length,
-                itemBuilder: (BuildContext context, int index) => _buildMessage(
-                    widget.event
-                        .messages[index]))));
+                itemBuilder: (BuildContext context, int index) =>
+                    _buildMessage(widget.event.messages[index]))));
   }
 
   Widget _buildMessage(Message message) {
@@ -777,7 +775,7 @@ class _EventScreenState extends State<EventScreen>
     final String date = DateFormat('yyyy-MM-dd \'at\' kk:mm')
         .format(DateTime.fromMillisecondsSinceEpoch(message.timestamp));
     if (user == null) {
-      return Container();
+      return Container(width: 0.0, height: 0.0);
     }
     return message.messageType == MessageType.Text
         ? Padding(
@@ -881,7 +879,8 @@ class _EventScreenState extends State<EventScreen>
                           _scrollController.jumpTo(
                               _scrollController.position.maxScrollExtent);
                           _feedEventScrollController.jumpTo(
-                              _feedEventScrollController.position.maxScrollExtent);
+                              _feedEventScrollController
+                                  .position.maxScrollExtent);
                         },
                         child: Icon(Icons.panorama, color: white))),
                 Expanded(

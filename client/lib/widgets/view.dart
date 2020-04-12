@@ -220,7 +220,7 @@ class _ViewState extends State<View> {
                               else
                                 widget.title is TabBar
                                     ? widget.title as TabBar
-                                    : Container(),
+                                    : Container(width: 0.0, height: 0.0),
                               if (Navigator.canPop(context))
                                 Align(
                                     alignment: Alignment.centerLeft,

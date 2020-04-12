@@ -8,7 +8,7 @@ class LoungeLimitPicker extends StatefulWidget {
 class _LoungeLimitPickerState extends State<LoungeLimitPicker> {
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Container(width: 0.0, height: 0.0);
     // TODO(me): later
   }
 }

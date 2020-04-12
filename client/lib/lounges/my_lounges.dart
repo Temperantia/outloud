@@ -146,7 +146,7 @@ class _MyLoungesScreenState extends State<MyLoungesScreen>
   Widget _buildLounge(AppState state, int newMessageCount, Lounge lounge,
       void Function(redux.ReduxAction<AppState>) dispatch, ThemeStyle theme) {
     if (lounge.event == null) {
-      return Container();
+      return Container(width: 0.0, height: 0.0);
     }
     return Container(
         margin: const EdgeInsets.symmetric(vertical: 10.0),

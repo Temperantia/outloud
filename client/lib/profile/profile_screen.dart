@@ -240,7 +240,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     final String display =
         content.where((String element) => element != '').toList().join(' • ');
     return !_isEdition && display == ''
-        ? Container()
+        ? Container(width: 0.0, height: 0.0)
         : Row(children: <Widget>[
             Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -304,7 +304,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 isExpanded: true,
                 value: controller[0] as String,
                 icon: const Icon(Icons.arrow_drop_down, color: orange),
-                underline: Container(),
+                underline: Container(width: 0.0, height: 0.0),
                 style: const TextStyle(color: orange),
                 onChanged: (String newValue) =>
                     setState(() => controller[0] = newValue),

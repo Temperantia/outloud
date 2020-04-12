@@ -57,7 +57,7 @@ class _MyEventsScreen extends State<MyEventsScreen>
         orElse: () => null);
 
     if (event == null) {
-      return Container();
+      return Container(width: 0.0, height: 0.0);
     }
     return Container(
         padding: const EdgeInsets.all(10.0),
@@ -146,27 +146,28 @@ class _MyEventsScreen extends State<MyEventsScreen>
       ThemeStyle themeStyle,
       void Function(redux.ReduxAction<AppState>) dispatch) {
     return userEvents.isEmpty
-        ? Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: <
-            Widget>[
-            Container(
-                padding: const EdgeInsets.symmetric(horizontal: 30.0),
-                child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Container(
-                          child: Text(
-                              FlutterI18n.translate(
-                                  context, 'MY_EVENTS.MY_EVENTS_EMPTY_TITLE'),
-                              style: const TextStyle(
-                                  fontSize: 20.0,
-                                  fontWeight: FontWeight.bold))),
-                      Text(
-                          FlutterI18n.translate(
-                              context, 'MY_EVENTS.MY_EVENTS_EMPTY_DESCRIPTION'),
-                          style: const TextStyle(color: grey))
-                    ])),
-            Image.asset('images/catsIllus4.png')
-          ])
+        ? Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
+                Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Container(
+                              child: Text(
+                                  FlutterI18n.translate(context,
+                                      'MY_EVENTS.MY_EVENTS_EMPTY_TITLE'),
+                                  style: const TextStyle(
+                                      fontSize: 20.0,
+                                      fontWeight: FontWeight.bold))),
+                          Text(
+                              FlutterI18n.translate(context,
+                                  'MY_EVENTS.MY_EVENTS_EMPTY_DESCRIPTION'),
+                              style: const TextStyle(color: grey))
+                        ])),
+                Image.asset('images/catsIllus4.png')
+              ])
         : Column(children: <Widget>[
             Expanded(
                 flex: 8,

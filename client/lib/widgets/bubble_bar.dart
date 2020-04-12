@@ -25,44 +25,42 @@ final BottomNavigationBarItem Function(String, ThemeStyle) _buildItem =
           activeIcon: Container(
               margin: const EdgeInsets.symmetric(vertical: 10.0),
               child: _buildIcon(image, themeStyle: themeStyle)),
-          title: Container(),
+          title: Container(width: 0.0, height: 0.0),
         );
 
-final BottomNavigationBarItem Function(String, int, ThemeStyle) _buildItemWithPing = 
+final BottomNavigationBarItem Function(String, int, ThemeStyle) _buildItemWithPing =
     (String image, int pings, ThemeStyle themeStyle) => BottomNavigationBarItem(
-              icon: Container(
-                  margin: const EdgeInsets.symmetric(vertical: 10.0),
-                  child: pings > 0
-                      ? Badge(
-                          position: BadgePosition.bottomLeft(),
-                          badgeColor: blue,
-                          badgeContent: Text(pings.toString(),
-                              textAlign: TextAlign.center,
-                              style: const TextStyle(
-                                  color: white, fontWeight: FontWeight.bold)),
-                          child: _buildIcon(image))
-                      : _buildIcon(image)),
-              activeIcon: Container(
-                  margin: const EdgeInsets.symmetric(vertical: 10.0),
-                  child: pings > 0
-                      ? Badge(
-                          position: BadgePosition.bottomLeft(),
-                          badgeColor: blue,
-                          badgeContent: Text(pings.toString(),
-                              textAlign: TextAlign.center,
-                              style: const TextStyle(
-                                  color: white, fontWeight: FontWeight.bold)),
-                          child: _buildIcon(image,
-                              themeStyle: themeStyle))
-                      : _buildIcon(image,
-                          themeStyle: themeStyle)),
-              title: Container());
+        icon: Container(
+            margin: const EdgeInsets.symmetric(vertical: 10.0),
+            child: pings > 0
+                ? Badge(
+                    position: BadgePosition.bottomLeft(),
+                    badgeColor: blue,
+                    badgeContent: Text(pings.toString(),
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                            color: white, fontWeight: FontWeight.bold)),
+                    child: _buildIcon(image))
+                : _buildIcon(image)),
+        activeIcon: Container(
+            margin: const EdgeInsets.symmetric(vertical: 10.0),
+            child: pings > 0
+                ? Badge(
+                    position: BadgePosition.bottomLeft(),
+                    badgeColor: blue,
+                    badgeContent: Text(pings.toString(),
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(color: white, fontWeight: FontWeight.bold)),
+                    child: _buildIcon(image, themeStyle: themeStyle))
+                : _buildIcon(image, themeStyle: themeStyle)),
+        title: Container(width: 0.0, height: 0.0));
 
 final List<BottomNavigationBarItem> Function(BuildContext, int, int, ThemeStyle)
-    bubbleBar = (BuildContext context, int pings, int loungePings,ThemeStyle themeStyle) =>
+    bubbleBar =
+    (BuildContext context, int pings, int loungePings, ThemeStyle themeStyle) =>
         <BottomNavigationBarItem>[
           //_buildItem('images/OL-draft1aWhite.png', themeStyle),
           _buildItem('images/iconEvent.png', themeStyle),
-          _buildItemWithPing('images/iconLounge.png', loungePings ,themeStyle),
-          _buildItemWithPing('images/iconPeople.png', pings ,themeStyle)
+          _buildItemWithPing('images/iconLounge.png', loungePings, themeStyle),
+          _buildItemWithPing('images/iconPeople.png', pings, themeStyle)
         ];

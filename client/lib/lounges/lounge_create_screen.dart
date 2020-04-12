@@ -24,7 +24,7 @@ class _LoungeCreateScreenState extends State<LoungeCreateScreen> {
 
   Widget _buildUserEvent(Event event, ThemeStyle themeStyle) {
     if (event == null) {
-      return Container();
+      return Container(width: 0.0, height: 0.0);
     }
     return GestureDetector(
         onTap: () => setState(() => _selected = event),

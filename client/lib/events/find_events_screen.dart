@@ -210,7 +210,7 @@ class _FindEventsScreen extends State<FindEventsScreen>
               padding: const EdgeInsets.symmetric(horizontal: 5.0),
               decoration: BoxDecoration(border: Border.all(color: black)),
               child: DropdownButton<String>(
-                  underline: Container(),
+                  underline: Container(width: 0.0, height: 0.0),
                   value: _distanceValue,
                   items: <String>[
                     FlutterI18n.translate(context, 'FIND_EVENTS.ANY_DISTANCE'),
@@ -231,7 +231,7 @@ class _FindEventsScreen extends State<FindEventsScreen>
               padding: const EdgeInsets.symmetric(horizontal: 5.0),
               decoration: BoxDecoration(border: Border.all(color: black)),
               child: DropdownButton<String>(
-                  underline: Container(),
+                  underline: Container(width: 0.0, height: 0.0),
                   value: _timeValue,
                   items: <String>[
                     FlutterI18n.translate(context, 'FIND_EVENTS.ANY_TIME'),

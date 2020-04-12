@@ -48,7 +48,7 @@ class Button extends StatelessWidget {
             color: backgroundColor.withOpacity(backgroundOpacity),
             textColor: colorText,
             onPressed: onPressed == null ? () {} : () => onPressed(),
-            icon: icon ?? Container(),
+            icon: icon ?? Container(width: 0.0, height: 0.0),
             label: Text(text,
                 style: TextStyle(
                     color: colorText,
