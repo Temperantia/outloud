@@ -12,7 +12,6 @@ import 'package:outloud/widgets/cached_image.dart';
 import 'package:outloud/widgets/loading.dart';
 import 'package:outloud/widgets/view.dart';
 import 'package:provider_for_redux/provider_for_redux.dart';
-import 'package:business/people/people_state.dart';
 
 import 'package:outloud/theme.dart';
 

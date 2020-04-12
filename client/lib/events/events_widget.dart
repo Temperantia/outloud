@@ -1,10 +1,8 @@
 import 'package:async_redux/async_redux.dart' as redux;
 import 'package:business/app_state.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:outloud/events/find_events_screen.dart';
 import 'package:outloud/events/my_events_screen.dart';
-import 'package:outloud/theme.dart';
 import 'package:outloud/widgets/loading.dart';
 import 'package:provider_for_redux/provider_for_redux.dart';
 
@@ -19,17 +17,14 @@ class _EventsWidgetState extends State<EventsWidget>
         SingleTickerProviderStateMixin {
   @override
   bool get wantKeepAlive => true;
-  TabController _tabController;
 
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(vsync: this, length: 2);
   }
 
   @override
   void dispose() {
-    _tabController.dispose();
     super.dispose();
   }
 
@@ -48,33 +43,15 @@ class _EventsWidgetState extends State<EventsWidget>
         return Loading();
       }
 
-      _tabController.animateTo(state.eventsTabIndex);
+      //_tabController.animateTo(state.eventsTabIndex);
 
-      return DefaultTabController(
-          length: 2,
-          child: Column(children: <Widget>[
-            Expanded(
-                child: TabBar(
-                    labelColor: white,
-                    indicatorColor: Colors.transparent,
-                    controller: _tabController,
-                    tabs: <Widget>[
-                  Tab(text: FlutterI18n.translate(context, 'EVENTS.MY_EVENTS')),
-                  Tab(
-                      text:
-                          FlutterI18n.translate(context, 'EVENTS.FIND_EVENTS'))
-                ])),
-            Expanded(
-                flex: 8,
-                child: Container(
-                    child: TabBarView(
-                      controller: _tabController,
-                        physics: const NeverScrollableScrollPhysics(),
-                        children: <Widget>[
-                      MyEventsScreen(),
-                      FindEventsScreen()
-                    ]))),
-          ]));
+      return Column(children: <Widget>[
+        Expanded(
+            flex: 8,
+            child: TabBarView(
+                physics: const NeverScrollableScrollPhysics(),
+                children: <Widget>[MyEventsScreen(), FindEventsScreen()])),
+      ]);
     });
   }
 }

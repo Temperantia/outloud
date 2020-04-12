@@ -162,70 +162,49 @@ class _LoungesWidgetState extends State<LoungesWidget>
         return Loading();
       }
 
-      return DefaultTabController(
-          length: 2,
-          child: Column(children: <Widget>[
-            Expanded(
-                child: TabBar(
-                    labelColor: white,
-                    indicatorColor: Colors.transparent,
-                    tabs: <Widget>[
-                  Tab(
-                      text: FlutterI18n.translate(
-                          context, 'LOUNGES_TAB.MY_LOUNGES')),
-                  Tab(
-                      text: FlutterI18n.translate(
-                          context, 'LOUNGES_TAB.FIND_LOUNGES')),
-                ])),
-            Expanded(
-                flex: 8,
-                child: TabBarView(
-                    physics: const NeverScrollableScrollPhysics(),
-                    children: <Widget>[
-                      MyLoungesScreen(),
-                      FindLoungesScreen()
-                    ])),
-            Expanded(
-                child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                  Button(
-                      text: FlutterI18n.translate(
-                          context, 'LOUNGES_TAB.CREATE_LOUNGE'),
-                      width: 250,
-                      icon: Icon(Icons.add),
-                      onPressed: () {
-                        final List<Event> eventsWithoutLounge =
-                            state.userState.events.where((Event _event) {
-                          final List<Lounge> _lounges =
-                              state.userState.eventLounges[_event.id];
-                          if (_lounges != null) {
-                            for (final Lounge _lounge in _lounges) {
-                              for (final Lounge _userLounge
-                                  in state.userState.lounges) {
-                                if (_userLounge.id == _lounge.id) {
-                                  return false;
-                                }
-                              }
-                            }
-                          }
-                          return true;
-                        }).toList();
-                        if (eventsWithoutLounge.isEmpty &&
-                            state.userState.events.isNotEmpty) {
-                          _showNoEventPopup(
-                              dispatch, store.dispatchFuture, state,
-                              hasAlreadyEvents: true);
-                        } else if (state.userState.events.isNotEmpty)
-                          dispatch(redux.NavigateAction<AppState>.pushNamed(
-                              LoungeCreateScreen.id));
-                        else {
-                          _showNoEventPopup(
-                              dispatch, store.dispatchFuture, state);
+      return Column(children: <Widget>[
+        Expanded(
+            flex: 8,
+            child: TabBarView(
+                physics: const NeverScrollableScrollPhysics(),
+                children: <Widget>[MyLoungesScreen(), FindLoungesScreen()])),
+        Expanded(
+            child: Row(mainAxisAlignment: MainAxisAlignment.center, children: <
+                Widget>[
+          Button(
+              text: FlutterI18n.translate(context, 'LOUNGES_TAB.CREATE_LOUNGE'),
+              width: 250,
+              icon: Icon(Icons.add),
+              onPressed: () {
+                final List<Event> eventsWithoutLounge =
+                    state.userState.events.where((Event _event) {
+                  final List<Lounge> _lounges =
+                      state.userState.eventLounges[_event.id];
+                  if (_lounges != null) {
+                    for (final Lounge _lounge in _lounges) {
+                      for (final Lounge _userLounge
+                          in state.userState.lounges) {
+                        if (_userLounge.id == _lounge.id) {
+                          return false;
                         }
-                      }),
-                ]))
-          ]));
+                      }
+                    }
+                  }
+                  return true;
+                }).toList();
+                if (eventsWithoutLounge.isEmpty &&
+                    state.userState.events.isNotEmpty) {
+                  _showNoEventPopup(dispatch, store.dispatchFuture, state,
+                      hasAlreadyEvents: true);
+                } else if (state.userState.events.isNotEmpty)
+                  dispatch(redux.NavigateAction<AppState>.pushNamed(
+                      LoungeCreateScreen.id));
+                else {
+                  _showNoEventPopup(dispatch, store.dispatchFuture, state);
+                }
+              }),
+        ]))
+      ]);
     });
   }
 }

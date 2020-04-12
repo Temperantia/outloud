@@ -70,14 +70,11 @@ class _ChatScreenState extends State<ChatScreen> {
 
   Widget _buildChat(User user, String userId, String picture) {
     final List<Message> messages = widget.chat.messages;
-    return Container(
-      padding: const EdgeInsets.all(20.0),
-      child: ListView.builder(
-          itemBuilder: (BuildContext context, int index) => _buildItem(
-              messages[messages.length - index - 1], user, userId, picture),
-          itemCount: messages.length,
-          controller: _scrollController),
-    );
+    return ListView.builder(
+        itemBuilder: (BuildContext context, int index) => _buildItem(
+            messages[messages.length - index - 1], user, userId, picture),
+        itemCount: messages.length,
+        controller: _scrollController);
   }
 
   Widget _buildItem(Message message, User user, String userId, String picture) {

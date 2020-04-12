@@ -49,9 +49,4 @@ const TextStyle textStyleButton =
 const TextStyle textStyleButtonAlt =
     TextStyle(color: grey, fontWeight: FontWeight.bold);
 
-ThemeData theme(ThemeStyle themeStyle) => ThemeData(
-    accentColor: white,
-    fontFamily: 'Hiragino',
-    primaryColor: primary(themeStyle),
-    sliderTheme:
-        const SliderThemeData(showValueIndicator: ShowValueIndicator.always));
+ThemeData theme(ThemeStyle themeStyle) => ThemeData(fontFamily: 'Hiragino');

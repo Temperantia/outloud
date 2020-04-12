@@ -3,10 +3,8 @@ import 'package:business/app_state.dart';
 import 'package:business/classes/chat.dart';
 import 'package:business/classes/user.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:outloud/people/people_chat_screen.dart';
 import 'package:outloud/people/people_friends_screen.dart';
-import 'package:outloud/theme.dart';
 import 'package:outloud/widgets/loading.dart';
 import 'package:provider_for_redux/provider_for_redux.dart';
 
@@ -34,28 +32,9 @@ class _PeopleWidgetState extends State<PeopleWidget>
       if (user == null || friends == null || chats == null) {
         return Loading();
       }
-      return DefaultTabController(
-          length: 2,
-          child: Column(children: <Widget>[
-            Expanded(
-                child: TabBar(
-                    labelColor: white,
-                    indicatorColor: Colors.transparent,
-                    tabs: <Widget>[
-                  Tab(text: FlutterI18n.translate(context, 'PEOPLE_TAB.CHATS')),
-                  Tab(
-                      text:
-                          FlutterI18n.translate(context, 'PEOPLE_TAB.FRIENDS')),
-                ])),
-            Expanded(
-                flex: 8,
-                child: TabBarView(
-                    physics: const NeverScrollableScrollPhysics(),
-                    children: <Widget>[
-                      PeopleChatScreen(),
-                      PeopleFriendsScreen()
-                    ])),
-          ]));
+      return TabBarView(
+          physics: const NeverScrollableScrollPhysics(),
+          children: <Widget>[PeopleChatScreen(), PeopleFriendsScreen()]);
     });
   }
 }

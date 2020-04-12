@@ -156,7 +156,7 @@ class _LoungeChatScreenState extends State<LoungeChatScreen>
       return Container();
     }
     return Container(
-        padding: const EdgeInsets.all(15.0),
+        padding: const EdgeInsets.symmetric(horizontal: 15.0),
         child: Row(children: <Widget>[
           Stack(alignment: Alignment.center, children: <Widget>[
             Container(
@@ -171,7 +171,7 @@ class _LoungeChatScreenState extends State<LoungeChatScreen>
                         topRight: Radius.circular(5.0)),
                     imageType: ImageType.Event))
           ]),
-          Expanded(
+          /*  Expanded(
               flex: 11,
               child: Container(
                   padding: const EdgeInsets.only(left: 20),
@@ -219,7 +219,7 @@ class _LoungeChatScreenState extends State<LoungeChatScreen>
                                     fontWeight: FontWeight.w800))
                           ]))
                     ])
-                  ]))),
+                  ]))), */
           if (state.userState.user.id == owner.id)
             GestureDetector(
                 onTap: () async {
