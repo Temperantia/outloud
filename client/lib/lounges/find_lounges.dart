@@ -53,21 +53,19 @@ class _FindLoungesScreenState extends State<FindLoungesScreen>
                         ])),
                 Image.asset('images/catsIllus2.png')
               ])
-        : Container(
-            padding: const EdgeInsets.symmetric(horizontal: 50.0),
-            child: ListView.builder(
-                itemCount: userEvents.length,
-                itemBuilder: (BuildContext context, int index) => Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          _buildEvent(
-                              userLounges,
-                              userEvents[index],
-                              userEventStates,
-                              userEventLounges,
-                              dispatch,
-                              themeStyle),
-                        ])));
+        : ListView.builder(
+            itemCount: userEvents.length,
+            itemBuilder: (BuildContext context, int index) => Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      _buildEvent(
+                          userLounges,
+                          userEvents[index],
+                          userEventStates,
+                          userEventLounges,
+                          dispatch,
+                          themeStyle),
+                    ]));
   }
 
   Widget _buildEvent(
@@ -91,7 +89,8 @@ class _FindLoungesScreenState extends State<FindLoungesScreen>
             LoungesScreen.id,
             arguments: event)),
         child: Container(
-            margin: const EdgeInsets.symmetric(vertical: 10.0),
+            decoration: BoxDecoration(color: Colors.transparent),
+            padding: const EdgeInsets.all(10.0),
             child: Row(children: <Widget>[
               Flexible(
                   child: Stack(alignment: Alignment.center, children: <Widget>[

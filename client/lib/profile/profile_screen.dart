@@ -561,7 +561,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             if (_isEdition)
               Container(
                   padding: const EdgeInsets.only(top: 5.0),
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                       gradient:
                           LinearGradient(colors: <Color>[pinkLight, pink])),
                   child: Row(
