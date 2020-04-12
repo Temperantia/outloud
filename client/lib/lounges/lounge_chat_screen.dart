@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:async_redux/async_redux.dart';
 import 'package:business/classes/chat_state.dart';
 import 'package:business/classes/message_state.dart';
@@ -48,10 +50,10 @@ class _LoungeChatScreenState extends State<LoungeChatScreen>
 
   void _markAsRead(Map<String, Map<String, ChatState>> loungesChatsStates,
       String userId, void Function(ReduxAction<AppState>) dispatch) {
-    if (loungesChatsStates[userId].isNotEmpty &&
-        loungesChatsStates[userId][widget.lounge.id]
-            .messageStates
-            .containsValue(MessageState.Received)) {
+    final bool isReceived = loungesChatsStates[userId][widget.lounge.id]
+        ?.messageStates
+        ?.containsValue(MessageState.Received);
+    if (isReceived != null) {
       dispatch(ChatsLoungeReadAction(widget.lounge.id));
     }
   }
@@ -456,8 +458,10 @@ class _LoungeChatScreenState extends State<LoungeChatScreen>
                           addMessage(_lounge.id, state.loginState.id,
                               _messageController.text, MessageType.Text);
                           _messageController.clear();
-                          _scrollController.jumpTo(_scrollController.position
-                              .maxScrollExtent); // TODO(alexandre): no no no
+                          Timer(
+                              const Duration(milliseconds: 250),
+                              () => _scrollController.jumpTo(
+                                  _scrollController.position.maxScrollExtent));
                         },
                         child: Icon(Icons.send, color: white)))
               ])),

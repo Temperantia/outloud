@@ -4,6 +4,7 @@ import 'package:business/classes/event.dart';
 import 'package:business/classes/user.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
+import 'package:outloud/profile/profile_screen.dart';
 import 'package:outloud/theme.dart';
 import 'package:outloud/widgets/cached_image.dart';
 import 'package:outloud/widgets/view.dart';
@@ -53,7 +54,7 @@ class _EventAttendingScreenState extends State<EventAttendingScreen> {
         ]));
   }
 
-  Widget _buildList() {
+  Widget _buildList(void Function(redux.ReduxAction<AppState>) dispatch) {
     final int memberNumber = widget.event.memberIds.length;
     final List<User> members = widget.event.members;
     return Expanded(
@@ -72,19 +73,24 @@ class _EventAttendingScreenState extends State<EventAttendingScreen> {
                       gridDelegate:
                           const SliverGridDelegateWithFixedCrossAxisCount(
                               crossAxisCount: 2,
-                              crossAxisSpacing: 20.0,
+                              mainAxisSpacing: 5,
+                              crossAxisSpacing: 10.0,
                               childAspectRatio: 3.0),
                       itemCount: members.length,
                       itemBuilder: (BuildContext context, int index) =>
-                          _buildMember(members[index])))
+                          _buildMember(members[index], dispatch)))
             ])));
   }
 
-  Widget _buildMember(User member) {
+  Widget _buildMember(
+      User member, void Function(redux.ReduxAction<AppState>) dispatch) {
     final String pic = member.pics.isEmpty ? null : member.pics[0];
     return GestureDetector(
+        onTap: () => dispatch(redux.NavigateAction<AppState>.pushNamed(
+            ProfileScreen.id,
+            arguments: <String, dynamic>{'user': member})),
         child: Container(
-            padding: const EdgeInsets.all(5.0),
+            padding: const EdgeInsets.all(10.0),
             decoration: BoxDecoration(
                 color: orangeLight, borderRadius: BorderRadius.circular(5.0)),
             child: Row(children: <Widget>[
@@ -96,13 +102,12 @@ class _EventAttendingScreenState extends State<EventAttendingScreen> {
               Expanded(
                   child: Container(
                       padding: const EdgeInsets.symmetric(horizontal: 5.0),
-                      child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Text(member.name,
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.bold))
-                          ])))
+                      child: Wrap(children: <Widget>[
+                        Text(member.name,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(fontWeight: FontWeight.bold))
+                      ])))
             ])));
   }
 
@@ -117,7 +122,7 @@ class _EventAttendingScreenState extends State<EventAttendingScreen> {
           child: Column(children: <Widget>[
         _buildHeader(),
         const Divider(),
-        _buildList()
+        _buildList(dispatch)
       ]));
     });
   }
