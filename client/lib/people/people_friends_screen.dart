@@ -195,18 +195,22 @@ class _PeopleFriendsScreenState extends State<PeopleFriendsScreen>
             flex: state.userState.pendingFriends.length > 1 ? 6 : 7,
             child: _buildFriends(state.userState.friends,
                 state.userState.pendingFriends, state.theme, dispatch)),
-        Expanded(
+        Container(
+            padding: const EdgeInsets.only(top: 5.0),
+            decoration: BoxDecoration(
+                gradient: LinearGradient(colors: <Color>[pinkLight, pink])),
             child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-              Button(
-                  text: FlutterI18n.translate(context, 'PEOPLE_TAB.FIND_MORE'),
-                  width: 250,
-                  icon: Icon(Icons.arrow_forward_ios),
-                  onPressed: () => dispatch(
-                      redux.NavigateAction<AppState>.pushNamed(
-                          PeopleSearchScreen.id)))
-            ]))
+                  Button(
+                      text: FlutterI18n.translate(
+                          context, 'PEOPLE_TAB.FIND_MORE'),
+                      width: 250,
+                      icon: Icon(Icons.arrow_forward_ios),
+                      onPressed: () => dispatch(
+                          redux.NavigateAction<AppState>.pushNamed(
+                              PeopleSearchScreen.id)))
+                ]))
       ]);
     });
   }

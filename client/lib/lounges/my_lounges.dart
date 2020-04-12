@@ -176,22 +176,21 @@ class _MyLoungesScreenState extends State<MyLoungesScreen>
                         child: Image.asset('images/chatIcon.png'))),
                 if (newMessageCount > 0)
                   Positioned(
-                    top: 0,
-                    left: 0,
-                    child: Container(
-                        width: 30.0,
-                        height: 30.0,
-                        margin: const EdgeInsets.symmetric(horizontal: 5.0),
-                        decoration: BoxDecoration(
-                            color: blue,
-                            borderRadius: BorderRadius.circular(60.0)),
-                        child: Center(
-                          child: Text(newMessageCount.toString(),
-                              textAlign: TextAlign.center,
-                              style: const TextStyle(
-                                  color: white, fontWeight: FontWeight.bold)),
-                        )),
-                  )
+                      top: 0,
+                      left: 0,
+                      child: Container(
+                          width: 30.0,
+                          height: 30.0,
+                          margin: const EdgeInsets.symmetric(horizontal: 5.0),
+                          decoration: BoxDecoration(
+                              color: blue,
+                              borderRadius: BorderRadius.circular(60.0)),
+                          child: Center(
+                            child: Text(newMessageCount.toString(),
+                                textAlign: TextAlign.center,
+                                style: const TextStyle(
+                                    color: white, fontWeight: FontWeight.bold)),
+                          )))
               ]),
               if (lounge.members.isNotEmpty)
                 Expanded(

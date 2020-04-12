@@ -382,55 +382,50 @@ class _FindEventsScreen extends State<FindEventsScreen>
       ThemeStyle themeStyle,
       void Function(redux.ReduxAction<AppState>) dispatch,
       Future<void> Function(redux.ReduxAction<AppState>) dispatchFuture) {
-    return Container(
-        padding: const EdgeInsets.only(bottom: 60.0),
-        child: Column(children: <Widget>[
-          Flexible(
-              flex: _flexFactorMap,
-              child: GestureDetector(
-                  onTap: () {
-                    _growMap();
-                  },
-                  child: _buildMapView())),
-          Container(
-              child: GestureDetector(
-                  onTap: () {
-                    _shrinkMap();
-                  },
-                  child: _buildFilters())),
-          Expanded(
-              flex: _flexFactorListEvent,
-              child: Container(
-                  child: GestureDetector(
-                      onTap: () {
-                        _shrinkMap();
-                      },
-                      onVerticalDragDown: (_) {
-                        _shrinkMap();
-                      },
-                      onHorizontalDragDown: (_) {
-                        _shrinkMap();
-                      },
-                      onTapDown: (_) {
-                        _shrinkMap();
-                      },
-                      child: RefreshIndicator(
-                          onRefresh: () => dispatchFuture(EventsGetAction()),
-                          child: ListView.builder(
-                              itemCount: _eventsDisplayed?.length,
-                              itemBuilder: (BuildContext context, int index) =>
-                                  Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: <Widget>[
-                                        _buildEvent(
-                                            _eventsDisplayed[index],
-                                            userEventStates,
-                                            dispatch,
-                                            dispatchFuture,
-                                            themeStyle),
-                                      ]))))))
-          /*  Expanded(
+    return Column(children: <Widget>[
+      Flexible(
+          flex: _flexFactorMap,
+          child: GestureDetector(
+              onTap: () {
+                _growMap();
+              },
+              child: _buildMapView())),
+      Container(
+          child: GestureDetector(
+              onTap: () {
+                _shrinkMap();
+              },
+              child: _buildFilters())),
+      Expanded(
+          flex: _flexFactorListEvent,
+          child: GestureDetector(
+              onTap: () {
+                _shrinkMap();
+              },
+              onVerticalDragDown: (_) {
+                _shrinkMap();
+              },
+              onHorizontalDragDown: (_) {
+                _shrinkMap();
+              },
+              onTapDown: (_) {
+                _shrinkMap();
+              },
+              child: RefreshIndicator(
+                  onRefresh: () => dispatchFuture(EventsGetAction()),
+                  child: ListView.builder(
+                      itemCount: _eventsDisplayed?.length,
+                      itemBuilder: (BuildContext context, int index) => Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                _buildEvent(
+                                    _eventsDisplayed[index],
+                                    userEventStates,
+                                    dispatch,
+                                    dispatchFuture,
+                                    themeStyle),
+                              ])))))
+      /*  Expanded(
           flex: 1,
           child: Container(
               child: Row(
@@ -444,7 +439,7 @@ class _FindEventsScreen extends State<FindEventsScreen>
                         redux.NavigateAction<AppState>.pushNamed(
                             EventCreateScreen.id))),
               ]))) */
-        ]));
+    ]);
   }
 
   @override

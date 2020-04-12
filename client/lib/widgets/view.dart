@@ -155,26 +155,25 @@ class _ViewState extends State<View> {
         in state.chatsState.usersChatsStates[state.userState.user.id].values) {
       newMessageCount += chatState.countNewMessages();
     }
-    for (final ChatState chatState
-        in state.chatsState.loungesChatsStates[state.userState.user.id].values) {
+    for (final ChatState chatState in state
+        .chatsState.loungesChatsStates[state.userState.user.id].values) {
       newMessageLoungeCount += chatState.countNewMessages();
     }
-    return Theme(
-        data: Theme.of(context).copyWith(canvasColor: Colors.transparent),
-        child: GradientBottomNavigationBar(
-            backgroundColorStart: pinkLight,
-            backgroundColorEnd: pink,
-            type: BottomNavigationBarType.fixed,
-            currentIndex: state.homePageIndex,
-            items: bubbleBar(context, newMessageCount, newMessageLoungeCount, state.theme),
-            onTap: (int index) async {
-              if (index == state.homePageIndex) {
-                return;
-              }
-              dispatch(AppNavigateAction(index));
-              Navigator.of(context)
-                  .popUntil((Route<dynamic> route) => route.isFirst);
-            }));
+    return GradientBottomNavigationBar(
+        backgroundColorStart: pinkLight,
+        backgroundColorEnd: pink,
+        type: BottomNavigationBarType.fixed,
+        currentIndex: state.homePageIndex,
+        items: bubbleBar(
+            context, newMessageCount, newMessageLoungeCount, state.theme),
+        onTap: (int index) async {
+          if (index == state.homePageIndex) {
+            return;
+          }
+          dispatch(AppNavigateAction(index));
+          Navigator.of(context)
+              .popUntil((Route<dynamic> route) => route.isFirst);
+        });
   }
 
   @override
@@ -193,33 +192,37 @@ class _ViewState extends State<View> {
               length: 2,
               child: Stack(children: <Widget>[
                 Scaffold(
-                    appBar: AppBar(
-                        elevation: 0.0,
-                        leading: user == null
-                            ? const CircularProgressIndicator()
-                            : Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: GestureDetector(
-                                    onTap: () => setState(() =>
-                                        _showUserSettings = !_showUserSettings),
-                                    child: CachedImage(
-                                        user.pics.isEmpty ? null : user.pics[0],
-                                        width: 40.0,
-                                        height: 40.0,
-                                        borderRadius:
-                                            BorderRadius.circular(60.0),
-                                        imageType: ImageType.User))),
-                        centerTitle: true,
-                        title: Stack(
-                            alignment: Alignment.center,
-                            children: <Widget>[
+                    appBar: widget.showAppBar
+                        ? AppBar(
+                            elevation: 0.0,
+                            leading: user == null
+                                ? const CircularProgressIndicator()
+                                : Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: GestureDetector(
+                                        onTap: () => setState(() =>
+                                            _showUserSettings =
+                                                !_showUserSettings),
+                                        child: CachedImage(
+                                            user.pics.isEmpty
+                                                ? null
+                                                : user.pics[0],
+                                            width: 40.0,
+                                            height: 40.0,
+                                            borderRadius:
+                                                BorderRadius.circular(60.0),
+                                            imageType: ImageType.User))),
+                            centerTitle: true,
+                            title:
+                                Stack(alignment: Alignment.center, children: <
+                                    Widget>[
                               if (widget.title is String)
                                 Text(widget.title as String,
                                     style: const TextStyle(color: white))
                               else
                                 widget.title is TabBar
                                     ? widget.title as TabBar
-                                    : null,
+                                    : Container(),
                               if (Navigator.canPop(context))
                                 Align(
                                     alignment: Alignment.centerLeft,
@@ -230,17 +233,18 @@ class _ViewState extends State<View> {
                                         child: Icon(widget.backIcon,
                                             color: white)))
                             ]),
-                        titleSpacing: 0.0,
-                        actions: <Widget>[
-                          Container(
-                              padding: const EdgeInsets.all(8.0),
-                              width: 40.0,
-                              height: 40.0,
-                              child: Image.asset('images/hamburger.png'))
-                        ],
-                        flexibleSpace: Image.asset('images/screenTop.png',
-                            fit: BoxFit.fill),
-                        backgroundColor: Colors.transparent),
+                            titleSpacing: 0.0,
+                            actions: <Widget>[
+                              Container(
+                                  padding: const EdgeInsets.all(8.0),
+                                  width: 40.0,
+                                  height: 40.0,
+                                  child: Image.asset('images/hamburger.png'))
+                            ],
+                            flexibleSpace: Image.asset('images/screenTop.png',
+                                fit: BoxFit.fill),
+                            backgroundColor: Colors.transparent)
+                        : null,
                     bottomNavigationBar: widget.showNavBar
                         ? _buildNavBar(state, dispatch)
                         : null,
