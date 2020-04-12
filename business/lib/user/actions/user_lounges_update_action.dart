@@ -34,10 +34,15 @@ class UserLoungesUpdateAction extends redux.ReduxAction<AppState> {
     final List<Chat> chats = <Chat>[];
     final Map<String, Map<String, ChatState>> loungesChatsStates =
         state.chatsState.loungesChatsStates;
-    loungesChatsStates.putIfAbsent(state.userState.user.id, () => <String, ChatState>{});
+    loungesChatsStates.putIfAbsent(
+        state.userState.user.id, () => <String, ChatState>{});
     for (final Lounge lounge in _lounges) {
       final Chat chat = Chat(lounge.id, state.loginState.id);
       chats.add(chat);
+
+      loungesChatsStates[state.userState.user.id]
+          .putIfAbsent(chat.id, () => ChatState());
+
       _messagesSub.add(streamMessages(chat.id).listen(
           (List<Message> messages) =>
               dispatch(ChatsLoungeUpdateAction(messages, chat.id))));
