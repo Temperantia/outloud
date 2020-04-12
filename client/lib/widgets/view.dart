@@ -203,22 +203,20 @@ class _ViewState extends State<View> {
                                         onTap: () => setState(() =>
                                             _showUserSettings =
                                                 !_showUserSettings),
-                                        child: CachedImage(
-                                            user.pics.isEmpty
-                                                ? null
-                                                : user.pics[0],
-                                            width: 40.0,
-                                            height: 40.0,
-                                            borderRadius:
-                                                BorderRadius.circular(60.0),
-                                            imageType: ImageType.User))),
+                                        child:
+                                            CachedImage(user.pics.isEmpty ? null : user.pics[0],
+                                                width: 40.0,
+                                                height: 40.0,
+                                                borderRadius:
+                                                    BorderRadius.circular(60.0),
+                                                imageType: ImageType.User))),
                             centerTitle: true,
-                            title:
-                                Stack(alignment: Alignment.center, children: <
-                                    Widget>[
+                            title: Stack(alignment: Alignment.center, children: <
+                                Widget>[
                               if (widget.title is String)
                                 Text(widget.title as String,
-                                    style: const TextStyle(color: white))
+                                    style: const TextStyle(
+                                        color: white, fontSize: 14.0))
                               else
                                 widget.title is TabBar
                                     ? widget.title as TabBar
@@ -236,10 +234,11 @@ class _ViewState extends State<View> {
                             titleSpacing: 0.0,
                             actions: <Widget>[
                               Container(
-                                  padding: const EdgeInsets.all(8.0),
-                                  width: 40.0,
-                                  height: 40.0,
-                                  child: Image.asset('images/hamburger.png'))
+                                padding: const EdgeInsets.all(8.0),
+                                width: 40.0,
+                                height: 40.0,
+                                //child: Image.asset('images/hamburger.png')
+                              )
                             ],
                             flexibleSpace: Image.asset('images/screenTop.png',
                                 fit: BoxFit.fill),
@@ -247,9 +246,13 @@ class _ViewState extends State<View> {
                         : null,
                     bottomNavigationBar: widget.showNavBar
                         ? _buildNavBar(state, dispatch)
-                        : null,
+                        : Container(
+                            width: 0.0,
+                            height: 0.0,
+                            decoration: const BoxDecoration(
+                                gradient: LinearGradient(colors: <Color>[pinkLight, pink]))),
                     body: SafeArea(child: _buildBody(state, dispatch))),
-                if (_showUserSettings)
+                if (widget.showAppBar && _showUserSettings)
                   SafeArea(
                       child:
                           Material(child: _buildUserSettings(user, dispatch)))
