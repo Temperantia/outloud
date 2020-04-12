@@ -76,7 +76,7 @@ class _FindLoungesScreenState extends State<FindLoungesScreen>
       void Function(redux.ReduxAction<AppState>) dispatch,
       ThemeStyle theme) {
     final UserEventState state = userEventStates[event.id];
-    String stateMessage;
+    String stateMessage = '';
     if (state == UserEventState.Attending) {
       stateMessage =
           FlutterI18n.translate(context, 'LOUNGES_TAB.ATTENDING_EVENT');

@@ -559,7 +559,9 @@ class _EventScreenState extends State<EventScreen>
                           style: const TextStyle(
                               color: white, fontWeight: FontWeight.bold)),
                     ]),
-                const Text('FOR LOUNGES', style: TextStyle(color: white)),
+                Text(FlutterI18n.translate(context, 'EVENT.FOR_LOUNGES'),
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(color: white)),
               ]));
     }
     return Expanded(child: w);
@@ -578,10 +580,8 @@ class _EventScreenState extends State<EventScreen>
                         color: orange,
                         padding: const EdgeInsets.all(5),
                         child: GestureDetector(
-                            onTap: () {
-                              _showConfirmPopup(
-                                  dispatch, dispatchFuture, state);
-                            },
+                            onTap: () => _showConfirmPopup(
+                                dispatch, dispatchFuture, state),
                             // TODO(alexandre): to unattend an event, you need not to have a lounge, so if that's the case, toast a msg about it and/or disable it,
                             child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -648,16 +648,13 @@ class _EventScreenState extends State<EventScreen>
                                         fontSize: 16,
                                         fontWeight: FontWeight.w400))
                               ]),
-                          Container(
-                              // padding: const EdgeInsets.only(bottom: 5),
-                              child: Text(
-                                  FlutterI18n.translate(
-                                      context, 'EVENT.ATTENDING'),
-                                  textAlign: TextAlign.center,
-                                  style: const TextStyle(
-                                      color: white,
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w400)))
+                          Text(
+                              FlutterI18n.translate(context, 'EVENT.ATTENDING'),
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(
+                                  color: white,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w400))
                         ]))));
   }
 
