@@ -128,17 +128,22 @@ class _LoungesScreenState extends State<LoungesScreen>
                                           arguments: lounge));
                                 }
                               },
-                              child: Text(
-                                  lounge.memberIds
-                                          .contains(state.userState.user.id)
-                                      ? FlutterI18n.translate(
-                                          context, 'LOUNGES.LEAVE')
-                                      : FlutterI18n.translate(context,
-                                          'LOUNGES.JOIN'), // TODO(me): add arrow icon
-                                  style: const TextStyle(
-                                      color: orange,
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.w700))),
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 5.0, horizontal: 20.0),
+                                decoration: BoxDecoration(color: blue),
+                                child: Text(
+                                    lounge.memberIds
+                                            .contains(state.userState.user.id)
+                                        ? FlutterI18n.translate(
+                                            context, 'LOUNGES.LEAVE')
+                                        : FlutterI18n.translate(context,
+                                            'LOUNGES.JOIN'), // TODO(me): add arrow icon
+                                    style: const TextStyle(
+                                        color: white,
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.w700)),
+                              )),
                         ]),
                         Wrap(
                             runAlignment: WrapAlignment.spaceBetween,

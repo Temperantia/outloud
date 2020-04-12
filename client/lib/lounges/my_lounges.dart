@@ -79,59 +79,64 @@ class _MyLoungesScreenState extends State<MyLoungesScreen>
     final User owner = lounge.members.firstWhere(
         (User member) => member.id == lounge.owner,
         orElse: () => null);
-    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: <
-        Widget>[
-      if (owner != null)
-        Row(children: <Widget>[
-          Container(
-              margin: const EdgeInsets.only(right: 5),
-              child: CachedImage(owner.pics.isEmpty ? null : owner.pics[0],
-                  width: 20.0,
-                  height: 20.0,
-                  borderRadius: BorderRadius.circular(20.0),
-                  imageType: ImageType.User)),
-          Expanded(
-              child: I18nText(
-                  state.userState.user.id == owner.id
-                      ? 'LOUNGE_CHAT.YOUR_LOUNGE'
-                      : 'LOUNGE_CHAT.SOMEONES_LOUNGE',
-                  child: const Text('',
+    return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          if (owner != null)
+            Row(children: <Widget>[
+              Container(
+                  margin: const EdgeInsets.only(right: 5),
+                  child: CachedImage(owner.pics.isEmpty ? null : owner.pics[0],
+                      width: 20.0,
+                      height: 20.0,
+                      borderRadius: BorderRadius.circular(20.0),
+                      imageType: ImageType.User)),
+              Expanded(
+                  child: I18nText(
+                      state.userState.user.id == owner.id
+                          ? 'LOUNGE_CHAT.YOUR_LOUNGE'
+                          : 'LOUNGE_CHAT.SOMEONES_LOUNGE',
+                      child: const Text('',
+                          style: TextStyle(
+                              color: black,
+                              fontSize: 13,
+                              fontWeight: FontWeight.w500)),
+                      translationParams: <String, String>{'user': owner.name})),
+            ]),
+          Wrap(children: <Widget>[
+            RichText(
+                text: TextSpan(
+                    text:
+                        '${lounge.members.length.toString()} ${FlutterI18n.translate(context, "LOUNGES_TAB.MEMBER")}${lounge.members.length > 1 ? 's ' : ' '}',
+                    style: const TextStyle(
+                        color: black,
+                        fontSize: 13,
+                        fontWeight: FontWeight.w500),
+                    children: <TextSpan>[
+                  TextSpan(
+                      text: lounge.event.name,
                       style: TextStyle(
-                          color: black,
-                          fontSize: 13,
-                          fontWeight: FontWeight.w500)),
-                  translationParams: <String, String>{'user': owner.name})),
-        ]),
-      Wrap(children: <Widget>[
-        RichText(
-            text: TextSpan(
-                text:
-                    '${lounge.members.length.toString()} ${FlutterI18n.translate(context, "LOUNGES_TAB.MEMBER")}${lounge.members.length > 1 ? 's ' : ' '}',
-                style: const TextStyle(
-                    color: black, fontSize: 13, fontWeight: FontWeight.w500),
-                children: <TextSpan>[
-              TextSpan(
-                  text: lounge.event.name,
-                  style: TextStyle(
-                      color: orange,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w800)),
-            ]))
-      ]),
-      GestureDetector(
-          onTap: () => dispatch(redux.NavigateAction<AppState>.pushNamed(
-              EventScreen.id,
-              arguments: lounge.event)),
-          child: Row(children: <Widget>[
-            Image.asset('images/arrowForward.png', width: 10.0, height: 10.0),
-            Text(
-                ' ' +
-                    FlutterI18n.translate(
-                        context, 'LOUNGES_TAB.GO_EVENT_LISTING'),
-                style:
-                    const TextStyle(color: blue, fontWeight: FontWeight.bold))
-          ]))
-    ]);
+                          color: orange,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w800)),
+                ]))
+          ]),
+          GestureDetector(
+              onTap: () => dispatch(redux.NavigateAction<AppState>.pushNamed(
+                  EventScreen.id,
+                  arguments: lounge.event)),
+              child: Row(children: <Widget>[
+                Container(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20.0, vertical: 5.0),
+                    decoration: const BoxDecoration(color: blue),
+                    child: Text(
+                        FlutterI18n.translate(
+                            context, 'LOUNGES_TAB.GO_EVENT_LISTING'),
+                        style: const TextStyle(
+                            color: white, fontWeight: FontWeight.bold)))
+              ]))
+        ]);
   }
 
   Widget _buildLounge(AppState state, int newMessageCount, Lounge lounge,

@@ -325,8 +325,8 @@
   "LOUNGES": {
     "YOUR_LOUNGE": "Your Lounge",
     "SOMEONES_LOUNGE": "{user}'s Lounge",
-    "LEAVE": "< LEAVE",
-    "JOIN": " > JOIN",
+    "LEAVE": "LEAVE",
+    "JOIN": " JOIN",
     "SLOT": "slot",
     "AVAILABLE": "available",
     "FOR_THE_EVENT": "FOR THE EVENT",

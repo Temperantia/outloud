@@ -162,14 +162,21 @@ class _ViewState extends State<View> {
       AppState state, void Function(ReduxAction<dynamic>) dispatch) {
     int newMessageCount = 0;
     int newMessageLoungeCount = 0;
-    for (final ChatState chatState
-        in state.chatsState.usersChatsStates[state.userState.user.id].values) {
-      newMessageCount += chatState.countNewMessages();
+    final String userId = state.userState.user.id;
+    if (state.chatsState.usersChatsStates[userId] != null) {
+      for (final ChatState chatState in state
+          .chatsState.usersChatsStates[state.userState.user.id].values) {
+        newMessageCount += chatState.countNewMessages();
+      }
     }
-    for (final ChatState chatState in state
-        .chatsState.loungesChatsStates[state.userState.user.id].values) {
-      newMessageLoungeCount += chatState.countNewMessages();
+
+    if (state.chatsState.loungesChatsStates[userId] != null) {
+      for (final ChatState chatState in state
+          .chatsState.loungesChatsStates[state.userState.user.id].values) {
+        newMessageLoungeCount += chatState.countNewMessages();
+      }
     }
+
     return GradientBottomNavigationBar(
         backgroundColorStart: pinkLight,
         backgroundColorEnd: pink,

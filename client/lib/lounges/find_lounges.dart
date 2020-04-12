@@ -5,6 +5,7 @@ import 'package:business/classes/lounge.dart';
 import 'package:business/classes/user_event_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
+import 'package:outloud/events/event_screen.dart';
 import 'package:outloud/lounges/lounges_screen.dart';
 import 'package:outloud/theme.dart';
 import 'package:outloud/widgets/cached_image.dart';
@@ -86,7 +87,7 @@ class _FindLoungesScreenState extends State<FindLoungesScreen>
 
     return GestureDetector(
         onTap: () => dispatch(redux.NavigateAction<AppState>.pushNamed(
-            LoungesScreen.id,
+            EventScreen.id,
             arguments: event)),
         child: Container(
             decoration: BoxDecoration(color: Colors.transparent),
@@ -126,17 +127,23 @@ class _FindLoungesScreenState extends State<FindLoungesScreen>
                                     fontWeight: FontWeight.bold,
                                     fontSize: 13)),
                             Row(children: <Widget>[
-                              Image.asset('images/arrowForward.png',
-                                  width: 10.0, height: 10.0),
-                              Expanded(
-                                  child: Text(
-                                      ' ' +
+                              GestureDetector(
+                                  onTap: () => dispatch(
+                                      redux.NavigateAction<AppState>.pushNamed(
+                                          LoungesScreen.id,
+                                          arguments: event)),
+                                  child: Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 20.0, vertical: 5.0),
+                                      decoration:
+                                          const BoxDecoration(color: blue),
+                                      child: Text(
                                           FlutterI18n.translate(context,
                                               'LOUNGES_TAB.FIND_LOUNGES'),
-                                      style: const TextStyle(
-                                          color: blue,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 14)))
+                                          style: const TextStyle(
+                                              color: white,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 14))))
                             ])
                           ]))),
             ])));
