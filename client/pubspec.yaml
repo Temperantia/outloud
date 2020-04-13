@@ -1,7 +1,7 @@
 name: outloud
 description: A new Flutter project.
 
-version: 0.9.0+1
+version: 0.9.0+2
 
 environment:
   sdk: ">=2.6.0 <3.0.0"
@@ -43,7 +43,6 @@ dependencies:
   cached_network_image: ^2.0.0
   google_maps_flutter: ^0.5.24
   path_provider: ^1.6.4
-  network_to_file_image: ^2.2.8
   dotted_border: ^1.0.5
   date_utils: ^0.1.0+3
   gradient_bottom_navigation_bar: ^1.0.0+4

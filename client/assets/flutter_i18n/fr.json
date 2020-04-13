@@ -13,14 +13,14 @@
     "WRITING": "Ecriture",
     "CULTURE_AND_LANGUAGE": "Culture & Langage",
     "MUSIC": "Musique",
-    "ACTIVISM": "Militantisme",
+    "ACTIVISM": "Activisme",
     "FILM": "Film",
     "GAMING": "Jeux-vidéos",
     "BELIEFS": "Croyances",
     "BOOKS": "Livres",
     "DANCE": "Danse",
     "PET": "Animaux",
-    "CRAFT": "Activité manuelle"
+    "CRAFT": "Artisanat"
   },
   "GENDERS": {
     "AGENDER": "Non-genré",
@@ -46,7 +46,7 @@
     "GENDERQUEER": "Genderqueer",
     "INTERSEX": "Intersex",
     "MALE": "Male",
-    "MTF": "Homme à Femme",
+    "MTF": "MTF",
     "NEITHER": "Aucun",
     "NEUTROIS": "Neutrois",
     "NON_BINARY": "Non-binaire",
@@ -96,8 +96,8 @@
     "SAPIOSEXUAL": "Sapiosexuel"
   },
   "MENU_USER": {
-    "OPTION_1": "Voir le profil",
-    "OPTION_2": "Editer le profil",
+    "OPTION_1": "Voir mon profil",
+    "OPTION_2": "Editer mon profil",
     "OPTION_3": "Se déconnecter"
   },
   "LOGIN": {
@@ -109,18 +109,18 @@
   "REGISTER_1": {
     "SIGNED_AS": "Inscrit en tant que",
     "COMPLETE_PROFILE": "PROFIL COMPLET",
-    "CONTINUE_APP": "CONTINUE TO APP",
+    "CONTINUE_APP": "CONTINUER",
     "BACK": "RETOUR"
   },
   "REGISTER_2": {
-    "SKIP": "Passer >",
-    "TITLE": "Raconte-nous ce qui ta passionne",
-    "SUBTITLE": "Aide-nous à trouver des personnes et events que tu appréciera.",
+    "SKIP": "Passer",
+    "TITLE": "Raconte-nous ce qui te passionne",
+    "SUBTITLE": "Aide-nous à te propose des personnes et events que tu apprécieras.",
     "BACK": "RETOUR",
     "NEXT": "SUIVANT"
   },
   "REGISTER_3": {
-    "SKIP": "Passer >",
+    "SKIP": "Passer",
     "TITLE": "Dis-nous en plus sur toi",
     "SUBTITLE": "Partage avec tes prochains amis ce qui te passionne le plus",
     "LOCATION": "LOCALISATION",
@@ -146,13 +146,13 @@
   "REGISTER_5": {
     "TITLE": "Rencontre des gens dans",
     "TITLE_BIG": "SALON",
-    "SUBTITLE": "Après avoir rejoint un event, trouve un salon pour trouver tes fidèles compagnons",
+    "SUBTITLE": "Après avoir rejoint un event, trouve ou créé un salon pour voir avec qui y aller.",// Ajoute tes amis aussi !",
     "BACK": "RETOUR",
     "NEXT": "SUIVANT"
   },
   "PROFILE": {
     "MAIN": "PRINCIPAL",
-    "ABOUT": "A PROPOS DE",
+    "ABOUT": "A PROPOS",
     "LOCATION": "LOCALISATION",
     "GENDER": "GENRE",
     "PRONOUNS": "PRONOMS",
@@ -171,7 +171,7 @@
   },
   "HOME": {
     "PERMISSION_WARNING": "ALERTE PERMISSION",
-    "ALLOW_PERMISSION": "TU DOIS ACCEPTER DE POUVOIR ETRE LOCALISE",
+    "ALLOW_PERMISSION": "IL FAUT ACCEPTER DE POUVOIR ETRE LOCALISE",
     "REFUSE": "NON, MERCI",
     "SETTINGS": "ALLER aux paramètres"
   },
@@ -186,12 +186,12 @@
   },
   "EVENT": {
     "HOLD_UP": "Attends",
-    "UNATTEND_WARNING": "Si tu ne vas plus à l'event ça va supprimer/quitter les salons que tu as rejoint pour cet event",
-    "CONTINUE": "Tu veux toujours continuer?",
+    "UNATTEND_WARNING": "Si tu ne vas plus à l'event cela va supprimer le salon que tu as rejoint pour cet event",
+    "CONTINUE": "Tu veux toujours continuer ?",
     "TAKE_ME_BACK": "Non",
     "UNATTEND": "OUI, Event supprimé",
     "LOUNGES_AVAILABLE": "Salons disponibles!",
-    "JOINING": "Tu peux rejoindre un salon. Joindre un salon te permet d'apprécier les events avec des gens tout comme toi",
+    "JOINING": "Tu peux rejoindre un salon. Joindre un salon te permet d'apprécier les events avec des gens interessés.",
     "GOT_IT": "COMPRIS",
     "VIEW_MY": "VOIR MON",
     "LOUNGE": "SALON",
@@ -202,7 +202,7 @@
     "LIVE_FEED": "LIVE FEED",
     "EVENT_DESCRIPTION": "DESCRIPTION DE L'EVENT",
     "EVENT_DETAILS": "DETAILS DE L'EVENT",
-    "MESSAGE": "Rejoins-nous!"
+    "MESSAGE": "Commente sur l'event !"
   },
   "EVENTS": {
     "MY_EVENTS": "MES EVENTS",
@@ -253,7 +253,7 @@
     "PUBLIC": "PUBLIQUE",
     "MAX_MEMBER_COUNT": "NOMBRE MAXIMAL DE MEMBRES",
     "PREMIUM_UPGRADE": "Améliore ton salon pour plus de membres, une plus grande portée et d'autres privilèges",
-    "UPGRADE": "AMELIORER   >",
+    "UPGRADE": "AMELIORER",
     "LOUNGE_DESCRIPTION": "DESCRIPTION DU SALON",
     "GROUP_DESCRIPTION": "Brève description du groupe",
     "CREATE_LOUNGE": "CREER UN SALON",
@@ -350,7 +350,7 @@
     "CREATE_LOUNGE": "CREER UN SALON",
     "MY_LOUNGES_EMPTY_TITLE": "Rien sur la carte",
     "MY_LOUNGES_EMPTY_DESCRIPTION": "Tu n'as pas encore rejoint de salon ! Assure toi d'aller à un event pour gagner accès aux salons.",
-    "FIND_LOUNGES_EMPTY_TITLE": "Stop",
+    "FIND_LOUNGES_EMPTY_TITLE": "Miaouuh..! ",
     "FIND_LOUNGES_EMPTY_DESCRIPTION": "Tu as besoin d'aller à un event avant d'avoir accès aux salons."
   },
   "PEOPLE_SEARCH": {
