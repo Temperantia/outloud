@@ -20,6 +20,7 @@ class ChatsUpdateMemberAction extends ReduxAction<AppState> {
     }
 
     chat.entity = _member;
+    print('here');
 
     return state.copy(chatsState: state.chatsState.copy(chats: chats));
   }

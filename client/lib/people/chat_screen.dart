@@ -31,6 +31,8 @@ class _ChatScreenState extends State<ChatScreen> {
   final TextEditingController _messageController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
 
+  Chat _chat;
+
   @override
   void dispose() {
     _messageController.dispose();
@@ -40,10 +42,10 @@ class _ChatScreenState extends State<ChatScreen> {
 
   void _markAsRead(Map<String, Map<String, ChatState>> usersChatsStates,
       String userId, void Function(ReduxAction<AppState>) dispatch) {
-    if (usersChatsStates[userId][widget.chat.id]
+    if (usersChatsStates[userId][_chat.id]
         .messageStates
         .containsValue(MessageState.Received)) {
-      dispatch(ChatsReadAction(widget.chat.id));
+      dispatch(ChatsReadAction(_chat.id));
     }
   }
 
@@ -62,14 +64,14 @@ class _ChatScreenState extends State<ChatScreen> {
           msg: FlutterI18n.translate(context, 'CHAT.NO_MESSAGE'));
     } else {
       _messageController.clear();
-      addMessage(widget.chat.id, userId, text.trim(), MessageType.Text);
+      addMessage(_chat.id, userId, text.trim(), MessageType.Text);
       _scrollController.animateTo(0.0,
           duration: const Duration(milliseconds: 300), curve: Curves.linear);
     }
   }
 
   Widget _buildChat(User user, String userId, String picture) {
-    final List<Message> messages = widget.chat.messages;
+    final List<Message> messages = _chat.messages;
     return ListView.builder(
         itemBuilder: (BuildContext context, int index) => _buildItem(
             messages[messages.length - index - 1], user, userId, picture),
@@ -78,7 +80,7 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   Widget _buildItem(Message message, User user, String userId, String picture) {
-    final User userPeer = widget.chat.entity as User;
+    final User userPeer = _chat.entity as User;
     final List<String> pictures = userPeer.pics;
     final String picturePeer = pictures.isEmpty ? null : pictures[0];
     return Container(
@@ -151,11 +153,16 @@ class _ChatScreenState extends State<ChatScreen> {
       final User user = state.userState.user;
       final String picture = user.pics.isEmpty ? null : user.pics[0];
       final String userId = user.id;
-      if (widget.chat.entity == null) {
+
+      final List<Chat> chats = state.chatsState.chats;
+      _chat = chats.firstWhere((Chat chat) => chat.id == widget.chat.id,
+          orElse: () => null);
+      print('building chat screen');
+      if (_chat == null || _chat.entity == null) {
         return Container(width: 0.0, height: 0.0);
       }
       _markAsRead(state.chatsState.usersChatsStates, userId, dispatch);
-      final String namePeer = (widget.chat.entity as User).name.split(' ')[0];
+      final String namePeer = (_chat.entity as User).name.split(' ')[0];
       return View(
           title: 'CHAT AVEC ${namePeer.toUpperCase()}',
           buttons: Container(
