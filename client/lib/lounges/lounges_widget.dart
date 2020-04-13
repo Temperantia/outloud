@@ -166,7 +166,7 @@ class _LoungesWidgetState extends State<LoungesWidget>
         Expanded(
             child: TabBarView(
                 physics: const NeverScrollableScrollPhysics(),
-                children: <Widget>[MyLoungesScreen(), FindLoungesScreen()])),
+                children: <Widget>[FindLoungesScreen(), MyLoungesScreen()])),
         Container(
           padding: const EdgeInsets.only(top: 5.0),
           decoration: const BoxDecoration(

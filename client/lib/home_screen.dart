@@ -79,8 +79,8 @@ class _HomeScreenState extends State<HomeScreen>
               labelColor: white,
               indicator: const BoxDecoration(),
               tabs: <Widget>[
+                Tab(text: FlutterI18n.translate(context, 'EVENTS.FIND_EVENTS')),
                 Tab(text: FlutterI18n.translate(context, 'EVENTS.MY_EVENTS')),
-                Tab(text: FlutterI18n.translate(context, 'EVENTS.FIND_EVENTS'))
               ]),
           child: EventsWidget()),
       View(
@@ -92,10 +92,10 @@ class _HomeScreenState extends State<HomeScreen>
               tabs: <Widget>[
                 Tab(
                     text: FlutterI18n.translate(
-                        context, 'LOUNGES_TAB.MY_LOUNGES')),
+                        context, 'LOUNGES_TAB.FIND_LOUNGES')),
                 Tab(
                     text: FlutterI18n.translate(
-                        context, 'LOUNGES_TAB.FIND_LOUNGES')),
+                        context, 'LOUNGES_TAB.MY_LOUNGES')),
               ]),
           child: LoungesWidget()),
       View(

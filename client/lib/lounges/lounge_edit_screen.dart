@@ -4,7 +4,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:business/app_state.dart';
 import 'package:business/lounges/actions/lounge_remove_action.dart';
-import 'package:business/lounges/actions/lounge_kick_user_action.dart';
 import 'package:business/lounges/actions/lounge_edit_details_action.dart';
 import 'package:business/lounges/actions/lounge_edit_meetup_action.dart';
 import 'package:async_redux/async_redux.dart' as redux;

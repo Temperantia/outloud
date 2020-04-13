@@ -50,7 +50,10 @@ class _EventsWidgetState extends State<EventsWidget>
             flex: 8,
             child: TabBarView(
                 physics: const NeverScrollableScrollPhysics(),
-                children: <Widget>[MyEventsScreen(), FindEventsScreen()])),
+                children: <Widget>[
+                  FindEventsScreen(),
+                  MyEventsScreen(),
+                ])),
       ]);
     });
   }

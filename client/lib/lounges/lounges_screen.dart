@@ -131,7 +131,7 @@ class _LoungesScreenState extends State<LoungesScreen>
                               child: Container(
                                 padding: const EdgeInsets.symmetric(
                                     vertical: 5.0, horizontal: 20.0),
-                                decoration: BoxDecoration(color: blue),
+                                decoration: const BoxDecoration(color: blue),
                                 child: Text(
                                     lounge.memberIds
                                             .contains(state.userState.user.id)

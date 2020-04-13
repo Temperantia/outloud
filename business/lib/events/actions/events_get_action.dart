@@ -34,11 +34,12 @@ class EventsGetAction extends redux.ReduxAction<AppState> {
           event.distance = event.location == null
               ? null
               : (await geoLocator.distanceBetween(
-                      event.location.latitude,
-                      event.location.longitude,
-                      position.latitude,
-                      position.longitude))
-                  .roundToDouble();
+                          event.location.latitude,
+                          event.location.longitude,
+                          position.latitude,
+                          position.longitude))
+                      .roundToDouble() /
+                  1000;
         }
         events.sort((Event eventA, Event eventB) {
           if (eventA.dateStart.isBefore(eventB.dateStart)) {
