@@ -108,7 +108,7 @@
   },
   "REGISTER_1": {
     "SIGNED_AS": "Inscrit en tant que",
-    "COMPLETE_PROFILE": "PROFIL COMPLET",
+    "COMPLETE_PROFILE": "COMPLETE TON PROFIL",
     "CONTINUE_APP": "CONTINUER",
     "BACK": "RETOUR"
   },
@@ -146,7 +146,7 @@
   "REGISTER_5": {
     "TITLE": "Rencontre des gens dans",
     "TITLE_BIG": "SALON",
-    "SUBTITLE": "Après avoir rejoint un event, trouve ou créé un salon pour voir avec qui y aller.",// Ajoute tes amis aussi !",
+    "SUBTITLE": "Après avoir rejoint un event, trouve ou créé un salon pour voir avec qui y aller.", // Ajoute tes amis aussi !",
     "BACK": "RETOUR",
     "NEXT": "SUIVANT"
   },
