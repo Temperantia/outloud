@@ -157,7 +157,6 @@ class _ChatScreenState extends State<ChatScreen> {
       final List<Chat> chats = state.chatsState.chats;
       _chat = chats.firstWhere((Chat chat) => chat.id == widget.chat.id,
           orElse: () => null);
-      print('building chat screen');
       if (_chat == null || _chat.entity == null) {
         return Container(width: 0.0, height: 0.0);
       }
