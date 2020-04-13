@@ -48,7 +48,7 @@ class LoginGoogleAction extends ReduxAction<AppState> {
           birthDate: birthdate,
           name: result.user.displayName,
           id: result.user.uid,
-          pics: <String>[result.user.photoUrl]);
+          pics: <String>[result.user.photoUrl.replaceFirst('=s99', '=1000')]);
 
       if (getUser(user.id) != null) {
         dispatch(UserListenAction(user.id));
