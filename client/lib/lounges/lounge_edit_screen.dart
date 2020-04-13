@@ -136,15 +136,8 @@ class _LoungeEditScreenState extends State<LoungeEditScreen>
                                             await showLoaderAnimation(
                                                 context, this,
                                                 animationDuration: 600);
-                                            for (final String memberId
-                                                in widget.lounge.memberIds) {
-                                              await dispatchFuture(
-                                                  LoungeKickUserAction(
-                                                      memberId, widget.lounge));
-                                            }
                                             dispatch(LoungeRemoveAction(
                                                 widget.lounge));
-
                                             Navigator.pop(context);
                                             dispatch(redux.NavigateAction<
                                                 AppState>.pop());

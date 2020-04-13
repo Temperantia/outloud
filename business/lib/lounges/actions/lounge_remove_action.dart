@@ -19,10 +19,13 @@ class LoungeRemoveAction extends ReduxAction<AppState> {
     }
 
     final Map<String, Map<String, ChatState>> loungesChatsStates =
-    state.chatsState.loungesChatsStates;
+        state.chatsState.loungesChatsStates;
 
-    loungesChatsStates[state.userState.user.id]
-        .remove(lounge.id);
+    loungesChatsStates[state.userState.user.id].remove(lounge.id);
+
+    for (final User _user in lounge.members) {
+      updateUserLounge(_user, _user.lounges..remove(lounge.id));
+    }
 
     await deleteLounge(lounge);
 

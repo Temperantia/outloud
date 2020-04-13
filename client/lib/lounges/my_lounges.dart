@@ -66,7 +66,7 @@ class _MyLoungesScreenState extends State<MyLoungesScreen>
                                   .chatsState
                                   .loungesChatsStates[state.userState.user.id]
                                       [lounges[index].id]
-                                  .countNewMessages()
+                                  ?.countNewMessages()
                               : 0,
                           lounges[index],
                           dispatch,
@@ -170,7 +170,7 @@ class _MyLoungesScreenState extends State<MyLoungesScreen>
                         width: 40.0,
                         height: 40.0,
                         child: Image.asset('images/chatIcon.png')),
-                    if (newMessageCount > 0)
+                    if ((newMessageCount ?? 0) > 0)
                       Positioned(
                           top: 0,
                           left: 0,
