@@ -337,7 +337,7 @@ class _FindEventsScreen extends State<FindEventsScreen>
                                         style: const TextStyle(color: orange)),
                                     if (event.distance != null)
                                       Text(
-                                          '${event.distance.toString()}${FlutterI18n.translate(context, 'FIND_EVENTS.AWAY')}',
+                                          '${event.distance.toStringAsFixed(1)}${FlutterI18n.translate(context, 'FIND_EVENTS.AWAY')}',
                                           style: const TextStyle(color: orange))
                                   ]),
                               Wrap(children: <Widget>[
