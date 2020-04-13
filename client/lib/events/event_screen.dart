@@ -59,6 +59,7 @@ class _EventScreenState extends State<EventScreen>
   String _adressEvent;
   double _latitude;
   double _longitude;
+  bool _doubleClickingGuard;
 
   @override
   void initState() {
@@ -78,6 +79,7 @@ class _EventScreenState extends State<EventScreen>
         position: LatLng(_latitude, _longitude),
         infoWindow: InfoWindow(title: widget.event.name));
     _resolveAdressEvent();
+    _doubleClickingGuard = false;
   }
 
   @override
@@ -296,26 +298,30 @@ class _EventScreenState extends State<EventScreen>
                                     fontWeight: FontWeight.w500)),
                           ),
                           SizedBox(
-                              child: GestureDetector(
-                                  onTap: () => Navigator.pop(context),
-                                  child: Container(
-                                      color: white,
-                                      child: Column(children: <Widget>[
-                                        Container(
-                                            padding: const EdgeInsets.all(15),
-                                            child: Align(
-                                                alignment:
-                                                    Alignment.bottomCenter,
-                                                child: Text(
-                                                    FlutterI18n.translate(
-                                                        context,
-                                                        'EVENT.GOT_IT'),
-                                                    style: const TextStyle(
-                                                        color: Colors.green,
-                                                        fontSize: 24,
-                                                        fontWeight:
-                                                            FontWeight.w600))))
-                                      ]))))
+                            child: GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    _doubleClickingGuard = false;
+                                  });
+                                  Navigator.pop(context);
+                                },
+                                child: Container(
+                                    color: white,
+                                    child: Column(children: <Widget>[
+                                      Container(
+                                          padding: const EdgeInsets.all(15),
+                                          child: Align(
+                                              alignment: Alignment.bottomCenter,
+                                              child: Text(
+                                                  FlutterI18n.translate(
+                                                      context, 'EVENT.GOT_IT'),
+                                                  style: const TextStyle(
+                                                      color: Colors.green,
+                                                      fontSize: 24,
+                                                      fontWeight:
+                                                          FontWeight.w600))))
+                                    ]))),
+                          )
                         ]))
               ]));
         });
@@ -627,35 +633,45 @@ class _EventScreenState extends State<EventScreen>
             : Container(
                 padding: const EdgeInsets.all(5),
                 color: orange,
-                child: InkWell(
-                    onTap: () {
-                      if (!widget.event.likes.contains(state.loginState.id)) {
-                        dispatch(EventLikeAction(widget.event));
-                      }
-                      dispatch(EventRegisterAction(widget.event));
-                      _showInfoPopup();
-                    },
-                    child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: <Widget>[
-                                Icon(Icons.check, color: white, size: 16),
-                                Text(widget.event.memberIds.length.toString(),
-                                    style: const TextStyle(
-                                        color: white,
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w400))
-                              ]),
-                          Text(
-                              FlutterI18n.translate(context, 'EVENT.ATTENDING'),
-                              textAlign: TextAlign.center,
-                              style: const TextStyle(
-                                  color: white,
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w400))
-                        ]))));
+                child: IgnorePointer(
+                    ignoring: _doubleClickingGuard,
+                    child: InkWell(
+                        onTap: () {
+                          setState(() {
+                            _doubleClickingGuard = true;
+                          });
+                          if (!widget.event.likes
+                              .contains(state.loginState.id)) {
+                            dispatch(EventLikeAction(widget.event));
+                          }
+                          dispatch(EventRegisterAction(widget.event));
+                          _showInfoPopup();
+                        },
+                        child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: <Widget>[
+                                    Icon(Icons.check, color: white, size: 16),
+                                    Text(
+                                        widget.event.memberIds.length
+                                            .toString(),
+                                        style: const TextStyle(
+                                            color: white,
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w400))
+                                  ]),
+                              Text(
+                                  FlutterI18n.translate(
+                                      context, 'EVENT.ATTENDING'),
+                                  textAlign: TextAlign.center,
+                                  style: const TextStyle(
+                                      color: white,
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w400))
+                            ])))));
   }
 
   Widget _buildDescription() {
