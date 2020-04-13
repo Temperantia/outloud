@@ -241,7 +241,10 @@ class _LoungesScreenState extends State<LoungesScreen>
           void Function(redux.ReduxAction<AppState>) dispatch,
           Widget child) {
         final List<Lounge> lounges =
-            state.userState.eventLounges[widget.event.id];
+            List<Lounge>.of(state.userState.eventLounges[widget.event.id]);
+        lounges.removeWhere((Lounge lounge) {
+          return lounge.memberIds.length >= lounge.memberLimit;
+        });
         return View(
             title: FlutterI18n.translate(context, 'LOUNGES.BROWSING_LOUNGES'),
             buttons: Row(
@@ -259,7 +262,7 @@ class _LoungesScreenState extends State<LoungesScreen>
             child: Column(children: <Widget>[
               _buildHeader(context),
               const Divider(),
-              if (lounges == null)
+              if (lounges == null || lounges.isEmpty)
                 _noLoungeWidget(dispatch)
               else if (lounges.isNotEmpty)
                 Container(
