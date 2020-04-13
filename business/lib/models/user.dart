@@ -43,12 +43,12 @@ Future<List<User>> getUsers(String userId,
     int ageStart = 13,
     int ageEnd = 99,
     double distance = -1}) async {
-  final DateTime now = DateTime.now();
+  /* final DateTime now = DateTime.now();
   final DateTime dateStart = DateTime(now.year - ageStart, now.month, now.day);
-  final DateTime dateEnd = DateTime(now.year - ageEnd, now.month, now.day);
+  final DateTime dateEnd = DateTime(now.year - ageEnd, now.month, now.day); */
   Query query = _api.queryCollection(where: <QueryConstraint>[
-    QueryConstraint(field: 'birthDate', isGreaterThanOrEqualTo: dateEnd),
-    QueryConstraint(field: 'birthDate', isLessThanOrEqualTo: dateStart),
+    /*   QueryConstraint(field: 'birthDate', isGreaterThanOrEqualTo: dateEnd),
+    QueryConstraint(field: 'birthDate', isLessThanOrEqualTo: dateStart), */
   ]);
   if (interests.isNotEmpty) {
     query = query.where('interests', arrayContainsAny: interests);
