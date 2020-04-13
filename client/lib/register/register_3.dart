@@ -111,7 +111,7 @@ class _Register3ScreenState extends State<Register3Screen> {
                   isExpanded: true,
                   value: controller[0] as String,
                   icon: const Icon(Icons.arrow_drop_down, color: orange),
-                  underline: Container(),
+                  underline: Container(width: 0.0, height: 0.0),
                   style: const TextStyle(color: orange),
                   onChanged: (String newValue) =>
                       setState(() => controller[0] = newValue),
@@ -227,7 +227,7 @@ class _Register3ScreenState extends State<Register3Screen> {
                     padding: const EdgeInsets.all(20.0),
                     child: Column(children: <Widget>[
                       Row(children: <Widget>[
-                        Expanded(child: Container()),
+                        Expanded(child: Container(width: 0.0, height: 0.0)),
                         Expanded(
                             child: Container(
                                 width: 50.0,

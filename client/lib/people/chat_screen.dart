@@ -152,7 +152,7 @@ class _ChatScreenState extends State<ChatScreen> {
       final String picture = user.pics.isEmpty ? null : user.pics[0];
       final String userId = user.id;
       if (widget.chat.entity == null) {
-        return Container();
+        return Container(width: 0.0, height: 0.0);
       }
       _markAsRead(state.chatsState.usersChatsStates, userId, dispatch);
       final String namePeer = (widget.chat.entity as User).name.split(' ')[0];

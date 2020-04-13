@@ -57,86 +57,87 @@ class _MyEventsScreen extends State<MyEventsScreen>
         orElse: () => null);
 
     if (event == null) {
-      return Container();
+      return Container(width: 0.0, height: 0.0);
     }
-    return Container(
-        padding: const EdgeInsets.all(10.0),
-        child: Row(children: <Widget>[
-          GestureDetector(
-            onTap: () => dispatch(redux.NavigateAction<AppState>.pushNamed(
-                EventScreen.id,
-                arguments: event)),
-            child: Stack(alignment: Alignment.center, children: <Widget>[
-              CachedImage(event.pic,
-                  width: 70.0,
-                  height: 70.0,
-                  borderRadius: const BorderRadius.only(
-                      bottomRight: Radius.circular(5.0),
-                      topRight: Radius.circular(5.0)),
-                  imageType: ImageType.Event),
-              Container(
-                  color: pink.withOpacity(0.5), width: 70.0, height: 70.0),
-              Column(children: <Widget>[
-                Text(date,
-                    style: const TextStyle(
-                        color: white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20)),
-                Text(month,
-                    style: const TextStyle(
-                        color: white, fontWeight: FontWeight.bold))
-              ])
-            ]),
-          ),
-          Expanded(
-              child: Container(
-                  padding: const EdgeInsets.only(left: 10.0),
-                  child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: <Widget>[
-                        Text(event.name,
-                            style:
-                                const TextStyle(fontWeight: FontWeight.bold)),
-                        Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              Text('$time - $timeEnd'),
-                              Container(
-                                  child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: <Widget>[
-                                    if (state == UserEventState.Attending)
-                                      Icon(Icons.check)
-                                    else if (state == UserEventState.Liked)
-                                      Icon(MdiIcons.heart),
-                                    Text(stateMessage),
-                                  ]))
-                            ]),
-                        if (lounge == null)
-                          Button(
-                              text: FlutterI18n.translate(
-                                  context, 'MY_EVENTS.FIND_LOUNGES'),
-                              height: 30.0,
-                              backgroundColor: orange,
-                              backgroundOpacity: 1.0,
-                              onPressed: () => dispatch(
-                                  redux.NavigateAction<AppState>.pushNamed(
-                                      LoungesScreen.id,
-                                      arguments: event)))
-                        else
-                          Button(
-                              text: FlutterI18n.translate(
-                                  context, 'MY_EVENTS.VIEW_LOUNGE'),
-                              height: 30.0,
-                              backgroundColor: pinkBright,
-                              backgroundOpacity: 1.0,
-                              onPressed: () => dispatch(
-                                  redux.NavigateAction<AppState>.pushNamed(
-                                      LoungeChatScreen.id,
-                                      arguments: lounge)))
-                      ])))
-        ]));
+    return GestureDetector(
+        onTap: () => dispatch(redux.NavigateAction<AppState>.pushNamed(
+            EventScreen.id,
+            arguments: event)),
+        child: Container(
+            decoration: BoxDecoration(color: Colors.transparent),
+            padding: const EdgeInsets.all(10.0),
+            child: Row(children: <Widget>[
+              Stack(alignment: Alignment.center, children: <Widget>[
+                CachedImage(event.pic,
+                    width: 70.0,
+                    height: 70.0,
+                    borderRadius: const BorderRadius.only(
+                        bottomRight: Radius.circular(5.0),
+                        topRight: Radius.circular(5.0)),
+                    imageType: ImageType.Event),
+                Container(
+                    color: pink.withOpacity(0.5), width: 70.0, height: 70.0),
+                Column(children: <Widget>[
+                  Text(date,
+                      style: const TextStyle(
+                          color: white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20)),
+                  Text(month,
+                      style: const TextStyle(
+                          color: white, fontWeight: FontWeight.bold))
+                ])
+              ]),
+              Expanded(
+                  child: Container(
+                      padding: const EdgeInsets.only(left: 10.0),
+                      child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: <Widget>[
+                            Text(event.name,
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold)),
+                            Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: <Widget>[
+                                  Text('$time - $timeEnd'),
+                                  Container(
+                                      child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: <Widget>[
+                                        if (state == UserEventState.Attending)
+                                          Icon(Icons.check)
+                                        else if (state == UserEventState.Liked)
+                                          Icon(MdiIcons.heart),
+                                        Text(stateMessage),
+                                      ]))
+                                ]),
+                            if (lounge == null)
+                              Button(
+                                  text: FlutterI18n.translate(
+                                      context, 'MY_EVENTS.FIND_LOUNGES'),
+                                  height: 30.0,
+                                  backgroundColor: orange,
+                                  backgroundOpacity: 1.0,
+                                  onPressed: () => dispatch(
+                                      redux.NavigateAction<AppState>.pushNamed(
+                                          LoungesScreen.id,
+                                          arguments: event)))
+                            else
+                              Button(
+                                  text: FlutterI18n.translate(
+                                      context, 'MY_EVENTS.VIEW_LOUNGE'),
+                                  height: 30.0,
+                                  backgroundColor: pinkBright,
+                                  backgroundOpacity: 1.0,
+                                  onPressed: () => dispatch(
+                                      redux.NavigateAction<AppState>.pushNamed(
+                                          LoungeChatScreen.id,
+                                          arguments: lounge)))
+                          ])))
+            ])));
   }
 
   Widget _buildUserEvents(
@@ -146,27 +147,28 @@ class _MyEventsScreen extends State<MyEventsScreen>
       ThemeStyle themeStyle,
       void Function(redux.ReduxAction<AppState>) dispatch) {
     return userEvents.isEmpty
-        ? Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: <
-            Widget>[
-            Container(
-                padding: const EdgeInsets.symmetric(horizontal: 30.0),
-                child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Container(
-                          child: Text(
-                              FlutterI18n.translate(
-                                  context, 'MY_EVENTS.MY_EVENTS_EMPTY_TITLE'),
-                              style: const TextStyle(
-                                  fontSize: 20.0,
-                                  fontWeight: FontWeight.bold))),
-                      Text(
-                          FlutterI18n.translate(
-                              context, 'MY_EVENTS.MY_EVENTS_EMPTY_DESCRIPTION'),
-                          style: const TextStyle(color: grey))
-                    ])),
-            Image.asset('images/catsIllus4.png')
-          ])
+        ? Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
+                Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Container(
+                              child: Text(
+                                  FlutterI18n.translate(context,
+                                      'MY_EVENTS.MY_EVENTS_EMPTY_TITLE'),
+                                  style: const TextStyle(
+                                      fontSize: 20.0,
+                                      fontWeight: FontWeight.bold))),
+                          Text(
+                              FlutterI18n.translate(context,
+                                  'MY_EVENTS.MY_EVENTS_EMPTY_DESCRIPTION'),
+                              style: const TextStyle(color: grey))
+                        ])),
+                Image.asset('images/catsIllus4.png')
+              ])
         : Column(children: <Widget>[
             Expanded(
                 flex: 8,

@@ -67,26 +67,37 @@ class _ViewState extends State<View> {
       User user, void Function(ReduxAction<dynamic>) dispatch) {
     return Container(
         width: 300.0,
+        padding: const EdgeInsets.all(10.0),
         decoration: const BoxDecoration(
             image: DecorationImage(
                 image: AssetImage('images/userMenuBG.png'), fit: BoxFit.cover)),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: <
             Widget>[
+          Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                if (user == null)
+                  const CircularProgressIndicator()
+                else
+                  Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: GestureDetector(
+                          onTap: () => setState(
+                              () => _showUserSettings = !_showUserSettings),
+                          child: CachedImage(
+                              user.pics.isEmpty ? null : user.pics[0],
+                              width: 40.0,
+                              height: 40.0,
+                              borderRadius: BorderRadius.circular(60.0),
+                              imageType: ImageType.User))),
+                Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: GestureDetector(
+                        onTap: () => setState(() => _showUserSettings = false),
+                        child: Icon(Icons.close, color: white)))
+              ]),
           Row(children: <Widget>[
-            if (user == null)
-              const CircularProgressIndicator()
-            else
-              Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: GestureDetector(
-                      onTap: () => setState(
-                          () => _showUserSettings = !_showUserSettings),
-                      child: CachedImage(
-                          user.pics.isEmpty ? null : user.pics[0],
-                          width: 40.0,
-                          height: 40.0,
-                          borderRadius: BorderRadius.circular(60.0),
-                          imageType: ImageType.User))),
+            Text(user.name, style: const TextStyle(color: white))
           ]),
           GestureDetector(
               onTap: () {
@@ -103,7 +114,7 @@ class _ViewState extends State<View> {
                     padding: const EdgeInsets.only(left: 8.0),
                     child: Text(
                         FlutterI18n.translate(context, 'MENU_USER.OPTION_1'),
-                        style: const TextStyle(color: white, fontSize: 10.0))),
+                        style: const TextStyle(color: white))),
               ])),
           GestureDetector(
               onTap: () {
@@ -123,9 +134,9 @@ class _ViewState extends State<View> {
                     padding: const EdgeInsets.only(left: 8.0),
                     child: Text(
                         FlutterI18n.translate(context, 'MENU_USER.OPTION_2'),
-                        style: const TextStyle(color: white, fontSize: 10.0))),
+                        style: const TextStyle(color: white))),
               ])),
-          const Divider(),
+          const Divider(color: white),
           GestureDetector(
               onTap: () {
                 Navigator.of(context)
@@ -142,7 +153,7 @@ class _ViewState extends State<View> {
                     padding: const EdgeInsets.only(left: 8.0),
                     child: Text(
                         FlutterI18n.translate(context, 'MENU_USER.OPTION_3'),
-                        style: const TextStyle(color: white, fontSize: 10.0))),
+                        style: const TextStyle(color: white))),
               ]))
         ]));
   }
@@ -151,14 +162,21 @@ class _ViewState extends State<View> {
       AppState state, void Function(ReduxAction<dynamic>) dispatch) {
     int newMessageCount = 0;
     int newMessageLoungeCount = 0;
-    for (final ChatState chatState
-        in state.chatsState.usersChatsStates[state.userState.user.id].values) {
-      newMessageCount += chatState.countNewMessages();
+    final String userId = state.userState.user.id;
+    if (state.chatsState.usersChatsStates[userId] != null) {
+      for (final ChatState chatState in state
+          .chatsState.usersChatsStates[state.userState.user.id].values) {
+        newMessageCount += chatState.countNewMessages();
+      }
     }
-    for (final ChatState chatState in state
-        .chatsState.loungesChatsStates[state.userState.user.id].values) {
-      newMessageLoungeCount += chatState.countNewMessages();
+
+    if (state.chatsState.loungesChatsStates[userId] != null) {
+      for (final ChatState chatState in state
+          .chatsState.loungesChatsStates[state.userState.user.id].values) {
+        newMessageLoungeCount += chatState.countNewMessages();
+      }
     }
+
     return GradientBottomNavigationBar(
         backgroundColorStart: pinkLight,
         backgroundColorEnd: pink,
@@ -220,7 +238,7 @@ class _ViewState extends State<View> {
                               else
                                 widget.title is TabBar
                                     ? widget.title as TabBar
-                                    : Container(),
+                                    : Container(width: 0.0, height: 0.0),
                               if (Navigator.canPop(context))
                                 Align(
                                     alignment: Alignment.centerLeft,

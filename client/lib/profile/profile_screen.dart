@@ -1,10 +1,8 @@
 import 'dart:typed_data';
 
 import 'package:async_redux/async_redux.dart';
-import 'package:business/actions/app_navigate_action.dart';
 import 'package:business/app_state.dart';
 import 'package:business/classes/user.dart';
-import 'package:business/events/actions/events_get_action.dart';
 import 'package:business/models/user.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -12,7 +10,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:outloud/theme.dart';
-import 'package:outloud/widgets/bubble_bar.dart';
 import 'package:outloud/widgets/button.dart';
 import 'package:outloud/widgets/cached_image.dart';
 import 'package:outloud/widgets/view.dart';
@@ -240,7 +237,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     final String display =
         content.where((String element) => element != '').toList().join(' • ');
     return !_isEdition && display == ''
-        ? Container()
+        ? Container(width: 0.0, height: 0.0)
         : Row(children: <Widget>[
             Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -304,7 +301,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 isExpanded: true,
                 value: controller[0] as String,
                 icon: const Icon(Icons.arrow_drop_down, color: orange),
-                underline: Container(),
+                underline: Container(width: 0.0, height: 0.0),
                 style: const TextStyle(color: orange),
                 onChanged: (String newValue) =>
                     setState(() => controller[0] = newValue),
@@ -396,32 +393,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       _user.interests.add(suggestion['name']);
                     }))
         ]));
-  }
-
-  Widget _buildNavBar(
-      AppState state, void Function(ReduxAction<dynamic>) dispatch) {
-    return Align(
-        alignment: Alignment.bottomCenter,
-        child: Theme(
-            data: Theme.of(context).copyWith(canvasColor: Colors.transparent),
-            child: BottomNavigationBar(
-                elevation: 0,
-                type: BottomNavigationBarType.fixed,
-                showSelectedLabels: false,
-                showUnselectedLabels: false,
-                currentIndex: state.homePageIndex,
-                items: bubbleBar(context, 0, 0, state.theme),
-                onTap: (int index) async {
-                  if (index == state.homePageIndex) {
-                    return;
-                  }
-                  dispatch(AppNavigateAction(index));
-                  if (index == 1) {
-                    dispatch(EventsGetAction());
-                  }
-                  Navigator.of(context)
-                      .popUntil((Route<dynamic> route) => route.isFirst);
-                })));
   }
 
   @override
@@ -576,56 +547,70 @@ class _ProfileScreenState extends State<ProfileScreen> {
         FlutterI18n.translate(context, 'SEXUAL_ORIENTATIONS.SAPIOSEXUAL'),
       ]);
 
-      // TODO(alexandre): remove navbar duplicate
       return View(
-          isProfileScreen: true,
           isEditing: _isEdition,
           user: _user,
-          child: ListView(children: <Widget>[
-            _buildPicture(state.userState.user.id),
-            _buildAbout(),
-            const Divider(),
-            _buildInterests(),
+          child: Column(children: <Widget>[
+            Expanded(
+                child: ListView(children: <Widget>[
+              _buildPicture(state.userState.user.id),
+              _buildAbout(),
+              const Divider(),
+              _buildInterests(),
+            ])),
             if (_isEdition)
-              Button(
-                  width: 200.0,
-                  text: FlutterI18n.translate(context, 'PROFILE.SAVE'),
-                  onPressed: () async {
-                    _user.home =
-                        (_controllers['LOCATION'][0] as TextEditingController)
-                            .text
-                            .trim();
-                    _user.pronoun =
-                        (_controllers['PRONOUNS'][0] as TextEditingController)
-                            .text
-                            .trim();
-                    _user.school =
-                        (_controllers['EDUCATION'][0] as TextEditingController)
-                            .text
-                            .trim();
-                    _user.degree =
-                        (_controllers['EDUCATION'][1] as TextEditingController)
-                            .text
-                            .trim();
-                    _user.position =
-                        (_controllers['OCCUPATION'][0] as TextEditingController)
-                            .text
-                            .trim();
-                    _user.employer =
-                        (_controllers['OCCUPATION'][1] as TextEditingController)
-                            .text
-                            .trim();
-                    _user.pics = await Future.wait<String>(
-                        _pictures.map((dynamic picture) async {
-                      if (picture is Uint8List) {
-                        return await _saveImage(picture);
-                      }
-                      return picture as String;
-                    }).toList());
-                    updateUser(_user);
-                    dispatch(NavigateAction<AppState>.pop());
-                  }),
-            _buildNavBar(state, dispatch),
+              Container(
+                  padding: const EdgeInsets.only(top: 5.0),
+                  decoration: const BoxDecoration(
+                      gradient:
+                          LinearGradient(colors: <Color>[pinkLight, pink])),
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Button(
+                            text:
+                                FlutterI18n.translate(context, 'PROFILE.SAVE'),
+                            onPressed: () async {
+                              _user.home = (_controllers['LOCATION'][0]
+                                      as TextEditingController)
+                                  .text
+                                  .trim();
+                              _user.gender =
+                                  _controllers['GENDER'][0] as String;
+                              _user.pronoun = (_controllers['PRONOUNS'][0]
+                                      as TextEditingController)
+                                  .text
+                                  .trim();
+                              _user.orientation =
+                                  _controllers['SEXUAL ORIENTATION'][0]
+                                      as String;
+                              _user.school = (_controllers['EDUCATION'][0]
+                                      as TextEditingController)
+                                  .text
+                                  .trim();
+                              _user.degree = (_controllers['EDUCATION'][1]
+                                      as TextEditingController)
+                                  .text
+                                  .trim();
+                              _user.position = (_controllers['OCCUPATION'][0]
+                                      as TextEditingController)
+                                  .text
+                                  .trim();
+                              _user.employer = (_controllers['OCCUPATION'][1]
+                                      as TextEditingController)
+                                  .text
+                                  .trim();
+                              _user.pics = await Future.wait<String>(
+                                  _pictures.map((dynamic picture) async {
+                                if (picture is Uint8List) {
+                                  return await _saveImage(picture);
+                                }
+                                return picture as String;
+                              }).toList());
+                              updateUser(_user);
+                              dispatch(NavigateAction<AppState>.pop());
+                            })
+                      ]))
           ]));
     });
   }

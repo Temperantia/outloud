@@ -119,11 +119,12 @@ class _EventAttendingScreenState extends State<EventAttendingScreen> {
         void Function(redux.ReduxAction<AppState>) dispatch,
         Widget child) {
       return View(
+          title: 'LISTE DE PARTICIPANTS',
           child: Column(children: <Widget>[
-        _buildHeader(),
-        const Divider(),
-        _buildList(dispatch)
-      ]));
+            _buildHeader(),
+            const Divider(),
+            _buildList(dispatch)
+          ]));
     });
   }
 }

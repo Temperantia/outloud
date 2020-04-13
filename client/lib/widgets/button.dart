@@ -7,7 +7,6 @@ class Button extends StatelessWidget {
       this.onPressed,
       this.width,
       this.height,
-      this.icon,
       this.backgroundColor = orangeLight,
       this.backgroundOpacity = 0.5,
       this.colorText = white,
@@ -22,7 +21,6 @@ class Button extends StatelessWidget {
   final Function onPressed;
   final double width;
   final double height;
-  final Icon icon;
   final Color backgroundColor;
   final double backgroundOpacity;
   final Color colorText;
@@ -43,13 +41,11 @@ class Button extends StatelessWidget {
             bottom: paddingBottom),
         width: width,
         height: height ?? 50,
-        child: RaisedButton.icon(
-            elevation: 0.0,
+        child: FlatButton(
             color: backgroundColor.withOpacity(backgroundOpacity),
             textColor: colorText,
             onPressed: onPressed == null ? () {} : () => onPressed(),
-            icon: icon ?? Container(),
-            label: Text(text,
+            child: Text(text,
                 style: TextStyle(
                     color: colorText,
                     fontSize: fontSize,

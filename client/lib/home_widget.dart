@@ -22,7 +22,7 @@ class _HomeWidgetState extends State<HomeWidget>
         AppState state,
         void Function(ReduxAction<dynamic>) dispatch,
         Widget child) {
-      return Container();
+      return Container(width: 0.0, height: 0.0);
     });
   }
 }

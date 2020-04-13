@@ -110,7 +110,7 @@ class _Register2ScreenState extends State<Register2Screen> {
                     padding: const EdgeInsets.all(20.0),
                     child: Column(children: <Widget>[
                       Row(children: <Widget>[
-                        Expanded(child: Container()),
+                        Expanded(child: Container(width: 0.0, height: 0.0)),
                         Expanded(
                             child: Container(
                                 width: 50.0,

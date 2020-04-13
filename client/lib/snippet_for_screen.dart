@@ -13,7 +13,7 @@ class SnippetScreen extends StatelessWidget {
         AppState state,
         void Function(ReduxAction<AppState>) dispatch,
         Widget child) {
-      return View(child: Container());
+      return View(child: Container(width: 0.0, height: 0.0));
     });
   }
 }

@@ -162,13 +162,13 @@ class _LoungeChatScreenState extends State<LoungeChatScreen>
   Widget _buildHeader(
       AppState state, void Function(ReduxAction<AppState>) dispatch) {
     if (_lounge == null || _lounge.members == null) {
-      return Container();
+      return Container(width: 0.0, height: 0.0);
     }
     final User owner = _lounge.members.firstWhere(
         (User member) => member.id == _lounge.owner,
         orElse: () => null);
     if (owner == null) {
-      return Container();
+      return Container(width: 0.0, height: 0.0);
     }
     return Container(
         padding: const EdgeInsets.symmetric(horizontal: 15.0),
@@ -333,7 +333,7 @@ class _LoungeChatScreenState extends State<LoungeChatScreen>
         (User user) => user.id == message.idFrom,
         orElse: () => null);
     if (user == null) {
-      return Container();
+      return Container(width: 0.0, height: 0.0);
     }
     return Container(
         padding: const EdgeInsets.all(4),
