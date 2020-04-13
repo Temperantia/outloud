@@ -259,7 +259,7 @@ class _ViewState extends State<View> {
                               )
                             ],
                             flexibleSpace: Image.asset('images/screenTop.png',
-                                fit: BoxFit.fill),
+                                fit: BoxFit.cover),
                             backgroundColor: Colors.transparent)
                         : null,
                     bottomNavigationBar: widget.showNavBar
