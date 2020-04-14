@@ -17,6 +17,7 @@ dependencies:
   enum_to_string: ^1.0.8
   timeago: ^2.0.24
   intl: ^0.16.0
+  device_info: 0.4.2+1
 
   location_permissions: ^2.0.4
   geolocator: ^5.1.5
