@@ -13,6 +13,7 @@ dependencies:
   google_sign_in: ^4.1.1
   firebase_auth: ^0.15.4
   flutter_facebook_login: ^3.0.0
+  apple_sign_in: ^0.1.0
   async_redux: ^2.5.2
   enum_to_string: ^1.0.8
   timeago: ^2.0.24
