@@ -131,7 +131,7 @@ class _LoungesWidgetState extends State<LoungesWidget>
                                                   animationDuration: 600);
                                               Navigator.pop(context);
                                               dispatch(AppNavigateAction(0));
-                                              dispatch(AppSwitchEventsTab(1));
+                                              dispatch(AppSwitchEventsTab(0));
                                               // redux.NavigateAction<AppState>.pushNamed('0');
                                             },
                                             child: Text(

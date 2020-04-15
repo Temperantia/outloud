@@ -252,8 +252,8 @@ class _LoungesScreenState extends State<LoungesScreen>
           AppState state,
           void Function(redux.ReduxAction<AppState>) dispatch,
           Widget child) {
-        final List<Lounge> lounges =
-            List<Lounge>.of(state.userState.eventLounges[widget.event.id]?? <Lounge>[]);
+        final List<Lounge> lounges = List<Lounge>.of(
+            state.userState.eventLounges[widget.event.id] ?? <Lounge>[]);
         lounges.removeWhere((Lounge lounge) {
           return lounge.memberIds.length >= lounge.memberLimit;
         });
