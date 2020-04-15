@@ -12,6 +12,7 @@ import 'package:business/login/actions/login_action.dart';
 import 'package:outloud/routes.dart';
 
 import 'package:outloud/theme.dart';
+import 'package:outloud/widgets/eula_widget.dart';
 import 'package:outloud/widgets/loading.dart';
 import 'package:provider_for_redux/provider_for_redux.dart';
 
@@ -59,8 +60,12 @@ class _AppState extends State<App> {
     return AsyncReduxProvider<AppState>.value(
         value: store,
         child: ReduxSelector<AppState, dynamic>(
-            selector: (BuildContext context, AppState state) =>
-                <dynamic>[state.loading, state.userState.user, state.theme],
+            selector: (BuildContext context, AppState state) => <dynamic>[
+                  state.loading,
+                  state.userState.user,
+                  state.theme,
+                  state.acceptedEula
+                ],
             builder: (BuildContext context,
                 Store<AppState> store,
                 AppState state,
@@ -77,11 +82,13 @@ class _AppState extends State<App> {
                   debugShowCheckedModeBanner: false,
                   theme: theme(state.theme),
                   title: 'Inc•lusive',
-                  home: state.loading
-                      ? Loading()
-                      : state.userState.user == null
-                          ? LoginScreen()
-                          : HomeScreen(),
+                  home: !state.acceptedEula
+                      ? EulaWidget()
+                      : state.loading
+                          ? Loading()
+                          : state.userState.user == null
+                              ? LoginScreen()
+                              : HomeScreen(),
                   navigatorKey: navigatorKey,
                   onGenerateRoute: (RouteSettings settings) =>
                       MaterialPageRoute<dynamic>(

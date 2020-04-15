@@ -1,5 +1,6 @@
 import 'package:async_redux/async_redux.dart';
 import 'package:business/app_state.dart';
+import 'package:business/login/actions/login_apple_action.dart';
 import 'package:business/login/actions/login_google_action.dart';
 import 'package:business/login/actions/login_facebook_action.dart';
 import 'package:flutter/material.dart';
@@ -76,7 +77,7 @@ class LoginScreen extends StatelessWidget {
                                   width: 300.0,
                                   backgroundColor: blueDark,
                                   backgroundOpacity: 0.7,
-                                  onPressed: () async {
+                                  onPressed: () {
                                     dispatch(LoginFacebookAction());
                                     dispatch(NavigateAction<AppState>.pushNamed(
                                         Register1Screen.id));
@@ -87,12 +88,21 @@ class LoginScreen extends StatelessWidget {
                                     context, 'LOGIN.GOOGLE'),
                                 fontWeight: FontWeight.bold,
                                 width: 300.0,
-                                onPressed: () async {
+                                onPressed: () {
                                   dispatch(LoginGoogleAction());
                                   dispatch(NavigateAction<AppState>.pushNamed(
                                       Register1Screen.id));
                                 }),
-                            Container(height: 50.0)
+                            Button(
+                                text: FlutterI18n.translate(
+                                    context, 'LOGIN.APPLE'),
+                                fontWeight: FontWeight.bold,
+                                width: 300.0,
+                                onPressed: () {
+                                  dispatch(LoginAppleAction());
+                                  dispatch(NavigateAction<AppState>.pushNamed(
+                                      Register1Screen.id));
+                                }),
                           ]))
                 ])));
   }
