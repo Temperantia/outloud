@@ -3,7 +3,6 @@ import 'package:business/app_state.dart';
 import 'package:flutter/material.dart';
 import 'package:outloud/events/find_events_screen.dart';
 import 'package:outloud/events/my_events_screen.dart';
-import 'package:outloud/widgets/loading.dart';
 import 'package:provider_for_redux/provider_for_redux.dart';
 
 class EventsWidget extends StatefulWidget {
@@ -36,25 +35,12 @@ class _EventsWidgetState extends State<EventsWidget>
         AppState state,
         void Function(redux.ReduxAction<dynamic>) dispatch,
         Widget child) {
-      if ( //state.eventsState.events == null ||
-          state.userState.events == null ||
-              state.userState.user.events == null ||
-              state.userState.lounges == null) {
-        return Loading();
-      }
-
-      //_tabController.animateTo(state.eventsTabIndex);
-
-      return Column(children: <Widget>[
-        Expanded(
-            flex: 8,
-            child: TabBarView(
-                physics: const NeverScrollableScrollPhysics(),
-                children: <Widget>[
-                  FindEventsScreen(),
-                  MyEventsScreen(),
-                ])),
-      ]);
+      return TabBarView(
+          physics: const NeverScrollableScrollPhysics(),
+          children: <Widget>[
+            FindEventsScreen(),
+            MyEventsScreen(),
+          ]);
     });
   }
 }
