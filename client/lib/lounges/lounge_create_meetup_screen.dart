@@ -517,8 +517,7 @@ class _LoungeCreateMeetupScreenState extends State<LoungeCreateMeetupScreen> {
                                           height: 40,
                                           padding: const EdgeInsets.all(10.0),
                                           child: Text(
-                                              _timeEvent.hour
-                                                  .toString(),
+                                              _timeEvent.hour.toString(),
                                               style: const TextStyle(
                                                   color: orange,
                                                   fontWeight:
@@ -639,34 +638,15 @@ class _LoungeCreateMeetupScreenState extends State<LoungeCreateMeetupScreen> {
                               _dateEvent.day,
                               _timeEvent.hour,
                               _timeEvent.minute);
+                          GeoPoint _location;
                           if (_positionOfPlace == null) {
-                            showDialog(
-                                context: context,
-                                builder: (BuildContext context) => AlertDialog(
-                                        title: Text(FlutterI18n.translate(
-                                            context,
-                                            'LOUNGE_CREATE_MEETUP.MISSING_INFORMATION')),
-                                        content: Text(FlutterI18n.translate(
-                                            context,
-                                            'LOUNGE_CREATE_MEETUP.POSITION_TO_PROVIDE')),
-                                        actions: <Widget>[
-                                          FlatButton(
-                                              onPressed: () {
-                                                _dismissDialog();
-                                                _scrollController.animateTo(0,
-                                                    duration: const Duration(
-                                                        seconds: 1),
-                                                    curve: Curves.ease);
-                                              },
-                                              child: Text(FlutterI18n.translate(
-                                                  context,
-                                                  'LOUNGE_CREATE_MEETUP.OK')))
-                                        ]));
-                            return;
+                            _location = null;
+                          } else {
+                            _location = GeoPoint(
+                                _positionOfPlace.position.latitude,
+                                _positionOfPlace.position.longitude);
                           }
-                          final GeoPoint _location = GeoPoint(
-                              _positionOfPlace.position.latitude,
-                              _positionOfPlace.position.longitude);
+
                           dispatch(LoungeCreateMeetupAction(_location,
                               _dateOfEvent, _notesTextController.text));
                         }),

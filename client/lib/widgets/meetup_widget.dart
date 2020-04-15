@@ -81,25 +81,31 @@ class LoungeMeetupWidgetState extends State<LoungeMeetupWidget> {
   }
 
   Future<void> _initLounge() async {
-    final String _address = await _getAdressFromCoordinates(
-        widget.lounge.location.latitude, widget.lounge.location.longitude);
+    final String _address = widget.lounge.location != null
+        ? await _getAdressFromCoordinates(
+            widget.lounge.location.latitude, widget.lounge.location.longitude)
+        : '';
     setState(() {
       _searchTextController.text = _address;
-      _positionOfPlace = Marker(
-          markerId: MarkerId(_address),
-          position: LatLng(widget.lounge.location.latitude,
-              widget.lounge.location.longitude),
-          infoWindow: InfoWindow(
-              snippet: _address,
-              title: FlutterI18n.translate(
-                  context, 'LOUNGE_CREATE_MEETUP.MEETING_POINT')));
       _notesTextController.text = widget.lounge.notes;
       _timeEvent = TimeOfDay.fromDateTime(widget.lounge.date);
       _dateEvent = widget.lounge.date;
-      _markers.clear();
-      _markers[_positionOfPlace.markerId.toString()] = _positionOfPlace;
+
+      if (widget.lounge.location != null) {
+        _positionOfPlace = Marker(
+            markerId: MarkerId(_address),
+            position: LatLng(widget.lounge.location.latitude,
+                widget.lounge.location.longitude),
+            infoWindow: InfoWindow(
+                snippet: _address,
+                title: FlutterI18n.translate(
+                    context, 'LOUNGE_CREATE_MEETUP.MEETING_POINT')));
+        _markers.clear();
+        _markers[_positionOfPlace.markerId.toString()] = _positionOfPlace;
+      }
     });
-    _moveCameraToPosition(_positionOfPlace.position, 15);
+    if (widget.lounge.location != null) 
+      _moveCameraToPosition(_positionOfPlace.position, 15);
   }
 
   Future<void> _onSearchChanged() async {
@@ -525,8 +531,7 @@ class LoungeMeetupWidgetState extends State<LoungeMeetupWidget> {
                                       color: orangeLight,
                                       height: 40,
                                       padding: const EdgeInsets.all(10.0),
-                                      child: Text(
-                                          _timeEvent.hour.toString()))),
+                                      child: Text(_timeEvent.hour.toString()))),
                               const Text(':'),
                               GestureDetector(
                                   onTap: () {
