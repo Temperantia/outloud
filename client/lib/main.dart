@@ -12,7 +12,7 @@ import 'package:business/login/actions/login_action.dart';
 import 'package:outloud/routes.dart';
 
 import 'package:outloud/theme.dart';
-import 'package:outloud/widgets/eula_widget.dart';
+//import 'package:outloud/widgets/eula_widget.dart';
 import 'package:outloud/widgets/loading.dart';
 import 'package:provider_for_redux/provider_for_redux.dart';
 
@@ -82,9 +82,9 @@ class _AppState extends State<App> {
                   debugShowCheckedModeBanner: false,
                   theme: theme(state.theme),
                   title: 'Inc•lusive',
-                  home: !state.acceptedEula
+                  home: /*!state.acceptedEula
                       ? EulaWidget()
-                      : state.loading
+                      :*/ state.loading
                           ? Loading()
                           : state.userState.user == null
                               ? LoginScreen()
