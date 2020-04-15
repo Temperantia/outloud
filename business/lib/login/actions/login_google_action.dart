@@ -57,6 +57,7 @@ class LoginGoogleAction extends ReduxAction<AppState> {
       return state.copy(
           loginState: state.loginState.copy(user: user, id: user.id));
     } catch (error) {
+      dispatch(NavigateAction<AppState>.pop());
       return state.copy(
           loginState: state.loginState.copy(loginError: error.toString()));
     }

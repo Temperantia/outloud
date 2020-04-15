@@ -12,6 +12,7 @@ import 'package:business/login/actions/login_action.dart';
 import 'package:outloud/routes.dart';
 
 import 'package:outloud/theme.dart';
+import 'package:outloud/widgets/error_widget.dart';
 //import 'package:outloud/widgets/eula_widget.dart';
 import 'package:outloud/widgets/loading.dart';
 import 'package:provider_for_redux/provider_for_redux.dart';
@@ -64,7 +65,8 @@ class _AppState extends State<App> {
                   state.loading,
                   state.userState.user,
                   state.theme,
-                  state.acceptedEula
+                  state.acceptedEula,
+                  state.loginState.loginError
                 ],
             builder: (BuildContext context,
                 Store<AppState> store,
@@ -82,9 +84,13 @@ class _AppState extends State<App> {
                   debugShowCheckedModeBanner: false,
                   theme: theme(state.theme),
                   title: 'Inc•lusive',
-                  home: /*!state.acceptedEula
+                  home:
+                      /*!state.acceptedEula
                       ? EulaWidget()
-                      :*/ state.loading
+                      :*/
+                      state.loginState.loginError.compareTo('') != 0 ?
+                      MyErrorWidget(state.loginState.loginError) : 
+                      state.loading
                           ? Loading()
                           : state.userState.user == null
                               ? LoginScreen()
