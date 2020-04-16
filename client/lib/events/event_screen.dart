@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:typed_data';
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:business/app.dart';
 import 'package:business/app_state.dart';
 import 'package:async_redux/async_redux.dart' as redux;
@@ -140,7 +141,8 @@ class _EventScreenState extends State<EventScreen>
                         color: pink,
                         size: 60,
                       ),
-                      Text(FlutterI18n.translate(context, 'EVENT.HOLD_UP'),
+                      AutoSizeText(
+                          FlutterI18n.translate(context, 'EVENT.HOLD_UP'),
                           style: const TextStyle(
                               color: pink,
                               fontSize: 28,
@@ -149,7 +151,7 @@ class _EventScreenState extends State<EventScreen>
                       Container(
                         padding: const EdgeInsets.only(
                             left: 18, right: 18, bottom: 10),
-                        child: Text(
+                        child: AutoSizeText(
                             FlutterI18n.translate(
                                 context, 'EVENT.UNATTEND_WARNING'),
                             textAlign: TextAlign.center,
@@ -161,7 +163,7 @@ class _EventScreenState extends State<EventScreen>
                       Container(
                         padding: const EdgeInsets.only(
                             left: 18, right: 18, bottom: 15),
-                        child: Text(
+                        child: AutoSizeText(
                             FlutterI18n.translate(context, 'EVENT.CONTINUE'),
                             textAlign: TextAlign.justify,
                             style: const TextStyle(
@@ -185,7 +187,7 @@ class _EventScreenState extends State<EventScreen>
                                           child: Container(
                                               padding: const EdgeInsets.only(
                                                   left: 20, right: 20),
-                                              child: Text(
+                                              child: AutoSizeText(
                                                   FlutterI18n.translate(context,
                                                       'EVENT.TAKE_ME_BACK'),
                                                   style: const TextStyle(
@@ -232,7 +234,7 @@ class _EventScreenState extends State<EventScreen>
                                                 }
                                               }
                                             },
-                                            child: Text(
+                                            child: AutoSizeText(
                                                 FlutterI18n.translate(
                                                     context, 'EVENT.UNATTEND'),
                                                 style: const TextStyle(
@@ -278,7 +280,7 @@ class _EventScreenState extends State<EventScreen>
                           const SizedBox(
                             height: 15,
                           ),
-                          Text(
+                          AutoSizeText(
                               FlutterI18n.translate(
                                   context, 'EVENT.LOUNGES_AVAILABLE'),
                               style: const TextStyle(
@@ -289,7 +291,7 @@ class _EventScreenState extends State<EventScreen>
                           Container(
                             padding: const EdgeInsets.only(
                                 left: 18, right: 18, bottom: 10),
-                            child: Text(
+                            child: AutoSizeText(
                                 FlutterI18n.translate(context, 'EVENT.JOINING'),
                                 textAlign: TextAlign.center,
                                 style: const TextStyle(
@@ -312,7 +314,7 @@ class _EventScreenState extends State<EventScreen>
                                           padding: const EdgeInsets.all(15),
                                           child: Align(
                                               alignment: Alignment.bottomCenter,
-                                              child: Text(
+                                              child: AutoSizeText(
                                                   FlutterI18n.translate(
                                                       context, 'EVENT.GOT_IT'),
                                                   style: const TextStyle(
@@ -371,14 +373,15 @@ class _EventScreenState extends State<EventScreen>
                     child: Column(children: <Widget>[
                       Padding(
                           padding: const EdgeInsets.all(5),
-                          child: Text(widget.event.dateStart.day.toString(),
+                          child: AutoSizeText(
+                              widget.event.dateStart.day.toString(),
                               style: const TextStyle(
                                   color: white,
                                   fontSize: 20,
                                   fontWeight: FontWeight.w700))),
                       Padding(
                           padding: const EdgeInsets.all(5),
-                          child: Text(
+                          child: AutoSizeText(
                               DateFormat('MMM').format(widget.event.dateStart),
                               style: const TextStyle(
                                   color: white,
@@ -389,7 +392,7 @@ class _EventScreenState extends State<EventScreen>
                 flex: 5,
                 child: Container(
                     padding: const EdgeInsets.only(left: 5.0),
-                    child: Text(widget.event.name,
+                    child: AutoSizeText(widget.event.name,
                         style: const TextStyle(
                             color: white,
                             fontSize: 20,
@@ -406,7 +409,7 @@ class _EventScreenState extends State<EventScreen>
                 Icon(Icons.location_on, color: pink),
                 Padding(
                     padding: const EdgeInsets.all(5),
-                    child: Text(_adressEvent,
+                    child: AutoSizeText(_adressEvent,
                         style: const TextStyle(
                             color: white,
                             fontSize: 16,
@@ -428,13 +431,13 @@ class _EventScreenState extends State<EventScreen>
                         child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[
-                              Text(
+                              AutoSizeText(
                                   '${DateFormat('jm').format(widget.event.dateStart)} -',
                                   style: const TextStyle(
                                       color: pinkLight,
                                       fontSize: 15,
                                       fontWeight: FontWeight.w900)),
-                              Text(
+                              AutoSizeText(
                                   DateFormat('jm').format(widget.event.dateEnd),
                                   style: const TextStyle(
                                       color: pinkLight,
@@ -457,7 +460,7 @@ class _EventScreenState extends State<EventScreen>
                         padding: const EdgeInsets.all(5),
                         decoration:
                             BoxDecoration(border: Border.all(color: pinkLight)),
-                        child: Text(interest,
+                        child: AutoSizeText(interest,
                             style: const TextStyle(
                                 color: pink,
                                 fontSize: 14,
@@ -466,7 +469,7 @@ class _EventScreenState extends State<EventScreen>
                       margin: const EdgeInsets.all(5),
                       padding: const EdgeInsets.all(5),
                       color: Colors.pink[100],
-                      child: Text(widget.event.price,
+                      child: AutoSizeText(widget.event.price,
                           style: const TextStyle(
                               color: pink,
                               fontSize: 14,
@@ -501,10 +504,12 @@ class _EventScreenState extends State<EventScreen>
                     Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
-                          Text(FlutterI18n.translate(context, 'EVENT.VIEW_MY'),
+                          AutoSizeText(
+                              FlutterI18n.translate(context, 'EVENT.VIEW_MY'),
                               style: const TextStyle(
                                   color: white, fontWeight: FontWeight.bold)),
-                          Text(FlutterI18n.translate(context, 'EVENT.LOUNGE'),
+                          AutoSizeText(
+                              FlutterI18n.translate(context, 'EVENT.LOUNGE'),
                               style: const TextStyle(
                                   color: white, fontWeight: FontWeight.bold)),
                         ]),
@@ -531,7 +536,7 @@ class _EventScreenState extends State<EventScreen>
                               width: 20.0,
                               height: 20.0,
                               child: Image.asset('images/iconLounge.png')),
-                          Text(
+                          AutoSizeText(
                               lounges == null ? '0' : lounges.length.toString(),
                               style: const TextStyle(
                                   color: white,
@@ -540,7 +545,7 @@ class _EventScreenState extends State<EventScreen>
                         ]),
                     Container(
                         padding: const EdgeInsets.only(bottom: 5),
-                        child: Text(
+                        child: AutoSizeText(
                             'LOUNGE${lounges == null || lounges.length <= 1 ? '' : 'S'}',
                             style: const TextStyle(
                                 color: white,
@@ -561,11 +566,13 @@ class _EventScreenState extends State<EventScreen>
                           width: 20.0,
                           height: 20.0,
                           child: Image.asset('images/iconLounge.png')),
-                      Text(FlutterI18n.translate(context, 'EVENT.ATTEND'),
+                      AutoSizeText(
+                          FlutterI18n.translate(context, 'EVENT.ATTEND'),
                           style: const TextStyle(
                               color: white, fontWeight: FontWeight.bold)),
                     ]),
-                Text(FlutterI18n.translate(context, 'EVENT.FOR_LOUNGES'),
+                AutoSizeText(
+                    FlutterI18n.translate(context, 'EVENT.FOR_LOUNGES'),
                     textAlign: TextAlign.center,
                     style: const TextStyle(color: white)),
               ]));
@@ -615,12 +622,12 @@ class _EventScreenState extends State<EventScreen>
                                       MainAxisAlignment.spaceEvenly,
                                   children: <Widget>[
                                     Icon(Icons.person, color: white),
-                                    Text(
+                                    AutoSizeText(
                                         widget.event.memberIds.length
                                             .toString(),
                                         style: const TextStyle(color: white))
                                   ]),
-                              Text(
+                              AutoSizeText(
                                   FlutterI18n.translate(
                                       context, 'EVENT.VIEW_LIST'),
                                   textAlign: TextAlign.center,
@@ -655,7 +662,7 @@ class _EventScreenState extends State<EventScreen>
                                       MainAxisAlignment.spaceEvenly,
                                   children: <Widget>[
                                     Icon(Icons.check, color: white, size: 16),
-                                    Text(
+                                    AutoSizeText(
                                         widget.event.memberIds.length
                                             .toString(),
                                         style: const TextStyle(
@@ -663,7 +670,7 @@ class _EventScreenState extends State<EventScreen>
                                             fontSize: 16,
                                             fontWeight: FontWeight.w400))
                                   ]),
-                              Text(
+                              AutoSizeText(
                                   FlutterI18n.translate(
                                       context, 'EVENT.ATTENDING'),
                                   textAlign: TextAlign.center,
@@ -679,14 +686,15 @@ class _EventScreenState extends State<EventScreen>
         header: Container(
           color: orange,
           padding: const EdgeInsets.all(10),
-          child: Text(FlutterI18n.translate(context, 'EVENT.EVENT_DESCRIPTION'),
+          child: AutoSizeText(
+              FlutterI18n.translate(context, 'EVENT.EVENT_DESCRIPTION'),
               style: const TextStyle(
                   color: white, fontSize: 16, fontWeight: FontWeight.w600)),
         ),
         theme: const ExpandableThemeData(iconColor: orange),
         expanded: Container(
             padding: const EdgeInsets.all(20.0),
-            child: Text(widget.event.description, softWrap: true)));
+            child: AutoSizeText(widget.event.description, softWrap: true)));
   }
 
   Widget _buildBanner() {
@@ -724,7 +732,7 @@ class _EventScreenState extends State<EventScreen>
           Expanded(
               child: Container(
                   margin: const EdgeInsets.all(5),
-                  child: const Text('LIVE FEED',
+                  child: const AutoSizeText('LIVE FEED',
                       style: TextStyle(
                           color: blueDark,
                           fontSize: 28,
@@ -734,19 +742,19 @@ class _EventScreenState extends State<EventScreen>
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: const <Widget>[
-                    Text('Sponsored by : Best event provider',
+                    AutoSizeText('Sponsored by : Best event provider',
                         textAlign: TextAlign.left,
                         style: TextStyle(
                             color: black,
                             fontSize: 16,
                             fontWeight: FontWeight.w400)),
-                    Text('https://www.sponsor-best.com',
+                    AutoSizeText('https://www.sponsor-best.com',
                         textAlign: TextAlign.left,
                         style: TextStyle(
                             color: blueDark,
                             fontSize: 15,
                             fontWeight: FontWeight.w700)),
-                    Text('Twitter / Facebook / @BestEvent',
+                    AutoSizeText('Twitter / Facebook / @BestEvent',
                         textAlign: TextAlign.left,
                         style: TextStyle(
                             color: blueDark,
@@ -806,14 +814,14 @@ class _EventScreenState extends State<EventScreen>
                       child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
-                            Text(user.name,
+                            AutoSizeText(user.name,
                                 style: const TextStyle(
                                     color: blueDark,
                                     fontWeight: FontWeight.bold)),
-                            Text(message.content,
+                            AutoSizeText(message.content,
                                 style: const TextStyle(color: blueDark))
                           ]))),
-              Text(date, style: const TextStyle(color: blueDark))
+              AutoSizeText(date, style: const TextStyle(color: blueDark))
             ]))
         : Row(children: <Widget>[
             Expanded(
@@ -832,12 +840,12 @@ class _EventScreenState extends State<EventScreen>
                             child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
-                                  Text(user.name,
+                                  AutoSizeText(user.name,
                                       style: const TextStyle(
                                           color: blueDark,
                                           fontWeight: FontWeight.bold))
                                 ]))),
-                    Text(date, style: const TextStyle(color: blueDark))
+                    AutoSizeText(date, style: const TextStyle(color: blueDark))
                   ])),
               Row(children: <Widget>[
                 Expanded(
@@ -876,7 +884,8 @@ class _EventScreenState extends State<EventScreen>
                           Icon(Icons.favorite_border, color: white),
                         Padding(
                             padding: const EdgeInsets.only(left: 5.0),
-                            child: Text(widget.event.likes.length.toString(),
+                            child: AutoSizeText(
+                                widget.event.likes.length.toString(),
                                 style: const TextStyle(color: white)))
                       ]))),
           buttons: Container(

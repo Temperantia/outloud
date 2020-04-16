@@ -13,6 +13,10 @@ class UserEventMembersUpdateAction extends redux.ReduxAction<AppState> {
   AppState reduce() {
     final List<Event> events = state.userState.events;
 
+    if (events == null) {
+      return null;
+    }
+
     final Event event = events.firstWhere((Event event) => event.id == _eventId,
         orElse: () => null);
 

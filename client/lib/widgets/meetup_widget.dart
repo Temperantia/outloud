@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:async_redux/async_redux.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:business/app.dart';
 import 'package:business/app_state.dart';
 import 'package:business/classes/lounge.dart';
@@ -104,7 +105,7 @@ class LoungeMeetupWidgetState extends State<LoungeMeetupWidget> {
         _markers[_positionOfPlace.markerId.toString()] = _positionOfPlace;
       }
     });
-    if (widget.lounge.location != null) 
+    if (widget.lounge.location != null)
       _moveCameraToPosition(_positionOfPlace.position, 15);
   }
 
@@ -261,7 +262,7 @@ class LoungeMeetupWidgetState extends State<LoungeMeetupWidget> {
                                 }
                                 _mapButtonsOverlay.remove();
                               },
-                              child: Text(FlutterI18n.translate(
+                              child: AutoSizeText(FlutterI18n.translate(
                                   context, 'LOUNGE_CREATE_MEETUP.CANCEL'))),
                           FlatButton(
                               color: white,
@@ -289,7 +290,7 @@ class LoungeMeetupWidgetState extends State<LoungeMeetupWidget> {
                                 //     _positionOfPlace.position, 15);
                                 _mapButtonsOverlay.remove();
                               },
-                              child: Text(FlutterI18n.translate(
+                              child: AutoSizeText(FlutterI18n.translate(
                                   context, 'LOUNGE_CREATE_MEETUP.OK')))
                         ])))));
   }
@@ -319,7 +320,7 @@ class LoungeMeetupWidgetState extends State<LoungeMeetupWidget> {
 
   Widget _buildCompletionResult(int index) {
     return ListTile(
-        title: Text(_resultPlaces[index].name),
+        title: AutoSizeText(_resultPlaces[index].name),
         onTap: () async {
           _throttle.cancel();
           setState(() {
@@ -359,7 +360,7 @@ class LoungeMeetupWidgetState extends State<LoungeMeetupWidget> {
               constraints: BoxConstraints.expand(
                 height: Theme.of(context).textTheme.display1.fontSize * 1.1,
               ),
-              child: Text(
+              child: AutoSizeText(
                   FlutterI18n.translate(
                       context, 'LOUNGE_CREATE_MEETUP.LOUNGE_DESIGNATED_MEETUP'),
                   style: const TextStyle(
@@ -502,7 +503,7 @@ class LoungeMeetupWidgetState extends State<LoungeMeetupWidget> {
           Container(
               constraints: BoxConstraints.expand(
                   height: Theme.of(context).textTheme.display1.fontSize * 1.1),
-              child: Text(
+              child: AutoSizeText(
                   FlutterI18n.translate(
                       context, 'LOUNGE_CREATE_MEETUP.MEETUP_TIME'),
                   style: const TextStyle(
@@ -531,8 +532,9 @@ class LoungeMeetupWidgetState extends State<LoungeMeetupWidget> {
                                       color: orangeLight,
                                       height: 40,
                                       padding: const EdgeInsets.all(10.0),
-                                      child: Text(_timeEvent.hour.toString()))),
-                              const Text(':'),
+                                      child: AutoSizeText(
+                                          _timeEvent.hour.toString()))),
+                              const AutoSizeText(':'),
                               GestureDetector(
                                   onTap: () {
                                     if (widget.readMode) {
@@ -544,8 +546,8 @@ class LoungeMeetupWidgetState extends State<LoungeMeetupWidget> {
                                       color: orangeLight,
                                       height: 40,
                                       padding: const EdgeInsets.all(10.0),
-                                      child:
-                                          Text(_timeEvent.minute.toString())))
+                                      child: AutoSizeText(
+                                          _timeEvent.minute.toString())))
                             ])),
                     GestureDetector(
                         onTap: () async {
@@ -567,7 +569,7 @@ class LoungeMeetupWidgetState extends State<LoungeMeetupWidget> {
                             color: orangeLight,
                             height: 40,
                             padding: const EdgeInsets.all(10.0),
-                            child: Text(
+                            child: AutoSizeText(
                                 DateFormat('dd-MM-yyyy').format(_dateEvent))))
                   ]))
         ]));
@@ -582,7 +584,7 @@ class LoungeMeetupWidgetState extends State<LoungeMeetupWidget> {
           Container(
               constraints: BoxConstraints.expand(
                   height: Theme.of(context).textTheme.display1.fontSize * 1.1),
-              child: Text(
+              child: AutoSizeText(
                   FlutterI18n.translate(
                       context, 'LOUNGE_CREATE_MEETUP.MEETUP_NOTES'),
                   style: const TextStyle(

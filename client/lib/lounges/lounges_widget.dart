@@ -1,4 +1,5 @@
 import 'package:async_redux/async_redux.dart' as redux;
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:business/actions/app_navigate_action.dart';
 import 'package:business/actions/app_switch_events_tab.dart';
 import 'package:business/app_state.dart';
@@ -60,7 +61,7 @@ class _LoungesWidgetState extends State<LoungesWidget>
                         color: pink,
                         size: 60,
                       ),
-                      Text(
+                      AutoSizeText(
                           FlutterI18n.translate(context, 'LOUNGE_CREATE.HELLO'),
                           style: const TextStyle(
                               color: pink,
@@ -70,7 +71,7 @@ class _LoungesWidgetState extends State<LoungesWidget>
                       Container(
                         padding: const EdgeInsets.only(
                             left: 18, right: 18, bottom: 10),
-                        child: Text(
+                        child: AutoSizeText(
                             FlutterI18n.translate(
                                 context,
                                 hasAlreadyEvents
@@ -85,7 +86,7 @@ class _LoungesWidgetState extends State<LoungesWidget>
                       Container(
                         padding: const EdgeInsets.only(
                             left: 18, right: 18, bottom: 15),
-                        child: Text(
+                        child: AutoSizeText(
                             FlutterI18n.translate(
                                 context, 'LOUNGE_CREATE.CONTINUE'),
                             textAlign: TextAlign.justify,
@@ -110,7 +111,7 @@ class _LoungesWidgetState extends State<LoungesWidget>
                                           child: Container(
                                               padding: const EdgeInsets.only(
                                                   left: 20, right: 20),
-                                              child: Text(
+                                              child: AutoSizeText(
                                                   FlutterI18n.translate(context,
                                                       'LOUNGE_CREATE.STAY_IN_LOUNGES'),
                                                   style: const TextStyle(
@@ -134,7 +135,7 @@ class _LoungesWidgetState extends State<LoungesWidget>
                                               dispatch(AppSwitchEventsTab(0));
                                               // redux.NavigateAction<AppState>.pushNamed('0');
                                             },
-                                            child: Text(
+                                            child: AutoSizeText(
                                                 FlutterI18n.translate(context,
                                                     'LOUNGE_CREATE.REDIRECT_TO_FIND_EVENTS'),
                                                 style: const TextStyle(

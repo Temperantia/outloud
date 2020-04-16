@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:badges/badges.dart';
 import 'package:business/app_state.dart';
 import 'package:flutter/cupertino.dart';
@@ -36,7 +37,7 @@ final BottomNavigationBarItem Function(String, int, ThemeStyle) _buildItemWithPi
                 ? Badge(
                     position: BadgePosition.bottomLeft(),
                     badgeColor: blue,
-                    badgeContent: Text(pings.toString(),
+                    badgeContent: AutoSizeText(pings.toString(),
                         textAlign: TextAlign.center,
                         style: const TextStyle(
                             color: white, fontWeight: FontWeight.bold)),
@@ -48,7 +49,7 @@ final BottomNavigationBarItem Function(String, int, ThemeStyle) _buildItemWithPi
                 ? Badge(
                     position: BadgePosition.bottomLeft(),
                     badgeColor: blue,
-                    badgeContent: Text(pings.toString(),
+                    badgeContent: AutoSizeText(pings.toString(),
                         textAlign: TextAlign.center,
                         style: const TextStyle(color: white, fontWeight: FontWeight.bold)),
                     child: _buildIcon(image, themeStyle: themeStyle))

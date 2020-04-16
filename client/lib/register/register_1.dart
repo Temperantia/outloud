@@ -1,4 +1,5 @@
 import 'package:async_redux/async_redux.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:business/actions/app_disconnect_action.dart';
 import 'package:business/app_state.dart';
 import 'package:business/classes/user.dart';
@@ -56,7 +57,7 @@ class _Register1ScreenState extends State<Register1Screen> {
                             width: 50.0,
                             height: 50.0,
                             child: Image.asset('images/OL-draft2a.png')),
-                        Text(
+                        AutoSizeText(
                             FlutterI18n.translate(
                                 context, 'REGISTER_1.SIGNED_AS'),
                             style: const TextStyle(fontSize: 20.0)),
@@ -65,7 +66,8 @@ class _Register1ScreenState extends State<Register1Screen> {
                             height: 150.0,
                             borderRadius: BorderRadius.circular(180.0),
                             imageType: ImageType.User),
-                        Text(user.name, style: const TextStyle(fontSize: 26.0)),
+                        AutoSizeText(user.name,
+                            style: const TextStyle(fontSize: 26.0)),
                         if (state.userState.user == null)
                           Button(
                               text: FlutterI18n.translate(

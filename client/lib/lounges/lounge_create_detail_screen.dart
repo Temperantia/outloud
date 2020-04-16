@@ -1,4 +1,5 @@
 import 'package:async_redux/async_redux.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:business/app_state.dart';
 import 'package:business/lounges/actions/lounge_create_detail_action.dart';
 import 'package:business/classes/lounge_visibility.dart';
@@ -41,7 +42,7 @@ class _LoungeCreateDetailScreenState extends State<LoungeCreateDetailScreen> {
               constraints: BoxConstraints.expand(
                 height: Theme.of(context).textTheme.display1.fontSize * 1.1,
               ),
-              child: Text(
+              child: AutoSizeText(
                   FlutterI18n.translate(
                       context, 'LOUNGE_CREATE_DETAIL.LOUNGE_VISIBILITY'),
                   style: const TextStyle(
@@ -56,7 +57,8 @@ class _LoungeCreateDetailScreenState extends State<LoungeCreateDetailScreen> {
               onChanged: (LoungeVisibility visibility) =>
                   _visibility = visibility,
             ),
-            Text(FlutterI18n.translate(context, 'LOUNGE_CREATE_DETAIL.PUBLIC'),
+            AutoSizeText(
+                FlutterI18n.translate(context, 'LOUNGE_CREATE_DETAIL.PUBLIC'),
                 style: textStyleCardTitle(state.theme))
           ])
         ]));
@@ -70,7 +72,7 @@ class _LoungeCreateDetailScreenState extends State<LoungeCreateDetailScreen> {
               constraints: BoxConstraints.expand(
                 height: Theme.of(context).textTheme.display1.fontSize * 1.1,
               ),
-              child: Text(
+              child: AutoSizeText(
                   FlutterI18n.translate(
                       context, 'LOUNGE_CREATE_DETAIL.MAX_MEMBER_COUNT'),
                   style: const TextStyle(
@@ -106,7 +108,7 @@ class _LoungeCreateDetailScreenState extends State<LoungeCreateDetailScreen> {
                                             borderRadius:
                                                 BorderRadius.circular(180.0)),
                                         child: Center(
-                                            child: Text(
+                                            child: AutoSizeText(
                                           memberCount.toString(),
                                           textAlign: TextAlign.center,
                                           style: const TextStyle(
@@ -133,7 +135,8 @@ class _LoungeCreateDetailScreenState extends State<LoungeCreateDetailScreen> {
                                           borderRadius:
                                               BorderRadius.circular(180.0)),
                                       child: Center(
-                                          child: Text(memberCount.toString(),
+                                          child: AutoSizeText(
+                                              memberCount.toString(),
                                               textAlign: TextAlign.center,
                                               style: const TextStyle(
                                                   color: white,
@@ -151,7 +154,7 @@ class _LoungeCreateDetailScreenState extends State<LoungeCreateDetailScreen> {
         child: Column(children: <Widget>[
           Container(
               padding: const EdgeInsets.all(10.0),
-              child: Text(
+              child: AutoSizeText(
                   FlutterI18n.translate(
                       context, 'LOUNGE_CREATE_DETAIL.PREMIUM_UPGRADE'),
                   textAlign: TextAlign.center,
@@ -175,7 +178,7 @@ class _LoungeCreateDetailScreenState extends State<LoungeCreateDetailScreen> {
               constraints: BoxConstraints.expand(
                 height: Theme.of(context).textTheme.display1.fontSize * 1.1,
               ),
-              child: Text(
+              child: AutoSizeText(
                   FlutterI18n.translate(
                       context, 'LOUNGE_CREATE_DETAIL.LOUNGE_DESCRIPTION'),
                   style: const TextStyle(

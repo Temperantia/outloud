@@ -1,4 +1,5 @@
 import 'package:async_redux/async_redux.dart' as redux;
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:business/app_state.dart';
 import 'package:business/classes/user.dart';
 import 'package:business/people/actions/people_get_action.dart';
@@ -57,19 +58,19 @@ class _PeopleSearchScreenState extends State<PeopleSearchScreen>
                           child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
-                                Text(
+                                AutoSizeText(
                                   user.name,
                                   style: const TextStyle(
                                       color: black,
                                       fontWeight: FontWeight.bold,
                                       fontSize: 14),
                                 ),
-                                /*  const Text(
+                                /*  const AutoSizeText(
                                   'many shared intests',
                                   style: TextStyle(
                                       color: orange, fontWeight: FontWeight.w400),
                                 ), */
-                                /* Text(
+                                /* AutoSizeText(
                                   distance != null
                                       ? ' somewhere : $distance away'
                                       : 'somewhere',
@@ -88,7 +89,8 @@ class _PeopleSearchScreenState extends State<PeopleSearchScreen>
                                             decoration: BoxDecoration(
                                                 border: Border.all(
                                                     color: pinkBright)),
-                                            child: Text(_interest.toUpperCase(),
+                                            child: AutoSizeText(
+                                                _interest.toUpperCase(),
                                                 style: const TextStyle(
                                                     color: pinkBright,
                                                     fontSize: 12)))
@@ -104,7 +106,7 @@ class _PeopleSearchScreenState extends State<PeopleSearchScreen>
                             left: 2.0, right: 2.0, bottom: 10),
                         decoration:
                             BoxDecoration(border: Border.all(color: blue)),
-                        child: const Text('REQUETE EN ATTENTE',
+                        child: const AutoSizeText('REQUETE EN ATTENTE',
                             style: TextStyle(
                                 fontSize: 10, fontWeight: FontWeight.w300))),
                     Row(children: <Widget>[
@@ -123,7 +125,7 @@ class _PeopleSearchScreenState extends State<PeopleSearchScreen>
                                   size: 20,
                                   color: blue,
                                 ),
-                                const Text('Accepter',
+                                const AutoSizeText('Accepter',
                                     style: TextStyle(
                                         color: blue,
                                         fontSize: 12,
@@ -144,7 +146,7 @@ class _PeopleSearchScreenState extends State<PeopleSearchScreen>
                                   size: 20,
                                   color: blue,
                                 ),
-                                const Text('Refuser',
+                                const AutoSizeText('Refuser',
                                     style: TextStyle(
                                         color: blue,
                                         fontSize: 12,
@@ -168,7 +170,7 @@ class _PeopleSearchScreenState extends State<PeopleSearchScreen>
                             left: 2.0, right: 2.0, bottom: 10),
                         decoration:
                             BoxDecoration(border: Border.all(color: blue)),
-                        child: const Text('REQUETE ENVOYEE',
+                        child: const AutoSizeText('REQUETE ENVOYEE',
                             style: TextStyle(
                                 fontSize: 10, fontWeight: FontWeight.w300))),
                     GestureDetector(
@@ -179,7 +181,7 @@ class _PeopleSearchScreenState extends State<PeopleSearchScreen>
                               state.userState.user.id, user.id));
                         },
                         child: Row(children: <Widget>[
-                          const Text('Annuler',
+                          const AutoSizeText('Annuler',
                               style: TextStyle(
                                   color: blue,
                                   fontSize: 12,

@@ -1,4 +1,5 @@
 import 'package:async_redux/async_redux.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:business/app_state.dart';
 import 'package:business/login/actions/login_apple_action.dart';
 import 'package:business/login/actions/login_google_action.dart';
@@ -52,11 +53,11 @@ class LoginScreen extends StatelessWidget {
                                 width: 200.0,
                                 child: Image.asset('images/OL-blue.png')),
                             Column(children: <Widget>[
-                              Text(
+                              AutoSizeText(
                                   FlutterI18n.translate(
                                       context, 'LOGIN.MOTTO_1'),
                                   style: const TextStyle(color: grey)),
-                              Text(
+                              AutoSizeText(
                                   FlutterI18n.translate(
                                       context, 'LOGIN.MOTTO_2'),
                                   style: const TextStyle(color: grey))

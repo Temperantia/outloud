@@ -1,4 +1,5 @@
 import 'package:async_redux/async_redux.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:business/classes/user.dart';
 import 'package:flutter/widgets.dart';
 import 'package:business/app_state.dart';
@@ -84,7 +85,7 @@ class _LoungeViewScreenState extends State<LoungeViewScreen> {
                                 state.userState.user.id == owner.id
                                     ? 'LOUNGE_CHAT.YOUR_LOUNGE'
                                     : 'LOUNGE_CHAT.SOMEONES_LOUNGE',
-                                child: const Text('',
+                                child: const AutoSizeText('',
                                     style: TextStyle(
                                         color: black,
                                         fontSize: 13,
@@ -127,14 +128,16 @@ class _LoungeViewScreenState extends State<LoungeViewScreen> {
               child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    Text(FlutterI18n.translate(context, 'LOUNGE.MEMBERS'),
+                    AutoSizeText(
+                        FlutterI18n.translate(context, 'LOUNGE.MEMBERS'),
                         style: const TextStyle(
                             color: black,
                             fontSize: 15,
                             fontWeight: FontWeight.w700)),
                     GestureDetector(
                         child: Row(children: <Widget>[
-                      Text(FlutterI18n.translate(context, 'LOUNGE.PUBLIC'),
+                      AutoSizeText(
+                          FlutterI18n.translate(context, 'LOUNGE.PUBLIC'),
                           style: const TextStyle(
                               color: Colors.orange,
                               fontSize: 15,
@@ -164,7 +167,7 @@ class _LoungeViewScreenState extends State<LoungeViewScreen> {
                             imageType: ImageType.User),
                         Container(
                             padding: const EdgeInsets.only(left: 10),
-                            child: Text(member.name,
+                            child: AutoSizeText(member.name,
                                 style: const TextStyle(
                                     color: black,
                                     fontSize: 15,
@@ -176,7 +179,7 @@ class _LoungeViewScreenState extends State<LoungeViewScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
                         GestureDetector(
-                            child: Text(
+                            child: AutoSizeText(
                                 FlutterI18n.translate(context, 'LOUNGE.ADMIN'),
                                 style: const TextStyle(
                                     color: orange,
@@ -190,7 +193,7 @@ class _LoungeViewScreenState extends State<LoungeViewScreen> {
                 iconSize: 40,
                 icon: Icon(Icons.add_circle, color: orange),
                 onPressed: null),
-            Text(FlutterI18n.translate(context, 'LOUNGE.INVITE_MORE_PEOPLE'),
+            AutoSizeText(FlutterI18n.translate(context, 'LOUNGE.INVITE_MORE_PEOPLE'),
                 style: const TextStyle(
                     color: orange, fontSize: 15, fontWeight: FontWeight.w700))
           ]) */
@@ -208,7 +211,7 @@ class _LoungeViewScreenState extends State<LoungeViewScreen> {
               child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    Text(
+                    AutoSizeText(
                         '${FlutterI18n.translate(context, "LOUNGE.MAX_PEOPLE_COUNT")} : ${_limit.toInt()}',
                         style: const TextStyle(
                             color: black,
@@ -226,7 +229,7 @@ class _LoungeViewScreenState extends State<LoungeViewScreen> {
               constraints: BoxConstraints.expand(
                 height: Theme.of(context).textTheme.display1.fontSize * 1.1,
               ),
-              child: Text(
+              child: AutoSizeText(
                   FlutterI18n.translate(context, 'LOUNGE.LOUNGE_DESCRIPTION'),
                   style: const TextStyle(
                       color: black,

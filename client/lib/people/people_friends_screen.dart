@@ -1,5 +1,6 @@
 import 'package:async_redux/async_redux.dart' as redux;
 import 'package:async_redux/async_redux.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:business/app_state.dart';
 import 'package:business/classes/user.dart';
 import 'package:flutter/material.dart';
@@ -49,7 +50,7 @@ class _PeopleFriendsScreenState extends State<PeopleFriendsScreen>
                     child: Container(
                         padding: const EdgeInsets.only(left: 15.0),
                         child: Wrap(children: <Widget>[
-                          Text(user.name,
+                          AutoSizeText(user.name,
                               style: const TextStyle(
                                   color: black,
                                   fontWeight: FontWeight.w600,
@@ -63,7 +64,7 @@ class _PeopleFriendsScreenState extends State<PeopleFriendsScreen>
                       margin: const EdgeInsets.only(left: 2.0, right: 2.0),
                       decoration: BoxDecoration(
                           color: orange, border: Border.all(color: orange)),
-                      child: Text(
+                      child: AutoSizeText(
                           FlutterI18n.translate(
                                   context, 'PEOPLE_TAB.SEND_MESSAGE')
                               .toUpperCase(),
@@ -92,7 +93,7 @@ class _PeopleFriendsScreenState extends State<PeopleFriendsScreen>
                 child: Container(
                     padding: const EdgeInsets.only(left: 15.0),
                     child: Wrap(children: <Widget>[
-                      Text(user.name,
+                      AutoSizeText(user.name,
                           style: const TextStyle(
                               color: white,
                               fontWeight: FontWeight.w600,
@@ -109,7 +110,7 @@ class _PeopleFriendsScreenState extends State<PeopleFriendsScreen>
                     },
                     child: Column(children: <Widget>[
                       Icon(Icons.add_circle_outline, size: 30, color: white),
-                      const Text('ACCEPTER',
+                      const AutoSizeText('ACCEPTER',
                           style: TextStyle(
                               color: white,
                               fontWeight: FontWeight.w300,
@@ -126,7 +127,7 @@ class _PeopleFriendsScreenState extends State<PeopleFriendsScreen>
                     },
                     child: Column(children: <Widget>[
                       Icon(Icons.remove_circle_outline, size: 30, color: white),
-                      const Text('REFUSER',
+                      const AutoSizeText('REFUSER',
                           style: TextStyle(
                               color: white,
                               fontWeight: FontWeight.w300,
@@ -148,7 +149,7 @@ class _PeopleFriendsScreenState extends State<PeopleFriendsScreen>
         child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Text(
+              AutoSizeText(
                   pendingFriends.length > 1
                       ? 'NOUVELLES DEMANDES D\'AMI'
                       : 'NOUVELLE DEMANDE D\'AMI',

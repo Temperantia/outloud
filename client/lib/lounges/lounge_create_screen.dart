@@ -1,4 +1,5 @@
 import 'package:async_redux/async_redux.dart' as redux;
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:business/app_state.dart';
 import 'package:business/classes/event.dart';
 import 'package:business/classes/lounge.dart';
@@ -45,7 +46,7 @@ class _LoungeCreateScreenState extends State<LoungeCreateScreen> {
                       borderRadius: BorderRadius.circular(5.0),
                       imageType: ImageType.Event)),
               Expanded(
-                  child: Text(event.name,
+                  child: AutoSizeText(event.name,
                       style: const TextStyle(
                           color: orange, fontWeight: FontWeight.bold))),
             ])));
@@ -94,7 +95,7 @@ class _LoungeCreateScreenState extends State<LoungeCreateScreen> {
                 Row(children: <Widget>[
                   Container(
                       padding: const EdgeInsets.symmetric(vertical: 10.0),
-                      child: Text(
+                      child: AutoSizeText(
                           FlutterI18n.translate(
                               context, 'LOUNGE_CREATE.CHOOSE_EVENT'),
                           style: const TextStyle(fontWeight: FontWeight.w900)))

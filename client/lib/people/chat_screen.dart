@@ -1,4 +1,5 @@
 import 'package:async_redux/async_redux.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:business/app_state.dart';
 import 'package:business/chats/actions/chats_read_action.dart';
 import 'package:business/classes/chat.dart';
@@ -114,15 +115,15 @@ class _ChatScreenState extends State<ChatScreen> {
                       Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
-                            Text(
+                            AutoSizeText(
                                 userId == message.idFrom
                                     ? user.name
                                     : userPeer.name,
                                 style: const TextStyle(
                                     fontWeight: FontWeight.bold)),
-                            Text(_dateFormatter(message.timestamp))
+                            AutoSizeText(_dateFormatter(message.timestamp))
                           ]),
-                      Text(message.content),
+                      AutoSizeText(message.content),
                     ]))),
         if (userId == message.idFrom)
           Padding(

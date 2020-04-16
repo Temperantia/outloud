@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:outloud/theme.dart';
 
@@ -45,7 +46,7 @@ class Button extends StatelessWidget {
             color: backgroundColor.withOpacity(backgroundOpacity),
             textColor: colorText,
             onPressed: onPressed == null ? () {} : () => onPressed(),
-            child: Text(text,
+            child: AutoSizeText(text,
                 style: TextStyle(
                     color: colorText,
                     fontSize: fontSize,

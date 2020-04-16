@@ -1,4 +1,5 @@
 import 'package:async_redux/async_redux.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:business/app_state.dart';
 import 'package:business/actions/app_navigate_action.dart';
 import 'package:business/classes/chat_state.dart';
@@ -97,7 +98,7 @@ class _ViewState extends State<View> {
                         child: Icon(Icons.close, color: white)))
               ]),
           Row(children: <Widget>[
-            Text(user.name, style: const TextStyle(color: white))
+            AutoSizeText(user.name, style: const TextStyle(color: white))
           ]),
           GestureDetector(
               onTap: () {
@@ -112,7 +113,7 @@ class _ViewState extends State<View> {
                     child: Image.asset('images/iconView.png', color: white)),
                 Padding(
                     padding: const EdgeInsets.only(left: 8.0),
-                    child: Text(
+                    child: AutoSizeText(
                         FlutterI18n.translate(context, 'MENU_USER.OPTION_1'),
                         style: const TextStyle(color: white))),
               ])),
@@ -132,7 +133,7 @@ class _ViewState extends State<View> {
                     child: Image.asset('images/iconEdit.png', color: white)),
                 Padding(
                     padding: const EdgeInsets.only(left: 8.0),
-                    child: Text(
+                    child: AutoSizeText(
                         FlutterI18n.translate(context, 'MENU_USER.OPTION_2'),
                         style: const TextStyle(color: white))),
               ])),
@@ -151,7 +152,7 @@ class _ViewState extends State<View> {
                     child: Image.asset('images/iconLeave.png', color: white)),
                 Padding(
                     padding: const EdgeInsets.only(left: 8.0),
-                    child: Text(
+                    child: AutoSizeText(
                         FlutterI18n.translate(context, 'MENU_USER.OPTION_3'),
                         style: const TextStyle(color: white))),
               ]))
@@ -232,7 +233,7 @@ class _ViewState extends State<View> {
                             title: Stack(alignment: Alignment.center, children: <
                                 Widget>[
                               if (widget.title is String)
-                                Text(widget.title as String,
+                                AutoSizeText(widget.title as String,
                                     style: const TextStyle(
                                         color: white, fontSize: 14.0))
                               else

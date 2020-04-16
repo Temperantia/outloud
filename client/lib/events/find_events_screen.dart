@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:async_redux/async_redux.dart' as redux;
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:business/app.dart';
 import 'package:business/app_state.dart';
 import 'package:business/classes/event.dart';
@@ -187,7 +188,7 @@ class _FindEventsScreen extends State<FindEventsScreen>
                       child: FlatButton(
                           child: Row(
                             children: const <Widget>[
-                              Text('Interests'),
+                              AutoSizeText('Interests'),
                               Icon(Icons.arrow_drop_down)
                             ],
                           ),
@@ -221,7 +222,7 @@ class _FindEventsScreen extends State<FindEventsScreen>
                   ]
                       .map<DropdownMenuItem<String>>((String value) =>
                           DropdownMenuItem<String>(
-                              value: value, child: Text(value)))
+                              value: value, child: AutoSizeText(value)))
                       .toList(),
                   onChanged: (String newValue) => setState(() {
                         _distanceValue = newValue;
@@ -243,7 +244,7 @@ class _FindEventsScreen extends State<FindEventsScreen>
                   ]
                       .map<DropdownMenuItem<String>>((String value) =>
                           DropdownMenuItem<String>(
-                              value: value, child: Text(value)))
+                              value: value, child: AutoSizeText(value)))
                       .toList(),
                   onChanged: (String newValue) => setState(() {
                         _timeValue = newValue;
@@ -311,10 +312,10 @@ class _FindEventsScreen extends State<FindEventsScreen>
                           borderRadius: BorderRadius.circular(5.0)),
                       padding: const EdgeInsets.symmetric(vertical: 5.0),
                       child: Column(children: <Widget>[
-                        Text(date,
+                        AutoSizeText(date,
                             style: const TextStyle(
                                 color: white, fontWeight: FontWeight.bold)),
-                        Text(month,
+                        AutoSizeText(month,
                             style: const TextStyle(
                                 color: white,
                                 fontWeight: FontWeight.bold,
@@ -326,17 +327,17 @@ class _FindEventsScreen extends State<FindEventsScreen>
                         child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
-                              Text(event.name,
+                              AutoSizeText(event.name,
                                   style: const TextStyle(
                                       fontWeight: FontWeight.bold)),
                               Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: <Widget>[
-                                    Text('$time - $timeEnd',
+                                    AutoSizeText('$time - $timeEnd',
                                         style: const TextStyle(color: orange)),
                                     if (event.distance != null)
-                                      Text(
+                                      AutoSizeText(
                                           '${event.distance.toStringAsFixed(1)}${FlutterI18n.translate(context, 'FIND_EVENTS.AWAY')}',
                                           style: const TextStyle(color: orange))
                                   ]),
@@ -349,7 +350,8 @@ class _FindEventsScreen extends State<FindEventsScreen>
                                           borderRadius:
                                               BorderRadius.circular(5.0),
                                           border: Border.all(color: pink)),
-                                      child: Text(interest.toUpperCase(),
+                                      child: AutoSizeText(
+                                          interest.toUpperCase(),
                                           style: const TextStyle(
                                               color: pink,
                                               fontWeight: FontWeight.bold)))

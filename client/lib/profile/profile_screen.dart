@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:async_redux/async_redux.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:business/app_state.dart';
 import 'package:business/classes/user.dart';
 import 'package:business/models/user.dart';
@@ -135,7 +136,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 _buildPictureSlot(
                                     _pictures.isEmpty ? null : _pictures[0], 0),
                                 Expanded(
-                                    child: Text(
+                                    child: AutoSizeText(
                                         FlutterI18n.translate(
                                             context, 'PROFILE.MAIN'),
                                         style: const TextStyle(color: white)))
@@ -166,7 +167,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   child: Container(
                       padding: const EdgeInsets.all(20.0),
                       child: Wrap(children: <Widget>[
-                        Text(name,
+                        AutoSizeText(name,
                             style: const TextStyle(
                                 color: white,
                                 fontSize: 24.0,
@@ -203,7 +204,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
           Row(children: <Widget>[
             Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Text(FlutterI18n.translate(context, 'PROFILE.ABOUT'),
+                child: AutoSizeText(
+                    FlutterI18n.translate(context, 'PROFILE.ABOUT'),
                     style: const TextStyle(color: pinkBright, fontSize: 20.0)))
           ]),
           _buildAboutBloc(FlutterI18n.translate(context, 'PROFILE.LOCATION'),
@@ -244,14 +246,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Text(title.toUpperCase(),
+                      AutoSizeText(title.toUpperCase(),
                           style: const TextStyle(fontWeight: FontWeight.bold)),
                       if (_isEdition)
                         _buildAboutController(
                             title, _controllers[controllerKey],
                             placeholders: placeholders)
                       else
-                        Text(display, style: const TextStyle(color: orange)),
+                        AutoSizeText(display,
+                            style: const TextStyle(color: orange)),
                     ]))
           ]);
   }
@@ -308,7 +311,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 items: (controller[1] as List<String>)
                     .map<DropdownMenuItem<String>>((String value) =>
                         DropdownMenuItem<String>(
-                            value: value, child: Text(value)))
+                            value: value, child: AutoSizeText(value)))
                     .toList()))
     ]);
   }
@@ -321,7 +324,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
           Row(children: <Widget>[
             Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Text(FlutterI18n.translate(context, 'PROFILE.INTERESTS'),
+                child: AutoSizeText(
+                    FlutterI18n.translate(context, 'PROFILE.INTERESTS'),
                     style: const TextStyle(color: pinkBright, fontSize: 20.0)))
           ]),
           Wrap(alignment: WrapAlignment.start, children: <Widget>[
@@ -337,7 +341,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: <Widget>[
-                            Text(interest.value.toUpperCase(),
+                            AutoSizeText(interest.value.toUpperCase(),
                                 style: const TextStyle(color: pinkBright)),
                             GestureDetector(
                                 onTap: () => setState(() =>
@@ -349,12 +353,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       margin: const EdgeInsets.all(5.0),
                       decoration:
                           BoxDecoration(border: Border.all(color: pinkBright)),
-                      child: Text(interest.value.toUpperCase(),
+                      child: AutoSizeText(interest.value.toUpperCase(),
                           style: const TextStyle(color: pinkBright)))
           ]),
           if (_isEdition)
             TypeAheadField<Map<String, String>>(
-                noItemsFoundBuilder: (BuildContext context) => Text(
+                noItemsFoundBuilder: (BuildContext context) => AutoSizeText(
                     FlutterI18n.translate(context, 'PROFILE.NO_ITEM_FOUND'),
                     style: TextStyle(
                         color: Theme.of(context).errorColor, fontSize: 12)),
@@ -385,7 +389,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     (BuildContext context, Map<String, String> suggestion) =>
                         ListTile(
                             leading: Icon(Icons.category),
-                            title: Text(suggestion['name'],
+                            title: AutoSizeText(suggestion['name'],
                                 style: const TextStyle(color: orange))),
                 onSuggestionSelected: (Map<String, String> suggestion) =>
                     setState(() {

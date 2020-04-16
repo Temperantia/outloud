@@ -1,4 +1,5 @@
 import 'package:async_redux/async_redux.dart' as redux;
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:business/app_state.dart';
 import 'package:business/classes/chat.dart';
 import 'package:business/classes/message.dart';
@@ -52,15 +53,15 @@ class _PeopleChatScreenState extends State<PeopleChatScreen>
                             child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
-                                  Text(chat.entity.name,
+                                  AutoSizeText(chat.entity.name,
                                       style: const TextStyle(
                                           fontWeight: FontWeight.bold)),
                                   if (lastMessage != null)
-                                    Text(lastMessage.getTimeAgo(),
+                                    AutoSizeText(lastMessage.getTimeAgo(),
                                         style: textStyleListItemSubtitle),
                                   if (lastMessage != null)
                                     Wrap(children: <Widget>[
-                                      Text(lastMessage.content,
+                                      AutoSizeText(lastMessage.content,
                                           maxLines: 1,
                                           overflow: TextOverflow.ellipsis,
                                           style: const TextStyle(
@@ -76,7 +77,7 @@ class _PeopleChatScreenState extends State<PeopleChatScreen>
                               color: blue,
                               borderRadius: BorderRadius.circular(60.0)),
                           child: Center(
-                            child: Text(newMessageCount.toString(),
+                            child: AutoSizeText(newMessageCount.toString(),
                                 textAlign: TextAlign.center,
                                 style: const TextStyle(
                                     color: white, fontWeight: FontWeight.bold)),

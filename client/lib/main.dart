@@ -77,7 +77,8 @@ class _AppState extends State<App> {
               return MaterialApp(
                   localizationsDelegates: <LocalizationsDelegate<dynamic>>[
                     FlutterI18nDelegate(
-                        translationLoader: FileTranslationLoader()),
+                        translationLoader:
+                            FileTranslationLoader(fallbackFile: 'fr')),
                     GlobalMaterialLocalizations.delegate,
                     GlobalWidgetsLocalizations.delegate
                   ],
@@ -88,13 +89,13 @@ class _AppState extends State<App> {
                       /*!state.acceptedEula
                       ? EulaWidget()
                       :*/
-                      state.loginState.loginError.compareTo('') != 0 ?
-                      MyErrorWidget(state.loginState.loginError) : 
-                      state.loading
-                          ? Loading()
-                          : state.userState.user == null
-                              ? LoginScreen()
-                              : HomeScreen(),
+                      state.loginState.loginError.compareTo('') != 0
+                          ? MyErrorWidget(state.loginState.loginError)
+                          : state.loading
+                              ? Loading()
+                              : state.userState.user == null
+                                  ? LoginScreen()
+                                  : HomeScreen(),
                   navigatorKey: navigatorKey,
                   onGenerateRoute: (RouteSettings settings) =>
                       MaterialPageRoute<dynamic>(

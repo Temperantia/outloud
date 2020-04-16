@@ -1,4 +1,5 @@
 import 'package:async_redux/async_redux.dart' as redux;
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:business/app_state.dart';
 import 'package:business/classes/event.dart';
 import 'package:business/classes/lounge.dart';
@@ -41,13 +42,13 @@ class _FindLoungesScreenState extends State<FindLoungesScreen>
                           Container(
                               padding:
                                   const EdgeInsets.symmetric(vertical: 20.0),
-                              child: Text(
+                              child: AutoSizeText(
                                   FlutterI18n.translate(context,
                                       'LOUNGES_TAB.FIND_LOUNGES_EMPTY_TITLE'),
                                   style: const TextStyle(
                                       fontSize: 20.0,
                                       fontWeight: FontWeight.bold))),
-                          Text(
+                          AutoSizeText(
                               FlutterI18n.translate(context,
                                   'LOUNGES_TAB.FIND_LOUNGES_EMPTY_DESCRIPTION'),
                               style: const TextStyle(color: grey))
@@ -118,10 +119,10 @@ class _FindLoungesScreenState extends State<FindLoungesScreen>
                       child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
-                            Text(stateMessage,
+                            AutoSizeText(stateMessage,
                                 style: const TextStyle(
                                     fontWeight: FontWeight.bold, fontSize: 13)),
-                            Text(event.name,
+                            AutoSizeText(event.name,
                                 style: const TextStyle(
                                     color: orange,
                                     fontWeight: FontWeight.bold,
@@ -137,7 +138,7 @@ class _FindLoungesScreenState extends State<FindLoungesScreen>
                                           horizontal: 20.0, vertical: 5.0),
                                       decoration:
                                           const BoxDecoration(color: blue),
-                                      child: Text(
+                                      child: AutoSizeText(
                                           FlutterI18n.translate(context,
                                               'LOUNGES_TAB.FIND_LOUNGES'),
                                           style: const TextStyle(

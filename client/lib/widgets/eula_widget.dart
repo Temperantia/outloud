@@ -1,4 +1,5 @@
 import 'package:async_redux/async_redux.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:business/app_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -74,14 +75,14 @@ This EULA agreement, and any dispute arising out of or in connection with this E
                                   ]),
                               child: SingleChildScrollView(
                                   child: Column(children: <Widget>[
-                                const Text(
+                                const AutoSizeText(
                                     'This End-User License Agreement ("EULA") is a legal agreement between you and Alexandre Du Lorier',
                                     style: TextStyle(
                                         color: orange,
                                         fontSize: 26,
                                         fontWeight: FontWeight.w700)),
                                 const SizedBox(height: 15),
-                                Text(textEnglish,
+                                AutoSizeText(textEnglish,
                                     style: const TextStyle(
                                         color: orange,
                                         fontSize: 12,
@@ -109,7 +110,7 @@ This EULA agreement, and any dispute arising out of or in connection with this E
                                                                       .only(
                                                                   left: 20,
                                                                   right: 20),
-                                                          child: const Text(
+                                                          child: const AutoSizeText(
                                                               'DECLINE THESE TERMS',
                                                               style: TextStyle(
                                                                   color: orange,
@@ -128,7 +129,7 @@ This EULA agreement, and any dispute arising out of or in connection with this E
                                                         store.dispatch(
                                                             UserAcceptEulaAction());
                                                       },
-                                                      child: const Text(
+                                                      child: const AutoSizeText(
                                                           'ACCEPT',
                                                           style: TextStyle(
                                                               color: white,

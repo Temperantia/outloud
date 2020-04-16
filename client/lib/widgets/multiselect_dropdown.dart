@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:outloud/theme.dart';
 
@@ -30,7 +31,7 @@ class _MyMultiCheckBoxesContent extends State<MyMultiCheckBoxesContent> {
                 itemBuilder: (BuildContext context, int index) => Container(
                       child: CheckboxListTile(
                           checkColor: orange,
-                          title: Text(widget.checkboxes[index].name),
+                          title: AutoSizeText(widget.checkboxes[index].name),
                           value: widget.checkboxes[index].checked,
                           onChanged: (bool choosen) {
                             setState(() {

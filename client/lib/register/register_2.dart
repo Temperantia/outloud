@@ -1,4 +1,5 @@
 import 'package:async_redux/async_redux.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:business/app_state.dart';
 import 'package:business/login/actions/login_interests_action.dart';
 import 'package:flutter/material.dart';
@@ -31,7 +32,7 @@ class _Register2ScreenState extends State<Register2Screen> {
                 padding: const EdgeInsets.all(5.0),
                 margin: const EdgeInsets.all(5.0),
                 child: Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
-                  Text(interest.key.toUpperCase(),
+                  AutoSizeText(interest.key.toUpperCase(),
                       style: const TextStyle(color: white)),
                   Padding(
                       padding: const EdgeInsets.only(left: 10.0),
@@ -45,7 +46,7 @@ class _Register2ScreenState extends State<Register2Screen> {
                 padding: const EdgeInsets.all(5.0),
                 margin: const EdgeInsets.all(5.0),
                 child: Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
-                  Text(interest.key.toUpperCase(),
+                  AutoSizeText(interest.key.toUpperCase(),
                       style: const TextStyle(color: pink)),
                   Padding(
                       padding: const EdgeInsets.only(left: 10.0),
@@ -123,7 +124,7 @@ class _Register2ScreenState extends State<Register2Screen> {
                                     onTap: () => dispatch(
                                         NavigateAction<AppState>.pushNamed(
                                             Register3Screen.id)),
-                                    child: Text(
+                                    child: AutoSizeText(
                                         FlutterI18n.translate(
                                             context, 'REGISTER_2.SKIP'),
                                         style: const TextStyle(color: grey)))))
@@ -131,11 +132,11 @@ class _Register2ScreenState extends State<Register2Screen> {
                       Expanded(
                           flex: 7,
                           child: ListView(children: <Widget>[
-                            Text(
+                            AutoSizeText(
                                 FlutterI18n.translate(
                                     context, 'REGISTER_2.TITLE'),
                                 style: const TextStyle(fontSize: 20.0)),
-                            Text(
+                            AutoSizeText(
                                 FlutterI18n.translate(
                                     context, 'REGISTER_2.SUBTITLE'),
                                 style: const TextStyle(color: grey)),

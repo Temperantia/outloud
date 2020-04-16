@@ -1,4 +1,5 @@
 import 'package:async_redux/async_redux.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:business/app_state.dart';
 import 'package:business/classes/user.dart';
 import 'package:business/login/actions/login_info_action.dart';
@@ -60,7 +61,7 @@ class _Register3ScreenState extends State<Register3Screen> {
             child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Text(title.toUpperCase(),
+                  AutoSizeText(title.toUpperCase(),
                       style: const TextStyle(fontWeight: FontWeight.bold)),
                   _buildAboutController(title, _controllers[title],
                       placeholders: placeholders)
@@ -118,7 +119,7 @@ class _Register3ScreenState extends State<Register3Screen> {
                   items: (controller[1] as List<String>)
                       .map<DropdownMenuItem<String>>((String value) =>
                           DropdownMenuItem<String>(
-                              value: value, child: Text(value)))
+                              value: value, child: AutoSizeText(value)))
                       .toList()))
       ]);
 
@@ -244,7 +245,7 @@ class _Register3ScreenState extends State<Register3Screen> {
                                           NavigateAction<AppState>.pushNamed(
                                               Register4Screen.id));
                                     },
-                                    child: Text(
+                                    child: AutoSizeText(
                                         FlutterI18n.translate(
                                             context, 'REGISTER_3.SKIP'),
                                         style: const TextStyle(color: grey)))))
@@ -252,11 +253,11 @@ class _Register3ScreenState extends State<Register3Screen> {
                       Expanded(
                           flex: 7,
                           child: ListView(children: <Widget>[
-                            Text(
+                            AutoSizeText(
                                 FlutterI18n.translate(
                                     context, 'REGISTER_3.TITLE'),
                                 style: const TextStyle(fontSize: 20.0)),
-                            Text(
+                            AutoSizeText(
                                 FlutterI18n.translate(
                                     context, 'REGISTER_3.SUBTITLE'),
                                 style: const TextStyle(color: grey)),

@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:async_redux/async_redux.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:business/classes/chat_state.dart';
 import 'package:business/classes/message_state.dart';
 import 'package:business/classes/user.dart';
@@ -81,7 +82,7 @@ class _LoungeChatScreenState extends State<LoungeChatScreen>
                   child:
                       Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
                     const Icon(MdiIcons.trashCan, color: orange, size: 60),
-                    Text(
+                    AutoSizeText(
                         FlutterI18n.translate(
                             context, 'LOUNGE_CHAT.LEAVE_LOUNGE'),
                         style: const TextStyle(
@@ -91,7 +92,7 @@ class _LoungeChatScreenState extends State<LoungeChatScreen>
                     const SizedBox(height: 15),
                     Container(
                         padding: const EdgeInsets.only(left: 18, right: 18),
-                        child: Text(
+                        child: AutoSizeText(
                             FlutterI18n.translate(
                                 context, 'LOUNGE_CHAT.LEAVE_WARNING'),
                             textAlign: TextAlign.center,
@@ -100,7 +101,7 @@ class _LoungeChatScreenState extends State<LoungeChatScreen>
                     Container(
                         padding: const EdgeInsets.only(
                             left: 18, right: 18, bottom: 15),
-                        child: Text(
+                        child: AutoSizeText(
                             FlutterI18n.translate(
                                 context, 'LOUNGE_CHAT.LEAVE_CONFIRMATION'),
                             textAlign: TextAlign.justify,
@@ -121,7 +122,7 @@ class _LoungeChatScreenState extends State<LoungeChatScreen>
                                           child: Container(
                                               padding: const EdgeInsets.only(
                                                   left: 20, right: 20),
-                                              child: Text(
+                                              child: AutoSizeText(
                                                   FlutterI18n.translate(context,
                                                       'LOUNGE_CHAT.TAKE_ME_BACK'),
                                                   style: const TextStyle(
@@ -146,7 +147,7 @@ class _LoungeChatScreenState extends State<LoungeChatScreen>
                                             dispatch(
                                                 NavigateAction<AppState>.pop());
                                           },
-                                          child: Text(
+                                          child: AutoSizeText(
                                               FlutterI18n.translate(context,
                                                   'LOUNGE_CHAT.LEAVE_YES'),
                                               style: const TextStyle(
@@ -200,11 +201,11 @@ class _LoungeChatScreenState extends State<LoungeChatScreen>
                       Expanded(
                           child: Container(
                               padding: const EdgeInsets.only(left: 10),
-                              child: I18nText(
+                              child: I18nAutoSizeText(
                                   state.userState.user.id == owner.id
                                       ? 'LOUNGE_CHAT.YOUR_LOUNGE'
                                       : 'LOUNGE_CHAT.SOMEONES_LOUNGE',
-                                  child: const Text('',
+                                  child: const AutoSizeText('',
                                       style: TextStyle(
                                           color: black,
                                           fontSize: 13,
@@ -214,7 +215,7 @@ class _LoungeChatScreenState extends State<LoungeChatScreen>
                                   })))
                     ]),
                     Wrap(children: <Widget>[
-                      RichText(
+                      RichAutoSizeText(
                           text: TextSpan(
                               text: _lounge.members.length.toString() +
                                   ' ' +
@@ -246,7 +247,8 @@ class _LoungeChatScreenState extends State<LoungeChatScreen>
                 },
                 child: Column(children: <Widget>[
                   const Icon(MdiIcons.calendarEdit, color: orange),
-                  Text(FlutterI18n.translate(context, 'LOUNGE_CHAT.EDIT'),
+                  AutoSizeText(
+                      FlutterI18n.translate(context, 'LOUNGE_CHAT.EDIT'),
                       style: const TextStyle(
                           color: orange, fontWeight: FontWeight.bold))
                 ]))
@@ -264,14 +266,14 @@ class _LoungeChatScreenState extends State<LoungeChatScreen>
                           child: Column(children: <Widget>[
                             const Icon(MdiIcons.arrowLeftBoldCircleOutline,
                                 color: orange),
-                            Text(
+                            AutoSizeText(
                                 FlutterI18n.translate(
                                     context, 'LOUNGE_CHAT.LEAVE'),
                                 style: const TextStyle(
                                     color: orange,
                                     fontSize: 9,
                                     fontWeight: FontWeight.bold)),
-                            Text(
+                            AutoSizeText(
                                 FlutterI18n.translate(
                                     context, 'LOUNGE_CHAT.LOUNGE'),
                                 style: const TextStyle(
@@ -291,14 +293,14 @@ class _LoungeChatScreenState extends State<LoungeChatScreen>
                           margin: const EdgeInsets.only(left: 5, top: 10),
                           child: Column(children: <Widget>[
                             const Icon(MdiIcons.viewCarousel, color: orange),
-                            Text(
+                            AutoSizeText(
                                 FlutterI18n.translate(
                                     context, 'LOUNGE_CHAT.VIEW'),
                                 style: const TextStyle(
                                     color: orange,
                                     fontSize: 9,
                                     fontWeight: FontWeight.bold)),
-                            Text(
+                            AutoSizeText(
                                 FlutterI18n.translate(
                                     context, 'LOUNGE_CHAT.DETAILS'),
                                 style: const TextStyle(
@@ -373,12 +375,13 @@ class _LoungeChatScreenState extends State<LoungeChatScreen>
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: <Widget>[
-                                  Text(user.name,
+                                  AutoSizeText(user.name,
                                       style: const TextStyle(
                                           color: black,
                                           fontSize: 12,
                                           fontWeight: FontWeight.w600)),
-                                  Text(_dateFormatter(message.timestamp),
+                                  AutoSizeText(
+                                      _dateFormatter(message.timestamp),
                                       style: const TextStyle(
                                           color: black,
                                           fontSize: 12,
@@ -386,7 +389,7 @@ class _LoungeChatScreenState extends State<LoungeChatScreen>
                                 ]),
                             Container(
                                 padding: const EdgeInsets.only(top: 5),
-                                child: Text(
+                                child: AutoSizeText(
                                   message.content,
                                   textAlign: TextAlign.left,
                                   style: const TextStyle(

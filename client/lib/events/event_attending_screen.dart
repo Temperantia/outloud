@@ -1,4 +1,5 @@
 import 'package:async_redux/async_redux.dart' as redux;
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:business/app_state.dart';
 import 'package:business/classes/event.dart';
 import 'package:business/classes/user.dart';
@@ -26,7 +27,7 @@ class _EventAttendingScreenState extends State<EventAttendingScreen> {
         padding: const EdgeInsets.all(15),
         child: Column(children: <Widget>[
           Row(children: <Widget>[
-            Text(
+            AutoSizeText(
                 FlutterI18n.translate(
                     context, 'EVENTS_ATTENDING.FOR_THE_EVENT'),
                 style: const TextStyle(
@@ -44,7 +45,7 @@ class _EventAttendingScreenState extends State<EventAttendingScreen> {
                 flex: 8,
                 child: Container(
                     padding: const EdgeInsets.only(left: 10),
-                    child: Text(widget.event.name,
+                    child: AutoSizeText(widget.event.name,
                         textAlign: TextAlign.justify,
                         style: const TextStyle(
                             color: orange,
@@ -64,7 +65,7 @@ class _EventAttendingScreenState extends State<EventAttendingScreen> {
             child: Column(children: <Widget>[
               Container(
                   padding: const EdgeInsets.all(5.0),
-                  child: Text(
+                  child: AutoSizeText(
                       '${memberNumber.toString()} ${memberNumber <= 1 ? FlutterI18n.translate(context, "EVENTS_ATTENDING.PEOPLE_SINGULAR") : FlutterI18n.translate(context, "EVENTS_ATTENDING.PEOPLE_PLURAL")} ${FlutterI18n.translate(context, "EVENTS_ATTENDING.ATTENDING")}',
                       style: const TextStyle(
                           color: orange, fontWeight: FontWeight.bold))),
@@ -103,7 +104,7 @@ class _EventAttendingScreenState extends State<EventAttendingScreen> {
                   child: Container(
                       padding: const EdgeInsets.symmetric(horizontal: 5.0),
                       child: Wrap(children: <Widget>[
-                        Text(member.name,
+                        AutoSizeText(member.name,
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                             style: const TextStyle(fontWeight: FontWeight.bold))

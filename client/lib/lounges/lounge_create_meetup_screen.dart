@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:async_redux/async_redux.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:business/app.dart';
 import 'package:business/app_state.dart';
 import 'package:flutter/foundation.dart';
@@ -249,7 +250,7 @@ class _LoungeCreateMeetupScreenState extends State<LoungeCreateMeetupScreen> {
                                 }
                                 _mapButtonsOverlay.remove();
                               },
-                              child: Text(FlutterI18n.translate(
+                              child: AutoSizeText(FlutterI18n.translate(
                                   context, 'LOUNGE_CREATE_MEETUP.CANCEL'))),
                           FlatButton(
                               color: white,
@@ -277,7 +278,7 @@ class _LoungeCreateMeetupScreenState extends State<LoungeCreateMeetupScreen> {
                                 //     _positionOfPlace.position, 15);
                                 _mapButtonsOverlay.remove();
                               },
-                              child: Text(FlutterI18n.translate(
+                              child: AutoSizeText(FlutterI18n.translate(
                                   context, 'LOUNGE_CREATE_MEETUP.OK')))
                         ])))));
   }
@@ -308,7 +309,7 @@ class _LoungeCreateMeetupScreenState extends State<LoungeCreateMeetupScreen> {
 
   Widget _buildCompletionResult(int index) {
     return ListTile(
-        title: Text(_resultPlaces[index].name),
+        title: AutoSizeText(_resultPlaces[index].name),
         onTap: () async {
           _throttle.cancel();
           setState(() {
@@ -348,7 +349,7 @@ class _LoungeCreateMeetupScreenState extends State<LoungeCreateMeetupScreen> {
               constraints: BoxConstraints.expand(
                 height: Theme.of(context).textTheme.display1.fontSize * 1.1,
               ),
-              child: Text(
+              child: AutoSizeText(
                   FlutterI18n.translate(
                       context, 'LOUNGE_CREATE_MEETUP.LOUNGE_DESIGNATED_MEETUP'),
                   style: const TextStyle(
@@ -490,7 +491,7 @@ class _LoungeCreateMeetupScreenState extends State<LoungeCreateMeetupScreen> {
           Container(
               constraints: BoxConstraints.expand(
                   height: Theme.of(context).textTheme.display1.fontSize * 1.1),
-              child: Text(
+              child: AutoSizeText(
                   FlutterI18n.translate(
                       context, 'LOUNGE_CREATE_MEETUP.MEETING_POINT'),
                   style: const TextStyle(
@@ -516,20 +517,20 @@ class _LoungeCreateMeetupScreenState extends State<LoungeCreateMeetupScreen> {
                                           color: whiteAlt,
                                           height: 40,
                                           padding: const EdgeInsets.all(10.0),
-                                          child: Text(
+                                          child: AutoSizeText(
                                               _timeEvent.hour.toString(),
                                               style: const TextStyle(
                                                   color: orange,
                                                   fontWeight:
                                                       FontWeight.bold)))),
-                                  const Text(':'),
+                                  const AutoSizeText(':'),
                                   GestureDetector(
                                       onTap: () => _updateTimeOfEvent(),
                                       child: Container(
                                           color: whiteAlt,
                                           height: 40,
                                           padding: const EdgeInsets.all(10.0),
-                                          child: Text(
+                                          child: AutoSizeText(
                                               _timeEvent.minute.toString(),
                                               style: const TextStyle(
                                                   color: orange,
@@ -554,7 +555,7 @@ class _LoungeCreateMeetupScreenState extends State<LoungeCreateMeetupScreen> {
                               color: whiteAlt,
                               height: 40,
                               padding: const EdgeInsets.all(10.0),
-                              child: Text(
+                              child: AutoSizeText(
                                   DateFormat('dd-MM-yyyy').format(_dateEvent),
                                   style: const TextStyle(
                                       color: orange,
@@ -574,7 +575,7 @@ class _LoungeCreateMeetupScreenState extends State<LoungeCreateMeetupScreen> {
           Container(
               constraints: BoxConstraints.expand(
                   height: Theme.of(context).textTheme.display1.fontSize * 1.1),
-              child: Text(
+              child: AutoSizeText(
                   FlutterI18n.translate(
                       context, 'LOUNGE_CREATE_MEETUP.MEETUP_NOTES'),
                   style: const TextStyle(

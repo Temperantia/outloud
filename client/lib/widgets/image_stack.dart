@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:outloud/theme.dart';
 import 'package:outloud/widgets/cached_image.dart';
@@ -81,7 +82,8 @@ class ImageStack extends StatelessWidget {
                           color: imageBorderColor, width: imageBorderWidth),
                       color: backgroundColor),
                   child: Center(
-                      child: Text((totalCount - images.length).toString(),
+                      child: AutoSizeText(
+                          (totalCount - images.length).toString(),
                           textAlign: TextAlign.center,
                           style: extraCountTextStyle)))
               : const SizedBox())

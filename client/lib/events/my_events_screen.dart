@@ -1,4 +1,5 @@
 import 'package:async_redux/async_redux.dart' as redux;
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:business/app_state.dart';
 import 'package:business/classes/event.dart';
 import 'package:business/classes/lounge.dart';
@@ -78,12 +79,12 @@ class _MyEventsScreen extends State<MyEventsScreen>
                 Container(
                     color: pink.withOpacity(0.5), width: 70.0, height: 70.0),
                 Column(children: <Widget>[
-                  Text(date,
+                  AutoSizeText(date,
                       style: const TextStyle(
                           color: white,
                           fontWeight: FontWeight.bold,
                           fontSize: 20)),
-                  Text(month,
+                  AutoSizeText(month,
                       style: const TextStyle(
                           color: white, fontWeight: FontWeight.bold))
                 ])
@@ -94,14 +95,14 @@ class _MyEventsScreen extends State<MyEventsScreen>
                       child: Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: <Widget>[
-                            Text(event.name,
+                            AutoSizeText(event.name,
                                 style: const TextStyle(
                                     fontWeight: FontWeight.bold)),
                             Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: <Widget>[
-                                  Text('$time - $timeEnd'),
+                                  AutoSizeText('$time - $timeEnd'),
                                   Container(
                                       child: Row(
                                           mainAxisAlignment:
@@ -111,7 +112,7 @@ class _MyEventsScreen extends State<MyEventsScreen>
                                           Icon(Icons.check)
                                         else if (state == UserEventState.Liked)
                                           Icon(MdiIcons.heart),
-                                        Text(stateMessage),
+                                        AutoSizeText(stateMessage),
                                       ]))
                                 ]),
                             if (lounge == null)
@@ -156,13 +157,13 @@ class _MyEventsScreen extends State<MyEventsScreen>
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Container(
-                              child: Text(
+                              child: AutoSizeText(
                                   FlutterI18n.translate(context,
                                       'MY_EVENTS.MY_EVENTS_EMPTY_TITLE'),
                                   style: const TextStyle(
                                       fontSize: 20.0,
                                       fontWeight: FontWeight.bold))),
-                          Text(
+                          AutoSizeText(
                               FlutterI18n.translate(context,
                                   'MY_EVENTS.MY_EVENTS_EMPTY_DESCRIPTION'),
                               style: const TextStyle(color: grey))

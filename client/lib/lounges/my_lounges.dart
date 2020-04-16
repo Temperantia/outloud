@@ -1,4 +1,5 @@
 import 'package:async_redux/async_redux.dart' as redux;
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:business/app_state.dart';
 import 'package:business/classes/lounge.dart';
 import 'package:business/classes/user.dart';
@@ -38,13 +39,13 @@ class _MyLoungesScreenState extends State<MyLoungesScreen>
                           Container(
                               padding:
                                   const EdgeInsets.symmetric(vertical: 20.0),
-                              child: Text(
+                              child: AutoSizeText(
                                   FlutterI18n.translate(context,
                                       'LOUNGES_TAB.MY_LOUNGES_EMPTY_TITLE'),
                                   style: const TextStyle(
                                       fontSize: 20.0,
                                       fontWeight: FontWeight.bold))),
-                          Text(
+                          AutoSizeText(
                               FlutterI18n.translate(context,
                                   'LOUNGES_TAB.MY_LOUNGES_EMPTY_DESCRIPTION'),
                               style: const TextStyle(color: grey))
@@ -96,7 +97,7 @@ class _MyLoungesScreenState extends State<MyLoungesScreen>
                       state.userState.user.id == owner.id
                           ? 'LOUNGE_CHAT.YOUR_LOUNGE'
                           : 'LOUNGE_CHAT.SOMEONES_LOUNGE',
-                      child: const Text('',
+                      child: const AutoSizeText('',
                           style: TextStyle(
                               color: black,
                               fontSize: 13,
@@ -130,7 +131,7 @@ class _MyLoungesScreenState extends State<MyLoungesScreen>
                     padding: const EdgeInsets.symmetric(
                         horizontal: 20.0, vertical: 5.0),
                     decoration: const BoxDecoration(color: blue),
-                    child: Text(
+                    child: AutoSizeText(
                         FlutterI18n.translate(
                             context, 'LOUNGES_TAB.GO_EVENT_LISTING'),
                         style: const TextStyle(
@@ -183,7 +184,7 @@ class _MyLoungesScreenState extends State<MyLoungesScreen>
                                   color: blue,
                                   borderRadius: BorderRadius.circular(60.0)),
                               child: Center(
-                                child: Text(newMessageCount.toString(),
+                                child: AutoSizeText(newMessageCount.toString(),
                                     textAlign: TextAlign.center,
                                     style: const TextStyle(
                                         color: white,

@@ -1,4 +1,5 @@
 import 'package:async_redux/async_redux.dart' as redux;
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:business/app_state.dart';
 import 'package:business/classes/event.dart';
 import 'package:business/classes/lounge.dart';
@@ -97,7 +98,7 @@ class _LoungesScreenState extends State<LoungesScreen>
                                   state.userState.user.id == owner.id
                                       ? 'LOUNGE_CHAT.YOUR_LOUNGE'
                                       : 'LOUNGE_CHAT.SOMEONES_LOUNGE',
-                                  child: const Text('',
+                                  child: const AutoSizeText('',
                                       style: TextStyle(
                                           fontSize: 13,
                                           fontWeight: FontWeight.w500)),
@@ -132,7 +133,7 @@ class _LoungesScreenState extends State<LoungesScreen>
                                 padding: const EdgeInsets.symmetric(
                                     vertical: 5.0, horizontal: 20.0),
                                 decoration: const BoxDecoration(color: blue),
-                                child: Text(
+                                child: AutoSizeText(
                                     lounge.memberIds
                                             .contains(state.userState.user.id)
                                         ? FlutterI18n.translate(
@@ -175,7 +176,7 @@ class _LoungesScreenState extends State<LoungesScreen>
                                           color: Colors.grey,
                                           borderRadius:
                                               BorderRadius.circular(180))),
-                                Text(
+                                AutoSizeText(
                                     '$availableSlots ${FlutterI18n.translate(context, "LOUNGES.SLOT")}$s ${FlutterI18n.translate(context, "LOUNGES.AVAILABLE")}'),
                               ])
                             ])
@@ -190,7 +191,8 @@ class _LoungesScreenState extends State<LoungesScreen>
             constraints: BoxConstraints.expand(
               height: Theme.of(context).textTheme.display1.fontSize * 1.1,
             ),
-            child: Text(FlutterI18n.translate(context, 'LOUNGES.FOR_THE_EVENT'),
+            child: AutoSizeText(
+                FlutterI18n.translate(context, 'LOUNGES.FOR_THE_EVENT'),
                 textAlign: TextAlign.left,
                 style: const TextStyle(
                     color: black, fontSize: 13, fontWeight: FontWeight.bold))),
@@ -211,7 +213,7 @@ class _LoungesScreenState extends State<LoungesScreen>
               flex: 8,
               child: Container(
                   padding: const EdgeInsets.only(left: 10),
-                  child: Text(widget.event.name,
+                  child: AutoSizeText(widget.event.name,
                       textAlign: TextAlign.justify,
                       style: const TextStyle(
                           color: orange,
@@ -236,10 +238,11 @@ class _LoungesScreenState extends State<LoungesScreen>
   Widget _noLoungeWidget(void Function(redux.ReduxAction<AppState>) dispatch) =>
       Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
         Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
-          Text(FlutterI18n.translate(context, 'LOUNGES.EMPTY_TITLE'),
+          AutoSizeText(FlutterI18n.translate(context, 'LOUNGES.EMPTY_TITLE'),
               style:
                   const TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold)),
-          Text(FlutterI18n.translate(context, 'LOUNGES.EMPTY_DESCRIPTION'),
+          AutoSizeText(
+              FlutterI18n.translate(context, 'LOUNGES.EMPTY_DESCRIPTION'),
               style: const TextStyle(color: grey))
         ]),
         Image.asset('images/catsIllus3.png')
@@ -278,7 +281,7 @@ class _LoungesScreenState extends State<LoungesScreen>
               else if (lounges.isNotEmpty)
                 Container(
                     margin: const EdgeInsets.only(top: 10, bottom: 20),
-                    child: Text(
+                    child: AutoSizeText(
                         '${lounges.length} ${FlutterI18n.translate(context, "LOUNGES.LOUNGE")}' +
                             (lounges.length > 1 ? 's' : '') +
                             ' ' +

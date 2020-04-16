@@ -1,4 +1,5 @@
 import 'package:async_redux/async_redux.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:business/actions/app_navigate_action.dart';
 import 'package:business/app.dart';
 import 'package:business/app_state.dart';
@@ -43,19 +44,20 @@ class _HomeScreenState extends State<HomeScreen>
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-              title: Text(
+              title: AutoSizeText(
                   FlutterI18n.translate(context, 'HOME.PERMISSION_WARNING')),
-              content:
-                  Text(FlutterI18n.translate(context, 'HOME.ALLOW_PERMISSION')),
+              content: AutoSizeText(
+                  FlutterI18n.translate(context, 'HOME.ALLOW_PERMISSION')),
               actions: <Widget>[
                 FlatButton(
-                    child: Text(FlutterI18n.translate(context, 'HOME.REFUSE')),
+                    child: AutoSizeText(
+                        FlutterI18n.translate(context, 'HOME.REFUSE')),
                     onPressed: () {
                       Navigator.pop(context);
                     }),
                 FlatButton(
-                    child:
-                        Text(FlutterI18n.translate(context, 'HOME.SETTINGS')),
+                    child: AutoSizeText(
+                        FlutterI18n.translate(context, 'HOME.SETTINGS')),
                     onPressed: () {
                       permissionLocation.openAppSettings();
                     })

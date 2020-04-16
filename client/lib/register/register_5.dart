@@ -1,4 +1,5 @@
 import 'package:async_redux/async_redux.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:business/app_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
@@ -68,16 +69,16 @@ class _Register5ScreenState extends State<Register5Screen> {
                                     child: Image.asset(
                                         'images/illustrationLounges.png',
                                         fit: BoxFit.fitWidth)),
-                                Text(
+                                AutoSizeText(
                                     FlutterI18n.translate(
                                         context, 'REGISTER_5.TITLE'),
                                     style: const TextStyle(
                                         color: grey, fontSize: 20.0)),
-                                Text(
+                                AutoSizeText(
                                     FlutterI18n.translate(
                                         context, 'REGISTER_5.TITLE_BIG'),
                                     style: const TextStyle(fontSize: 40.0)),
-                                Text(
+                                AutoSizeText(
                                     FlutterI18n.translate(
                                         context, 'REGISTER_5.SUBTITLE'),
                                     style: const TextStyle(color: grey)),

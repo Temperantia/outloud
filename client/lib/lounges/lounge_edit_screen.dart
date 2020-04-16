@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:business/classes/lounge_visibility.dart';
 import 'package:business/classes/user.dart';
 import 'package:flutter/services.dart';
@@ -77,7 +78,7 @@ class _LoungeEditScreenState extends State<LoungeEditScreen>
                   child:
                       Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
                     const Icon(MdiIcons.trashCan, color: orange, size: 60),
-                    Text(
+                    AutoSizeText(
                         FlutterI18n.translate(
                             context, 'LOUNGE_EDIT.DELETE_LOUNGE'),
                         style: const TextStyle(
@@ -87,7 +88,7 @@ class _LoungeEditScreenState extends State<LoungeEditScreen>
                     const SizedBox(height: 15),
                     Container(
                         padding: const EdgeInsets.only(left: 18, right: 18),
-                        child: Text(
+                        child: AutoSizeText(
                             FlutterI18n.translate(
                                 context, 'LOUNGE_EDIT.PERMANENT_DELETE'),
                             textAlign: TextAlign.center,
@@ -96,7 +97,7 @@ class _LoungeEditScreenState extends State<LoungeEditScreen>
                     Container(
                         padding: const EdgeInsets.only(
                             left: 18, right: 18, bottom: 15),
-                        child: Text(
+                        child: AutoSizeText(
                             FlutterI18n.translate(
                                 context, 'LOUNGE_EDIT.DELETE_CONFIRMATION'),
                             textAlign: TextAlign.justify,
@@ -117,7 +118,7 @@ class _LoungeEditScreenState extends State<LoungeEditScreen>
                                           child: Container(
                                               padding: const EdgeInsets.only(
                                                   left: 20, right: 20),
-                                              child: Text(
+                                              child: AutoSizeText(
                                                   FlutterI18n.translate(context,
                                                       'LOUNGE_EDIT.TAKE_ME_BACK'),
                                                   style: const TextStyle(
@@ -143,7 +144,7 @@ class _LoungeEditScreenState extends State<LoungeEditScreen>
                                             dispatch(redux.NavigateAction<
                                                 AppState>.pop());
                                           },
-                                          child: Text(
+                                          child: AutoSizeText(
                                               FlutterI18n.translate(context,
                                                   'LOUNGE_EDIT.DELETE_YES'),
                                               style: const TextStyle(
@@ -200,7 +201,7 @@ class _LoungeEditScreenState extends State<LoungeEditScreen>
                                 state.userState.user.id == owner.id
                                     ? 'LOUNGE_CHAT.YOUR_LOUNGE'
                                     : 'LOUNGE_CHAT.SOMEONES_LOUNGE',
-                                child: const Text('',
+                                child: const AutoSizeText('',
                                     style: TextStyle(
                                         color: black,
                                         fontSize: 13,
@@ -237,14 +238,14 @@ class _LoungeEditScreenState extends State<LoungeEditScreen>
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
                         const Icon(MdiIcons.trashCan, color: orange),
-                        Text(
+                        AutoSizeText(
                             FlutterI18n.translate(
                                 context, 'LOUNGE_EDIT.REMOVE'),
                             style: const TextStyle(
                                 color: orange,
                                 fontSize: 10,
                                 fontWeight: FontWeight.bold)),
-                        Text(
+                        AutoSizeText(
                             FlutterI18n.translate(
                                 context, 'LOUNGE_EDIT.LOUNGE'),
                             style: const TextStyle(
@@ -265,14 +266,16 @@ class _LoungeEditScreenState extends State<LoungeEditScreen>
               child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    Text(FlutterI18n.translate(context, 'LOUNGE_EDIT.MEMBERS'),
+                    AutoSizeText(
+                        FlutterI18n.translate(context, 'LOUNGE_EDIT.MEMBERS'),
                         style: const TextStyle(
                             color: black,
                             fontSize: 15,
                             fontWeight: FontWeight.w700)),
                     GestureDetector(
                         child: Row(children: <Widget>[
-                      Text(FlutterI18n.translate(context, 'LOUNGE_EDIT.PUBLIC'),
+                      AutoSizeText(
+                          FlutterI18n.translate(context, 'LOUNGE_EDIT.PUBLIC'),
                           style: const TextStyle(
                               color: Colors.orange,
                               fontSize: 15,
@@ -299,7 +302,7 @@ class _LoungeEditScreenState extends State<LoungeEditScreen>
                               imageType: ImageType.User),
                           Container(
                               padding: const EdgeInsets.only(left: 10),
-                              child: Text(member.name,
+                              child: AutoSizeText(member.name,
                                   style: const TextStyle(
                                       color: black,
                                       fontSize: 15,
@@ -310,7 +313,7 @@ class _LoungeEditScreenState extends State<LoungeEditScreen>
                           iconSize: 40,
                           icon: Icon(Icons.add_circle, color: orange),
                           onPressed: null),
-                      Text(
+                      AutoSizeText(
                           FlutterI18n.translate(
                               context, 'LOUNGE_EDIT.INVITE_MORE_PEOPLE'),
                           style: const TextStyle(
@@ -330,7 +333,7 @@ class _LoungeEditScreenState extends State<LoungeEditScreen>
           Container(
               constraints: BoxConstraints.expand(
                   height: Theme.of(context).textTheme.display1.fontSize * 1.1),
-              child: Text(
+              child: AutoSizeText(
                   FlutterI18n.translate(
                       context, 'LOUNGE_CREATE_DETAIL.MAX_MEMBER_COUNT'),
                   style: const TextStyle(
@@ -366,7 +369,7 @@ class _LoungeEditScreenState extends State<LoungeEditScreen>
                                             borderRadius:
                                                 BorderRadius.circular(180.0)),
                                         child: Center(
-                                            child: Text(
+                                            child: AutoSizeText(
                                           memberCount.toString(),
                                           textAlign: TextAlign.center,
                                           style: const TextStyle(
@@ -393,7 +396,8 @@ class _LoungeEditScreenState extends State<LoungeEditScreen>
                                           borderRadius:
                                               BorderRadius.circular(180.0)),
                                       child: Center(
-                                          child: Text(memberCount.toString(),
+                                          child: AutoSizeText(
+                                              memberCount.toString(),
                                               textAlign: TextAlign.center,
                                               style: const TextStyle(
                                                   color: white,
@@ -411,7 +415,7 @@ class _LoungeEditScreenState extends State<LoungeEditScreen>
           Container(
               constraints: BoxConstraints.expand(
                   height: Theme.of(context).textTheme.display1.fontSize * 1.1),
-              child: Text(
+              child: AutoSizeText(
                   FlutterI18n.translate(
                       context, 'LOUNGE_EDIT.LOUNGE_DESCRIPTION'),
                   style: const TextStyle(
