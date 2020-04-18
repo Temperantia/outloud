@@ -1,7 +1,6 @@
 import 'dart:async';
 
-import 'package:async_redux/async_redux.dart' as redux;
-import 'package:business/app.dart';
+import 'package:async_redux/async_redux.dart' show ReduxAction;
 import 'package:business/app_state.dart';
 import 'package:business/chats/actions/chats_event_update_action.dart';
 import 'package:business/classes/event.dart';
@@ -11,10 +10,8 @@ import 'package:business/events/actions/event_members_update_action.dart';
 import 'package:business/models/event_message.dart';
 import 'package:business/models/events.dart';
 import 'package:business/models/user.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:location_permissions/location_permissions.dart';
 
-class EventsGetAction extends redux.ReduxAction<AppState> {
+class EventsGetAction extends ReduxAction<AppState> {
   static final List<StreamSubscription<List<User>>> _membersSubs =
       <StreamSubscription<List<User>>>[];
   static final List<StreamSubscription<List<Message>>> _messagesSubs =
@@ -24,7 +21,7 @@ class EventsGetAction extends redux.ReduxAction<AppState> {
   Future<AppState> reduce() async {
     final List<Event> events = await getEvents();
 
-    final PermissionStatus permission =
+    /*  final PermissionStatus permission =
         await permissionLocation.checkLocationPermissionStatus();
     if (permission == PermissionStatus.granted) {
       try {
@@ -52,7 +49,7 @@ class EventsGetAction extends redux.ReduxAction<AppState> {
       } catch (error) {
         // TODO(me): handle error
       }
-    }
+    } */
 
     _streamUsers(events);
     _streamMessages(events);

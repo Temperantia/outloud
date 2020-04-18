@@ -1,22 +1,30 @@
 import 'package:async_redux/async_redux.dart';
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:business/classes/lounge_visibility.dart';
 import 'package:business/classes/user.dart';
+import 'package:business/lounges/actions/lounge_edit_details_action.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:business/app_state.dart';
-import 'package:async_redux/async_redux.dart' as redux;
+import 'package:async_redux/async_redux.dart' show ReduxAction, NavigateAction;
 import 'package:business/classes/lounge.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:outloud/profile/profile_screen.dart';
 import 'package:outloud/theme.dart';
+import 'package:outloud/widgets/button.dart';
 import 'package:outloud/widgets/cached_image.dart';
-import 'package:outloud/widgets/meetup_widget.dart';
+import 'package:outloud/widgets/lounge_banner.dart';
+import 'package:outloud/widgets/lounge_member_range_bar.dart';
 import 'package:outloud/widgets/view.dart';
 import 'package:provider_for_redux/provider_for_redux.dart';
 
 class LoungeViewScreen extends StatefulWidget {
-  const LoungeViewScreen(this.lounge);
+  const LoungeViewScreen(this.lounge, this.isEdit);
+
   final Lounge lounge;
+  final bool isEdit;
+
   static const String id = 'LoungeViewScreen';
 
   @override
@@ -26,14 +34,21 @@ class LoungeViewScreen extends StatefulWidget {
 class _LoungeViewScreenState extends State<LoungeViewScreen> {
   final ScrollController _scrollController = ScrollController();
   final TextEditingController _descriptionController = TextEditingController();
-  double _limit;
-  LoungeMeetupWidget _meetupWidget;
+
+  void Function(ReduxAction<AppState>) _dispatch;
+  int _limit;
+  LoungeVisibility _visibility;
+/*   final GlobalKey<LoungeMeetupWidgetState> _meetupWidgetKey = GlobalKey();
+
+  LoungeMeetupWidget _meetupWidget; */
 
   @override
   void initState() {
     super.initState();
-    _limit = widget.lounge.memberLimit.toDouble();
-    _meetupWidget = LoungeMeetupWidget(widget.lounge, true);
+    _limit = widget.lounge.memberLimit;
+    _visibility = widget.lounge.visibility;
+
+    //_meetupWidget = LoungeMeetupWidget(widget.lounge, true);
     _descriptionController.text = widget.lounge.description;
   }
 
@@ -44,117 +59,45 @@ class _LoungeViewScreenState extends State<LoungeViewScreen> {
     super.dispose();
   }
 
-  Widget _buildHeader(
-      AppState state, void Function(ReduxAction<AppState>) dispatch) {
+  Widget _buildHeader(String userId) {
     final User owner = widget.lounge.members.firstWhere(
         (User member) => member.id == widget.lounge.owner,
         orElse: () => null);
 
-    return Container(
-        padding: const EdgeInsets.all(15.0),
-        child: Row(children: <Widget>[
-          Flexible(
-              child: Stack(alignment: Alignment.center, children: <Widget>[
-            Container(
-                decoration: const BoxDecoration(
-                    border:
-                        Border(left: BorderSide(color: orange, width: 5.0))),
-                child: CachedImage(widget.lounge.event.pic,
-                    width: 40.0,
-                    height: 40.0,
-                    borderRadius: const BorderRadius.only(
-                        bottomRight: Radius.circular(5.0),
-                        topRight: Radius.circular(5.0)),
-                    imageType: ImageType.Event))
-          ])),
-          Flexible(
-              flex: 8,
-              child: Container(
-                  padding: const EdgeInsets.only(left: 20),
-                  child: Column(children: <Widget>[
-                    if (owner != null)
-                      Row(children: <Widget>[
-                        CachedImage(owner.pics.isEmpty ? null : owner.pics[0],
-                            width: 20.0,
-                            height: 20.0,
-                            borderRadius: BorderRadius.circular(20.0),
-                            imageType: ImageType.User),
-                        Container(
-                            padding: const EdgeInsets.only(left: 10),
-                            child: I18nText(
-                                state.userState.user.id == owner.id
-                                    ? 'LOUNGE_CHAT.YOUR_LOUNGE'
-                                    : 'LOUNGE_CHAT.SOMEONES_LOUNGE',
-                                child: const AutoSizeText('',
-                                    style: TextStyle(
-                                        color: black,
-                                        fontSize: 13,
-                                        fontWeight: FontWeight.w500)),
-                                translationParams: <String, String>{
-                                  'user': owner.name
-                                }))
-                      ]),
-                    Wrap(children: <Widget>[
-                      RichText(
-                          text: TextSpan(
-                              text:
-                                  '${widget.lounge.members.length.toString()} ${FlutterI18n.translate(context, "LOUNGE.MEMBER")}${widget.lounge.members.length > 1 ? 's' : ''} ',
-                              style: const TextStyle(
-                                  color: black,
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.w500),
-                              children: <TextSpan>[
-                            TextSpan(
-                                text: widget.lounge.event.name,
-                                style: TextStyle(
-                                    color: orange,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w800))
-                          ]))
-                    ])
-                  ])))
-        ]));
+    return LoungeBanner(lounge: widget.lounge, owner: owner, userId: userId);
   }
 
-  Widget _buildMembers(BuildContext context, AppState state,
-      void Function(ReduxAction<AppState>) dispatch) {
+  Widget _buildMembers() {
     return Container(
         padding: const EdgeInsets.all(15),
         child: Column(children: <Widget>[
-          Container(
-              constraints: BoxConstraints.expand(
-                height: Theme.of(context).textTheme.display1.fontSize * 1.1,
-              ),
-              child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    AutoSizeText(
-                        FlutterI18n.translate(context, 'LOUNGE.MEMBERS'),
-                        style: const TextStyle(
-                            color: black,
-                            fontSize: 15,
-                            fontWeight: FontWeight.w700)),
-                    GestureDetector(
-                        child: Row(children: <Widget>[
-                      AutoSizeText(
-                          FlutterI18n.translate(context, 'LOUNGE.PUBLIC'),
-                          style: const TextStyle(
-                              color: Colors.orange,
-                              fontSize: 15,
-                              fontWeight: FontWeight.w500)),
-                      const IconButton(
-                          iconSize: 20,
-                          icon: Icon(Icons.lock_open, color: Colors.orange),
-                          onPressed: null)
-                    ]))
-                  ])),
+          Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                AutoSizeText(FlutterI18n.translate(context, 'LOUNGE.MEMBERS'),
+                    style: const TextStyle(
+                        color: black,
+                        fontSize: 15,
+                        fontWeight: FontWeight.w700)),
+                GestureDetector(
+                    child: Row(children: <Widget>[
+                  AutoSizeText(FlutterI18n.translate(context, 'LOUNGE.PUBLIC'),
+                      style: const TextStyle(
+                          color: Colors.orange,
+                          fontSize: 15,
+                          fontWeight: FontWeight.w500)),
+                  const IconButton(
+                      iconSize: 20,
+                      icon: Icon(Icons.lock_open, color: Colors.orange),
+                      onPressed: null)
+                ]))
+              ]),
           Column(children: <Widget>[
             for (User member in widget.lounge.members)
-              // if (member.id != lounge.owner)
               Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: <
                   Widget>[
                 GestureDetector(
-                  onTap: () => dispatch(NavigateAction<AppState>.pushNamed(
+                  onTap: () => _dispatch(NavigateAction<AppState>.pushNamed(
                       ProfileScreen.id,
                       arguments: <String, dynamic>{'user': member})),
                   child: Container(
@@ -200,80 +143,128 @@ class _LoungeViewScreenState extends State<LoungeViewScreen> {
         ]));
   }
 
-  Widget _buildLoungeMaxMemberCount(BuildContext context, AppState state) {
+  Widget _buildLoungeMaxMemberCount() {
     return Container(
         padding: const EdgeInsets.all(15),
-        child: Column(children: <Widget>[
-          Container(
-              constraints: BoxConstraints.expand(
-                height: Theme.of(context).textTheme.display1.fontSize * 1.1,
-              ),
-              child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
+        child: widget.isEdit
+            ? Column(children: <Widget>[
+                AutoSizeText(
+                    FlutterI18n.translate(
+                        context, 'LOUNGE_CREATE_DETAIL.MAX_MEMBER_COUNT'),
+                    style: const TextStyle(
+                        color: black,
+                        fontSize: 15,
+                        fontWeight: FontWeight.w700)),
+                LoungeMemberRangeBar(
+                    selected: _limit,
+                    max: 5,
+                    onUpdate: (int selected) =>
+                        setState(() => _limit = selected))
+              ])
+            : Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
                     AutoSizeText(
                         '${FlutterI18n.translate(context, "LOUNGE.MAX_PEOPLE_COUNT")} : ${_limit.toInt()}',
                         style: const TextStyle(
                             color: black,
                             fontSize: 15,
                             fontWeight: FontWeight.w700))
-                  ])),
-        ]));
+                  ]));
   }
 
-  Widget _buildLoungeDescription(BuildContext context, AppState state) {
+  Widget _buildLoungeDescription() {
     return Container(
         padding: const EdgeInsets.all(15),
-        child: Column(children: <Widget>[
-          Container(
-              constraints: BoxConstraints.expand(
-                height: Theme.of(context).textTheme.display1.fontSize * 1.1,
-              ),
-              child: AutoSizeText(
-                  FlutterI18n.translate(context, 'LOUNGE.LOUNGE_DESCRIPTION'),
-                  style: const TextStyle(
-                      color: black,
-                      fontSize: 15,
-                      fontWeight: FontWeight.w700))),
-          Container(
-              constraints: BoxConstraints.expand(
-                  height: Theme.of(context).textTheme.display1.fontSize * 1.1 +
-                      100),
-              padding: const EdgeInsets.only(left: 10.0, top: 1.0, right: 10.0),
-              color: orangeLight,
-              child:
-                  TextField(readOnly: true, controller: _descriptionController))
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: <
+            Widget>[
+          AutoSizeText(
+              FlutterI18n.translate(context, 'LOUNGE.LOUNGE_DESCRIPTION'),
+              style: const TextStyle(
+                  color: black, fontSize: 15, fontWeight: FontWeight.w700)),
+          if (widget.isEdit)
+            Container(
+                constraints: BoxConstraints.expand(
+                    height:
+                        Theme.of(context).textTheme.display1.fontSize * 1.1 +
+                            100),
+                padding:
+                    const EdgeInsets.only(left: 10.0, top: 1.0, right: 10.0),
+                color: orangeLight,
+                child: TextField(
+                    controller: _descriptionController,
+                    keyboardType: TextInputType.text,
+                    inputFormatters: <TextInputFormatter>[
+                      LengthLimitingTextInputFormatter(100),
+                    ],
+                    decoration: InputDecoration(
+                        border: InputBorder.none,
+                        hintText: FlutterI18n.translate(
+                            context, 'LOUNGE_EDIT.GROUP_DESCRIPTION'))))
+          else
+            Container(
+                constraints: BoxConstraints.expand(
+                    height:
+                        Theme.of(context).textTheme.display1.fontSize * 1.1 +
+                            100),
+                padding:
+                    const EdgeInsets.only(left: 10.0, top: 1.0, right: 10.0),
+                color: orangeLight,
+                child: TextField(
+                    readOnly: true, controller: _descriptionController))
         ]));
   }
 
   @override
   Widget build(BuildContext context) {
     return ReduxConsumer<AppState>(builder: (BuildContext context,
-        redux.Store<AppState> store,
+        Store<AppState> store,
         AppState state,
-        void Function(redux.ReduxAction<dynamic>) dispatch,
+        void Function(ReduxAction<AppState>) dispatch,
         Widget child) {
+      _dispatch = dispatch;
       return View(
           title: FlutterI18n.translate(context, 'LOUNGE.VIEW_LOUNGE_DETAILS'),
+          buttons: widget.isEdit
+              ? Row(mainAxisAlignment: MainAxisAlignment.center, children: <
+                  Widget>[
+                  Button(
+                      text: FlutterI18n.translate(context, 'LOUNGE_EDIT.SAVE'),
+                      onPressed: () {
+                        /*  final Map<String, dynamic> _meetupEdits =
+                            _meetupWidgetKey.currentState.saveMeetupOptions();
+                        dispatch(LoungeEditMeetupAction(
+                            widget.lounge,
+                            _meetupEdits['date'] as DateTime,
+                            _meetupEdits['location'] as GeoPoint,
+                            _meetupEdits['notes'] as String)); */
+                        dispatch(LoungeEditDetailsAction(
+                            widget.lounge,
+                            _visibility,
+                            _limit.toInt(),
+                            _descriptionController.text));
+                        dispatch(NavigateAction<AppState>.pop());
+                      },
+                      paddingLeft: 5)
+                ])
+              : null,
           child: Column(children: <Widget>[
+            _buildHeader(state.userState.user.id),
+            const Divider(),
             Expanded(
-                child: Column(children: <Widget>[
-              _buildHeader(state, dispatch),
-              Container(color: white, child: const Divider()),
-              Expanded(
-                  flex: 8,
-                  child: Scrollbar(
-                      child: ListView(
-                          controller: _scrollController,
-                          children: <Widget>[
-                        Column(children: <Widget>[
-                          _buildMembers(context, state, dispatch),
-                          _buildLoungeMaxMemberCount(context, state),
-                          _buildLoungeDescription(context, state),
-                          _meetupWidget
-                        ])
-                      ]))),
-            ]))
+                flex: 8,
+                child: Scrollbar(
+                    controller: _scrollController,
+                    child: ListView(children: <Widget>[
+                      _buildMembers(),
+                      _buildLoungeMaxMemberCount(),
+                      _buildLoungeDescription(),
+                      /* if (widget.isEdit)
+                          LoungeMeetupWidget(widget.lounge, false,
+                              key: _meetupWidgetKey)
+                        else
+                          _meetupWidget */
+                    ])))
           ]));
     });
   }

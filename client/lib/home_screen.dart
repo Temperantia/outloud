@@ -122,7 +122,7 @@ class _HomeScreenState extends State<HomeScreen>
         builder: (BuildContext context,
             Store<AppState> store,
             AppState state,
-            void Function(ReduxAction<dynamic>) dispatch,
+            void Function(ReduxAction<AppState>) dispatch,
             dynamic model,
             Widget child) {
           if (!_tabController.hasListeners) {

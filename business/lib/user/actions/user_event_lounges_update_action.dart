@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:async_redux/async_redux.dart' as redux;
+import 'package:async_redux/async_redux.dart' show ReduxAction;
 import 'package:business/app_state.dart';
 import 'package:business/classes/event.dart';
 import 'package:business/classes/lounge.dart';
@@ -8,7 +8,7 @@ import 'package:business/classes/user.dart';
 import 'package:business/models/user.dart';
 import 'package:business/user/actions/user_event_lounge_member_update_action.dart';
 
-class UserEventLoungesUpdateAction extends redux.ReduxAction<AppState> {
+class UserEventLoungesUpdateAction extends ReduxAction<AppState> {
   UserEventLoungesUpdateAction(this._lounges, this._events);
 
   final List<Lounge> _lounges;

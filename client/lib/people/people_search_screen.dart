@@ -1,4 +1,5 @@
-import 'package:async_redux/async_redux.dart' as redux;
+import 'package:async_redux/async_redux.dart'
+    show ReduxAction, NavigateAction, Store;
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:business/app_state.dart';
 import 'package:business/classes/user.dart';
@@ -7,7 +8,6 @@ import 'package:business/user/actions/user_send_friend_request_action.dart';
 import 'package:business/user/actions/user_accept_friend_request_action.dart';
 import 'package:business/user/actions/user_deny_friend_request_action.dart';
 import 'package:flutter/material.dart';
-import 'package:outloud/functions/loader_animation.dart';
 import 'package:outloud/profile/profile_screen.dart';
 import 'package:outloud/widgets/cached_image.dart';
 import 'package:outloud/widgets/loading.dart';
@@ -24,20 +24,15 @@ class PeopleSearchScreen extends StatefulWidget {
 
 class _PeopleSearchScreenState extends State<PeopleSearchScreen>
     with TickerProviderStateMixin {
-  Widget _buildPerson(
-    User user,
-    String distance,
-    Future<void> Function(redux.ReduxAction<AppState>) dispatchFuture,
-    void Function(redux.ReduxAction<AppState>) dispatch,
-    ThemeStyle theme,
-    AppState state,
-  ) {
+  void Function(ReduxAction<AppState>) _dispatch;
+
+  Widget _buildPerson(User person, User user, String distance) {
     return Column(children: <Widget>[
       const Divider(),
       GestureDetector(
-          onTap: () => dispatch(redux.NavigateAction<AppState>.pushNamed(
+          onTap: () => _dispatch(NavigateAction<AppState>.pushNamed(
               ProfileScreen.id,
-              arguments: <String, dynamic>{'user': user})),
+              arguments: <String, dynamic>{'user': person})),
           child: Container(
               decoration: BoxDecoration(
                   color: Colors.transparent,
@@ -47,7 +42,7 @@ class _PeopleSearchScreenState extends State<PeopleSearchScreen>
               child: Row(children: <Widget>[
                 Expanded(
                     child: Row(children: <Widget>[
-                  CachedImage(user.pics.isEmpty ? null : user.pics[0],
+                  CachedImage(person.pics.isEmpty ? null : person.pics[0],
                       width: 50.0,
                       height: 50.0,
                       borderRadius: BorderRadius.circular(20.0),
@@ -59,7 +54,7 @@ class _PeopleSearchScreenState extends State<PeopleSearchScreen>
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
                                 AutoSizeText(
-                                  user.name,
+                                  person.name,
                                   style: const TextStyle(
                                       color: black,
                                       fontWeight: FontWeight.bold,
@@ -80,7 +75,7 @@ class _PeopleSearchScreenState extends State<PeopleSearchScreen>
                                 SingleChildScrollView(
                                     child: Row(children: <Widget>[
                                       for (final String _interest
-                                          in user.interests)
+                                          in person.interests)
                                         Container(
                                             padding: const EdgeInsets.only(
                                                 left: 2.0, right: 2.0),
@@ -98,7 +93,7 @@ class _PeopleSearchScreenState extends State<PeopleSearchScreen>
                                     scrollDirection: Axis.horizontal)
                               ])))
                 ])),
-                if (state.userState.user.pendingFriends.contains(user.id))
+                if (user.pendingFriends.contains(user.id))
                   Column(children: <Widget>[
                     Container(
                         padding: const EdgeInsets.only(left: 4.0, right: 4.0),
@@ -114,10 +109,10 @@ class _PeopleSearchScreenState extends State<PeopleSearchScreen>
                           margin: const EdgeInsets.only(right: 15.0),
                           child: GestureDetector(
                               onTap: () async {
-                                await showLoaderAnimation(context, this,
-                                    animationDuration: 600);
-                                dispatch(UserAcceptFriendRequestAction(
-                                    user.id, state.userState.user.id));
+                                /* await showLoaderAnimation(context, this,
+                                    animationDuration: 600); */
+                                _dispatch(UserAcceptFriendRequestAction(
+                                    person.id, user.id));
                               },
                               child: Column(children: <Widget>[
                                 Icon(
@@ -135,10 +130,10 @@ class _PeopleSearchScreenState extends State<PeopleSearchScreen>
                           margin: const EdgeInsets.only(left: 15.0),
                           child: GestureDetector(
                               onTap: () async {
-                                await showLoaderAnimation(context, this,
-                                    animationDuration: 600);
-                                dispatch(UserDenyFriendRequestAction(
-                                    user.id, state.userState.user.id));
+                                /* await showLoaderAnimation(context, this,
+                                    animationDuration: 600); */
+                                _dispatch(UserDenyFriendRequestAction(
+                                    person.id, user.id));
                               },
                               child: Column(children: <Widget>[
                                 Icon(
@@ -154,13 +149,12 @@ class _PeopleSearchScreenState extends State<PeopleSearchScreen>
                               ])))
                     ])
                   ])
-                else if (!state.userState.user.requestedFriends
-                    .contains(user.id))
+                else if (!user.requestedFriends.contains(person.id))
                   Container(
                       padding: const EdgeInsets.all(15),
                       child: GestureDetector(
-                          onTap: () => dispatch(UserSendFriendRequest(
-                              state.userState.user.id, user.id)),
+                          onTap: () => _dispatch(
+                              UserSendFriendRequest(user.id, person.id)),
                           child: Icon(Icons.add, size: 40, color: blue)))
                 else
                   Column(children: <Widget>[
@@ -175,10 +169,10 @@ class _PeopleSearchScreenState extends State<PeopleSearchScreen>
                                 fontSize: 10, fontWeight: FontWeight.w300))),
                     GestureDetector(
                         onTap: () async {
-                          await showLoaderAnimation(context, this,
-                              animationDuration: 600);
-                          dispatch(UserDenyFriendRequestAction(
-                              state.userState.user.id, user.id));
+                          /* await showLoaderAnimation(context, this,
+                              animationDuration: 600); */
+                          _dispatch(
+                              UserDenyFriendRequestAction(user.id, person.id));
                         },
                         child: Row(children: <Widget>[
                           const AutoSizeText('Annuler',
@@ -199,16 +193,17 @@ class _PeopleSearchScreenState extends State<PeopleSearchScreen>
   @override
   Widget build(BuildContext context) {
     return ReduxConsumer<AppState>(builder: (BuildContext context,
-        redux.Store<AppState> store,
+        Store<AppState> store,
         AppState state,
-        void Function(redux.ReduxAction<AppState>) dispatch,
+        void Function(ReduxAction<AppState>) dispatch,
         Widget child) {
+      _dispatch = dispatch;
       final List<User> people = state.peopleState.people.where((User _user) {
         return !state.userState.user.friends.contains(_user.id) &&
             _user.id != state.userState.user.id;
       }).toList();
       final Map<String, String> distances = state.peopleState.distances;
-      if (people == null || distances == null) {
+      if (people == null /*  || distances == null */) {
         return Loading();
       }
       return View(
@@ -216,18 +211,12 @@ class _PeopleSearchScreenState extends State<PeopleSearchScreen>
           child: RefreshIndicator(
             onRefresh: () => store.dispatchFuture(PeopleGetAction()),
             child: Container(
-                decoration: const BoxDecoration(color: white),
                 padding: const EdgeInsets.all(10.0),
                 child: ListView.builder(
                     itemCount: people.length,
                     itemBuilder: (BuildContext context, int index) =>
-                        _buildPerson(
-                            people[index],
-                            distances[people[index].id],
-                            store.dispatchFuture,
-                            dispatch,
-                            state.theme,
-                            state))),
+                        _buildPerson(people[index], state.userState.user,
+                            distances[people[index].id]))),
           ));
     });
   }

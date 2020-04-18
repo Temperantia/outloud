@@ -1,4 +1,5 @@
-import 'package:async_redux/async_redux.dart' as redux;
+import 'package:async_redux/async_redux.dart'
+    show ReduxAction, NavigateAction, Store;
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:business/app_state.dart';
 import 'package:business/classes/event.dart';
@@ -9,8 +10,7 @@ import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:outloud/events/event_screen.dart';
 import 'package:outloud/lounges/lounges_screen.dart';
 import 'package:outloud/theme.dart';
-import 'package:outloud/widgets/cached_image.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:outloud/widgets/event_image.dart';
 import 'package:provider_for_redux/provider_for_redux.dart';
 
 class FindLoungesScreen extends StatefulWidget {
@@ -20,6 +20,7 @@ class FindLoungesScreen extends StatefulWidget {
 
 class _FindLoungesScreenState extends State<FindLoungesScreen>
     with AutomaticKeepAliveClientMixin<FindLoungesScreen> {
+  void Function(ReduxAction<AppState>) _dispatch;
   @override
   bool get wantKeepAlive => true;
 
@@ -27,9 +28,7 @@ class _FindLoungesScreenState extends State<FindLoungesScreen>
       List<Lounge> userLounges,
       List<Event> userEvents,
       Map<String, UserEventState> userEventStates,
-      Map<String, List<Lounge>> userEventLounges,
-      void Function(redux.ReduxAction<AppState>) dispatch,
-      ThemeStyle themeStyle) {
+      Map<String, List<Lounge>> userEventLounges) {
     return userEvents.isEmpty
         ? Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -60,13 +59,8 @@ class _FindLoungesScreenState extends State<FindLoungesScreen>
             itemBuilder: (BuildContext context, int index) => Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      _buildEvent(
-                          userLounges,
-                          userEvents[index],
-                          userEventStates,
-                          userEventLounges,
-                          dispatch,
-                          themeStyle),
+                      _buildEvent(userLounges, userEvents[index],
+                          userEventStates, userEventLounges),
                     ]));
   }
 
@@ -74,9 +68,7 @@ class _FindLoungesScreenState extends State<FindLoungesScreen>
       List<Lounge> userLounges,
       Event event,
       Map<String, UserEventState> userEventStates,
-      Map<String, List<Lounge>> userEventLounges,
-      void Function(redux.ReduxAction<AppState>) dispatch,
-      ThemeStyle theme) {
+      Map<String, List<Lounge>> userEventLounges) {
     final UserEventState state = userEventStates[event.id];
     String stateMessage = '';
     if (state == UserEventState.Attending) {
@@ -87,31 +79,14 @@ class _FindLoungesScreenState extends State<FindLoungesScreen>
     }
 
     return GestureDetector(
-        onTap: () => dispatch(redux.NavigateAction<AppState>.pushNamed(
+        onTap: () => _dispatch(NavigateAction<AppState>.pushNamed(
             EventScreen.id,
             arguments: event)),
         child: Container(
             decoration: BoxDecoration(color: Colors.transparent),
             padding: const EdgeInsets.all(10.0),
             child: Row(children: <Widget>[
-              Flexible(
-                  child: Stack(alignment: Alignment.center, children: <Widget>[
-                Container(
-                    decoration: const BoxDecoration(
-                        border: Border(
-                            left: BorderSide(color: orange, width: 7.0))),
-                    child: CachedImage(event.pic,
-                        width: 70.0,
-                        height: 70.0,
-                        borderRadius: const BorderRadius.only(
-                            bottomRight: Radius.circular(5.0),
-                            topRight: Radius.circular(5.0)),
-                        imageType: ImageType.Event)),
-                if (state == UserEventState.Attending)
-                  Icon(Icons.check, size: 40.0, color: white)
-                else if (state == UserEventState.Liked)
-                  Icon(MdiIcons.heart, size: 40.0, color: white),
-              ])),
+              Flexible(child: EventImage(image: event.pic, state: state)),
               Expanded(
                   flex: 3,
                   child: Padding(
@@ -129,8 +104,8 @@ class _FindLoungesScreenState extends State<FindLoungesScreen>
                                     fontSize: 13)),
                             Row(children: <Widget>[
                               GestureDetector(
-                                  onTap: () => dispatch(
-                                      redux.NavigateAction<AppState>.pushNamed(
+                                  onTap: () => _dispatch(
+                                      NavigateAction<AppState>.pushNamed(
                                           LoungesScreen.id,
                                           arguments: event)),
                                   child: Container(
@@ -146,7 +121,7 @@ class _FindLoungesScreenState extends State<FindLoungesScreen>
                                               fontWeight: FontWeight.bold,
                                               fontSize: 14))))
                             ])
-                          ]))),
+                          ])))
             ])));
   }
 
@@ -154,10 +129,11 @@ class _FindLoungesScreenState extends State<FindLoungesScreen>
   Widget build(BuildContext context) {
     super.build(context);
     return ReduxConsumer<AppState>(builder: (BuildContext context,
-        redux.Store<AppState> store,
+        Store<AppState> store,
         AppState state,
-        void Function(redux.ReduxAction<dynamic>) dispatch,
+        void Function(ReduxAction<AppState>) dispatch,
         Widget child) {
+      _dispatch = dispatch;
       final List<Event> eventsWithoutLounge =
           state.userState.events.where((Event _event) {
         final List<Lounge> _lounges = state.userState.eventLounges[_event.id];
@@ -173,13 +149,8 @@ class _FindLoungesScreenState extends State<FindLoungesScreen>
         return true;
       }).toList();
 
-      return _buildEvents(
-          state.userState.lounges,
-          eventsWithoutLounge,
-          state.userState.user.events,
-          state.userState.eventLounges,
-          dispatch,
-          state.theme);
+      return _buildEvents(state.userState.lounges, eventsWithoutLounge,
+          state.userState.user.events, state.userState.eventLounges);
     });
   }
 }

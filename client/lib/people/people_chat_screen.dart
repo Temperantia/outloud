@@ -1,4 +1,5 @@
-import 'package:async_redux/async_redux.dart' as redux;
+import 'package:async_redux/async_redux.dart'
+    show ReduxAction, NavigateAction, Store;
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:business/app_state.dart';
 import 'package:business/classes/chat.dart';
@@ -17,11 +18,12 @@ class PeopleChatScreen extends StatefulWidget {
 
 class _PeopleChatScreenState extends State<PeopleChatScreen>
     with AutomaticKeepAliveClientMixin<PeopleChatScreen> {
+  void Function(ReduxAction<AppState>) _dispatch;
+
   @override
   bool get wantKeepAlive => true;
 
-  Widget _buildChat(Chat chat, int newMessageCount, ThemeStyle theme,
-      void Function(redux.ReduxAction<AppState>) dispatch) {
+  Widget _buildChat(Chat chat, int newMessageCount) {
     if (chat.entity == null) {
       return Container(width: 0.0, height: 0.0);
     }
@@ -32,7 +34,7 @@ class _PeopleChatScreenState extends State<PeopleChatScreen>
         : (chat.entity as User).pics[0];
     return Column(children: <Widget>[
       GestureDetector(
-          onTap: () => dispatch(redux.NavigateAction<AppState>.pushNamed(
+          onTap: () => _dispatch(NavigateAction<AppState>.pushNamed(
               ChatScreen.id,
               arguments: chat)),
           child: Container(
@@ -92,10 +94,11 @@ class _PeopleChatScreenState extends State<PeopleChatScreen>
   Widget build(BuildContext context) {
     super.build(context);
     return ReduxConsumer<AppState>(builder: (BuildContext context,
-        redux.Store<AppState> store,
+        Store<AppState> store,
         AppState state,
-        void Function(redux.ReduxAction<dynamic>) dispatch,
+        void Function(ReduxAction<AppState>) dispatch,
         Widget child) {
+      _dispatch = dispatch;
       return ListView.builder(
           itemCount: state.chatsState.chats.length,
           itemBuilder: (BuildContext context, int index) {
@@ -104,9 +107,7 @@ class _PeopleChatScreenState extends State<PeopleChatScreen>
                 chat,
                 state.chatsState
                     .usersChatsStates[state.userState.user.id][chat.id]
-                    .countNewMessages(),
-                state.theme,
-                dispatch);
+                    .countNewMessages());
           });
     });
   }

@@ -1,4 +1,5 @@
-import 'package:async_redux/async_redux.dart' as redux;
+import 'package:async_redux/async_redux.dart'
+    show ReduxAction, NavigateAction, Store;
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:business/app_state.dart';
 import 'package:business/classes/event.dart';
@@ -33,8 +34,7 @@ class _EventAttendingScreenState extends State<EventAttendingScreen> {
                 style: const TextStyle(
                     color: black, fontSize: 13, fontWeight: FontWeight.bold)),
           ]),
-          Container(
-              child: Row(children: <Widget>[
+          Row(children: <Widget>[
             Flexible(
                 child: CachedImage(widget.event.pic,
                     width: 30.0,
@@ -50,14 +50,19 @@ class _EventAttendingScreenState extends State<EventAttendingScreen> {
                         style: const TextStyle(
                             color: orange,
                             fontSize: 12,
-                            fontWeight: FontWeight.w700)))),
-          ])),
+                            fontWeight: FontWeight.w700))))
+          ])
         ]));
   }
 
-  Widget _buildList(void Function(redux.ReduxAction<AppState>) dispatch) {
+  Widget _buildList(void Function(ReduxAction<AppState>) dispatch) {
     final int memberNumber = widget.event.memberIds.length;
     final List<User> members = widget.event.members;
+
+    if (widget.event.members == null) {
+      return Container(width: 0.0, height: 0.0);
+    }
+
     return Expanded(
         child: Container(
             padding:
@@ -84,10 +89,10 @@ class _EventAttendingScreenState extends State<EventAttendingScreen> {
   }
 
   Widget _buildMember(
-      User member, void Function(redux.ReduxAction<AppState>) dispatch) {
+      User member, void Function(ReduxAction<AppState>) dispatch) {
     final String pic = member.pics.isEmpty ? null : member.pics[0];
     return GestureDetector(
-        onTap: () => dispatch(redux.NavigateAction<AppState>.pushNamed(
+        onTap: () => dispatch(NavigateAction<AppState>.pushNamed(
             ProfileScreen.id,
             arguments: <String, dynamic>{'user': member})),
         child: Container(
@@ -115,9 +120,9 @@ class _EventAttendingScreenState extends State<EventAttendingScreen> {
   @override
   Widget build(BuildContext context) {
     return ReduxConsumer<AppState>(builder: (BuildContext context,
-        redux.Store<AppState> store,
+        Store<AppState> store,
         AppState state,
-        void Function(redux.ReduxAction<AppState>) dispatch,
+        void Function(ReduxAction<AppState>) dispatch,
         Widget child) {
       return View(
           title: 'LISTE DE PARTICIPANTS',

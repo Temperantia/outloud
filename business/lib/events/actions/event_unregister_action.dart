@@ -1,11 +1,11 @@
-import 'package:async_redux/async_redux.dart' as redux;
+import 'package:async_redux/async_redux.dart' show ReduxAction;
 import 'package:business/app_state.dart';
 import 'package:business/classes/event.dart';
 import 'package:business/classes/user.dart';
 import 'package:business/models/events.dart';
 import 'package:business/models/user.dart';
 
-class EventUnRegisterAction extends redux.ReduxAction<AppState> {
+class EventUnRegisterAction extends ReduxAction<AppState> {
   EventUnRegisterAction(this._event);
 
   final Event _event;

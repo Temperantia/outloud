@@ -1,16 +1,13 @@
 import 'package:async_redux/async_redux.dart';
-import 'package:business/app.dart';
 import 'package:business/app_state.dart';
 import 'package:business/classes/user.dart';
 import 'package:business/models/user.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:geolocator/geolocator.dart';
 
 class PeopleGetAction extends ReduxAction<AppState> {
   @override
   Future<AppState> reduce() async {
     final List<User> people = await getUsers(state.loginState.id);
-    GeoPoint location;
+/*     GeoPoint location;
     if (state.userState.user != null) {
       location = state.userState.user.location;
     } else {
@@ -41,9 +38,9 @@ class PeopleGetAction extends ReduxAction<AppState> {
         }
       }
     }
-
+ */
     return state.copy(
-        peopleState:
-            state.peopleState.copy(people: people, distances: distances));
+        peopleState: state.peopleState
+            .copy(people: people /* , distances: distances */));
   }
 }

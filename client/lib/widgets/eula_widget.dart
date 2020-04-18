@@ -55,7 +55,7 @@ This EULA agreement, and any dispute arising out of or in connection with this E
   Widget build(BuildContext context) {
     return ReduxConsumer<AppState>(
         builder: (BuildContext context, Store<AppState> store, AppState state,
-                void Function(ReduxAction<dynamic>) dispatch, Widget child) =>
+                void Function(ReduxAction<AppState>) dispatch, Widget child) =>
             Scaffold(
                 body: Center(
                     child: Dialog(

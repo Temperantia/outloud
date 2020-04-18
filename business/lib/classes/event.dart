@@ -35,10 +35,13 @@ class Event extends Entity {
             : (snapshot['dateEnd'] as Timestamp).toDate(),
         memberIds = snapshot['memberIds'] == null
             ? <String>[]
-            : List<String>.of(snapshot['memberIds'].cast<String>() as List<String>, growable: true),
+            : List<String>.of(
+                snapshot['memberIds'].cast<String>() as List<String>,
+                growable: true),
         likes = snapshot['likes'] == null
             ? <String>[]
-            : List<String>.of(snapshot['likes'].cast<String>() as List<String>, growable: true),
+            : List<String>.of(snapshot['likes'].cast<String>() as List<String>,
+                growable: true),
         pic = snapshot['pic'] as String,
         price = snapshot['price'] as String ?? '',
         super(
@@ -48,7 +51,9 @@ class Event extends Entity {
             location: snapshot['location'] as GeoPoint,
             interests: snapshot['interests'] == null
                 ? <String>[]
-                : List<String>.of(snapshot['interests'].cast<String>() as List<String>, growable: true));
+                : List<String>.of(
+                    snapshot['interests'].cast<String>() as List<String>,
+                    growable: true));
 
   DateTime dateStart;
   DateTime dateEnd;
@@ -57,7 +62,7 @@ class Event extends Entity {
   String pic;
   String price;
 
-  double distance;
+  // double distance;
   List<User> members;
   List<Message> messages;
   List<User> chatMembers;

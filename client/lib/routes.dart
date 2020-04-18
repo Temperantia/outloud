@@ -9,7 +9,6 @@ import 'package:outloud/lounges/lounge_chat_screen.dart';
 import 'package:outloud/lounges/lounge_create_detail_screen.dart';
 import 'package:outloud/lounges/lounge_create_meetup_screen.dart';
 import 'package:outloud/lounges/lounge_create_screen.dart';
-import 'package:outloud/lounges/lounge_edit_screen.dart';
 import 'package:outloud/lounges/lounge_view_screen.dart';
 import 'package:outloud/lounges/lounges_screen.dart';
 import 'package:outloud/people/people_search_screen.dart';
@@ -40,8 +39,8 @@ final Map<String, Widget Function(Object)> routes =
   LoungeCreateScreen.id: (_) => LoungeCreateScreen(),
   LoungeCreateDetailScreen.id: (_) => LoungeCreateDetailScreen(),
   LoungeCreateMeetupScreen.id: (_) => LoungeCreateMeetupScreen(),
-  LoungeEditScreen.id: (dynamic lounge) => LoungeEditScreen(lounge as Lounge),
-  LoungeViewScreen.id: (dynamic lounge) => LoungeViewScreen(lounge as Lounge),
+  LoungeViewScreen.id: (dynamic settings) => LoungeViewScreen(
+      settings['lounge'] as Lounge, settings['isEdit'] as bool ?? false),
   ProfileScreen.id: (dynamic settings) => ProfileScreen(
       settings['user'] as User, settings['isEdition'] as bool ?? false),
   ChatScreen.id: (dynamic chat) => ChatScreen(chat as Chat),

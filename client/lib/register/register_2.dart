@@ -34,8 +34,8 @@ class _Register2ScreenState extends State<Register2Screen> {
                 child: Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
                   AutoSizeText(interest.key.toUpperCase(),
                       style: const TextStyle(color: white)),
-                  Padding(
-                      padding: const EdgeInsets.only(left: 10.0),
+                  const Padding(
+                      padding: EdgeInsets.only(left: 10.0),
                       child: Icon(Icons.check, color: white, size: 12.0))
                 ])),
           )
@@ -48,8 +48,8 @@ class _Register2ScreenState extends State<Register2Screen> {
                 child: Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
                   AutoSizeText(interest.key.toUpperCase(),
                       style: const TextStyle(color: pink)),
-                  Padding(
-                      padding: const EdgeInsets.only(left: 10.0),
+                  const Padding(
+                      padding: EdgeInsets.only(left: 10.0),
                       child: Icon(Icons.radio_button_unchecked,
                           color: pink, size: 12.0))
                 ])));
@@ -60,7 +60,7 @@ class _Register2ScreenState extends State<Register2Screen> {
     return ReduxConsumer<AppState>(builder: (BuildContext context,
         Store<AppState> store,
         AppState state,
-        void Function(ReduxAction<dynamic>) dispatch,
+        void Function(ReduxAction<AppState>) dispatch,
         Widget child) {
       _interests = <String>[
         FlutterI18n.translate(context, 'INTERESTS.FOOD_AND_DRINK'),

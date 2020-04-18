@@ -1,9 +1,9 @@
-import 'package:async_redux/async_redux.dart' as redux;
+import 'package:async_redux/async_redux.dart' show ReduxAction;
 import 'package:business/app_state.dart';
 import 'package:business/classes/event.dart';
 import 'package:business/classes/lounge.dart';
 
-class UserLoungeEventUpdateAction extends redux.ReduxAction<AppState> {
+class UserLoungeEventUpdateAction extends ReduxAction<AppState> {
   UserLoungeEventUpdateAction(this._event, this._loungeId);
 
   final Event _event;

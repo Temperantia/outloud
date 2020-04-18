@@ -41,12 +41,12 @@ class _ChatScreenState extends State<ChatScreen> {
     super.dispose();
   }
 
-  void _markAsRead(Map<String, Map<String, ChatState>> usersChatsStates,
-      String userId, void Function(ReduxAction<AppState>) dispatch) {
+  void _markAsRead(
+      Map<String, Map<String, ChatState>> usersChatsStates, String userId) {
     if (usersChatsStates[userId][_chat.id]
         .messageStates
         .containsValue(MessageState.Received)) {
-      dispatch(ChatsReadAction(_chat.id));
+      _dispatch(ChatsReadAction(_chat.id));
     }
   }
 
@@ -161,7 +161,7 @@ class _ChatScreenState extends State<ChatScreen> {
       if (_chat == null || _chat.entity == null) {
         return Container(width: 0.0, height: 0.0);
       }
-      _markAsRead(state.chatsState.usersChatsStates, userId, dispatch);
+      _markAsRead(state.chatsState.usersChatsStates, userId);
       final String namePeer = (_chat.entity as User).name.split(' ')[0];
       return View(
           title: 'CHAT AVEC ${namePeer.toUpperCase()}',

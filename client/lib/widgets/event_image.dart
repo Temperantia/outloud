@@ -1,0 +1,87 @@
+import 'package:auto_size_text/auto_size_text.dart';
+import 'package:business/classes/user_event_state.dart';
+import 'package:flutter/material.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:outloud/theme.dart';
+import 'package:outloud/widgets/cached_image.dart';
+import 'package:intl/intl.dart';
+
+class EventImage extends StatelessWidget {
+  const EventImage(
+      {this.image,
+      this.state,
+      this.size = 70.0,
+      this.isChat = false,
+      this.date,
+      this.newMessageCount});
+
+  final String image;
+  final UserEventState state;
+  final double size;
+  final bool isChat;
+  final DateTime date;
+  final int newMessageCount;
+
+  @override
+  Widget build(BuildContext context) {
+    Widget dateWidget;
+    if (date != null) {
+      final String day = DateFormat('dd').format(date);
+      final String month = DateFormat('MMM').format(date);
+      dateWidget = Column(children: <Widget>[
+        AutoSizeText(day,
+            style: const TextStyle(
+                color: white, fontWeight: FontWeight.bold, fontSize: 20)),
+        AutoSizeText(month,
+            style: const TextStyle(color: white, fontWeight: FontWeight.bold))
+      ]);
+    }
+
+    return Stack(alignment: Alignment.center, children: <Widget>[
+      Container(
+          decoration: const BoxDecoration(
+              border: Border(left: BorderSide(color: orange, width: 7.0))),
+          child: CachedImage(image,
+              width: size,
+              height: size,
+              borderRadius: const BorderRadius.only(
+                  bottomRight: Radius.circular(5.0),
+                  topRight: Radius.circular(5.0)),
+              imageType: ImageType.Event)),
+      Container(
+          width: size + 7.0,
+          height: size,
+          decoration: BoxDecoration(
+              color: pink.withOpacity(0.5),
+              borderRadius: const BorderRadius.only(
+                  bottomRight: Radius.circular(5.0),
+                  topRight: Radius.circular(5.0)))),
+      if (dateWidget != null) dateWidget,
+      if (state == UserEventState.Attending)
+        Icon(Icons.check, size: size - 20.0, color: white)
+      else if (state == UserEventState.Liked)
+        Icon(MdiIcons.heart, size: size - 20.0, color: white),
+      if (isChat)
+        Container(
+            width: size - 20.0,
+            height: size - 20.0,
+            child: Image.asset('images/chatIcon.png')),
+      if ((newMessageCount ?? 0) > 0)
+        Positioned(
+            top: 0.0,
+            left: 0.0,
+            child: Container(
+                width: size - 20.0,
+                height: size - 20.0,
+                margin: const EdgeInsets.symmetric(horizontal: 5.0),
+                decoration: BoxDecoration(
+                    color: blue, borderRadius: BorderRadius.circular(60.0)),
+                child: Center(
+                  child: AutoSizeText(newMessageCount.toString(),
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                          color: white, fontWeight: FontWeight.bold)),
+                )))
+    ]);
+  }
+}

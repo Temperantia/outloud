@@ -259,7 +259,7 @@
     "GROUP_DESCRIPTION": "Brève description du groupe",
     "CREATE_LOUNGE": "CREER UN SALON",
     "BACK": "RETOUR",
-    "NEXT": "SUIVANT"
+    "CREATE": "CREER"
   },
   "LOUNGE_CREATE_MEETUP": {
     "CANCEL": "Annuler",

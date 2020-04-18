@@ -12,7 +12,7 @@ class MyErrorWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return ReduxConsumer<AppState>(
         builder: (BuildContext context, Store<AppState> store, AppState state,
-                void Function(ReduxAction<dynamic>) dispatch, Widget child) =>
+                void Function(ReduxAction<AppState>) dispatch, Widget child) =>
             AlertDialog(
                 title: const AutoSizeText('An error has occured'),
                 content: AutoSizeText('error detail : ' + error.toString()),

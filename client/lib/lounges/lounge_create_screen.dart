@@ -1,4 +1,5 @@
-import 'package:async_redux/async_redux.dart' as redux;
+import 'package:async_redux/async_redux.dart'
+    show ReduxAction, NavigateAction, Store;
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:business/app_state.dart';
 import 'package:business/classes/event.dart';
@@ -55,9 +56,9 @@ class _LoungeCreateScreenState extends State<LoungeCreateScreen> {
   @override
   Widget build(BuildContext context) {
     return ReduxConsumer<AppState>(builder: (BuildContext context,
-        redux.Store<AppState> store,
+        Store<AppState> store,
         AppState state,
-        void Function(redux.ReduxAction<AppState>) dispatch,
+        void Function(ReduxAction<AppState>) dispatch,
         Widget child) {
       final List<Lounge> userLounges = state.userState.lounges;
       final List<Event> userEvents = state.userState.events
@@ -85,7 +86,7 @@ class _LoungeCreateScreenState extends State<LoungeCreateScreen> {
                             dispatch(LoungeCreateAction(
                               _selected.id,
                             ));
-                            dispatch(redux.NavigateAction<AppState>.pushNamed(
+                            dispatch(NavigateAction<AppState>.pushNamed(
                                 LoungeCreateDetailScreen.id));
                           }),
                     ]),

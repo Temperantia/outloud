@@ -128,7 +128,7 @@ class _Register3ScreenState extends State<Register3Screen> {
     return ReduxConsumer<AppState>(builder: (BuildContext context,
         Store<AppState> store,
         AppState state,
-        void Function(ReduxAction<dynamic>) dispatch,
+        void Function(ReduxAction<AppState>) dispatch,
         Widget child) {
       User user = state.loginState.user;
       _controllers['GENDER'].add(<String>[

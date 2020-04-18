@@ -20,7 +20,7 @@ class _HomeWidgetState extends State<HomeWidget>
     return ReduxConsumer<AppState>(builder: (BuildContext context,
         Store<AppState> store,
         AppState state,
-        void Function(ReduxAction<dynamic>) dispatch,
+        void Function(ReduxAction<AppState>) dispatch,
         Widget child) {
       return Container(width: 0.0, height: 0.0);
     });

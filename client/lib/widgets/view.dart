@@ -48,10 +48,10 @@ class View extends StatefulWidget {
 }
 
 class _ViewState extends State<View> {
+  void Function(ReduxAction<AppState>) _dispatch;
   bool _showUserSettings = false;
 
-  Widget _buildBody(
-      AppState state, void Function(ReduxAction<dynamic>) dispatch) {
+  Widget _buildBody() {
     return widget.buttons == null
         ? widget.child
         : Column(children: <Widget>[
@@ -64,8 +64,7 @@ class _ViewState extends State<View> {
           ]);
   }
 
-  Widget _buildUserSettings(
-      User user, void Function(ReduxAction<dynamic>) dispatch) {
+  Widget _buildUserSettings(User user) {
     return Container(
         width: 300.0,
         padding: const EdgeInsets.all(10.0),
@@ -102,7 +101,7 @@ class _ViewState extends State<View> {
           ]),
           GestureDetector(
               onTap: () {
-                dispatch(NavigateAction<AppState>.pushNamed(ProfileScreen.id,
+                _dispatch(NavigateAction<AppState>.pushNamed(ProfileScreen.id,
                     arguments: <String, dynamic>{'user': user}));
                 setState(() => _showUserSettings = false);
               },
@@ -119,7 +118,7 @@ class _ViewState extends State<View> {
               ])),
           GestureDetector(
               onTap: () {
-                dispatch(NavigateAction<AppState>.pushNamed(ProfileScreen.id,
+                _dispatch(NavigateAction<AppState>.pushNamed(ProfileScreen.id,
                     arguments: <String, dynamic>{
                       'user': user,
                       'isEdition': true
@@ -142,7 +141,7 @@ class _ViewState extends State<View> {
               onTap: () {
                 Navigator.of(context)
                     .popUntil((Route<dynamic> route) => route.isFirst);
-                dispatch(AppDisconnectAction());
+                _dispatch(AppDisconnectAction());
                 setState(() => _showUserSettings = false);
               },
               child: Row(children: <Widget>[
@@ -159,21 +158,66 @@ class _ViewState extends State<View> {
         ]));
   }
 
+  AppBar _buildAppBar(User user) {
+    return AppBar(
+        elevation: 0.0,
+        leading: user == null
+            ? const CircularProgressIndicator()
+            : Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: GestureDetector(
+                    onTap: () =>
+                        setState(() => _showUserSettings = !_showUserSettings),
+                    child: CachedImage(user.pics.isEmpty ? null : user.pics[0],
+                        width: 40.0,
+                        height: 40.0,
+                        borderRadius: BorderRadius.circular(60.0),
+                        imageType: ImageType.User))),
+        centerTitle: true,
+        title: Stack(alignment: Alignment.center, children: <Widget>[
+          if (widget.title is String)
+            AutoSizeText(widget.title as String,
+                style: const TextStyle(color: white, fontSize: 14.0))
+          else
+            widget.title is TabBar
+                ? widget.title as TabBar
+                : Container(width: 0.0, height: 0.0),
+          if (Navigator.canPop(context))
+            Align(
+                alignment: Alignment.centerLeft,
+                child: GestureDetector(
+                    onTap: widget.onBack ??
+                        () => _dispatch(NavigateAction<AppState>.pop()),
+                    child: Icon(widget.backIcon, color: white)))
+        ]),
+        titleSpacing: 0.0,
+        actions: <Widget>[
+          Container(
+            padding: const EdgeInsets.all(8.0),
+            width: 40.0,
+            height: 40.0,
+            //child: Image.asset('images/hamburger.png')
+          )
+        ],
+        flexibleSpace: Image.asset('images/screenTop.png', fit: BoxFit.cover),
+        backgroundColor: Colors.transparent);
+  }
+
   Widget _buildNavBar(
-      AppState state, void Function(ReduxAction<dynamic>) dispatch) {
+      Map<String, ChatState> userChatStates,
+      Map<String, ChatState> loungeChatStates,
+      int homePageIndex,
+      ThemeStyle themeStyle) {
     int newMessageCount = 0;
     int newMessageLoungeCount = 0;
-    final String userId = state.userState.user.id;
-    if (state.chatsState.usersChatsStates[userId] != null) {
-      for (final ChatState chatState in state
-          .chatsState.usersChatsStates[state.userState.user.id].values) {
+    if (userChatStates != null) {
+      for (final ChatState chatState in userChatStates.values) {
         newMessageCount += chatState.countNewMessages();
       }
     }
 
-    if (state.chatsState.loungesChatsStates[userId] != null) {
-      for (final ChatState chatState in state
-          .chatsState.loungesChatsStates[state.userState.user.id].values) {
+    if (loungeChatStates != null) {
+      for (final ChatState chatState in loungeChatStates.values) {
         newMessageLoungeCount += chatState.countNewMessages();
       }
     }
@@ -182,14 +226,14 @@ class _ViewState extends State<View> {
         backgroundColorStart: pinkLight,
         backgroundColorEnd: pink,
         type: BottomNavigationBarType.fixed,
-        currentIndex: state.homePageIndex,
+        currentIndex: homePageIndex,
         items: bubbleBar(
-            context, newMessageCount, newMessageLoungeCount, state.theme),
+            context, newMessageCount, newMessageLoungeCount, themeStyle),
         onTap: (int index) async {
-          if (index == state.homePageIndex) {
+          if (index == homePageIndex) {
             return;
           }
-          dispatch(AppNavigateAction(index));
+          _dispatch(AppNavigateAction(index));
           Navigator.of(context)
               .popUntil((Route<dynamic> route) => route.isFirst);
         });
@@ -203,78 +247,33 @@ class _ViewState extends State<View> {
         builder: (BuildContext context,
             Store<AppState> store,
             AppState state,
-            void Function(ReduxAction<dynamic>) dispatch,
+            void Function(ReduxAction<AppState>) dispatch,
             dynamic model,
             Widget w) {
+          _dispatch = dispatch;
           final User user = state.userState.user;
+          final String userId = user.id;
+          final Map<String, ChatState> userChatStates =
+              state.chatsState.usersChatsStates[userId];
+          final Map<String, ChatState> loungeChatStates =
+              state.chatsState.loungesChatsStates[userId];
           return DefaultTabController(
               length: 2,
               child: Stack(children: <Widget>[
                 Scaffold(
-                    appBar: widget.showAppBar
-                        ? AppBar(
-                            elevation: 0.0,
-                            leading: user == null
-                                ? const CircularProgressIndicator()
-                                : Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: GestureDetector(
-                                        onTap: () => setState(() =>
-                                            _showUserSettings =
-                                                !_showUserSettings),
-                                        child:
-                                            CachedImage(user.pics.isEmpty ? null : user.pics[0],
-                                                width: 40.0,
-                                                height: 40.0,
-                                                borderRadius:
-                                                    BorderRadius.circular(60.0),
-                                                imageType: ImageType.User))),
-                            centerTitle: true,
-                            title: Stack(alignment: Alignment.center, children: <
-                                Widget>[
-                              if (widget.title is String)
-                                AutoSizeText(widget.title as String,
-                                    style: const TextStyle(
-                                        color: white, fontSize: 14.0))
-                              else
-                                widget.title is TabBar
-                                    ? widget.title as TabBar
-                                    : Container(width: 0.0, height: 0.0),
-                              if (Navigator.canPop(context))
-                                Align(
-                                    alignment: Alignment.centerLeft,
-                                    child: GestureDetector(
-                                        onTap: widget.onBack ??
-                                            () => dispatch(
-                                                NavigateAction<AppState>.pop()),
-                                        child: Icon(widget.backIcon,
-                                            color: white)))
-                            ]),
-                            titleSpacing: 0.0,
-                            actions: <Widget>[
-                              Container(
-                                padding: const EdgeInsets.all(8.0),
-                                width: 40.0,
-                                height: 40.0,
-                                //child: Image.asset('images/hamburger.png')
-                              )
-                            ],
-                            flexibleSpace: Image.asset('images/screenTop.png',
-                                fit: BoxFit.cover),
-                            backgroundColor: Colors.transparent)
-                        : null,
+                    appBar: widget.showAppBar ? _buildAppBar(user) : null,
                     bottomNavigationBar: widget.showNavBar
-                        ? _buildNavBar(state, dispatch)
+                        ? _buildNavBar(userChatStates, loungeChatStates,
+                            state.homePageIndex, state.theme)
                         : Container(
                             width: 0.0,
                             height: 0.0,
                             decoration: const BoxDecoration(
-                                gradient: LinearGradient(colors: <Color>[pinkLight, pink]))),
-                    body: SafeArea(child: _buildBody(state, dispatch))),
+                                gradient: LinearGradient(
+                                    colors: <Color>[pinkLight, pink]))),
+                    body: SafeArea(child: _buildBody())),
                 if (_showUserSettings)
-                  SafeArea(
-                      child:
-                          Material(child: _buildUserSettings(user, dispatch)))
+                  SafeArea(child: Material(child: _buildUserSettings(user)))
               ]));
         });
   }

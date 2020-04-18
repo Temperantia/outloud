@@ -1,4 +1,5 @@
-import 'package:async_redux/async_redux.dart' as redux;
+import 'package:async_redux/async_redux.dart'
+    show ReduxAction, NavigateAction, Store;
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:business/app_state.dart';
 import 'package:business/classes/event.dart';
@@ -9,7 +10,6 @@ import 'package:flutter/material.dart';
 import 'package:business/lounges/actions/lounge_join_action.dart';
 import 'package:business/lounges/actions/lounge_leave_action.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
-import 'package:outloud/functions/loader_animation.dart';
 import 'package:outloud/lounges/lounge_chat_screen.dart';
 import 'package:outloud/lounges/lounge_create_screen.dart';
 import 'package:outloud/lounges/lounge_view_screen.dart';
@@ -31,6 +31,7 @@ class LoungesScreen extends StatefulWidget {
 
 class _LoungesScreenState extends State<LoungesScreen>
     with TickerProviderStateMixin {
+  void Function(ReduxAction<AppState>) _dispatch;
   Map<String, User> _owners;
 
   @override
@@ -49,26 +50,22 @@ class _LoungesScreenState extends State<LoungesScreen>
   }
 
 // TODO(robin): if lounge is full dont show it
-  Widget _buildLounge(
-      Lounge lounge,
-      Future<void> Function(redux.ReduxAction<AppState>) dispatchFuture,
-      void Function(redux.ReduxAction<AppState>) dispatch,
-      AppState state) {
+  Widget _buildLounge(Lounge lounge, String userId) {
     resolveOwner(lounge.id, lounge.owner);
     final User owner = _owners[lounge.id];
     if (owner == null) {
       return Container(width: 0.0, height: 0.0);
     }
-    if (owner.id == state.userState.user.id) {
+    if (owner.id == userId) {
       return Container(width: 0.0, height: 0.0);
     }
     final int availableSlots = lounge.memberLimit - lounge.memberIds.length;
     final String s = availableSlots <= 1 ? '' : 's';
 
     return GestureDetector(
-        onTap: () => dispatch(redux.NavigateAction<AppState>.pushNamed(
+        onTap: () => _dispatch(NavigateAction<AppState>.pushNamed(
             LoungeViewScreen.id,
-            arguments: lounge)),
+            arguments: <String, dynamic>{'lounge': lounge, 'isEdit': false})),
         child: Container(
             padding: const EdgeInsets.all(10.0),
             decoration: BoxDecoration(color: Colors.transparent),
@@ -95,10 +92,10 @@ class _LoungesScreenState extends State<LoungesScreen>
                               child: Wrap(children: <Widget>[
                             if (owner != null)
                               I18nText(
-                                  state.userState.user.id == owner.id
+                                  userId == owner.id
                                       ? 'LOUNGE_CHAT.YOUR_LOUNGE'
                                       : 'LOUNGE_CHAT.SOMEONES_LOUNGE',
-                                  child: const AutoSizeText('',
+                                  child: const Text('',
                                       style: TextStyle(
                                           fontSize: 13,
                                           fontWeight: FontWeight.w500)),
@@ -109,42 +106,35 @@ class _LoungesScreenState extends State<LoungesScreen>
                           GestureDetector(
                               onTap: () async {
                                 // TODO(robin): this shouldnt exist, the owner shouldnt see a join button on his own lounges and maybe not even see it here (ask @nadir)
-                                if (lounge.owner == state.userState.user.id) {
+                                if (lounge.owner == userId) {
                                   return;
                                 }
-                                if (lounge.memberIds
-                                    .contains(state.userState.user.id)) {
-                                  dispatch(LoungeLeaveAction(
-                                      state.userState.user.id, lounge));
+                                if (lounge.memberIds.contains(userId)) {
+                                  _dispatch(LoungeLeaveAction(userId, lounge));
                                 } else {
-                                  await showLoaderAnimation(context, this,
-                                      animationDuration: 600);
-                                  dispatch(LoungeJoinAction(
-                                      state.userState.user.id, lounge));
-                                  dispatch(
-                                      redux.NavigateAction<AppState>.pop());
-                                  dispatch(
-                                      redux.NavigateAction<AppState>.pushNamed(
-                                          LoungeChatScreen.id,
-                                          arguments: lounge));
+                                  /*  await showLoaderAnimation(context, this,
+                                      animationDuration: 600); */
+                                  _dispatch(LoungeJoinAction(userId, lounge));
+                                  _dispatch(NavigateAction<AppState>.pop());
+                                  _dispatch(NavigateAction<AppState>.pushNamed(
+                                      LoungeChatScreen.id,
+                                      arguments: lounge));
                                 }
                               },
                               child: Container(
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 5.0, horizontal: 20.0),
-                                decoration: const BoxDecoration(color: blue),
-                                child: AutoSizeText(
-                                    lounge.memberIds
-                                            .contains(state.userState.user.id)
-                                        ? FlutterI18n.translate(
-                                            context, 'LOUNGES.LEAVE')
-                                        : FlutterI18n.translate(context,
-                                            'LOUNGES.JOIN'), // TODO(me): add arrow icon
-                                    style: const TextStyle(
-                                        color: white,
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.w700)),
-                              )),
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 5.0, horizontal: 20.0),
+                                  decoration: const BoxDecoration(color: blue),
+                                  child: AutoSizeText(
+                                      lounge.memberIds.contains(userId)
+                                          ? FlutterI18n.translate(
+                                              context, 'LOUNGES.LEAVE')
+                                          : FlutterI18n.translate(context,
+                                              'LOUNGES.JOIN'), // TODO(me): add arrow icon
+                                      style: const TextStyle(
+                                          color: white,
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.w700))))
                         ]),
                         Wrap(
                             runAlignment: WrapAlignment.spaceBetween,
@@ -223,19 +213,16 @@ class _LoungesScreenState extends State<LoungesScreen>
       ]));
 
   Widget _buildListLounges(
-          List<Lounge> lounges,
-          Future<void> Function(redux.ReduxAction<AppState>) dispatchFuture,
-          void Function(redux.ReduxAction<AppState>) dispatch,
-          AppState state) =>
+          List<Lounge> lounges, String userId) =>
       ListView.builder(
           itemCount: lounges.length,
-          itemBuilder: (BuildContext context, int index) =>
-              Column(children: <Widget>[
-                _buildLounge(lounges[index], dispatchFuture, dispatch, state),
-                const Divider(color: black)
-              ]));
+          itemBuilder: (BuildContext context, int index) => Column(
+                  children: <Widget>[
+                    _buildLounge(lounges[index], userId),
+                    const Divider(color: black)
+                  ]));
 
-  Widget _noLoungeWidget(void Function(redux.ReduxAction<AppState>) dispatch) =>
+  Widget _noLoungeWidget() =>
       Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
         Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
           AutoSizeText(FlutterI18n.translate(context, 'LOUNGES.EMPTY_TITLE'),
@@ -251,15 +238,15 @@ class _LoungesScreenState extends State<LoungesScreen>
   @override
   Widget build(BuildContext context) =>
       ReduxConsumer<AppState>(builder: (BuildContext context,
-          redux.Store<AppState> store,
+          Store<AppState> store,
           AppState state,
-          void Function(redux.ReduxAction<AppState>) dispatch,
+          void Function(ReduxAction<AppState>) dispatch,
           Widget child) {
+        _dispatch = dispatch;
         final List<Lounge> lounges = List<Lounge>.of(
             state.userState.eventLounges[widget.event.id] ?? <Lounge>[]);
-        lounges.removeWhere((Lounge lounge) {
-          return lounge.memberIds.length >= lounge.memberLimit;
-        });
+        lounges.removeWhere(
+            (Lounge lounge) => lounge.memberIds.length >= lounge.memberLimit);
         return View(
             title: FlutterI18n.translate(context, 'LOUNGES.BROWSING_LOUNGES'),
             buttons: Row(
@@ -270,14 +257,14 @@ class _LoungesScreenState extends State<LoungesScreen>
                           context, 'LOUNGES_TAB.CREATE_LOUNGE'),
                       width: 250,
                       onPressed: () => dispatch(
-                          redux.NavigateAction<AppState>.pushNamed(
+                          NavigateAction<AppState>.pushNamed(
                               LoungeCreateScreen.id)))
                 ]),
             child: Column(children: <Widget>[
               _buildHeader(context),
               const Divider(),
               if (lounges == null || lounges.isEmpty)
-                _noLoungeWidget(dispatch)
+                _noLoungeWidget()
               else if (lounges.isNotEmpty)
                 Container(
                     margin: const EdgeInsets.only(top: 10, bottom: 20),
@@ -293,8 +280,7 @@ class _LoungesScreenState extends State<LoungesScreen>
                             fontWeight: FontWeight.w600))),
               if (lounges != null && lounges.isNotEmpty)
                 Expanded(
-                    child: _buildListLounges(
-                        lounges, store.dispatchFuture, dispatch, state)),
+                    child: _buildListLounges(lounges, state.userState.user.id))
             ]));
       });
 }

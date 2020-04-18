@@ -196,10 +196,6 @@ class _LoungeCreateMeetupScreenState extends State<LoungeCreateMeetupScreen> {
     return 0;
   }
 
-  void _dismissDialog() {
-    Navigator.pop(context);
-  }
-
   OverlayEntry _createOverlayButtons() {
     final RenderBox renderBox =
         _keyMap.currentContext.findRenderObject() as RenderBox;

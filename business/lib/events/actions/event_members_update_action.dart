@@ -1,9 +1,9 @@
-import 'package:async_redux/async_redux.dart' as redux;
+import 'package:async_redux/async_redux.dart' show ReduxAction;
 import 'package:business/app_state.dart';
 import 'package:business/classes/event.dart';
 import 'package:business/classes/user.dart';
 
-class EventMembersUpdateAction extends redux.ReduxAction<AppState> {
+class EventMembersUpdateAction extends ReduxAction<AppState> {
   EventMembersUpdateAction(this._members, this._eventId);
 
   final List<User> _members;

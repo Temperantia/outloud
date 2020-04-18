@@ -25,7 +25,7 @@ class _Register1ScreenState extends State<Register1Screen> {
     return ReduxConsumer<AppState>(builder: (BuildContext context,
         Store<AppState> store,
         AppState state,
-        void Function(ReduxAction<dynamic>) dispatch,
+        void Function(ReduxAction<AppState>) dispatch,
         Widget child) {
       final User user = state.loginState.user;
 

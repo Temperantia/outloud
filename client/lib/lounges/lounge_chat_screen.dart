@@ -9,15 +9,14 @@ import 'package:business/lounges/actions/lounge_leave_action.dart';
 import 'package:business/chats/actions/chats_lounge_read_action.dart';
 import 'package:flutter/widgets.dart';
 import 'package:business/app_state.dart';
-import 'package:async_redux/async_redux.dart' as redux;
+import 'package:async_redux/async_redux.dart'
+    show ReduxAction, NavigateAction, Store;
 import 'package:business/classes/lounge.dart';
 import 'package:business/classes/chat.dart';
 import 'package:business/classes/message.dart';
 import 'package:business/models/message.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
-import 'package:outloud/functions/loader_animation.dart';
-import 'package:outloud/lounges/lounge_edit_screen.dart';
 import 'package:outloud/lounges/lounge_view_screen.dart';
 import 'package:outloud/profile/profile_screen.dart';
 import 'package:outloud/theme.dart';
@@ -38,6 +37,7 @@ class LoungeChatScreen extends StatefulWidget {
 
 class _LoungeChatScreenState extends State<LoungeChatScreen>
     with TickerProviderStateMixin {
+  void Function(ReduxAction<AppState>) _dispatch;
   Lounge _lounge;
   final TextEditingController _messageController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
@@ -49,18 +49,17 @@ class _LoungeChatScreenState extends State<LoungeChatScreen>
     super.dispose();
   }
 
-  void _markAsRead(Map<String, Map<String, ChatState>> loungesChatsStates,
-      String userId, void Function(ReduxAction<AppState>) dispatch) {
+  void _markAsRead(
+      Map<String, Map<String, ChatState>> loungesChatsStates, String userId) {
     final bool isReceived = loungesChatsStates[userId][widget.lounge.id]
         ?.messageStates
         ?.containsValue(MessageState.Received);
     if (isReceived != null) {
-      dispatch(ChatsLoungeReadAction(widget.lounge.id));
+      _dispatch(ChatsLoungeReadAction(widget.lounge.id));
     }
   }
 
-  void _showConfirmPopup(
-      void Function(redux.ReduxAction<AppState>) dispatch, AppState state) {
+  void _showConfirmPopup(String userId) {
     showDialog(
         context: context,
         barrierDismissible: false,
@@ -137,14 +136,13 @@ class _LoungeChatScreenState extends State<LoungeChatScreen>
                                       alignment: Alignment.bottomCenter,
                                       child: FlatButton(
                                           onPressed: () async {
-                                            await showLoaderAnimation(
+                                            /* await showLoaderAnimation(
                                                 context, this,
-                                                animationDuration: 600);
-                                            dispatch(LoungeLeaveAction(
-                                                state.userState.user.id,
-                                                _lounge));
+                                                animationDuration: 600); */
+                                            _dispatch(LoungeLeaveAction(
+                                                userId, _lounge));
                                             Navigator.pop(context);
-                                            dispatch(
+                                            _dispatch(
                                                 NavigateAction<AppState>.pop());
                                           },
                                           child: AutoSizeText(
@@ -160,8 +158,7 @@ class _LoungeChatScreenState extends State<LoungeChatScreen>
             ])));
   }
 
-  Widget _buildHeader(
-      AppState state, void Function(ReduxAction<AppState>) dispatch) {
+  Widget _buildHeader(String userId) {
     if (_lounge == null || _lounge.members == null) {
       return Container(width: 0.0, height: 0.0);
     }
@@ -187,63 +184,17 @@ class _LoungeChatScreenState extends State<LoungeChatScreen>
                         topRight: Radius.circular(5.0)),
                     imageType: ImageType.Event))
           ]),
-          /*  Expanded(
-              flex: 11,
-              child: Container(
-                  padding: const EdgeInsets.only(left: 20),
-                  child: Column(children: <Widget>[
-                    Row(children: <Widget>[
-                      CachedImage(owner.pics.isEmpty ? null : owner.pics[0],
-                          width: 20.0,
-                          height: 20.0,
-                          borderRadius: BorderRadius.circular(20.0),
-                          imageType: ImageType.User),
-                      Expanded(
-                          child: Container(
-                              padding: const EdgeInsets.only(left: 10),
-                              child: I18nAutoSizeText(
-                                  state.userState.user.id == owner.id
-                                      ? 'LOUNGE_CHAT.YOUR_LOUNGE'
-                                      : 'LOUNGE_CHAT.SOMEONES_LOUNGE',
-                                  child: const AutoSizeText('',
-                                      style: TextStyle(
-                                          color: black,
-                                          fontSize: 13,
-                                          fontWeight: FontWeight.w500)),
-                                  translationParams: <String, String>{
-                                    'user': owner.name
-                                  })))
-                    ]),
-                    Wrap(children: <Widget>[
-                      RichAutoSizeText(
-                          text: TextSpan(
-                              text: _lounge.members.length.toString() +
-                                  ' ' +
-                                  FlutterI18n.translate(
-                                      context, 'LOUNGE_CHAT.MEMBER') +
-                                  (_lounge.members.length > 1 ? 's ' : ' '),
-                              style: const TextStyle(
-                                  color: black,
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.w500),
-                              children: <TextSpan>[
-                            TextSpan(
-                                text: _lounge.event.name,
-                                style: TextStyle(
-                                    color: orange,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w800))
-                          ]))
-                    ])
-                  ]))), */
-          if (state.userState.user.id == owner.id)
+          if (userId == owner.id)
             GestureDetector(
                 onTap: () async {
-                  await showLoaderAnimation(context, this,
-                      animationDuration: 600);
-                  dispatch(redux.NavigateAction<AppState>.pushNamed(
-                      LoungeEditScreen.id,
-                      arguments: _lounge));
+                  /* await showLoaderAnimation(context, this,
+                      animationDuration: 600); */
+                  _dispatch(NavigateAction<AppState>.pushNamed(
+                      LoungeViewScreen.id,
+                      arguments: <String, dynamic>{
+                        'lounge': _lounge,
+                        'isEdit': true
+                      }));
                 },
                 child: Column(children: <Widget>[
                   const Icon(MdiIcons.calendarEdit, color: orange),
@@ -257,9 +208,7 @@ class _LoungeChatScreenState extends State<LoungeChatScreen>
                 flex: 5,
                 child: Row(children: <Widget>[
                   GestureDetector(
-                      onTap: () async {
-                        _showConfirmPopup(dispatch, state);
-                      },
+                      onTap: () async => _showConfirmPopup(userId),
                       child: Container(
                           margin: const EdgeInsets.only(
                               left: 5, right: 10, top: 10),
@@ -283,11 +232,14 @@ class _LoungeChatScreenState extends State<LoungeChatScreen>
                           ]))),
                   GestureDetector(
                       onTap: () async {
-                        await showLoaderAnimation(context, this,
-                            animationDuration: 600);
-                        dispatch(NavigateAction<AppState>.pushNamed(
+                        /* await showLoaderAnimation(context, this,
+                            animationDuration: 600); */
+                        _dispatch(NavigateAction<AppState>.pushNamed(
                             LoungeViewScreen.id,
-                            arguments: _lounge));
+                            arguments: <String, dynamic>{
+                              'lounge': _lounge,
+                              'isEdit': false
+                            }));
                       },
                       child: Container(
                           margin: const EdgeInsets.only(left: 5, top: 10),
@@ -312,13 +264,11 @@ class _LoungeChatScreenState extends State<LoungeChatScreen>
         ]));
   }
 
-  Widget _buildChat(
-          Chat chat, void Function(redux.ReduxAction<dynamic>) dispatch) =>
-      ListView.builder(
-          controller: _scrollController,
-          itemCount: chat.messages.length,
-          itemBuilder: (BuildContext context, int index) => _buildMessage(
-              chat.messages[chat.messages.length - index - 1], dispatch));
+  Widget _buildChat(Chat chat) => ListView.builder(
+      controller: _scrollController,
+      itemCount: chat.messages.length,
+      itemBuilder: (BuildContext context, int index) =>
+          _buildMessage(chat.messages[chat.messages.length - index - 1]));
 
   String _dateFormatter(int timestamp) {
     final DateTime time = DateTime.fromMillisecondsSinceEpoch(timestamp);
@@ -329,8 +279,7 @@ class _LoungeChatScreenState extends State<LoungeChatScreen>
     return date_formater.DateFormat('yyyy-MM-dd \'at\' kk:mm').format(time);
   }
 
-  Widget _buildMessage(
-      Message message, void Function(redux.ReduxAction<dynamic>) dispatch) {
+  Widget _buildMessage(Message message) {
     final User user = _lounge.members.firstWhere(
         (User user) => user.id == message.idFrom,
         orElse: () => null);
@@ -348,7 +297,7 @@ class _LoungeChatScreenState extends State<LoungeChatScreen>
                 : TextDirection.ltr,
             children: <Widget>[
               GestureDetector(
-                  onTap: () => dispatch(NavigateAction<AppState>.pushNamed(
+                  onTap: () => _dispatch(NavigateAction<AppState>.pushNamed(
                       ProfileScreen.id,
                       arguments: <String, dynamic>{'user': user})),
                   child: Container(
@@ -404,10 +353,11 @@ class _LoungeChatScreenState extends State<LoungeChatScreen>
   @override
   Widget build(BuildContext context) {
     return ReduxConsumer<AppState>(builder: (BuildContext context,
-        redux.Store<AppState> store,
+        Store<AppState> store,
         AppState state,
-        void Function(redux.ReduxAction<dynamic>) dispatch,
+        void Function(ReduxAction<AppState>) dispatch,
         Widget child) {
+      _dispatch = dispatch;
       _lounge = state.userState.lounges.firstWhere(
           (Lounge lounge) => lounge.id == widget.lounge.id,
           orElse: () => null);
@@ -417,9 +367,9 @@ class _LoungeChatScreenState extends State<LoungeChatScreen>
             (Chat chat) => chat.id == _lounge.id,
             orElse: () => null);
       }
+      final String userId = state.userState.user.id;
 
-      _markAsRead(state.chatsState.loungesChatsStates, state.userState.user.id,
-          dispatch);
+      _markAsRead(state.chatsState.loungesChatsStates, userId);
 
       return View(
           title: FlutterI18n.translate(context, 'LOUNGE_CHAT.LOUNGE_CHAT'),
@@ -469,9 +419,9 @@ class _LoungeChatScreenState extends State<LoungeChatScreen>
                         child: Icon(Icons.send, color: white)))
               ])),
           child: Column(children: <Widget>[
-            _buildHeader(state, dispatch),
+            _buildHeader(userId),
             const Divider(),
-            if (chat != null) Expanded(child: _buildChat(chat, dispatch)),
+            if (chat != null) Expanded(child: _buildChat(chat)),
           ]));
     });
   }

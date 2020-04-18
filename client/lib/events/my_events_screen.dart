@@ -1,4 +1,5 @@
-import 'package:async_redux/async_redux.dart' as redux;
+import 'package:async_redux/async_redux.dart'
+    show ReduxAction, NavigateAction, Store;
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:business/app_state.dart';
 import 'package:business/classes/event.dart';
@@ -11,9 +12,10 @@ import 'package:outloud/lounges/lounge_chat_screen.dart';
 import 'package:outloud/lounges/lounges_screen.dart';
 import 'package:outloud/theme.dart';
 import 'package:outloud/widgets/button.dart';
-import 'package:outloud/widgets/cached_image.dart';
 import 'package:intl/intl.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:outloud/widgets/content_list.dart';
+import 'package:outloud/widgets/event_image.dart';
 import 'package:provider_for_redux/provider_for_redux.dart';
 
 class MyEventsScreen extends StatefulWidget {
@@ -23,21 +25,12 @@ class MyEventsScreen extends StatefulWidget {
 
 class _MyEventsScreen extends State<MyEventsScreen>
     with AutomaticKeepAliveClientMixin<MyEventsScreen> {
+  void Function(ReduxAction<AppState>) _dispatch;
   @override
   bool get wantKeepAlive => true;
 
-  Widget _buildUserEvent(
-      Event event,
-      Map<String, UserEventState> userEventStates,
-      List<Lounge> userLounges,
-      void Function(redux.ReduxAction<AppState>) dispatch,
-      ThemeStyle theme) {
-    final String date = event.dateStart == null
-        ? null
-        : DateFormat('dd').format(event.dateStart);
-    final String month = event.dateStart == null
-        ? null
-        : DateFormat('MMM').format(event.dateStart);
+  Widget _buildUserEvent(Event event,
+      Map<String, UserEventState> userEventStates, List<Lounge> userLounges) {
     final String time = event.dateStart == null
         ? null
         : DateFormat('jm').format(event.dateStart);
@@ -61,34 +54,14 @@ class _MyEventsScreen extends State<MyEventsScreen>
       return Container(width: 0.0, height: 0.0);
     }
     return GestureDetector(
-        onTap: () => dispatch(redux.NavigateAction<AppState>.pushNamed(
+        onTap: () => _dispatch(NavigateAction<AppState>.pushNamed(
             EventScreen.id,
             arguments: event)),
         child: Container(
             decoration: BoxDecoration(color: Colors.transparent),
             padding: const EdgeInsets.all(10.0),
             child: Row(children: <Widget>[
-              Stack(alignment: Alignment.center, children: <Widget>[
-                CachedImage(event.pic,
-                    width: 70.0,
-                    height: 70.0,
-                    borderRadius: const BorderRadius.only(
-                        bottomRight: Radius.circular(5.0),
-                        topRight: Radius.circular(5.0)),
-                    imageType: ImageType.Event),
-                Container(
-                    color: pink.withOpacity(0.5), width: 70.0, height: 70.0),
-                Column(children: <Widget>[
-                  AutoSizeText(date,
-                      style: const TextStyle(
-                          color: white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20)),
-                  AutoSizeText(month,
-                      style: const TextStyle(
-                          color: white, fontWeight: FontWeight.bold))
-                ])
-              ]),
+              EventImage(image: event.pic, date: event.dateStart),
               Expanded(
                   child: Container(
                       padding: const EdgeInsets.only(left: 10.0),
@@ -103,17 +76,16 @@ class _MyEventsScreen extends State<MyEventsScreen>
                                     MainAxisAlignment.spaceBetween,
                                 children: <Widget>[
                                   AutoSizeText('$time - $timeEnd'),
-                                  Container(
-                                      child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: <Widget>[
+                                  Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: <Widget>[
                                         if (state == UserEventState.Attending)
-                                          Icon(Icons.check)
+                                          const Icon(Icons.check)
                                         else if (state == UserEventState.Liked)
-                                          Icon(MdiIcons.heart),
+                                          const Icon(MdiIcons.heart),
                                         AutoSizeText(stateMessage),
-                                      ]))
+                                      ])
                                 ]),
                             if (lounge == null)
                               Button(
@@ -122,8 +94,8 @@ class _MyEventsScreen extends State<MyEventsScreen>
                                   height: 30.0,
                                   backgroundColor: orange,
                                   backgroundOpacity: 1.0,
-                                  onPressed: () => dispatch(
-                                      redux.NavigateAction<AppState>.pushNamed(
+                                  onPressed: () => _dispatch(
+                                      NavigateAction<AppState>.pushNamed(
                                           LoungesScreen.id,
                                           arguments: event)))
                             else
@@ -133,20 +105,16 @@ class _MyEventsScreen extends State<MyEventsScreen>
                                   height: 30.0,
                                   backgroundColor: pinkBright,
                                   backgroundOpacity: 1.0,
-                                  onPressed: () => dispatch(
-                                      redux.NavigateAction<AppState>.pushNamed(
+                                  onPressed: () => _dispatch(
+                                      NavigateAction<AppState>.pushNamed(
                                           LoungeChatScreen.id,
                                           arguments: lounge)))
                           ])))
             ])));
   }
 
-  Widget _buildUserEvents(
-      List<Event> userEvents,
-      Map<String, UserEventState> userEventStates,
-      List<Lounge> userLounges,
-      ThemeStyle themeStyle,
-      void Function(redux.ReduxAction<AppState>) dispatch) {
+  Widget _buildUserEvents(List<Event> userEvents,
+      Map<String, UserEventState> userEventStates, List<Lounge> userLounges) {
     return userEvents.isEmpty
         ? Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -156,13 +124,11 @@ class _MyEventsScreen extends State<MyEventsScreen>
                     child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          Container(
-                              child: AutoSizeText(
-                                  FlutterI18n.translate(context,
-                                      'MY_EVENTS.MY_EVENTS_EMPTY_TITLE'),
-                                  style: const TextStyle(
-                                      fontSize: 20.0,
-                                      fontWeight: FontWeight.bold))),
+                          AutoSizeText(
+                              FlutterI18n.translate(
+                                  context, 'MY_EVENTS.MY_EVENTS_EMPTY_TITLE'),
+                              style: const TextStyle(
+                                  fontSize: 20.0, fontWeight: FontWeight.bold)),
                           AutoSizeText(
                               FlutterI18n.translate(context,
                                   'MY_EVENTS.MY_EVENTS_EMPTY_DESCRIPTION'),
@@ -170,47 +136,23 @@ class _MyEventsScreen extends State<MyEventsScreen>
                         ])),
                 Image.asset('images/catsIllus4.png')
               ])
-        : Column(children: <Widget>[
-            Expanded(
-                flex: 8,
-                child: ListView.builder(
-                    itemCount: userEvents.length,
-                    itemBuilder: (BuildContext context, int index) => Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              _buildUserEvent(
-                                  userEvents[index],
-                                  userEventStates,
-                                  userLounges,
-                                  dispatch,
-                                  themeStyle),
-                              const Divider(color: orange),
-                            ]))),
-            /*  Expanded(
-          child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-            Button(
-                text: FlutterI18n.translate(context, 'MY_EVENTS.VIEW_CALENDAR'),
-                onPressed: () => null)
-          ])) */
-          ]);
+        : ContentList(
+            items: userEvents,
+            builder: (dynamic event) =>
+                _buildUserEvent(event as Event, userEventStates, userLounges));
   }
 
   @override
   Widget build(BuildContext context) {
     super.build(context);
     return ReduxConsumer<AppState>(builder: (BuildContext context,
-        redux.Store<AppState> store,
+        Store<AppState> store,
         AppState state,
-        void Function(redux.ReduxAction<dynamic>) dispatch,
+        void Function(ReduxAction<AppState>) dispatch,
         Widget child) {
-      return _buildUserEvents(
-          state.userState.events,
-          state.userState.user.events,
-          state.userState.lounges,
-          state.theme,
-          dispatch);
+      _dispatch = dispatch;
+      return _buildUserEvents(state.userState.events,
+          state.userState.user.events, state.userState.lounges);
     });
   }
 }

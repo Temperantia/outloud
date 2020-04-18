@@ -1,7 +1,7 @@
-import 'package:async_redux/async_redux.dart' as redux;
+import 'package:async_redux/async_redux.dart' show ReduxAction;
 import 'package:business/app_state.dart';
 
-class UserAcceptEulaAction extends redux.ReduxAction<AppState> {
+class UserAcceptEulaAction extends ReduxAction<AppState> {
   UserAcceptEulaAction();
 
   @override

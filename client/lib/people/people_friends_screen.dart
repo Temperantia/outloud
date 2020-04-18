@@ -1,11 +1,11 @@
-import 'package:async_redux/async_redux.dart' as redux;
+import 'package:async_redux/async_redux.dart'
+    show ReduxAction, NavigateAction, Store;
 import 'package:async_redux/async_redux.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:business/app_state.dart';
 import 'package:business/classes/user.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
-import 'package:outloud/functions/loader_animation.dart';
 import 'package:outloud/people/people_search_screen.dart';
 import 'package:business/user/actions/user_accept_friend_request_action.dart';
 import 'package:business/chats/actions/chats_create_action.dart';
@@ -26,13 +26,13 @@ class _PeopleFriendsScreenState extends State<PeopleFriendsScreen>
     with
         AutomaticKeepAliveClientMixin<PeopleFriendsScreen>,
         TickerProviderStateMixin {
+  void Function(ReduxAction<AppState>) _dispatch;
   @override
   bool get wantKeepAlive => true;
 
-  Widget _buildPerson(User user, ThemeStyle theme,
-      void Function(redux.ReduxAction<AppState>) dispatch) {
+  Widget _buildPerson(User user) {
     return GestureDetector(
-        onTap: () => dispatch(redux.NavigateAction<AppState>.pushNamed(
+        onTap: () => _dispatch(NavigateAction<AppState>.pushNamed(
             ProfileScreen.id,
             arguments: <String, dynamic>{'user': user})),
         child: Container(
@@ -58,7 +58,7 @@ class _PeopleFriendsScreenState extends State<PeopleFriendsScreen>
                         ])))
               ])),
               GestureDetector(
-                  onTap: () => dispatch(ChatsCreateAction(user.id)),
+                  onTap: () => _dispatch(ChatsCreateAction(user.id)),
                   child: Container(
                       padding: const EdgeInsets.only(left: 5.0, right: 5.0),
                       margin: const EdgeInsets.only(left: 2.0, right: 2.0),
@@ -75,74 +75,69 @@ class _PeopleFriendsScreenState extends State<PeopleFriendsScreen>
             ])));
   }
 
-  Widget _buildFriendRequest(User user, ThemeStyle theme,
-      void Function(redux.ReduxAction<AppState>) dispatch, AppState state) {
+  Widget _buildFriendRequest(User user, String userId) {
     return GestureDetector(
-      onTap: () => dispatch(NavigateAction<AppState>.pushNamed(ProfileScreen.id,
-          arguments: <String, dynamic>{'user': user})),
-      child: Container(
-          padding: const EdgeInsets.all(5),
-          child: Row(children: <Widget>[
-            CachedImage(user.pics.isEmpty ? null : user.pics[0],
-                width: 40.0,
-                height: 40.0,
-                borderRadius: BorderRadius.circular(20.0),
-                imageType: ImageType.User),
-            Expanded(
-                flex: 4,
-                child: Container(
-                    padding: const EdgeInsets.only(left: 15.0),
-                    child: Wrap(children: <Widget>[
-                      AutoSizeText(user.name,
-                          style: const TextStyle(
-                              color: white,
-                              fontWeight: FontWeight.w600,
-                              fontSize: 16))
-                    ]))),
-            Container(
-                padding: const EdgeInsets.all(10),
-                child: GestureDetector(
-                    onTap: () async {
-                      await showLoaderAnimation(context, this,
-                          animationDuration: 600);
-                      dispatch(UserAcceptFriendRequestAction(
-                          user.id, state.userState.user.id));
-                    },
-                    child: Column(children: <Widget>[
-                      Icon(Icons.add_circle_outline, size: 30, color: white),
-                      const AutoSizeText('ACCEPTER',
-                          style: TextStyle(
-                              color: white,
-                              fontWeight: FontWeight.w300,
-                              fontSize: 10))
-                    ]))),
-            Container(
-                padding: const EdgeInsets.all(10),
-                child: GestureDetector(
-                    onTap: () async {
-                      await showLoaderAnimation(context, this,
-                          animationDuration: 600);
-                      dispatch(UserDenyFriendRequestAction(
-                          user.id, state.userState.user.id));
-                    },
-                    child: Column(children: <Widget>[
-                      Icon(Icons.remove_circle_outline, size: 30, color: white),
-                      const AutoSizeText('REFUSER',
-                          style: TextStyle(
-                              color: white,
-                              fontWeight: FontWeight.w300,
-                              fontSize: 10))
-                    ])))
-          ])),
-    );
+        onTap: () => _dispatch(NavigateAction<AppState>.pushNamed(
+            ProfileScreen.id,
+            arguments: <String, dynamic>{'user': user})),
+        child: Container(
+            padding: const EdgeInsets.all(5),
+            child: Row(children: <Widget>[
+              CachedImage(user.pics.isEmpty ? null : user.pics[0],
+                  width: 40.0,
+                  height: 40.0,
+                  borderRadius: BorderRadius.circular(20.0),
+                  imageType: ImageType.User),
+              Expanded(
+                  flex: 4,
+                  child: Container(
+                      padding: const EdgeInsets.only(left: 15.0),
+                      child: Wrap(children: <Widget>[
+                        AutoSizeText(user.name,
+                            style: const TextStyle(
+                                color: white,
+                                fontWeight: FontWeight.w600,
+                                fontSize: 16))
+                      ]))),
+              Container(
+                  padding: const EdgeInsets.all(10),
+                  child: GestureDetector(
+                      onTap: () async {
+                        /* await showLoaderAnimation(context, this,
+                          animationDuration: 600); */
+                        _dispatch(
+                            UserAcceptFriendRequestAction(user.id, userId));
+                      },
+                      child: Column(children: <Widget>[
+                        Icon(Icons.add_circle_outline, size: 30, color: white),
+                        const AutoSizeText('ACCEPTER',
+                            style: TextStyle(
+                                color: white,
+                                fontWeight: FontWeight.w300,
+                                fontSize: 10))
+                      ]))),
+              Container(
+                  padding: const EdgeInsets.all(10),
+                  child: GestureDetector(
+                      onTap: () async {
+                        /* await showLoaderAnimation(context, this,
+                          animationDuration: 600); */
+                        _dispatch(UserDenyFriendRequestAction(user.id, userId));
+                      },
+                      child: Column(children: const <Widget>[
+                        Icon(Icons.remove_circle_outline,
+                            size: 30, color: white),
+                        AutoSizeText('REFUSER',
+                            style: TextStyle(
+                                color: white,
+                                fontWeight: FontWeight.w300,
+                                fontSize: 10))
+                      ])))
+            ])));
   }
 
   Widget _buildPendingFriends(
-      List<User> friends,
-      List<User> pendingFriends,
-      ThemeStyle theme,
-      void Function(redux.ReduxAction<AppState>) dispatch,
-      AppState state) {
+      List<User> friends, List<User> pendingFriends, String userId) {
     return Container(
         padding: const EdgeInsets.all(10.0),
         color: blue,
@@ -156,25 +151,23 @@ class _PeopleFriendsScreenState extends State<PeopleFriendsScreen>
                   style: const TextStyle(
                       color: white, fontWeight: FontWeight.w600, fontSize: 12)),
               Expanded(
-                  child: Container(
-                      child: ListView.builder(
-                          itemCount: pendingFriends.length,
-                          itemBuilder: (BuildContext context, int index) =>
-                              Column(children: <Widget>[
-                                const Divider(color: white),
-                                _buildFriendRequest(pendingFriends[index],
-                                    theme, dispatch, state)
-                              ]))))
+                  child: ListView.builder(
+                      itemCount: pendingFriends.length,
+                      itemBuilder: (BuildContext context, int index) =>
+                          Column(children: <Widget>[
+                            const Divider(color: white),
+                            _buildFriendRequest(pendingFriends[index], userId)
+                          ])))
             ]));
   }
 
   Widget _buildFriends(List<User> friends, List<User> pendingFriends,
-      ThemeStyle theme, void Function(redux.ReduxAction<AppState>) dispatch) {
+      ThemeStyle theme, void Function(ReduxAction<AppState>) dispatch) {
     return ListView.builder(
         itemCount: friends.length,
         itemBuilder: (BuildContext context, int index) => Column(
                 children: <Widget>[
-                  _buildPerson(friends[index], theme, dispatch),
+                  _buildPerson(friends[index]),
                   const Divider(color: black)
                 ]));
   }
@@ -183,20 +176,17 @@ class _PeopleFriendsScreenState extends State<PeopleFriendsScreen>
   Widget build(BuildContext context) {
     super.build(context);
     return ReduxConsumer<AppState>(builder: (BuildContext context,
-        redux.Store<AppState> store,
+        Store<AppState> store,
         AppState state,
-        void Function(redux.ReduxAction<dynamic>) dispatch,
+        void Function(ReduxAction<AppState>) dispatch,
         Widget child) {
+      _dispatch = dispatch;
       return Column(children: <Widget>[
         if (state.userState.pendingFriends.isNotEmpty)
           Flexible(
               flex: state.userState.pendingFriends.length > 1 ? 4 : 3,
-              child: _buildPendingFriends(
-                  state.userState.friends,
-                  state.userState.pendingFriends,
-                  state.theme,
-                  dispatch,
-                  state)),
+              child: _buildPendingFriends(state.userState.friends,
+                  state.userState.pendingFriends, state.userState.user.id)),
         Expanded(
             flex: state.userState.pendingFriends.length > 1 ? 6 : 7,
             child: _buildFriends(state.userState.friends,
@@ -205,17 +195,14 @@ class _PeopleFriendsScreenState extends State<PeopleFriendsScreen>
             padding: const EdgeInsets.only(top: 5.0),
             decoration: const BoxDecoration(
                 gradient: LinearGradient(colors: <Color>[pinkLight, pink])),
-            child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Button(
-                      text: FlutterI18n.translate(
-                          context, 'PEOPLE_TAB.FIND_MORE'),
-                      width: 250,
-                      onPressed: () => dispatch(
-                          redux.NavigateAction<AppState>.pushNamed(
-                              PeopleSearchScreen.id)))
-                ]))
+            child: Row(mainAxisAlignment: MainAxisAlignment.center, children: <
+                Widget>[
+              Button(
+                  text: FlutterI18n.translate(context, 'PEOPLE_TAB.FIND_MORE'),
+                  width: 250,
+                  onPressed: () => dispatch(NavigateAction<AppState>.pushNamed(
+                      PeopleSearchScreen.id)))
+            ]))
       ]);
     });
   }

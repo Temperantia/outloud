@@ -404,7 +404,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return ReduxConsumer<AppState>(builder: (BuildContext context,
         Store<AppState> store,
         AppState state,
-        void Function(ReduxAction<dynamic>) dispatch,
+        void Function(ReduxAction<AppState>) dispatch,
         Widget child) {
       _interestSuggestions = <Map<String, String>>[
         <String, String>{

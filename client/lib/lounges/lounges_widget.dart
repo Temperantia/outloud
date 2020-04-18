@@ -1,4 +1,5 @@
-import 'package:async_redux/async_redux.dart' as redux;
+import 'package:async_redux/async_redux.dart'
+    show ReduxAction, NavigateAction, Store;
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:business/actions/app_navigate_action.dart';
 import 'package:business/actions/app_switch_events_tab.dart';
@@ -8,7 +9,6 @@ import 'package:business/classes/lounge.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:outloud/functions/loader_animation.dart';
 import 'package:outloud/lounges/find_lounges.dart';
 import 'package:outloud/lounges/lounge_create_screen.dart';
 import 'package:outloud/lounges/my_lounges.dart';
@@ -30,8 +30,8 @@ class _LoungesWidgetState extends State<LoungesWidget>
   bool get wantKeepAlive => true;
 
   void _showNoEventPopup(
-      void Function(redux.ReduxAction<AppState>) dispatch,
-      Future<void> Function(redux.ReduxAction<AppState>) dispatchFuture,
+      void Function(ReduxAction<AppState>) dispatch,
+      Future<void> Function(ReduxAction<AppState>) dispatchFuture,
       AppState state,
       {bool hasAlreadyEvents = false}) {
     showDialog(
@@ -127,9 +127,9 @@ class _LoungesWidgetState extends State<LoungesWidget>
                                         alignment: Alignment.bottomCenter,
                                         child: FlatButton(
                                             onPressed: () async {
-                                              await showLoaderAnimation(
+                                              /*  await showLoaderAnimation(
                                                   context, this,
-                                                  animationDuration: 600);
+                                                  animationDuration: 600); */
                                               Navigator.pop(context);
                                               dispatch(AppNavigateAction(0));
                                               dispatch(AppSwitchEventsTab(0));
@@ -153,9 +153,9 @@ class _LoungesWidgetState extends State<LoungesWidget>
   Widget build(BuildContext context) {
     super.build(context);
     return ReduxConsumer<AppState>(builder: (BuildContext context,
-        redux.Store<AppState> store,
+        Store<AppState> store,
         AppState state,
-        void Function(redux.ReduxAction<dynamic>) dispatch,
+        void Function(ReduxAction<AppState>) dispatch,
         Widget child) {
       if (state.userState.user.events == null ||
           state.userState.events == null ||
@@ -200,7 +200,7 @@ class _LoungesWidgetState extends State<LoungesWidget>
                     _showNoEventPopup(dispatch, store.dispatchFuture, state,
                         hasAlreadyEvents: true);
                   } else if (state.userState.events.isNotEmpty)
-                    dispatch(redux.NavigateAction<AppState>.pushNamed(
+                    dispatch(NavigateAction<AppState>.pushNamed(
                         LoungeCreateScreen.id));
                   else {
                     _showNoEventPopup(dispatch, store.dispatchFuture, state);

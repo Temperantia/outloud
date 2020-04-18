@@ -258,7 +258,7 @@
     "GROUP_DESCRIPTION": "Brief description of your group.",
     "CREATE_LOUNGE": "CREATE LOUNGE",
     "BACK": "BACK",
-    "NEXT": "NEXT"
+    "CREATE": "CREATE"
   },
   "LOUNGE_CREATE_MEETUP": {
     "CANCEL": "Cancel",
