@@ -57,8 +57,7 @@ class _MyEventsScreen extends State<MyEventsScreen>
     return ContentListItem(
       onTap: () => _dispatch(
           NavigateAction<AppState>.pushNamed(EventScreen.id, arguments: event)),
-      leading: EventImage(
-          image: event.pic, thumbnail: event.thumbnail, date: event.dateStart),
+      leading: EventImage(image: event.pic, date: event.dateStart),
       title: AutoSizeText(event.name,
           style: const TextStyle(fontWeight: FontWeight.bold)),
       subtitle: Row(

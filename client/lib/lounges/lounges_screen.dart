@@ -188,10 +188,7 @@ class _LoungesScreenState extends State<LoungesScreen>
                     color: black, fontSize: 13, fontWeight: FontWeight.bold)),
             Row(children: <Widget>[
               EventImage(
-                  image: widget.event.pic,
-                  thumbnail: widget.event.thumbnail,
-                  size: 50.0,
-                  hasOverlay: false),
+                  image: widget.event.pic, size: 50.0, hasOverlay: false),
               Expanded(
                   child: Container(
                       padding: const EdgeInsets.only(left: 10),

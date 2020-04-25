@@ -333,11 +333,7 @@ class _FindEventsScreen extends State<FindEventsScreen>
           ])
         ]),
         trailing: EventImage(
-            image: event.pic,
-            thumbnail: event.thumbnail,
-            size: 50.0,
-            hasOverlay: false,
-            state: state));
+            image: event.pic, size: 50.0, hasOverlay: false, state: state));
   }
 
   Widget _buildFindEvents(Map<String, UserEventState> userEventStates) {

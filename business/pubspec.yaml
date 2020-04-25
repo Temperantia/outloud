@@ -19,7 +19,6 @@ dependencies:
   timeago: ^2.0.24
   intl: ^0.16.0
   device_info: 0.4.2+1
-  video_thumbnail: ^0.2.1
 
   location_permissions: ^2.0.4
   geolocator: ^5.1.5

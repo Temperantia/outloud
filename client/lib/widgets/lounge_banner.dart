@@ -104,9 +104,6 @@ class _LoungeBannerState extends State<LoungeBanner>
                                       alignment: Alignment.bottomCenter,
                                       child: FlatButton(
                                           onPressed: () async {
-                                            /* await showLoaderAnimation(
-                                                context, this,
-                                                animationDuration: 600); */
                                             _dispatch(LoungeRemoveAction(
                                                 widget.lounge));
                                             _dispatch(
@@ -144,7 +141,6 @@ class _LoungeBannerState extends State<LoungeBanner>
                 margin: const EdgeInsets.only(right: 5.0),
                 child: EventImage(
                     image: widget.lounge.event.pic,
-                    thumbnail: widget.lounge.event.thumbnail,
                     size: 50.0,
                     hasOverlay: false)),
             Expanded(

@@ -1,6 +1,4 @@
 import 'dart:async';
-import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:business/app_state.dart';
@@ -8,7 +6,6 @@ import 'package:async_redux/async_redux.dart'
     show ReduxAction, NavigateAction, Store;
 import 'package:business/classes/event.dart';
 import 'package:business/classes/lounge.dart';
-import 'package:business/classes/message.dart';
 import 'package:business/events/actions/event_like_action.dart';
 import 'package:business/events/actions/event_unlike_action.dart';
 import 'package:business/events/actions/event_register_action.dart';
@@ -16,22 +13,20 @@ import 'package:business/events/actions/event_unregister_action.dart';
 import 'package:business/lounges/actions/lounge_remove_action.dart';
 import 'package:business/lounges/actions/lounge_kick_user_action.dart';
 import 'package:business/lounges/actions/lounge_leave_action.dart';
-import 'package:business/models/event_message.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:outloud/events/event_attending_screen.dart';
-import 'package:outloud/functions/firebase.dart';
 import 'package:outloud/lounges/lounge_chat_screen.dart';
 import 'package:outloud/lounges/lounges_screen.dart';
 import 'package:outloud/theme.dart';
 import 'package:expandable/expandable.dart';
 import 'package:outloud/widgets/cached_image.dart';
+import 'package:outloud/widgets/message_bar.dart';
 import 'package:outloud/widgets/view.dart';
 import 'package:intl/intl.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:provider_for_redux/provider_for_redux.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -89,21 +84,6 @@ class _EventScreenState extends State<EventScreen>
     _scrollController.dispose();
     _feedEventScrollController.dispose();
     super.dispose();
-  }
-
-  Future<void> _sendImage(String userId) async {
-    try {
-      final Uint8List image =
-          (await (await MultiImagePicker.pickImages(maxImages: 1))[0]
-                  .getByteData())
-              .buffer
-              .asUint8List();
-      final String url =
-          await saveImage(image, 'images/events/${widget.event.id}');
-      addEventMessage(widget.event.id, userId, url, MessageType.Image);
-    } catch (error) {
-      return;
-    }
   }
 
   void _showConfirmPopup(String userId, List<Lounge> lounges) {
@@ -251,22 +231,16 @@ class _EventScreenState extends State<EventScreen>
                         borderRadius: BorderRadius.circular(5),
                         boxShadow: <BoxShadow>[
                           BoxShadow(
-                            color: Colors.black26,
-                            blurRadius: 10.0,
-                            offset: const Offset(0.0, 10.0),
-                          )
+                              color: Colors.black26,
+                              blurRadius: 10.0,
+                              offset: const Offset(0.0, 10.0))
                         ]),
                     child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: <Widget>[
-                          const Icon(
-                            MdiIcons.glassCocktail,
-                            color: white,
-                            size: 60,
-                          ),
-                          const SizedBox(
-                            height: 15,
-                          ),
+                          const Icon(MdiIcons.glassCocktail,
+                              color: white, size: 60),
+                          const SizedBox(height: 15),
                           AutoSizeText(
                               FlutterI18n.translate(
                                   context, 'EVENT.LOUNGES_AVAILABLE'),
@@ -339,16 +313,12 @@ class _EventScreenState extends State<EventScreen>
       Stack(alignment: Alignment.center, children: <Widget>[
         Row(children: <Widget>[
           Expanded(
-              child: widget.event.thumbnail == null
-                  ? CachedImage(widget.event.pic,
-                      height: 100,
-                      borderRadius: const BorderRadius.only(
-                          bottomRight: Radius.circular(5.0),
-                          topRight: Radius.circular(5.0)),
-                      imageType: ImageType.Event)
-                  : Container(
-                      height: 100,
-                      child: Image.file(File(widget.event.thumbnail))))
+              child: CachedImage(widget.event.pic,
+                  height: 100,
+                  borderRadius: const BorderRadius.only(
+                      bottomRight: Radius.circular(5.0),
+                      topRight: Radius.circular(5.0)),
+                  imageType: ImageType.Event))
         ]),
         Row(children: <Widget>[
           Expanded(
@@ -517,7 +487,7 @@ class _EventScreenState extends State<EventScreen>
                               style: const TextStyle(
                                   color: white,
                                   fontSize: 16,
-                                  fontWeight: FontWeight.w400)),
+                                  fontWeight: FontWeight.w400))
                         ]),
                     Container(
                         padding: const EdgeInsets.only(bottom: 5),
@@ -857,37 +827,15 @@ class _EventScreenState extends State<EventScreen>
                                 style: const TextStyle(color: white)))
                       ]))),
           buttons: Container(
-              margin: const EdgeInsets.symmetric(horizontal: 5.0),
-              decoration: BoxDecoration(
-                  color: orangeLight.withOpacity(0.5),
-                  borderRadius: BorderRadius.circular(5.0)),
-              child: Row(children: <Widget>[
-                Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: GestureDetector(
-                        onTap: () {
-                          _sendImage(userId);
-                          _feedEventScrollController.jumpTo(0.0);
-                        },
-                        child: Icon(Icons.panorama, color: white))),
-                Expanded(
-                    child: TextField(
-                        controller: _messageController,
-                        decoration: InputDecoration.collapsed(
-                            hintText:
-                                FlutterI18n.translate(context, 'EVENT.MESSAGE'),
-                            hintStyle: const TextStyle(color: white)))),
-                Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: GestureDetector(
-                        onTap: () {
-                          addEventMessage(widget.event.id, userId,
-                              _messageController.text.trim(), MessageType.Text);
-                          _messageController.clear();
-                          _feedEventScrollController.jumpTo(0.0);
-                        },
-                        child: Icon(Icons.send, color: white)))
-              ])),
+            padding: const EdgeInsets.symmetric(horizontal: 5.0),
+            child: MessageBar(
+                chatId: widget.event.id,
+                userId: userId,
+                messageController: _messageController,
+                scrollController: _scrollController,
+                hint: FlutterI18n.translate(context, 'EVENT.MESSAGE'),
+                isEvent: true),
+          ),
           child: widget.event == null
               ? const CircularProgressIndicator()
               : ListView(controller: _scrollController, children: <Widget>[

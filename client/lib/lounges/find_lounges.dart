@@ -79,8 +79,7 @@ class _FindLoungesScreenState extends State<FindLoungesScreen>
         onTap: () => _dispatch(NavigateAction<AppState>.pushNamed(
             EventScreen.id,
             arguments: event)),
-        leading: EventImage(
-            image: event.pic, thumbnail: event.thumbnail, state: state),
+        leading: EventImage(image: event.pic, state: state),
         title: AutoSizeText(stateMessage,
             style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
         subtitle: AutoSizeText(event.name,

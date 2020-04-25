@@ -10,8 +10,6 @@ import 'package:business/events/actions/event_members_update_action.dart';
 import 'package:business/models/event_message.dart';
 import 'package:business/models/events.dart';
 import 'package:business/models/user.dart';
-import 'package:video_thumbnail/video_thumbnail.dart';
-import 'package:path_provider/path_provider.dart';
 
 class EventsGetAction extends ReduxAction<AppState> {
   static final List<StreamSubscription<List<User>>> _membersSubs =
@@ -55,12 +53,7 @@ class EventsGetAction extends ReduxAction<AppState> {
 
     for (final Event event in events) {
       if (event.pic.contains('.mp4')) {
-        event.thumbnail = await VideoThumbnail.thumbnailFile(
-            video: event.pic,
-            thumbnailPath: (await getTemporaryDirectory()).path,
-            maxWidth: 1000,
-            imageFormat: ImageFormat.PNG,
-            quality: 75);
+        event.pic = null;
       }
     }
 

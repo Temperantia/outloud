@@ -1,4 +1,5 @@
-import 'package:async_redux/async_redux.dart' show ReduxAction, Store;
+import 'package:async_redux/async_redux.dart'
+    show ReduxAction, NavigateAction, Store;
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:business/app_state.dart';
 import 'package:business/classes/chat.dart';
@@ -6,6 +7,7 @@ import 'package:business/classes/chat_state.dart';
 import 'package:business/classes/message.dart';
 import 'package:business/classes/user.dart';
 import 'package:flutter/material.dart';
+import 'package:outloud/people/chat_screen.dart';
 import 'package:outloud/theme.dart';
 import 'package:outloud/widgets/cached_image.dart';
 import 'package:outloud/widgets/content_list.dart';
@@ -19,6 +21,8 @@ class PeopleChatScreen extends StatefulWidget {
 
 class _PeopleChatScreenState extends State<PeopleChatScreen>
     with AutomaticKeepAliveClientMixin<PeopleChatScreen> {
+  void Function(ReduxAction<AppState>) _dispatch;
+
   @override
   bool get wantKeepAlive => true;
 
@@ -32,6 +36,8 @@ class _PeopleChatScreenState extends State<PeopleChatScreen>
         ? null
         : (chat.entity as User).pics[0];
     return ContentListItem(
+        onTap: () => _dispatch(
+            NavigateAction<AppState>.pushNamed(ChatScreen.id, arguments: chat)),
         leading: CachedImage(pic,
             width: 50.0,
             height: 50.0,
@@ -61,6 +67,7 @@ class _PeopleChatScreenState extends State<PeopleChatScreen>
         AppState state,
         void Function(ReduxAction<AppState>) dispatch,
         Widget child) {
+      _dispatch = dispatch;
       final Map<String, ChatState> chatStates =
           state.chatsState.usersChatsStates[state.userState.user.id];
       return ContentList(

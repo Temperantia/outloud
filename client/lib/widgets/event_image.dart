@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:business/classes/user_event_state.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +9,6 @@ import 'package:intl/intl.dart';
 class EventImage extends StatelessWidget {
   const EventImage(
       {this.image,
-      this.thumbnail,
       this.state,
       this.size = 70.0,
       this.hasOverlay = true,
@@ -20,7 +17,6 @@ class EventImage extends StatelessWidget {
       this.newMessageCount});
 
   final String image;
-  final String thumbnail;
   final UserEventState state;
   final double size;
   final bool hasOverlay;
@@ -47,18 +43,13 @@ class EventImage extends StatelessWidget {
       Container(
           decoration: const BoxDecoration(
               border: Border(left: BorderSide(color: orange, width: 7.0))),
-          child: thumbnail == null
-              ? CachedImage(image,
-                  width: size,
-                  height: size,
-                  borderRadius: const BorderRadius.only(
-                      bottomRight: Radius.circular(5.0),
-                      topRight: Radius.circular(5.0)),
-                  imageType: ImageType.Event)
-              : Container(
-                  width: size,
-                  height: size,
-                  child: Image.file(File(thumbnail)))),
+          child: CachedImage(image,
+              width: size,
+              height: size,
+              borderRadius: const BorderRadius.only(
+                  bottomRight: Radius.circular(5.0),
+                  topRight: Radius.circular(5.0)),
+              imageType: ImageType.Event)),
       if (hasOverlay)
         Container(
             width: size + 7.0,

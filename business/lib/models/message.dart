@@ -13,20 +13,6 @@ Stream<List<Message>> streamMessages(String conversationId) {
           Message.fromMap(messageDoc.data, messageDoc.documentID));
 }
 
-/* Stream<GroupPing> streamGroupPings(Conversation conversation, String idFrom) {
-  return getDataFromQuery(
-      query: _api.querySubCollection(conversation.id, conversation.id,
-          where: <QueryConstraint>[
-            QueryConstraint(
-                field: 'timestamp', isGreaterThan: conversation.lastRead)
-          ]),
-      mapper: (DocumentSnapshot messageDoc) => Message.fromMap(messageDoc.data),
-      clientSidefilters: <bool Function(Message)>[
-        (Message message) => message.idFrom != idFrom
-      ]).map<GroupPing>(
-      (List<Message> messages) => GroupPing(value: messages.length));
-} */
-
 void addMessage(String conversation, String idFrom, String content,
     MessageType messageType) {
   final int timestamp = DateTime.now().millisecondsSinceEpoch;

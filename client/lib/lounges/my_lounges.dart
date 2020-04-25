@@ -80,7 +80,6 @@ class _MyLoungesScreenState extends State<MyLoungesScreen>
             arguments: lounge)),
         leading: EventImage(
             image: lounge.event.pic,
-            thumbnail: lounge.event.thumbnail,
             isChat: true,
             newMessageCount: newMessageCount),
         title: LoungeHeader(lounge: lounge, owner: owner, userId: userId),

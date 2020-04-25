@@ -5,6 +5,7 @@ import 'package:outloud/theme.dart';
 class Button extends StatelessWidget {
   const Button(
       {@required this.text,
+      this.icon,
       this.onPressed,
       this.width,
       this.height,
@@ -19,6 +20,7 @@ class Button extends StatelessWidget {
       this.paddingTop = 0});
 
   final String text;
+  final Widget icon;
   final Function onPressed;
   final double width;
   final double height;
@@ -42,11 +44,17 @@ class Button extends StatelessWidget {
             bottom: paddingBottom),
         width: width,
         height: height ?? 50,
-        child: FlatButton(
+        child: FlatButton.icon(
+            padding: EdgeInsets.only(
+                left: paddingLeft,
+                right: paddingRight,
+                top: paddingTop,
+                bottom: paddingBottom),
+            icon: icon ?? Container(width: 0.0, height: 0.0),
             color: backgroundColor.withOpacity(backgroundOpacity),
             textColor: colorText,
             onPressed: onPressed == null ? () {} : () => onPressed(),
-            child: AutoSizeText(text,
+            label: AutoSizeText(text,
                 style: TextStyle(
                     color: colorText,
                     fontSize: fontSize,

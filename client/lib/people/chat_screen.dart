@@ -7,14 +7,12 @@ import 'package:business/classes/chat_state.dart';
 import 'package:business/classes/message.dart';
 import 'package:business/classes/message_state.dart';
 import 'package:business/classes/user.dart';
-import 'package:business/models/message.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_i18n/flutter_i18n.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:outloud/profile/profile_screen.dart';
 import 'package:outloud/theme.dart';
 import 'package:outloud/widgets/cached_image.dart';
 import 'package:outloud/widgets/content_list.dart';
+import 'package:outloud/widgets/message_bar.dart';
 import 'package:outloud/widgets/view.dart';
 import 'package:intl/intl.dart';
 import 'package:provider_for_redux/provider_for_redux.dart';
@@ -58,17 +56,6 @@ class _ChatScreenState extends State<ChatScreen> {
       return DateFormat(' E \'at\' kk:mm').format(time);
     }
     return DateFormat('yyyy-MM-dd \'at\' kk:mm').format(time);
-  }
-
-  void _onSendMessage(String text, String userId) {
-    if (text.trim().isEmpty) {
-      Fluttertoast.showToast(
-          msg: FlutterI18n.translate(context, 'CHAT.NO_MESSAGE'));
-    } else {
-      _messageController.clear();
-      addMessage(_chat.id, userId, text.trim(), MessageType.Text);
-      _scrollController.jumpTo(0.0);
-    }
   }
 
   Widget _buildChat(User user, String userId, String picture) {
@@ -163,42 +150,13 @@ class _ChatScreenState extends State<ChatScreen> {
       return View(
           title: 'CHAT AVEC ${namePeer.toUpperCase()}',
           buttons: Container(
-              margin: const EdgeInsets.symmetric(horizontal: 10.0),
-              decoration: BoxDecoration(
-                  color: orangeLight.withOpacity(0.5),
-                  borderRadius: BorderRadius.circular(5.0)),
-              child: Row(children: <Widget>[
-                /*   Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: GestureDetector(
-                        onTap: () {}, child: Icon(Icons.add, color: white))), */
-                Expanded(
-                    child: Column(
-                  children: <Widget>[
-                    Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                        child: TextField(
-                            keyboardType: TextInputType.multiline,
-                            maxLines: null,
-                            controller: _messageController,
-                            decoration: InputDecoration.collapsed(
-                                hintText: 'Message pour $namePeer',
-                                hintStyle: const TextStyle(color: white))))
-                  ],
-                )),
-                /*   Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: GestureDetector(
-                        onTap: () {},
-                        child:
-                            const Icon(MdiIcons.stickerEmoji, color: white))), */
-                Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: GestureDetector(
-                        onTap: () => _onSendMessage(
-                            _messageController.text, state.userState.user.id),
-                        child: Icon(Icons.send, color: white)))
-              ])),
+              padding: const EdgeInsets.symmetric(horizontal: 10.0),
+              child: MessageBar(
+                  chatId: _chat.id,
+                  userId: userId,
+                  messageController: _messageController,
+                  scrollController: _scrollController,
+                  hint: 'Message pour $namePeer')),
           child: _buildChat(user, userId, picture));
     });
   }
