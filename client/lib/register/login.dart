@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:async_redux/async_redux.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:business/app_state.dart';
@@ -84,26 +86,28 @@ class LoginScreen extends StatelessWidget {
                                         Register1Screen.id));
                                   }),
                             ]),
-                            Button(
-                                text: FlutterI18n.translate(
-                                    context, 'LOGIN.GOOGLE'),
-                                fontWeight: FontWeight.bold,
-                                width: 300.0,
-                                onPressed: () {
-                                  dispatch(LoginGoogleAction());
-                                  dispatch(NavigateAction<AppState>.pushNamed(
-                                      Register1Screen.id));
-                                }),
-                            Button(
-                                text: FlutterI18n.translate(
-                                    context, 'LOGIN.APPLE'),
-                                fontWeight: FontWeight.bold,
-                                width: 300.0,
-                                onPressed: () {
-                                  dispatch(LoginAppleAction());
-                                  dispatch(NavigateAction<AppState>.pushNamed(
-                                      Register1Screen.id));
-                                }),
+                            if (Platform.isAndroid)
+                              Button(
+                                  text: FlutterI18n.translate(
+                                      context, 'LOGIN.GOOGLE'),
+                                  fontWeight: FontWeight.bold,
+                                  width: 300.0,
+                                  onPressed: () {
+                                    dispatch(LoginGoogleAction());
+                                    dispatch(NavigateAction<AppState>.pushNamed(
+                                        Register1Screen.id));
+                                  }),
+                            if (Platform.isIOS)
+                              Button(
+                                  text: FlutterI18n.translate(
+                                      context, 'LOGIN.APPLE'),
+                                  fontWeight: FontWeight.bold,
+                                  width: 300.0,
+                                  onPressed: () {
+                                    dispatch(LoginAppleAction());
+                                    dispatch(NavigateAction<AppState>.pushNamed(
+                                        Register1Screen.id));
+                                  }),
                           ]))
                 ])));
   }

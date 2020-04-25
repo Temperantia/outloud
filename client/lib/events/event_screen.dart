@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:auto_size_text/auto_size_text.dart';
@@ -8,7 +9,6 @@ import 'package:async_redux/async_redux.dart'
 import 'package:business/classes/event.dart';
 import 'package:business/classes/lounge.dart';
 import 'package:business/classes/message.dart';
-import 'package:business/classes/user.dart';
 import 'package:business/events/actions/event_like_action.dart';
 import 'package:business/events/actions/event_unlike_action.dart';
 import 'package:business/events/actions/event_register_action.dart';
@@ -17,11 +17,12 @@ import 'package:business/lounges/actions/lounge_remove_action.dart';
 import 'package:business/lounges/actions/lounge_kick_user_action.dart';
 import 'package:business/lounges/actions/lounge_leave_action.dart';
 import 'package:business/models/event_message.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
+import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:outloud/events/event_attending_screen.dart';
+import 'package:outloud/functions/firebase.dart';
 import 'package:outloud/lounges/lounge_chat_screen.dart';
 import 'package:outloud/lounges/lounges_screen.dart';
 import 'package:outloud/theme.dart';
@@ -32,6 +33,7 @@ import 'package:intl/intl.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:provider_for_redux/provider_for_redux.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class EventScreen extends StatefulWidget {
   const EventScreen(this.event);
@@ -96,12 +98,8 @@ class _EventScreenState extends State<EventScreen>
                   .getByteData())
               .buffer
               .asUint8List();
-      final StorageReference ref = FirebaseStorage.instance
-          .ref()
-          .child('images/events/${widget.event.id}/${DateTime.now()}');
-      final StorageUploadTask uploadTask = ref.putData(image);
-      final StorageTaskSnapshot result = await uploadTask.onComplete;
-      final String url = (await result.ref.getDownloadURL()).toString();
+      final String url =
+          await saveImage(image, 'images/events/${widget.event.id}');
       addEventMessage(widget.event.id, userId, url, MessageType.Image);
     } catch (error) {
       return;
@@ -341,8 +339,16 @@ class _EventScreenState extends State<EventScreen>
       Stack(alignment: Alignment.center, children: <Widget>[
         Row(children: <Widget>[
           Expanded(
-              child: CachedImage(widget.event.pic,
-                  height: 100.0, imageType: ImageType.Event))
+              child: widget.event.thumbnail == null
+                  ? CachedImage(widget.event.pic,
+                      height: 100,
+                      borderRadius: const BorderRadius.only(
+                          bottomRight: Radius.circular(5.0),
+                          topRight: Radius.circular(5.0)),
+                      imageType: ImageType.Event)
+                  : Container(
+                      height: 100,
+                      child: Image.file(File(widget.event.thumbnail))))
         ]),
         Row(children: <Widget>[
           Expanded(
@@ -658,7 +664,9 @@ class _EventScreenState extends State<EventScreen>
         theme: const ExpandableThemeData(iconColor: orange),
         expanded: Container(
             padding: const EdgeInsets.all(20.0),
-            child: AutoSizeText(widget.event.description, softWrap: true)));
+            child: Linkify(
+                onOpen: (LinkableElement link) async => launch(link.url),
+                text: widget.event.description)));
   }
 
   /*  Widget _buildBanner() {
@@ -727,34 +735,26 @@ class _EventScreenState extends State<EventScreen>
                   ]))
         ]));
   } */
-
+/* 
   Widget _buildLiveFeed() {
     if (widget.event.chatMembers == null) {
       return Container(width: 0.0, height: 0.0);
     }
 
-    return GestureDetector(
-        // onVerticalDragCancel: () {
-        //   if (_feedEventScrollController.offset == 0.0)  {
-        //  _scrollController
-        //         .jumpTo(_scrollController.position.minScrollExtent);
+    return Row(
+      children: <Widget>[
+        Flexible(
+          child: ContentList(
+              reverse: true,
+              controller: _feedEventScrollController,
+              items: widget.event.messages,
+              builder: (dynamic message) => _buildMessage(message as Message)),
+        ),
+      ],
+    );
+  } */
 
-        //   } else {
-        //  _scrollController
-        //         .jumpTo(_scrollController.position.maxScrollExtent);
-        //   }
-        // },
-        child: Container(
-            height: 280,
-            child: ListView.builder(
-                controller: _feedEventScrollController,
-                reverse: false,
-                itemCount: widget.event.messages.length,
-                itemBuilder: (BuildContext context, int index) =>
-                    _buildMessage(widget.event.messages[index]))));
-  }
-
-  Widget _buildMessage(Message message) {
+  /* Widget _buildMessage(Message message) {
     final User user = widget.event.chatMembers.firstWhere(
         (User user) => user.id == message.idFrom,
         orElse: () => null);
@@ -819,7 +819,7 @@ class _EventScreenState extends State<EventScreen>
             ]))
           ]);
   }
-
+ */
   @override
   Widget build(BuildContext context) {
     return ReduxConsumer<AppState>(builder: (BuildContext context,
@@ -867,13 +867,7 @@ class _EventScreenState extends State<EventScreen>
                     child: GestureDetector(
                         onTap: () {
                           _sendImage(userId);
-                          _scrollController.jumpTo(
-                              _scrollController.position.maxScrollExtent);
-                          Timer(
-                              const Duration(milliseconds: 250),
-                              () => _feedEventScrollController.jumpTo(
-                                  _feedEventScrollController
-                                      .position.maxScrollExtent));
+                          _feedEventScrollController.jumpTo(0.0);
                         },
                         child: Icon(Icons.panorama, color: white))),
                 Expanded(
@@ -890,13 +884,7 @@ class _EventScreenState extends State<EventScreen>
                           addEventMessage(widget.event.id, userId,
                               _messageController.text.trim(), MessageType.Text);
                           _messageController.clear();
-                          _scrollController.jumpTo(
-                              _scrollController.position.maxScrollExtent);
-                          Timer(
-                              const Duration(milliseconds: 250),
-                              () => _feedEventScrollController.jumpTo(
-                                  _feedEventScrollController
-                                      .position.maxScrollExtent));
+                          _feedEventScrollController.jumpTo(0.0);
                         },
                         child: Icon(Icons.send, color: white)))
               ])),
@@ -908,7 +896,7 @@ class _EventScreenState extends State<EventScreen>
                   _buildDescription(),
                   //_buildBanner(),
                   //_buildLiveFeedSponsor(),
-                  _buildLiveFeed()
+                  //_buildLiveFeed()
                 ]));
     });
   }

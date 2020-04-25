@@ -5,11 +5,12 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:business/app_state.dart';
 import 'package:business/classes/user.dart';
 import 'package:business/models/user.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dotted_border/dotted_border.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
+import 'package:outloud/functions/firebase.dart';
 import 'package:outloud/theme.dart';
 import 'package:outloud/widgets/button.dart';
 import 'package:outloud/widgets/cached_image.dart';
@@ -78,15 +79,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     super.dispose();
   }
 
-  Future<String> _saveImage(Uint8List image) async {
-    final StorageReference ref = FirebaseStorage.instance
-        .ref()
-        .child('images/users/${_user.id}/${DateTime.now()}');
-    final StorageUploadTask uploadTask = ref.putData(image);
-    final StorageTaskSnapshot result = await uploadTask.onComplete;
-    return (await result.ref.getDownloadURL()).toString();
-  }
-
   Future<void> _addPicture(int index) async {
     try {
       final Uint8List picture =
@@ -108,19 +100,28 @@ class _ProfileScreenState extends State<ProfileScreen> {
     if (age != null) {
       name += '• $age';
     }
+
+    final double height = MediaQuery.of(context).size.height -
+        kToolbarHeight -
+        MediaQuery.of(context).padding.top;
     return Container(
-        height: MediaQuery.of(context).size.height,
-        child: Stack(alignment: Alignment.center, children: <Widget>[
+        height: height,
+        child: Stack(alignment: Alignment.bottomCenter, children: <Widget>[
+          CarouselSlider(
+              items: _pictures
+                  .map<Widget>((dynamic picture) => picture is String
+                      ? CachedImage(picture,
+                          imageType: ImageType.UserBig, fit: BoxFit.fitHeight)
+                      : Image.memory(picture as Uint8List))
+                  .toList(),
+              options: CarouselOptions(
+                  height: height,
+                  enableInfiniteScroll: false,
+                  viewportFraction: 1.0)),
           Container(
+              color: black.withOpacity(0.6),
               width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height,
-              child: _pictures.isEmpty
-                  ? const CachedImage(null, imageType: ImageType.UserBig)
-                  : _pictures[0] is String
-                      ? CachedImage(_pictures[0] as String,
-                          imageType: ImageType.UserBig)
-                      : Image.memory(_pictures[0] as Uint8List,
-                          fit: BoxFit.cover)),
+              height: MediaQuery.of(context).size.height * 0.1),
           if (_isEdition)
             Container(
                 color: black.withOpacity(0.4),
@@ -163,20 +164,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
           Align(
               alignment: Alignment.bottomCenter,
               child: Container(
-                  padding: const EdgeInsets.only(bottom: 50.0),
-                  child: Container(
-                      padding: const EdgeInsets.all(20.0),
-                      child: Wrap(children: <Widget>[
-                        AutoSizeText(name,
-                            style: const TextStyle(
-                                color: white,
-                                fontSize: 24.0,
-                                fontWeight: FontWeight.bold)),
-                        if (_user.id == userId && !_isEdition)
-                          GestureDetector(
-                              onTap: () => setState(() => _isEdition = true),
-                              child: Icon(Icons.edit, color: white)),
-                      ]))))
+                  padding: const EdgeInsets.all(20.0),
+                  child: Wrap(children: <Widget>[
+                    AutoSizeText(name,
+                        style: const TextStyle(
+                            color: white,
+                            fontSize: 24.0,
+                            fontWeight: FontWeight.bold)),
+                    if (_user.id == userId && !_isEdition)
+                      GestureDetector(
+                          onTap: () => setState(() => _isEdition = true),
+                          child: Icon(Icons.edit, color: white)),
+                  ])))
         ]));
   }
 
@@ -552,6 +551,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ]);
 
       return View(
+          isProfileScreen: true,
+          showNavBar: false,
           isEditing: _isEdition,
           user: _user,
           child: Column(children: <Widget>[
@@ -559,7 +560,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 child: ListView(children: <Widget>[
               _buildPicture(state.userState.user.id),
               _buildAbout(),
-              const Divider(),
+              const Divider(color: orange),
               _buildInterests(),
             ])),
             if (_isEdition)
@@ -607,7 +608,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               _user.pics = await Future.wait<String>(
                                   _pictures.map((dynamic picture) async {
                                 if (picture is Uint8List) {
-                                  return await _saveImage(picture);
+                                  return await saveImage(
+                                      picture, 'images/users/${_user.id}');
                                 }
                                 return picture as String;
                               }).toList());

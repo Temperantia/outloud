@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:business/classes/user_event_state.dart';
 import 'package:flutter/material.dart';
@@ -9,15 +11,19 @@ import 'package:intl/intl.dart';
 class EventImage extends StatelessWidget {
   const EventImage(
       {this.image,
+      this.thumbnail,
       this.state,
       this.size = 70.0,
+      this.hasOverlay = true,
       this.isChat = false,
       this.date,
       this.newMessageCount});
 
   final String image;
+  final String thumbnail;
   final UserEventState state;
   final double size;
+  final bool hasOverlay;
   final bool isChat;
   final DateTime date;
   final int newMessageCount;
@@ -41,21 +47,27 @@ class EventImage extends StatelessWidget {
       Container(
           decoration: const BoxDecoration(
               border: Border(left: BorderSide(color: orange, width: 7.0))),
-          child: CachedImage(image,
-              width: size,
-              height: size,
-              borderRadius: const BorderRadius.only(
-                  bottomRight: Radius.circular(5.0),
-                  topRight: Radius.circular(5.0)),
-              imageType: ImageType.Event)),
-      Container(
-          width: size + 7.0,
-          height: size,
-          decoration: BoxDecoration(
-              color: pink.withOpacity(0.5),
-              borderRadius: const BorderRadius.only(
-                  bottomRight: Radius.circular(5.0),
-                  topRight: Radius.circular(5.0)))),
+          child: thumbnail == null
+              ? CachedImage(image,
+                  width: size,
+                  height: size,
+                  borderRadius: const BorderRadius.only(
+                      bottomRight: Radius.circular(5.0),
+                      topRight: Radius.circular(5.0)),
+                  imageType: ImageType.Event)
+              : Container(
+                  width: size,
+                  height: size,
+                  child: Image.file(File(thumbnail)))),
+      if (hasOverlay)
+        Container(
+            width: size + 7.0,
+            height: size,
+            decoration: BoxDecoration(
+                color: pink.withOpacity(0.5),
+                borderRadius: const BorderRadius.only(
+                    bottomRight: Radius.circular(5.0),
+                    topRight: Radius.circular(5.0)))),
       if (dateWidget != null) dateWidget,
       if (state == UserEventState.Attending)
         Icon(Icons.check, size: size - 20.0, color: white)

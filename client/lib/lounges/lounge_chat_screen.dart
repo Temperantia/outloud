@@ -20,7 +20,10 @@ import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:outloud/lounges/lounge_view_screen.dart';
 import 'package:outloud/profile/profile_screen.dart';
 import 'package:outloud/theme.dart';
+import 'package:outloud/widgets/button.dart';
 import 'package:outloud/widgets/cached_image.dart';
+import 'package:outloud/widgets/content_list.dart';
+import 'package:outloud/widgets/event_image.dart';
 import 'package:outloud/widgets/view.dart';
 import 'package:intl/intl.dart' as date_formater;
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -168,107 +171,91 @@ class _LoungeChatScreenState extends State<LoungeChatScreen>
     if (owner == null) {
       return Container(width: 0.0, height: 0.0);
     }
-    return Container(
-        padding: const EdgeInsets.symmetric(horizontal: 15.0),
-        child: Row(children: <Widget>[
-          Stack(alignment: Alignment.center, children: <Widget>[
-            Container(
-                decoration: const BoxDecoration(
-                    border:
-                        Border(left: BorderSide(color: orange, width: 5.0))),
-                child: CachedImage(_lounge.event.pic,
-                    width: 40.0,
-                    height: 40.0,
-                    borderRadius: const BorderRadius.only(
-                        bottomRight: Radius.circular(5.0),
-                        topRight: Radius.circular(5.0)),
-                    imageType: ImageType.Event))
-          ]),
-          if (userId == owner.id)
-            GestureDetector(
-                onTap: () async {
-                  /* await showLoaderAnimation(context, this,
-                      animationDuration: 600); */
-                  _dispatch(NavigateAction<AppState>.pushNamed(
-                      LoungeViewScreen.id,
-                      arguments: <String, dynamic>{
-                        'lounge': _lounge,
-                        'isEdit': true
-                      }));
-                },
-                child: Column(children: <Widget>[
-                  const Icon(MdiIcons.calendarEdit, color: orange),
-                  AutoSizeText(
-                      FlutterI18n.translate(context, 'LOUNGE_CHAT.EDIT'),
-                      style: const TextStyle(
-                          color: orange, fontWeight: FontWeight.bold))
-                ]))
-          else
-            Flexible(
-                flex: 5,
-                child: Row(children: <Widget>[
-                  GestureDetector(
-                      onTap: () async => _showConfirmPopup(userId),
-                      child: Container(
-                          margin: const EdgeInsets.only(
-                              left: 5, right: 10, top: 10),
-                          child: Column(children: <Widget>[
-                            const Icon(MdiIcons.arrowLeftBoldCircleOutline,
-                                color: orange),
-                            AutoSizeText(
-                                FlutterI18n.translate(
-                                    context, 'LOUNGE_CHAT.LEAVE'),
-                                style: const TextStyle(
-                                    color: orange,
-                                    fontSize: 9,
-                                    fontWeight: FontWeight.bold)),
-                            AutoSizeText(
-                                FlutterI18n.translate(
-                                    context, 'LOUNGE_CHAT.LOUNGE'),
-                                style: const TextStyle(
-                                    color: orange,
-                                    fontSize: 9,
-                                    fontWeight: FontWeight.bold))
-                          ]))),
-                  GestureDetector(
-                      onTap: () async {
-                        /* await showLoaderAnimation(context, this,
-                            animationDuration: 600); */
-                        _dispatch(NavigateAction<AppState>.pushNamed(
+    return Padding(
+      padding: const EdgeInsets.only(top: 5.0),
+      child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
+            EventImage(image: _lounge.event.pic, hasOverlay: false, size: 40.0),
+            if (userId == owner.id)
+              GestureDetector(
+                  onTap: () => _dispatch(NavigateAction<AppState>.pushNamed(
+                          LoungeViewScreen.id,
+                          arguments: <String, dynamic>{
+                            'lounge': _lounge,
+                            'isEdit': true
+                          })),
+                  child: Column(children: <Widget>[
+                    const Icon(MdiIcons.calendarEdit, color: orange),
+                    AutoSizeText(
+                        FlutterI18n.translate(context, 'LOUNGE_CHAT.EDIT'),
+                        style: const TextStyle(
+                            color: orange, fontWeight: FontWeight.bold))
+                  ]))
+            else
+              Row(children: <Widget>[
+                Button(
+                    text: FlutterI18n.translate(context, 'LOUNGE_CHAT.VIEW'),
+                    colorText: white,
+                    backgroundOpacity: 1.0,
+                    backgroundColor: orange),
+                /* GestureDetector(
+                    onTap: () => _showConfirmPopup(userId),
+                    child: Container(
+                        margin:
+                            const EdgeInsets.only(left: 5, right: 10, top: 10),
+                        child: Column(children: <Widget>[
+                          const Icon(MdiIcons.arrowLeftBoldCircleOutline,
+                              color: orange),
+                          AutoSizeText(
+                              FlutterI18n.translate(context, 'LOUNGE_CHAT.LEAVE'),
+                              style: const TextStyle(
+                                  color: orange,
+                                  fontSize: 9,
+                                  fontWeight: FontWeight.bold)),
+                          AutoSizeText(
+                              FlutterI18n.translate(
+                                  context, 'LOUNGE_CHAT.LOUNGE'),
+                              style: const TextStyle(
+                                  color: orange,
+                                  fontSize: 9,
+                                  fontWeight: FontWeight.bold))
+                        ]))),
+                GestureDetector(
+                    onTap: () => _dispatch(NavigateAction<AppState>.pushNamed(
                             LoungeViewScreen.id,
                             arguments: <String, dynamic>{
                               'lounge': _lounge,
                               'isEdit': false
-                            }));
-                      },
-                      child: Container(
-                          margin: const EdgeInsets.only(left: 5, top: 10),
-                          child: Column(children: <Widget>[
-                            const Icon(MdiIcons.viewCarousel, color: orange),
-                            AutoSizeText(
-                                FlutterI18n.translate(
-                                    context, 'LOUNGE_CHAT.VIEW'),
-                                style: const TextStyle(
-                                    color: orange,
-                                    fontSize: 9,
-                                    fontWeight: FontWeight.bold)),
-                            AutoSizeText(
-                                FlutterI18n.translate(
-                                    context, 'LOUNGE_CHAT.DETAILS'),
-                                style: const TextStyle(
-                                    color: orange,
-                                    fontSize: 9,
-                                    fontWeight: FontWeight.bold))
-                          ])))
-                ]))
-        ]));
+                            })),
+                    child: Container(
+                        margin: const EdgeInsets.only(left: 5, top: 10),
+                        child: Column(children: <Widget>[
+                          const Icon(MdiIcons.viewCarousel, color: orange),
+                          AutoSizeText(
+                              FlutterI18n.translate(context, 'LOUNGE_CHAT.VIEW'),
+                              style: const TextStyle(
+                                  color: orange,
+                                  fontSize: 9,
+                                  fontWeight: FontWeight.bold)),
+                          AutoSizeText(
+                              FlutterI18n.translate(
+                                  context, 'LOUNGE_CHAT.DETAILS'),
+                              style: const TextStyle(
+                                  color: orange,
+                                  fontSize: 9,
+                                  fontWeight: FontWeight.bold))
+                        ]))) */
+              ])
+          ]),
+    );
   }
 
-  Widget _buildChat(Chat chat) => ListView.builder(
+  Widget _buildChat(Chat chat) => ContentList(
       controller: _scrollController,
-      itemCount: chat.messages.length,
-      itemBuilder: (BuildContext context, int index) =>
-          _buildMessage(chat.messages[chat.messages.length - index - 1]));
+      withBorders: false,
+      items: chat.messages,
+      builder: (dynamic message) => _buildMessage(message as Message));
 
   String _dateFormatter(int timestamp) {
     final DateTime time = DateTime.fromMillisecondsSinceEpoch(timestamp);
@@ -326,26 +313,21 @@ class _LoungeChatScreenState extends State<LoungeChatScreen>
                                 children: <Widget>[
                                   AutoSizeText(user.name,
                                       style: const TextStyle(
-                                          color: black,
                                           fontSize: 12,
                                           fontWeight: FontWeight.w600)),
                                   AutoSizeText(
                                       _dateFormatter(message.timestamp),
                                       style: const TextStyle(
-                                          color: black,
                                           fontSize: 12,
                                           fontWeight: FontWeight.w400))
                                 ]),
                             Container(
                                 padding: const EdgeInsets.only(top: 5),
-                                child: AutoSizeText(
-                                  message.content,
-                                  textAlign: TextAlign.left,
-                                  style: const TextStyle(
-                                      color: black,
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w400),
-                                ))
+                                child: AutoSizeText(message.content,
+                                    textAlign: TextAlign.left,
+                                    style: const TextStyle(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w400)))
                           ])))
             ]));
   }
@@ -384,20 +366,18 @@ class _LoungeChatScreenState extends State<LoungeChatScreen>
                     child: GestureDetector(
                         onTap: () {}, child: Icon(Icons.add, color: white))), */
                 Expanded(
-                    child: Column(
-                  children: <Widget>[
-                    Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                        child: TextField(
-                            keyboardType: TextInputType.multiline,
-                            maxLines: null,
-                            controller: _messageController,
-                            decoration: InputDecoration.collapsed(
-                                hintText: FlutterI18n.translate(
-                                    context, 'LOUNGE_CHAT.MESSAGE'),
-                                hintStyle: const TextStyle(color: white))))
-                  ],
-                )),
+                    child: Column(children: <Widget>[
+                  Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: TextField(
+                          keyboardType: TextInputType.multiline,
+                          maxLines: null,
+                          controller: _messageController,
+                          decoration: InputDecoration.collapsed(
+                              hintText: FlutterI18n.translate(
+                                  context, 'LOUNGE_CHAT.MESSAGE'),
+                              hintStyle: const TextStyle(color: white))))
+                ])),
                 /*   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: GestureDetector(
@@ -420,7 +400,7 @@ class _LoungeChatScreenState extends State<LoungeChatScreen>
               ])),
           child: Column(children: <Widget>[
             _buildHeader(userId),
-            const Divider(),
+            const Divider(color: orange),
             if (chat != null) Expanded(child: _buildChat(chat)),
           ]));
     });

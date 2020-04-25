@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:outloud/theme.dart';
-import 'package:outloud/widgets/cached_image.dart';
+import 'package:outloud/widgets/event_image.dart';
 import 'package:outloud/widgets/lounge_header.dart';
 import 'package:provider_for_redux/provider_for_redux.dart';
 
@@ -140,22 +140,14 @@ class _LoungeBannerState extends State<LoungeBanner>
       return Container(
           padding: const EdgeInsets.all(15.0),
           child: Row(children: <Widget>[
-            Flexible(
-                child: Stack(alignment: Alignment.center, children: <Widget>[
-              Container(
-                  decoration: const BoxDecoration(
-                      border:
-                          Border(left: BorderSide(color: orange, width: 5.0))),
-                  child: CachedImage(widget.lounge.event.pic,
-                      width: 40.0,
-                      height: 40.0,
-                      borderRadius: const BorderRadius.only(
-                          bottomRight: Radius.circular(5.0),
-                          topRight: Radius.circular(5.0)),
-                      imageType: ImageType.Event))
-            ])),
-            Flexible(
-                flex: 4,
+            Container(
+                margin: const EdgeInsets.only(right: 5.0),
+                child: EventImage(
+                    image: widget.lounge.event.pic,
+                    thumbnail: widget.lounge.event.thumbnail,
+                    size: 50.0,
+                    hasOverlay: false)),
+            Expanded(
                 child: LoungeHeader(
                     lounge: widget.lounge,
                     owner: widget.owner,

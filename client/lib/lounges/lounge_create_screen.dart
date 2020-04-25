@@ -11,6 +11,7 @@ import 'package:outloud/lounges/lounge_create_detail_screen.dart';
 import 'package:outloud/theme.dart';
 import 'package:outloud/widgets/button.dart';
 import 'package:outloud/widgets/cached_image.dart';
+import 'package:outloud/widgets/content_list.dart';
 import 'package:outloud/widgets/view.dart';
 import 'package:provider_for_redux/provider_for_redux.dart';
 
@@ -24,7 +25,7 @@ class LoungeCreateScreen extends StatefulWidget {
 class _LoungeCreateScreenState extends State<LoungeCreateScreen> {
   Event _selected;
 
-  Widget _buildUserEvent(Event event, ThemeStyle themeStyle) {
+  Widget _buildUserEvent(Event event) {
     if (event == null) {
       return Container(width: 0.0, height: 0.0);
     }
@@ -34,9 +35,8 @@ class _LoungeCreateScreenState extends State<LoungeCreateScreen> {
             padding: const EdgeInsets.all(10.0),
             margin: const EdgeInsets.symmetric(vertical: 5.0),
             decoration: BoxDecoration(
-                color: _selected?.id == event.id
-                    ? primary(themeStyle).withOpacity(0.3)
-                    : null,
+                color:
+                    _selected?.id == event.id ? orange.withOpacity(0.3) : null,
                 borderRadius: BorderRadius.circular(5.0)),
             child: Row(children: <Widget>[
               Padding(
@@ -88,7 +88,7 @@ class _LoungeCreateScreenState extends State<LoungeCreateScreen> {
                             ));
                             dispatch(NavigateAction<AppState>.pushNamed(
                                 LoungeCreateDetailScreen.id));
-                          }),
+                          })
                     ]),
           child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 20.0),
@@ -102,10 +102,10 @@ class _LoungeCreateScreenState extends State<LoungeCreateScreen> {
                           style: const TextStyle(fontWeight: FontWeight.w900)))
                 ]),
                 Expanded(
-                    child: ListView.builder(
-                        itemCount: userEvents.length,
-                        itemBuilder: (BuildContext context, int index) =>
-                            _buildUserEvent(userEvents[index], state.theme))),
+                    child: ContentList(
+                        items: userEvents,
+                        builder: (dynamic event) =>
+                            _buildUserEvent(event as Event)))
               ])));
     });
   }

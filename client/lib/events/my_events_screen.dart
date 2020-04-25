@@ -15,6 +15,7 @@ import 'package:outloud/widgets/button.dart';
 import 'package:intl/intl.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:outloud/widgets/content_list.dart';
+import 'package:outloud/widgets/content_list_item.dart';
 import 'package:outloud/widgets/event_image.dart';
 import 'package:provider_for_redux/provider_for_redux.dart';
 
@@ -53,93 +54,73 @@ class _MyEventsScreen extends State<MyEventsScreen>
     if (event == null) {
       return Container(width: 0.0, height: 0.0);
     }
-    return GestureDetector(
-        onTap: () => _dispatch(NavigateAction<AppState>.pushNamed(
-            EventScreen.id,
-            arguments: event)),
-        child: Container(
-            decoration: BoxDecoration(color: Colors.transparent),
-            padding: const EdgeInsets.all(10.0),
-            child: Row(children: <Widget>[
-              EventImage(image: event.pic, date: event.dateStart),
-              Expanded(
-                  child: Container(
-                      padding: const EdgeInsets.only(left: 10.0),
-                      child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: <Widget>[
-                            AutoSizeText(event.name,
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.bold)),
-                            Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: <Widget>[
-                                  AutoSizeText('$time - $timeEnd'),
-                                  Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: <Widget>[
-                                        if (state == UserEventState.Attending)
-                                          const Icon(Icons.check)
-                                        else if (state == UserEventState.Liked)
-                                          const Icon(MdiIcons.heart),
-                                        AutoSizeText(stateMessage),
-                                      ])
-                                ]),
-                            if (lounge == null)
-                              Button(
-                                  text: FlutterI18n.translate(
-                                      context, 'MY_EVENTS.FIND_LOUNGES'),
-                                  height: 30.0,
-                                  backgroundColor: orange,
-                                  backgroundOpacity: 1.0,
-                                  onPressed: () => _dispatch(
-                                      NavigateAction<AppState>.pushNamed(
-                                          LoungesScreen.id,
-                                          arguments: event)))
-                            else
-                              Button(
-                                  text: FlutterI18n.translate(
-                                      context, 'MY_EVENTS.VIEW_LOUNGE'),
-                                  height: 30.0,
-                                  backgroundColor: pinkBright,
-                                  backgroundOpacity: 1.0,
-                                  onPressed: () => _dispatch(
-                                      NavigateAction<AppState>.pushNamed(
-                                          LoungeChatScreen.id,
-                                          arguments: lounge)))
-                          ])))
-            ])));
+    return ContentListItem(
+      onTap: () => _dispatch(
+          NavigateAction<AppState>.pushNamed(EventScreen.id, arguments: event)),
+      leading: EventImage(
+          image: event.pic, thumbnail: event.thumbnail, date: event.dateStart),
+      title: AutoSizeText(event.name,
+          style: const TextStyle(fontWeight: FontWeight.bold)),
+      subtitle: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            AutoSizeText('$time - $timeEnd'),
+            Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  if (state == UserEventState.Attending)
+                    const Icon(Icons.check)
+                  else if (state == UserEventState.Liked)
+                    const Icon(MdiIcons.heart),
+                  AutoSizeText(stateMessage)
+                ])
+          ]),
+      buttons: lounge == null
+          ? Button(
+              text: FlutterI18n.translate(context, 'MY_EVENTS.FIND_LOUNGES'),
+              height: 30.0,
+              backgroundColor: orange,
+              backgroundOpacity: 1.0,
+              onPressed: () => _dispatch(NavigateAction<AppState>.pushNamed(
+                  LoungesScreen.id,
+                  arguments: event)))
+          : Button(
+              text: FlutterI18n.translate(context, 'MY_EVENTS.VIEW_LOUNGE'),
+              height: 30.0,
+              backgroundColor: pinkBright,
+              backgroundOpacity: 1.0,
+              onPressed: () => _dispatch(NavigateAction<AppState>.pushNamed(
+                  LoungeChatScreen.id,
+                  arguments: lounge))),
+    );
   }
 
   Widget _buildUserEvents(List<Event> userEvents,
       Map<String, UserEventState> userEventStates, List<Lounge> userLounges) {
-    return userEvents.isEmpty
-        ? Column(
+    return ContentList(
+        items: userEvents,
+        builder: (dynamic event) =>
+            _buildUserEvent(event as Event, userEventStates, userLounges),
+        whenEmpty: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
-                Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 30.0),
-                    child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          AutoSizeText(
-                              FlutterI18n.translate(
-                                  context, 'MY_EVENTS.MY_EVENTS_EMPTY_TITLE'),
-                              style: const TextStyle(
-                                  fontSize: 20.0, fontWeight: FontWeight.bold)),
-                          AutoSizeText(
-                              FlutterI18n.translate(context,
-                                  'MY_EVENTS.MY_EVENTS_EMPTY_DESCRIPTION'),
-                              style: const TextStyle(color: grey))
-                        ])),
-                Image.asset('images/catsIllus4.png')
-              ])
-        : ContentList(
-            items: userEvents,
-            builder: (dynamic event) =>
-                _buildUserEvent(event as Event, userEventStates, userLounges));
+              Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        AutoSizeText(
+                            FlutterI18n.translate(
+                                context, 'MY_EVENTS.MY_EVENTS_EMPTY_TITLE'),
+                            style: const TextStyle(
+                                fontSize: 20.0, fontWeight: FontWeight.bold)),
+                        AutoSizeText(
+                            FlutterI18n.translate(context,
+                                'MY_EVENTS.MY_EVENTS_EMPTY_DESCRIPTION'),
+                            style: const TextStyle(color: grey))
+                      ])),
+              Image.asset('images/catsIllus4.png')
+            ]));
   }
 
   @override

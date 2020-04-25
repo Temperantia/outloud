@@ -66,6 +66,7 @@ class Event extends Entity {
   List<User> members;
   List<Message> messages;
   List<User> chatMembers;
+  String thumbnail;
 
   Map<String, dynamic> toJson() => <String, dynamic>{
         'name': name,

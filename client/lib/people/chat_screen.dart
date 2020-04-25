@@ -14,6 +14,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:outloud/profile/profile_screen.dart';
 import 'package:outloud/theme.dart';
 import 'package:outloud/widgets/cached_image.dart';
+import 'package:outloud/widgets/content_list.dart';
 import 'package:outloud/widgets/view.dart';
 import 'package:intl/intl.dart';
 import 'package:provider_for_redux/provider_for_redux.dart';
@@ -66,81 +67,77 @@ class _ChatScreenState extends State<ChatScreen> {
     } else {
       _messageController.clear();
       addMessage(_chat.id, userId, text.trim(), MessageType.Text);
-      _scrollController.animateTo(0.0,
-          duration: const Duration(milliseconds: 300), curve: Curves.linear);
+      _scrollController.jumpTo(0.0);
     }
   }
 
   Widget _buildChat(User user, String userId, String picture) {
-    final List<Message> messages = _chat.messages;
-    return ListView.builder(
-        itemBuilder: (BuildContext context, int index) => _buildItem(
-            messages[messages.length - index - 1], user, userId, picture),
-        itemCount: messages.length,
-        controller: _scrollController);
+    return ContentList(
+        reverse: true,
+        withBorders: false,
+        controller: _scrollController,
+        items: _chat.messages,
+        builder: (dynamic message) =>
+            _buildItem(message as Message, user, userId, picture));
   }
 
   Widget _buildItem(Message message, User user, String userId, String picture) {
     final User userPeer = _chat.entity as User;
     final List<String> pictures = userPeer.pics;
     final String picturePeer = pictures.isEmpty ? null : pictures[0];
+
     return Container(
-      padding: const EdgeInsets.all(5.0),
-      child: Row(children: <Widget>[
-        if (userId != message.idFrom)
-          Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: GestureDetector(
-                  onTap: () => _dispatch(NavigateAction<AppState>.pushNamed(
-                          ProfileScreen.id,
-                          arguments: <String, dynamic>{
-                            'user': userPeer,
-                          })),
-                  child: CachedImage(picturePeer,
-                      width: 35.0,
-                      height: 35.0,
-                      borderRadius: BorderRadius.circular(20.0),
-                      imageType: ImageType.User))),
-        Expanded(
-            child: Container(
-                padding: const EdgeInsets.all(15.0),
-                decoration: BoxDecoration(
-                    color: userId == message.idFrom
-                        ? pink.withOpacity(0.8)
-                        : pinkLight.withOpacity(0.8),
-                    borderRadius: BorderRadius.circular(5.0)),
-                child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            AutoSizeText(
-                                userId == message.idFrom
-                                    ? user.name
-                                    : userPeer.name,
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.bold)),
-                            AutoSizeText(_dateFormatter(message.timestamp))
-                          ]),
-                      AutoSizeText(message.content),
-                    ]))),
-        if (userId == message.idFrom)
-          Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: GestureDetector(
-                  onTap: () => _dispatch(NavigateAction<AppState>.pushNamed(
-                          ProfileScreen.id,
-                          arguments: <String, dynamic>{
-                            'user': user,
-                          })),
-                  child: CachedImage(picture,
-                      width: 35.0,
-                      height: 35.0,
-                      borderRadius: BorderRadius.circular(20.0),
-                      imageType: ImageType.User))),
-      ]),
-    );
+        padding: const EdgeInsets.all(5.0),
+        child: Row(children: <Widget>[
+          if (userId != message.idFrom)
+            Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: GestureDetector(
+                    onTap: () => _dispatch(NavigateAction<AppState>.pushNamed(
+                        ProfileScreen.id,
+                        arguments: <String, dynamic>{'user': userPeer})),
+                    child: CachedImage(picturePeer,
+                        width: 35.0,
+                        height: 35.0,
+                        borderRadius: BorderRadius.circular(20.0),
+                        imageType: ImageType.User))),
+          Expanded(
+              child: Container(
+                  padding: const EdgeInsets.all(15.0),
+                  decoration: BoxDecoration(
+                      color: userId == message.idFrom
+                          ? pink.withOpacity(0.8)
+                          : pinkLight.withOpacity(0.8),
+                      borderRadius: BorderRadius.circular(5.0)),
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              AutoSizeText(
+                                  userId == message.idFrom
+                                      ? user.name
+                                      : userPeer.name,
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold)),
+                              AutoSizeText(_dateFormatter(message.timestamp))
+                            ]),
+                        AutoSizeText(message.content)
+                      ]))),
+          if (userId == message.idFrom)
+            Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: GestureDetector(
+                    onTap: () => _dispatch(NavigateAction<AppState>.pushNamed(
+                        ProfileScreen.id,
+                        arguments: <String, dynamic>{'user': user})),
+                    child: CachedImage(picture,
+                        width: 35.0,
+                        height: 35.0,
+                        borderRadius: BorderRadius.circular(20.0),
+                        imageType: ImageType.User)))
+        ]));
   }
 
   @override

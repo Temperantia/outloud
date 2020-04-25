@@ -8,7 +8,7 @@ final Api _api = Api('eventMessages');
 Stream<List<Message>> streamEventMessages(String conversationId) {
   return getDataFromQuery(
       query: _api.querySubCollection(conversationId, conversationId,
-          orderBy: <OrderConstraint>[OrderConstraint('timestamp', false)]),
+          orderBy: <OrderConstraint>[OrderConstraint('timestamp', true)]),
       mapper: (DocumentSnapshot messageDoc) =>
           Message.fromMap(messageDoc.data, messageDoc.documentID));
 }

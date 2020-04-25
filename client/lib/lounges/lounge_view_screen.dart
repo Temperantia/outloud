@@ -250,7 +250,7 @@ class _LoungeViewScreenState extends State<LoungeViewScreen> {
               : null,
           child: Column(children: <Widget>[
             _buildHeader(state.userState.user.id),
-            const Divider(),
+            const Divider(color: orange),
             Expanded(
                 flex: 8,
                 child: Scrollbar(

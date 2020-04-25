@@ -16,6 +16,7 @@ import 'package:outloud/events/event_screen.dart';
 import 'package:outloud/theme.dart';
 import 'package:intl/intl.dart';
 import 'package:outloud/widgets/content_list.dart';
+import 'package:outloud/widgets/content_list_item.dart';
 import 'package:outloud/widgets/event_image.dart';
 import 'package:provider_for_redux/provider_for_redux.dart';
 
@@ -280,9 +281,8 @@ class _FindEventsScreen extends State<FindEventsScreen>
     final String timeEnd =
         event.dateEnd == null ? null : DateFormat('Hm').format(event.dateEnd);
     final UserEventState state = userEventStates[event.id];
-
-    return GestureDetector(
-        onTap: () async =>
+    return ContentListItem(
+        onTap: () =>
             /*  await showLoaderAnimation(context, this,
               executeCallback: true,
               dispatch: _dispatch,
@@ -291,60 +291,53 @@ class _FindEventsScreen extends State<FindEventsScreen>
                 arguments: event)) /* ,
               animationDuration: 600) */
         ,
-        child: Row(children: <Widget>[
-          if (date != null && time != null)
-            Container(
-                width: 50.0,
-                height: 50.0,
-                decoration: BoxDecoration(
-                    color: pinkBright,
-                    borderRadius: BorderRadius.circular(5.0)),
-                padding: const EdgeInsets.symmetric(vertical: 5.0),
-                child: Column(children: <Widget>[
-                  AutoSizeText(date,
+        leading: Container(
+            width: 50.0,
+            height: 50.0,
+            decoration: BoxDecoration(
+                color: pink, borderRadius: BorderRadius.circular(5.0)),
+            padding: const EdgeInsets.symmetric(vertical: 5.0),
+            child: Column(children: <Widget>[
+              AutoSizeText(date,
+                  style: const TextStyle(
+                      color: white, fontWeight: FontWeight.bold)),
+              AutoSizeText(month,
+                  style: const TextStyle(
+                      color: white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 10.0))
+            ])),
+        title: AutoSizeText(event.name,
+            style: const TextStyle(fontWeight: FontWeight.bold)),
+        subtitle: Column(children: <Widget>[
+          Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                AutoSizeText('$time - $timeEnd',
+                    style: const TextStyle(color: orange)),
+                /*  if (event.distance != null)
+                                      AutoSizeText(
+                                          '${event.distance.toStringAsFixed(1)}${FlutterI18n.translate(context, 'FIND_EVENTS.AWAY')}',
+                                          style: const TextStyle(color: orange)) */
+              ]),
+          Wrap(children: <Widget>[
+            for (String interest in event.interests)
+              Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(5.0),
+                      border: Border.all(color: pink)),
+                  child: AutoSizeText(interest.toUpperCase(),
                       style: const TextStyle(
-                          color: white, fontWeight: FontWeight.bold)),
-                  AutoSizeText(month,
-                      style: const TextStyle(
-                          color: white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 10.0))
-                ])),
-          Expanded(
-              child: Container(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        AutoSizeText(event.name,
-                            style:
-                                const TextStyle(fontWeight: FontWeight.bold)),
-                        Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              AutoSizeText('$time - $timeEnd',
-                                  style: const TextStyle(color: orange)),
-                              /*  if (event.distance != null)
-                                  AutoSizeText(
-                                      '${event.distance.toStringAsFixed(1)}${FlutterI18n.translate(context, 'FIND_EVENTS.AWAY')}',
-                                      style: const TextStyle(color: orange)) */
-                            ]),
-                        Wrap(children: <Widget>[
-                          for (String interest in event.interests)
-                            Container(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 5.0),
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(5.0),
-                                    border: Border.all(color: pink)),
-                                child: AutoSizeText(interest.toUpperCase(),
-                                    style: const TextStyle(
-                                        color: pink,
-                                        fontWeight: FontWeight.bold)))
-                        ])
-                      ]))),
-          EventImage(image: event.pic, size: 50.0, state: state)
-        ]));
+                          color: pink, fontWeight: FontWeight.bold)))
+          ])
+        ]),
+        trailing: EventImage(
+            image: event.pic,
+            thumbnail: event.thumbnail,
+            size: 50.0,
+            hasOverlay: false,
+            state: state));
   }
 
   Widget _buildFindEvents(Map<String, UserEventState> userEventStates) {

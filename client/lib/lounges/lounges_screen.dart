@@ -17,6 +17,8 @@ import 'package:outloud/lounges/lounge_view_screen.dart';
 import 'package:outloud/theme.dart';
 import 'package:outloud/widgets/button.dart';
 import 'package:outloud/widgets/cached_image.dart';
+import 'package:outloud/widgets/content_list.dart';
+import 'package:outloud/widgets/event_image.dart';
 import 'package:outloud/widgets/view.dart';
 import 'package:provider_for_redux/provider_for_redux.dart';
 
@@ -176,51 +178,35 @@ class _LoungesScreenState extends State<LoungesScreen>
 
   Widget _buildHeader(BuildContext context) => Container(
       padding: const EdgeInsets.all(15),
-      child: Column(children: <Widget>[
-        Container(
-            constraints: BoxConstraints.expand(
-              height: Theme.of(context).textTheme.display1.fontSize * 1.1,
-            ),
-            child: AutoSizeText(
+      child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            AutoSizeText(
                 FlutterI18n.translate(context, 'LOUNGES.FOR_THE_EVENT'),
                 textAlign: TextAlign.left,
                 style: const TextStyle(
-                    color: black, fontSize: 13, fontWeight: FontWeight.bold))),
-        Row(children: <Widget>[
-          Flexible(
-              child: Container(
-                  decoration: const BoxDecoration(
-                      border:
-                          Border(left: BorderSide(color: orange, width: 3.0))),
-                  child: CachedImage(widget.event.pic,
-                      width: 30.0,
-                      height: 30.0,
-                      borderRadius: const BorderRadius.only(
-                          bottomRight: Radius.circular(5.0),
-                          topRight: Radius.circular(5.0)),
-                      imageType: ImageType.Event))),
-          Expanded(
-              flex: 8,
-              child: Container(
-                  padding: const EdgeInsets.only(left: 10),
-                  child: AutoSizeText(widget.event.name,
-                      textAlign: TextAlign.justify,
-                      style: const TextStyle(
-                          color: orange,
-                          fontSize: 12,
-                          fontWeight: FontWeight.w700)))),
-        ])
-      ]));
+                    color: black, fontSize: 13, fontWeight: FontWeight.bold)),
+            Row(children: <Widget>[
+              EventImage(
+                  image: widget.event.pic,
+                  thumbnail: widget.event.thumbnail,
+                  size: 50.0,
+                  hasOverlay: false),
+              Expanded(
+                  child: Container(
+                      padding: const EdgeInsets.only(left: 10),
+                      child: AutoSizeText(widget.event.name,
+                          textAlign: TextAlign.justify,
+                          style: const TextStyle(
+                              color: orange,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w700)))),
+            ])
+          ]));
 
-  Widget _buildListLounges(
-          List<Lounge> lounges, String userId) =>
-      ListView.builder(
-          itemCount: lounges.length,
-          itemBuilder: (BuildContext context, int index) => Column(
-                  children: <Widget>[
-                    _buildLounge(lounges[index], userId),
-                    const Divider(color: black)
-                  ]));
+  Widget _buildListLounges(List<Lounge> lounges, String userId) => ContentList(
+      items: lounges,
+      builder: (dynamic lounge) => _buildLounge(lounge as Lounge, userId));
 
   Widget _noLoungeWidget() =>
       Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
@@ -262,7 +248,7 @@ class _LoungesScreenState extends State<LoungesScreen>
                 ]),
             child: Column(children: <Widget>[
               _buildHeader(context),
-              const Divider(),
+              const Divider(color: orange),
               if (lounges == null || lounges.isEmpty)
                 _noLoungeWidget()
               else if (lounges.isNotEmpty)

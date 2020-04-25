@@ -1,29 +1,45 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:outloud/theme.dart';
 
 class ContentList extends StatelessWidget {
-  const ContentList({this.items, this.builder, this.onRefresh});
+  const ContentList(
+      {this.items,
+      this.builder,
+      this.withBorders = true,
+      this.onRefresh,
+      this.whenEmpty,
+      this.reverse = false,
+      this.controller});
 
   final List<dynamic> items;
   final Widget Function(dynamic) builder;
+  final bool withBorders;
   final Future<void> Function() onRefresh;
+  final Widget whenEmpty;
+  final bool reverse;
+  final ScrollController controller;
 
   @override
   Widget build(BuildContext context) {
-    final Widget child = items == null
-        ? const CircularProgressIndicator()
-        : Scrollbar(
-            child: ListView.builder(
-                itemCount: items?.length,
-                itemBuilder: (BuildContext context, int index) =>
-                    Column(children: <Widget>[
-                      builder(items[index]),
-                      const Divider(color: orange),
-                    ])));
+    if (items == null) {
+      return const CircularProgressIndicator();
+    }
 
-    return onRefresh == null
-        ? child
-        : RefreshIndicator(onRefresh: () => onRefresh(), child: child);
+    final Widget child = Scrollbar(
+        child: ListView.builder(
+            reverse: reverse,
+            controller: controller,
+            itemCount: items?.length,
+            itemBuilder: (BuildContext context, int index) =>
+                Column(children: <Widget>[
+                  builder(items[index]),
+                  if (withBorders) const Divider(color: orange),
+                ])));
+
+    return whenEmpty != null && items.isEmpty
+        ? whenEmpty
+        : onRefresh == null
+            ? child
+            : RefreshIndicator(onRefresh: () => onRefresh(), child: child);
   }
 }

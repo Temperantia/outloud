@@ -128,7 +128,7 @@ class _EventAttendingScreenState extends State<EventAttendingScreen> {
           title: 'LISTE DE PARTICIPANTS',
           child: Column(children: <Widget>[
             _buildHeader(),
-            const Divider(),
+            const Divider(color: orange),
             _buildList(dispatch)
           ]));
     });

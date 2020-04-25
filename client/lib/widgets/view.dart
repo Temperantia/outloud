@@ -26,7 +26,7 @@ class View extends StatefulWidget {
       this.isEditing = false,
       this.user,
       this.onBack,
-      this.backIcon = Icons.keyboard_arrow_left,
+      this.backIcon = Icons.keyboard_backspace,
       this.actions,
       this.buttons});
 
@@ -57,7 +57,7 @@ class _ViewState extends State<View> {
         : Column(children: <Widget>[
             Expanded(child: widget.child),
             Container(
-                padding: const EdgeInsets.only(top: 5.0),
+                padding: const EdgeInsets.only(top: 10.0),
                 decoration: const BoxDecoration(
                     gradient: LinearGradient(colors: <Color>[pinkLight, pink])),
                 child: widget.buttons)
@@ -159,48 +159,62 @@ class _ViewState extends State<View> {
   }
 
   AppBar _buildAppBar(User user) {
-    return AppBar(
-        elevation: 0.0,
-        leading: user == null
-            ? const CircularProgressIndicator()
-            : Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: GestureDetector(
-                    onTap: () =>
-                        setState(() => _showUserSettings = !_showUserSettings),
-                    child: CachedImage(user.pics.isEmpty ? null : user.pics[0],
-                        width: 40.0,
-                        height: 40.0,
-                        borderRadius: BorderRadius.circular(60.0),
-                        imageType: ImageType.User))),
-        centerTitle: true,
-        title: Stack(alignment: Alignment.center, children: <Widget>[
-          if (widget.title is String)
-            AutoSizeText(widget.title as String,
-                style: const TextStyle(color: white, fontSize: 14.0))
-          else
-            widget.title is TabBar
-                ? widget.title as TabBar
-                : Container(width: 0.0, height: 0.0),
-          if (Navigator.canPop(context))
-            Align(
+    return widget.isProfileScreen
+        ? AppBar(
+            elevation: 0.0,
+            leading: Align(
                 alignment: Alignment.centerLeft,
                 child: GestureDetector(
                     onTap: widget.onBack ??
                         () => _dispatch(NavigateAction<AppState>.pop()),
-                    child: Icon(widget.backIcon, color: white)))
-        ]),
-        titleSpacing: 0.0,
-        actions: <Widget>[
-          Container(
-            padding: const EdgeInsets.all(8.0),
-            width: 40.0,
-            height: 40.0,
-            //child: Image.asset('images/hamburger.png')
-          )
-        ],
-        flexibleSpace: Image.asset('images/screenTop.png', fit: BoxFit.cover),
-        backgroundColor: Colors.transparent);
+                    child: Icon(widget.backIcon, color: white))),
+            flexibleSpace:
+                Image.asset('images/screenTop.png', fit: BoxFit.cover),
+            backgroundColor: Colors.transparent)
+        : AppBar(
+            elevation: 0.0,
+            leading: user == null
+                ? const CircularProgressIndicator()
+                : Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: GestureDetector(
+                        onTap: () => setState(
+                            () => _showUserSettings = !_showUserSettings),
+                        child: CachedImage(
+                            user.pics.isEmpty ? null : user.pics[0],
+                            width: 40.0,
+                            height: 40.0,
+                            borderRadius: BorderRadius.circular(60.0),
+                            imageType: ImageType.User))),
+            centerTitle: true,
+            title: Stack(alignment: Alignment.center, children: <Widget>[
+              if (widget.title is String)
+                AutoSizeText(widget.title as String,
+                    style: const TextStyle(color: white, fontSize: 14.0))
+              else
+                widget.title is TabBar
+                    ? widget.title as TabBar
+                    : Container(width: 0.0, height: 0.0),
+              if (Navigator.canPop(context))
+                Align(
+                    alignment: Alignment.centerLeft,
+                    child: GestureDetector(
+                        onTap: widget.onBack ??
+                            () => _dispatch(NavigateAction<AppState>.pop()),
+                        child: Icon(widget.backIcon, color: white)))
+            ]),
+            titleSpacing: 0.0,
+            actions: <Widget>[
+              Container(
+                padding: const EdgeInsets.all(8.0),
+                width: 40.0,
+                height: 40.0,
+                //child: Image.asset('images/hamburger.png')
+              )
+            ],
+            flexibleSpace:
+                Image.asset('images/screenTop.png', fit: BoxFit.cover),
+            backgroundColor: Colors.transparent);
   }
 
   Widget _buildNavBar(
@@ -252,11 +266,13 @@ class _ViewState extends State<View> {
             Widget w) {
           _dispatch = dispatch;
           final User user = state.userState.user;
-          final String userId = user.id;
-          final Map<String, ChatState> userChatStates =
-              state.chatsState.usersChatsStates[userId];
-          final Map<String, ChatState> loungeChatStates =
-              state.chatsState.loungesChatsStates[userId];
+          Map<String, ChatState> userChatStates;
+          Map<String, ChatState> loungeChatStates;
+          if (user != null) {
+            final String userId = user.id;
+            userChatStates = state.chatsState.usersChatsStates[userId];
+            loungeChatStates = state.chatsState.loungesChatsStates[userId];
+          }
           return DefaultTabController(
               length: 2,
               child: Stack(children: <Widget>[
