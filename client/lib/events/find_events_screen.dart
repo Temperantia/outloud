@@ -269,44 +269,50 @@ class _FindEventsScreen extends State<FindEventsScreen>
   } */
 
   Widget _buildEvent(Event event, Map<String, UserEventState> userEventStates) {
-    final String date = event.dateStart == null
-        ? null
-        : DateFormat('dd').format(event.dateStart);
-    final String month = event.dateStart == null
-        ? null
-        : DateFormat('MMM').format(event.dateStart);
-    final String time = event.dateStart == null
-        ? null
-        : DateFormat('Hm').format(event.dateStart);
-    final String timeEnd =
-        event.dateEnd == null ? null : DateFormat('Hm').format(event.dateEnd);
+    String date = '';
+    String month = '';
+    String time = '';
+    String timeEnd = '';
+
+    if (event.dateStart != null) {
+      date = DateFormat('dd').format(event.dateStart);
+      month = DateFormat('MMM').format(event.dateStart);
+      time = DateFormat('Hm').format(event.dateStart);
+
+      if (event.dateEnd != null) {
+        if (!Utils.isSameDay(event.dateStart, event.dateEnd)) {
+          date += ' - ${DateFormat('dd').format(event.dateEnd)}';
+        }
+        if (event.dateStart.month != event.dateEnd.month) {
+          month += ' - ${DateFormat('MMM').format(event.dateEnd)}';
+        }
+        timeEnd = DateFormat('Hm').format(event.dateEnd);
+      }
+    }
+
     final UserEventState state = userEventStates[event.id];
     return ContentListItem(
-        onTap: () =>
-            /*  await showLoaderAnimation(context, this,
-              executeCallback: true,
-              dispatch: _dispatch,
-              callback:  */
-            _dispatch(NavigateAction<AppState>.pushNamed(EventScreen.id,
-                arguments: event)) /* ,
-              animationDuration: 600) */
-        ,
+        onTap: () => _dispatch(NavigateAction<AppState>.pushNamed(
+            EventScreen.id,
+            arguments: event)),
         leading: Container(
-            width: 50.0,
-            height: 50.0,
+            width: 80.0,
+            height: 80.0,
             decoration: BoxDecoration(
                 color: pink, borderRadius: BorderRadius.circular(5.0)),
             padding: const EdgeInsets.symmetric(vertical: 5.0),
-            child: Column(children: <Widget>[
-              AutoSizeText(date,
-                  style: const TextStyle(
-                      color: white, fontWeight: FontWeight.bold)),
-              AutoSizeText(month,
-                  style: const TextStyle(
-                      color: white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 10.0))
-            ])),
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  AutoSizeText(date,
+                      style: const TextStyle(
+                          color: white, fontWeight: FontWeight.bold)),
+                  AutoSizeText(month,
+                      style: const TextStyle(
+                          color: white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 10.0))
+                ])),
         title: AutoSizeText(event.name,
             style: const TextStyle(fontWeight: FontWeight.bold)),
         subtitle: Column(children: <Widget>[
@@ -369,10 +375,9 @@ class _FindEventsScreen extends State<FindEventsScreen>
               child:  */
       _buildFilters(),
       Expanded(
-          child: ContentList(
+          child: ContentList<Event>(
               items: _eventsDisplayed,
-              builder: (dynamic event) =>
-                  _buildEvent(event as Event, userEventStates),
+              builder: (Event event) => _buildEvent(event, userEventStates),
               onRefresh: () => _dispatchFuture(EventsGetAction())))
       /*  Expanded(
           flex: 1,

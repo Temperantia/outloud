@@ -22,7 +22,7 @@ class ContentListItem extends StatelessWidget {
         onTap: () => onTap(),
         child: Container(
             decoration: BoxDecoration(color: Colors.transparent),
-            padding: const EdgeInsets.all(10.0),
+            padding: const EdgeInsets.all(5.0),
             child: Row(children: <Widget>[
               if (leading != null) leading,
               if (title != null || subtitle != null || buttons != null)

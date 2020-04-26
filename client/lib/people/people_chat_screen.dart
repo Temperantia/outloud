@@ -70,10 +70,10 @@ class _PeopleChatScreenState extends State<PeopleChatScreen>
       _dispatch = dispatch;
       final Map<String, ChatState> chatStates =
           state.chatsState.usersChatsStates[state.userState.user.id];
-      return ContentList(
+      return ContentList<Chat>(
           items: state.chatsState.chats,
-          builder: (dynamic chat) =>
-              _buildChat(chat as Chat, chatStates[chat.id].countNewMessages()));
+          builder: (Chat chat) =>
+              _buildChat(chat, chatStates[chat.id].countNewMessages()));
     });
   }
 }

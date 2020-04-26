@@ -32,14 +32,18 @@ class _MyEventsScreen extends State<MyEventsScreen>
 
   Widget _buildUserEvent(Event event,
       Map<String, UserEventState> userEventStates, List<Lounge> userLounges) {
-    final String time = event.dateStart == null
-        ? null
-        : DateFormat('jm').format(event.dateStart);
-    final String timeEnd =
-        event.dateEnd == null ? null : DateFormat('jm').format(event.dateEnd);
+    String time = '';
+    String timeEnd = '';
+
+    if (event.dateStart != null) {
+      time = DateFormat('Hm').format(event.dateStart);
+
+      if (event.dateEnd != null) {
+        timeEnd = DateFormat('Hm').format(event.dateEnd);
+      }
+    }
 
     final UserEventState state = userEventStates[event.id];
-
     String stateMessage = '';
     if (state == UserEventState.Attending) {
       stateMessage = FlutterI18n.translate(context, 'MY_EVENTS.GOING');
@@ -57,7 +61,8 @@ class _MyEventsScreen extends State<MyEventsScreen>
     return ContentListItem(
       onTap: () => _dispatch(
           NavigateAction<AppState>.pushNamed(EventScreen.id, arguments: event)),
-      leading: EventImage(image: event.pic, date: event.dateStart),
+      leading: EventImage(
+          image: event.pic, dateStart: event.dateStart, dateEnd: event.dateEnd),
       title: AutoSizeText(event.name,
           style: const TextStyle(fontWeight: FontWeight.bold)),
       subtitle: Row(
@@ -96,10 +101,10 @@ class _MyEventsScreen extends State<MyEventsScreen>
 
   Widget _buildUserEvents(List<Event> userEvents,
       Map<String, UserEventState> userEventStates, List<Lounge> userLounges) {
-    return ContentList(
+    return ContentList<Event>(
         items: userEvents,
-        builder: (dynamic event) =>
-            _buildUserEvent(event as Event, userEventStates, userLounges),
+        builder: (Event event) =>
+            _buildUserEvent(event, userEventStates, userLounges),
         whenEmpty: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[

@@ -15,6 +15,7 @@ import 'package:outloud/widgets/button.dart';
 import 'package:outloud/widgets/cached_image.dart';
 import 'package:outloud/widgets/content_list.dart';
 import 'package:outloud/widgets/content_list_item.dart';
+import 'package:outloud/widgets/people_search.dart';
 import 'package:provider_for_redux/provider_for_redux.dart';
 
 import 'package:outloud/theme.dart';
@@ -132,17 +133,18 @@ class _PeopleFriendsScreenState extends State<PeopleFriendsScreen>
                   style: const TextStyle(
                       color: white, fontWeight: FontWeight.w600, fontSize: 12)),
               Expanded(
-                  child: ContentList(
+                  child: ContentList<User>(
                       items: pendingFriends,
-                      builder: (dynamic friend) =>
-                          _buildFriendRequest(friend as User, userId)))
+                      builder: (User friend) =>
+                          _buildFriendRequest(friend, userId)))
             ]));
   }
 
   Widget _buildFriends(List<User> friends) {
-    return ContentList(
+    return ContentList<User>(
         items: friends,
-        builder: (dynamic friend) => _buildPerson(friend as User));
+        builder: (User friend) => _buildPerson(friend),
+        whenEmpty: PeopleSearch());
   }
 
   @override

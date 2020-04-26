@@ -201,9 +201,10 @@ class _LoungesScreenState extends State<LoungesScreen>
             ])
           ]));
 
-  Widget _buildListLounges(List<Lounge> lounges, String userId) => ContentList(
-      items: lounges,
-      builder: (dynamic lounge) => _buildLounge(lounge as Lounge, userId));
+  Widget _buildListLounges(List<Lounge> lounges, String userId) =>
+      ContentList<Lounge>(
+          items: lounges,
+          builder: (Lounge lounge) => _buildLounge(lounge, userId));
 
   Widget _noLoungeWidget() =>
       Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[

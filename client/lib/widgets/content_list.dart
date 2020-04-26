@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:outloud/theme.dart';
 
-class ContentList extends StatelessWidget {
+class ContentList<T> extends StatelessWidget {
   const ContentList(
       {this.items,
       this.builder,
@@ -11,8 +11,8 @@ class ContentList extends StatelessWidget {
       this.reverse = false,
       this.controller});
 
-  final List<dynamic> items;
-  final Widget Function(dynamic) builder;
+  final List<T> items;
+  final Widget Function(T) builder;
   final bool withBorders;
   final Future<void> Function() onRefresh;
   final Widget whenEmpty;

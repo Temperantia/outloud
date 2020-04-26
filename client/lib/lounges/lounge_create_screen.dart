@@ -102,10 +102,9 @@ class _LoungeCreateScreenState extends State<LoungeCreateScreen> {
                           style: const TextStyle(fontWeight: FontWeight.w900)))
                 ]),
                 Expanded(
-                    child: ContentList(
+                    child: ContentList<Event>(
                         items: userEvents,
-                        builder: (dynamic event) =>
-                            _buildUserEvent(event as Event)))
+                        builder: (Event event) => _buildUserEvent(event)))
               ])));
     });
   }

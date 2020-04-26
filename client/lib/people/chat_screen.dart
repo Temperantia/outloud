@@ -59,13 +59,13 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   Widget _buildChat(User user, String userId, String picture) {
-    return ContentList(
+    return ContentList<Message>(
         reverse: true,
         withBorders: false,
         controller: _scrollController,
         items: _chat.messages,
-        builder: (dynamic message) =>
-            _buildItem(message as Message, user, userId, picture));
+        builder: (Message message) =>
+            _buildItem(message, user, userId, picture));
   }
 
   Widget _buildItem(Message message, User user, String userId, String picture) {

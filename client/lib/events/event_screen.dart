@@ -13,6 +13,7 @@ import 'package:business/events/actions/event_unregister_action.dart';
 import 'package:business/lounges/actions/lounge_remove_action.dart';
 import 'package:business/lounges/actions/lounge_kick_user_action.dart';
 import 'package:business/lounges/actions/lounge_leave_action.dart';
+import 'package:date_utils/date_utils.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
@@ -310,72 +311,139 @@ class _EventScreenState extends State<EventScreen>
   Widget _buildEventInfo(String userId, bool isUserAttending,
       List<Lounge> lounges, Map<String, List<Lounge>> eventLounges) {
     return Column(children: <Widget>[
-      Stack(alignment: Alignment.center, children: <Widget>[
-        Row(children: <Widget>[
-          Expanded(
-              child: CachedImage(widget.event.pic,
-                  height: 100,
-                  borderRadius: const BorderRadius.only(
-                      bottomRight: Radius.circular(5.0),
-                      topRight: Radius.circular(5.0)),
-                  imageType: ImageType.Event))
-        ]),
-        Row(children: <Widget>[
-          Expanded(
-              child: Container(color: black.withOpacity(0.4), height: 100.0))
-        ]),
-        Column(children: <Widget>[
-          Row(children: <Widget>[
-            Expanded(
-                child: Container(
-                    margin: const EdgeInsets.all(5),
-                    color: pink,
-                    child: Column(children: <Widget>[
+      Container(
+          height: 200.0,
+          child: Stack(alignment: Alignment.topCenter, children: <Widget>[
+            Row(children: <Widget>[
+              Expanded(
+                  child: CachedImage(widget.event.pic,
+                      borderRadius: const BorderRadius.only(
+                          bottomRight: Radius.circular(5.0),
+                          topRight: Radius.circular(5.0)),
+                      imageType: ImageType.Event))
+            ]),
+            Row(children: <Widget>[
+              Expanded(
+                  child: Column(children: <Widget>[
+                Container(color: black.withOpacity(0.4), height: 200.0)
+              ]))
+            ]),
+            Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Column(children: <Widget>[
+                  Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Row(children: <Widget>[
+                          Container(
+                              padding: const EdgeInsets.only(left: 5),
+                              color: pink,
+                              child: Row(children: <Widget>[
+                                AutoSizeText(
+                                    widget.event.dateStart.day.toString(),
+                                    style: const TextStyle(
+                                        color: white,
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.w700)),
+                                Padding(
+                                    padding: const EdgeInsets.all(5),
+                                    child: AutoSizeText(
+                                        DateFormat('MMM')
+                                            .format(widget.event.dateStart),
+                                        style: const TextStyle(
+                                            color: white,
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w700)))
+                              ])),
+                          if (!Utils.isSameDay(
+                              widget.event.dateStart, widget.event.dateEnd))
+                            Row(children: <Widget>[
+                              const Padding(
+                                padding: EdgeInsets.all(5.0),
+                                child: AutoSizeText('-',
+                                    style: TextStyle(
+                                        color: white,
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.w900)),
+                              ),
+                              Container(
+                                  padding: const EdgeInsets.only(left: 5),
+                                  color: pink,
+                                  child: Row(children: <Widget>[
+                                    AutoSizeText(
+                                        widget.event.dateEnd.day.toString(),
+                                        style: const TextStyle(
+                                            color: white,
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.w700)),
+                                    Padding(
+                                        padding: const EdgeInsets.all(5),
+                                        child: AutoSizeText(
+                                            DateFormat('MMM')
+                                                .format(widget.event.dateEnd),
+                                            style: const TextStyle(
+                                                color: white,
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w700)))
+                                  ]))
+                            ])
+                        ]),
+                        Row(children: <Widget>[
+                          Container(
+                              padding: const EdgeInsets.all(5),
+                              color: pink,
+                              child: AutoSizeText(
+                                  DateFormat('jm')
+                                      .format(widget.event.dateStart),
+                                  style: const TextStyle(
+                                      color: white,
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w900))),
+                          const Padding(
+                            padding: EdgeInsets.all(5.0),
+                            child: AutoSizeText('-',
+                                style: TextStyle(
+                                    color: white,
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w900)),
+                          ),
+                          Container(
+                              padding: const EdgeInsets.all(5),
+                              color: pink,
+                              child: AutoSizeText(
+                                  DateFormat('jm').format(widget.event.dateEnd),
+                                  style: const TextStyle(
+                                      color: white,
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w900)))
+                        ])
+                      ]),
+                  Row(children: <Widget>[
+                    Expanded(
+                        child: AutoSizeText(widget.event.name,
+                            style: const TextStyle(
+                                color: white,
+                                fontSize: 20,
+                                fontWeight: FontWeight.w700)))
+                  ]),
+                  /*  GestureDetector(
+                    onTap: () async {
+                      final GoogleMapController controller = await _controller.future;
+                      controller.animateCamera(
+                          CameraUpdate.newCameraPosition(_intialMapLocation));
+                    },
+                    child: Row(children: <Widget>[
+                      Icon(Icons.location_on, color: pink),
                       Padding(
                           padding: const EdgeInsets.all(5),
-                          child: AutoSizeText(
-                              widget.event.dateStart.day.toString(),
+                          child: AutoSizeText(_adressEvent,
                               style: const TextStyle(
                                   color: white,
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w700))),
-                      Padding(
-                          padding: const EdgeInsets.all(5),
-                          child: AutoSizeText(
-                              DateFormat('MMM').format(widget.event.dateStart),
-                              style: const TextStyle(
-                                  color: white,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w700)))
-                    ]))),
-            Expanded(
-                flex: 5,
-                child: Container(
-                    padding: const EdgeInsets.only(left: 5.0),
-                    child: AutoSizeText(widget.event.name,
-                        style: const TextStyle(
-                            color: white,
-                            fontSize: 20,
-                            fontWeight: FontWeight.w700))))
-          ]),
-          /*  GestureDetector(
-              onTap: () async {
-                final GoogleMapController controller = await _controller.future;
-                controller.animateCamera(
-                    CameraUpdate.newCameraPosition(_intialMapLocation));
-              },
-              child: Row(children: <Widget>[
-                Icon(Icons.location_on, color: pink),
-                Padding(
-                    padding: const EdgeInsets.all(5),
-                    child: AutoSizeText(_adressEvent,
-                        style: const TextStyle(
-                            color: white,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500)))
-              ])), */
-        ])
-      ]),
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500)))
+                    ])), */
+                ]))
+          ])),
       Container(
           height: 85.0,
           margin: const EdgeInsets.all(10),

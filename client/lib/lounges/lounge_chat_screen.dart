@@ -229,12 +229,12 @@ class _LoungeChatScreenState extends State<LoungeChatScreen>
         ]));
   }
 
-  Widget _buildChat(Chat chat) => ContentList(
+  Widget _buildChat(Chat chat) => ContentList<Message>(
       reverse: true,
       controller: _scrollController,
       withBorders: false,
       items: chat.messages,
-      builder: (dynamic message) => _buildMessage(message as Message));
+      builder: (Message message) => _buildMessage(message));
 
   String _dateFormatter(int timestamp) {
     final DateTime time = DateTime.fromMillisecondsSinceEpoch(timestamp);

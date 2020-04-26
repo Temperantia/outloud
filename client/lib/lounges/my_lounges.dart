@@ -34,12 +34,10 @@ class _MyLoungesScreenState extends State<MyLoungesScreen>
       Map<String, List<Lounge>> userEventLounges,
       Map<String, ChatState> loungeChatStates,
       String userId) {
-    return ContentList(
+    return ContentList<Lounge>(
         items: lounges,
-        builder: (dynamic lounge) => _buildLounge(
-            loungeChatStates[lounge.id]?.countNewMessages(),
-            lounge as Lounge,
-            userId),
+        builder: (Lounge lounge) => _buildLounge(
+            loungeChatStates[lounge.id]?.countNewMessages(), lounge, userId),
         whenEmpty: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[

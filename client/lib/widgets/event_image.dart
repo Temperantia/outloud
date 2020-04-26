@@ -1,5 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:business/classes/user_event_state.dart';
+import 'package:date_utils/date_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:outloud/theme.dart';
@@ -10,10 +11,11 @@ class EventImage extends StatelessWidget {
   const EventImage(
       {this.image,
       this.state,
-      this.size = 70.0,
+      this.size = 80.0,
       this.hasOverlay = true,
       this.isChat = false,
-      this.date,
+      this.dateStart,
+      this.dateEnd,
       this.newMessageCount});
 
   final String image;
@@ -21,15 +23,28 @@ class EventImage extends StatelessWidget {
   final double size;
   final bool hasOverlay;
   final bool isChat;
-  final DateTime date;
+  final DateTime dateStart;
+  final DateTime dateEnd;
   final int newMessageCount;
 
   @override
   Widget build(BuildContext context) {
     Widget dateWidget;
-    if (date != null) {
-      final String day = DateFormat('dd').format(date);
-      final String month = DateFormat('MMM').format(date);
+    String day = '';
+    String month = '';
+
+    if (dateStart != null) {
+      day = DateFormat('dd').format(dateStart);
+      month = DateFormat('MMM').format(dateStart);
+
+      if (dateEnd != null) {
+        if (!Utils.isSameDay(dateStart, dateEnd)) {
+          day += ' - ${DateFormat('dd').format(dateEnd)}';
+        }
+        if (dateStart.month != dateEnd.month) {
+          month += ' - ${DateFormat('MMM').format(dateEnd)}';
+        }
+      }
       dateWidget = Column(children: <Widget>[
         AutoSizeText(day,
             style: const TextStyle(

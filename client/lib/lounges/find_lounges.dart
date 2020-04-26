@@ -32,10 +32,10 @@ class _FindLoungesScreenState extends State<FindLoungesScreen>
       List<Event> userEvents,
       Map<String, UserEventState> userEventStates,
       Map<String, List<Lounge>> userEventLounges) {
-    return ContentList(
+    return ContentList<Event>(
         items: userEvents,
-        builder: (dynamic event) => _buildEvent(
-            userLounges, event as Event, userEventStates, userEventLounges),
+        builder: (Event event) =>
+            _buildEvent(userLounges, event, userEventStates, userEventLounges),
         whenEmpty: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[

@@ -20,9 +20,6 @@ class _EventsWidgetState extends State<EventsWidget>
 
     return TabBarView(
         physics: const NeverScrollableScrollPhysics(),
-        children: <Widget>[
-          FindEventsScreen(),
-          MyEventsScreen(),
-        ]);
+        children: <Widget>[FindEventsScreen(), MyEventsScreen()]);
   }
 }

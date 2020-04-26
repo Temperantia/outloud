@@ -54,7 +54,8 @@ class _Register3ScreenState extends State<Register3Screen> {
     super.dispose();
   }
 
-  Widget _buildAboutBloc(String title, {List<String> placeholders}) =>
+  Widget _buildAboutBloc(String title, String key,
+          {List<String> placeholders}) =>
       Row(children: <Widget>[
         Padding(
             padding: const EdgeInsets.all(8.0),
@@ -63,7 +64,7 @@ class _Register3ScreenState extends State<Register3Screen> {
                 children: <Widget>[
                   AutoSizeText(title.toUpperCase(),
                       style: const TextStyle(fontWeight: FontWeight.bold)),
-                  _buildAboutController(title, _controllers[title],
+                  _buildAboutController(title, _controllers[key],
                       placeholders: placeholders)
                 ]))
       ]);
@@ -261,17 +262,26 @@ class _Register3ScreenState extends State<Register3Screen> {
                                 FlutterI18n.translate(
                                     context, 'REGISTER_3.SUBTITLE'),
                                 style: const TextStyle(color: grey)),
-                            _buildAboutBloc(FlutterI18n.translate(
-                                context, 'REGISTER_3.LOCATION')),
-                            _buildAboutBloc(FlutterI18n.translate(
-                                context, 'REGISTER_3.GENDER')),
-                            _buildAboutBloc(FlutterI18n.translate(
-                                context, 'REGISTER_3.PRONOUNS')),
-                            _buildAboutBloc(FlutterI18n.translate(
-                                context, 'REGISTER_3.SEXUAL_ORIENTATION')),
+                            _buildAboutBloc(
+                                FlutterI18n.translate(
+                                    context, 'REGISTER_3.LOCATION'),
+                                'LOCATION'),
+                            _buildAboutBloc(
+                                FlutterI18n.translate(
+                                    context, 'REGISTER_3.GENDER'),
+                                'GENDER'),
+                            _buildAboutBloc(
+                                FlutterI18n.translate(
+                                    context, 'REGISTER_3.PRONOUNS'),
+                                'PRONOUNS'),
+                            _buildAboutBloc(
+                                FlutterI18n.translate(
+                                    context, 'REGISTER_3.SEXUAL_ORIENTATION'),
+                                'SEXUAL ORIENTATION'),
                             _buildAboutBloc(
                                 FlutterI18n.translate(
                                     context, 'REGISTER_3.EDUCATION'),
+                                'EDUCATION',
                                 placeholders: <String>[
                                   FlutterI18n.translate(
                                       context, 'REGISTER_3.SCHOOL'),
@@ -281,6 +291,7 @@ class _Register3ScreenState extends State<Register3Screen> {
                             _buildAboutBloc(
                                 FlutterI18n.translate(
                                     context, 'REGISTER_3.OCCUPATION'),
+                                'OCCUPATION',
                                 placeholders: <String>[
                                   FlutterI18n.translate(
                                       context, 'REGISTER_3.POSITION'),
