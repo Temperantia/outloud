@@ -21,7 +21,7 @@ class ContentListItem extends StatelessWidget {
     return GestureDetector(
         onTap: () => onTap(),
         child: Container(
-            decoration: BoxDecoration(color: Colors.transparent),
+            decoration: const BoxDecoration(color: Colors.transparent),
             padding: const EdgeInsets.all(5.0),
             child: Row(children: <Widget>[
               if (leading != null) leading,
