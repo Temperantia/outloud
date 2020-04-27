@@ -105,17 +105,18 @@ class _ViewState extends State<View> {
                     arguments: <String, dynamic>{'user': user}));
                 setState(() => _showUserSettings = false);
               },
-              child: Row(children: <Widget>[
-                Container(
-                    width: 20.0,
-                    height: 20.0,
-                    child: Image.asset('images/iconView.png', color: white)),
-                Padding(
-                    padding: const EdgeInsets.only(left: 8.0),
-                    child: AutoSizeText(
-                        FlutterI18n.translate(context, 'MENU_USER.OPTION_1'),
-                        style: const TextStyle(color: white))),
-              ])),
+              child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                  child: Row(children: <Widget>[
+                    Image.asset('images/iconView.png',
+                        width: 20.0, height: 20.0, color: white),
+                    Padding(
+                        padding: const EdgeInsets.only(left: 8.0),
+                        child: AutoSizeText(
+                            FlutterI18n.translate(
+                                context, 'MENU_USER.OPTION_1'),
+                            style: const TextStyle(color: white)))
+                  ]))),
           GestureDetector(
               onTap: () {
                 _dispatch(NavigateAction<AppState>.pushNamed(ProfileScreen.id,
@@ -125,36 +126,39 @@ class _ViewState extends State<View> {
                     }));
                 setState(() => _showUserSettings = false);
               },
-              child: Row(children: <Widget>[
-                Container(
-                    width: 20.0,
-                    height: 20.0,
-                    child: Image.asset('images/iconEdit.png', color: white)),
-                Padding(
-                    padding: const EdgeInsets.only(left: 8.0),
-                    child: AutoSizeText(
-                        FlutterI18n.translate(context, 'MENU_USER.OPTION_2'),
-                        style: const TextStyle(color: white))),
-              ])),
+              child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                  child: Row(children: <Widget>[
+                    Image.asset('images/iconEdit.png',
+                        width: 20.0, height: 20.0, color: white),
+                    Padding(
+                        padding: const EdgeInsets.only(left: 8.0),
+                        child: AutoSizeText(
+                            FlutterI18n.translate(
+                                context, 'MENU_USER.OPTION_2'),
+                            style: const TextStyle(color: white))),
+                  ]))),
           const Divider(color: white),
           GestureDetector(
               onTap: () {
-                Navigator.of(context)
-                    .popUntil((Route<dynamic> route) => route.isFirst);
+                /*  if (Navigator.of(context).canPop())
+                  Navigator.of(context).popUntil(
+                      (Route<dynamic> route) => route.settings.name == 'Home'); */
                 _dispatch(AppDisconnectAction());
                 setState(() => _showUserSettings = false);
               },
-              child: Row(children: <Widget>[
-                Container(
-                    width: 20.0,
-                    height: 20.0,
-                    child: Image.asset('images/iconLeave.png', color: white)),
-                Padding(
-                    padding: const EdgeInsets.only(left: 8.0),
-                    child: AutoSizeText(
-                        FlutterI18n.translate(context, 'MENU_USER.OPTION_3'),
-                        style: const TextStyle(color: white))),
-              ]))
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                child: Row(children: <Widget>[
+                  Image.asset('images/iconLeave.png',
+                      width: 20.0, height: 20.0, color: white),
+                  Padding(
+                      padding: const EdgeInsets.only(left: 8.0),
+                      child: AutoSizeText(
+                          FlutterI18n.translate(context, 'MENU_USER.OPTION_3'),
+                          style: const TextStyle(color: white))),
+                ]),
+              ))
         ]));
   }
 

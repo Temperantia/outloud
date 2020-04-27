@@ -9,6 +9,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:outloud/functions/firebase.dart';
 import 'package:outloud/theme.dart';
+import 'package:outloud/widgets/multiline_text_field.dart';
 
 class MessageBar extends StatefulWidget {
   const MessageBar(
@@ -62,6 +63,7 @@ class _MessageBarState extends State<MessageBar> {
   @override
   Widget build(BuildContext context) {
     return Container(
+        height: 50.0,
         decoration: BoxDecoration(
             color: orangeLight.withOpacity(0.5),
             borderRadius: BorderRadius.circular(5.0)),
@@ -77,17 +79,11 @@ class _MessageBarState extends State<MessageBar> {
                     child: GestureDetector(
                         onTap: () {}, child: Icon(Icons.add, color: white))), */
           Expanded(
-              child: Column(children: <Widget>[
-            Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: TextField(
-                    keyboardType: TextInputType.multiline,
-                    maxLines: null,
-                    controller: widget.messageController,
-                    decoration: InputDecoration.collapsed(
-                        hintText: widget.hint,
-                        hintStyle: const TextStyle(color: white))))
-          ])),
+              child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: MultilineTextField(
+                      controller: widget.messageController,
+                      hint: widget.hint))),
           /*   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: GestureDetector(

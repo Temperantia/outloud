@@ -1,7 +1,5 @@
 import 'package:async_redux/async_redux.dart';
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:business/actions/app_navigate_action.dart';
-import 'package:business/app.dart';
 import 'package:business/app_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
@@ -20,18 +18,24 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen>
-    with SingleTickerProviderStateMixin, ChangeNotifier {
+    with SingleTickerProviderStateMixin {
   TabController _tabController;
+  void Function(ReduxAction<AppState>) _dispatch;
 
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(vsync: this, length: 3 /*4*/);
+    _tabController = TabController(vsync: this, length: 3 /*4*/)
+      ..addListener(() {
+        if (!_tabController.indexIsChanging) {
+          setState(() => _dispatch(AppNavigateAction(_tabController.index)));
+        }
+      });
 
-    _requestLocationPermission();
+    //_requestLocationPermission();
   }
 
-  Future<bool> _requestLocationPermission() async {
+  /*  Future<bool> _requestLocationPermission() async {
     final bool granted = await permissionLocation.requestLocationPermission();
     if (!granted) {
       onPermissionDenied();
@@ -64,7 +68,7 @@ class _HomeScreenState extends State<HomeScreen>
               ]);
         });
   }
-
+ */
   @override
   void dispose() {
     _tabController.dispose();
@@ -125,14 +129,7 @@ class _HomeScreenState extends State<HomeScreen>
             void Function(ReduxAction<AppState>) dispatch,
             dynamic model,
             Widget child) {
-          if (!_tabController.hasListeners) {
-            _tabController.addListener(() {
-              if (!_tabController.indexIsChanging &&
-                  _tabController.previousIndex != _tabController.index) {
-                dispatch(AppNavigateAction(_tabController.index));
-              }
-            });
-          }
+          _dispatch = dispatch;
           _tabController.animateTo(state.homePageIndex);
 
           return _buildBody();

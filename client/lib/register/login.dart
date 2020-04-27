@@ -47,13 +47,9 @@ class LoginScreen extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: <Widget>[
-                            Container(
-                                width: 100.0,
-                                height: 100.0,
-                                child: Image.asset('images/OL-draft2a.png')),
-                            Container(
-                                width: 200.0,
-                                child: Image.asset('images/OL-blue.png')),
+                            Image.asset('images/OL-draft2a.png',
+                                width: 100.0, height: 100.0),
+                            Image.asset('images/OL-blue.png', width: 200.0),
                             Column(children: <Widget>[
                               AutoSizeText(
                                   FlutterI18n.translate(
@@ -65,14 +61,12 @@ class LoginScreen extends StatelessWidget {
                                   style: const TextStyle(color: grey))
                             ]),
                             Column(children: <Widget>[
-                              Container(
+                              Image.asset('images/illustrationSplash.png',
                                   width:
                                       MediaQuery.of(context).size.width * 0.9,
                                   height:
                                       MediaQuery.of(context).size.width * 0.65,
-                                  child: Image.asset(
-                                      'images/illustrationSplash.png',
-                                      fit: BoxFit.fitWidth)),
+                                  fit: BoxFit.fitWidth),
                               Button(
                                   text: FlutterI18n.translate(
                                       context, 'LOGIN.FACEBOOK'),
@@ -84,7 +78,7 @@ class LoginScreen extends StatelessWidget {
                                     dispatch(LoginFacebookAction());
                                     dispatch(NavigateAction<AppState>.pushNamed(
                                         Register1Screen.id));
-                                  }),
+                                  })
                             ]),
                             if (Platform.isAndroid)
                               Button(
@@ -108,6 +102,14 @@ class LoginScreen extends StatelessWidget {
                                     dispatch(NavigateAction<AppState>.pushNamed(
                                         Register1Screen.id));
                                   }),
+/*                             Button(
+                                text: 'Email ou Téléphone',
+                                width: 300.0,
+                                onPressed: () {
+                                  dispatch(LoginEmailPhoneAction());
+                                  dispatch(NavigateAction<AppState>.pushNamed(
+                                      Register1Screen.id));
+                                }) */
                           ]))
                 ])));
   }

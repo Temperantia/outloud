@@ -23,7 +23,7 @@ GlobalKey<NavigatorState> navigatorKey;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+  SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
       statusBarBrightness: Brightness.light,
       statusBarColor: Colors.transparent,
       statusBarIconBrightness: Brightness.light));

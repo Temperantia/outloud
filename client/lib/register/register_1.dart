@@ -53,10 +53,8 @@ class _Register1ScreenState extends State<Register1Screen> {
                   child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: <Widget>[
-                        Container(
-                            width: 50.0,
-                            height: 50.0,
-                            child: Image.asset('images/OL-draft2a.png')),
+                        Image.asset('images/OL-draft2a.png',
+                            width: 50.0, height: 50.0),
                         AutoSizeText(
                             FlutterI18n.translate(
                                 context, 'REGISTER_1.SIGNED_AS'),

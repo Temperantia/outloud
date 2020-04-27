@@ -70,7 +70,7 @@ class _LoungesScreenState extends State<LoungesScreen>
             arguments: <String, dynamic>{'lounge': lounge, 'isEdit': false})),
         child: Container(
             padding: const EdgeInsets.all(10.0),
-            decoration: BoxDecoration(color: Colors.transparent),
+            decoration: const BoxDecoration(color: Colors.transparent),
             child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,

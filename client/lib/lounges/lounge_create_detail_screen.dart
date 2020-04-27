@@ -9,6 +9,7 @@ import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:outloud/theme.dart';
 import 'package:outloud/widgets/button.dart';
 import 'package:outloud/widgets/lounge_member_range_bar.dart';
+import 'package:outloud/widgets/multiline_text_field.dart';
 import 'package:outloud/widgets/view.dart';
 import 'package:provider_for_redux/provider_for_redux.dart';
 
@@ -102,32 +103,31 @@ class _LoungeCreateDetailScreenState extends State<LoungeCreateDetailScreen> {
   Widget _buildLoungeDescription() {
     return Container(
         padding: const EdgeInsets.all(15),
-        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: <
-            Widget>[
-          AutoSizeText(
-              FlutterI18n.translate(
-                  context, 'LOUNGE_CREATE_DETAIL.LOUNGE_DESCRIPTION'),
-              style: const TextStyle(
-                  color: black, fontSize: 15, fontWeight: FontWeight.w700)),
-          Container(
-              constraints: BoxConstraints.expand(
-                height:
-                    Theme.of(context).textTheme.display1.fontSize * 1.1 + 100,
-              ),
-              padding: const EdgeInsets.only(left: 10.0, top: 1.0, right: 10.0),
-              color: whiteAlt,
-              child: TextField(
-                  controller: _descriptionController,
-                  keyboardType: TextInputType.text,
-                  inputFormatters: <TextInputFormatter>[
-                    LengthLimitingTextInputFormatter(100),
-                  ],
-                  decoration: InputDecoration(
-                      hintStyle: const TextStyle(color: orange),
-                      border: InputBorder.none,
-                      hintText: FlutterI18n.translate(
-                          context, 'LOUNGE_CREATE_DETAIL.GROUP_DESCRIPTION'))))
-        ]));
+        child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              AutoSizeText(
+                  FlutterI18n.translate(
+                      context, 'LOUNGE_CREATE_DETAIL.LOUNGE_DESCRIPTION'),
+                  style: const TextStyle(
+                      color: black, fontSize: 15, fontWeight: FontWeight.w700)),
+              Container(
+                  constraints: BoxConstraints.expand(
+                    height:
+                        Theme.of(context).textTheme.display1.fontSize * 1.1 +
+                            100,
+                  ),
+                  padding:
+                      const EdgeInsets.only(left: 10.0, top: 1.0, right: 10.0),
+                  color: whiteAlt,
+                  child: MultilineTextField(
+                      controller: _descriptionController,
+                      formatters: <TextInputFormatter>[
+                        LengthLimitingTextInputFormatter(100),
+                      ],
+                      hint: FlutterI18n.translate(
+                          context, 'LOUNGE_CREATE_DETAIL.GROUP_DESCRIPTION')))
+            ]));
   }
 
   @override

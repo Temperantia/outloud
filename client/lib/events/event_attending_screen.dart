@@ -1,16 +1,38 @@
 import 'package:async_redux/async_redux.dart'
     show ReduxAction, NavigateAction, Store;
-import 'package:auto_size_text/auto_size_text.dart';
-import 'package:business/app_state.dart';
-import 'package:business/classes/event.dart';
-import 'package:business/classes/user.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_i18n/flutter_i18n.dart';
-import 'package:outloud/profile/profile_screen.dart';
-import 'package:outloud/theme.dart';
-import 'package:outloud/widgets/cached_image.dart';
-import 'package:outloud/widgets/view.dart';
-import 'package:provider_for_redux/provider_for_redux.dart';
+import 'package:auto_size_text/auto_size_text.dart' show AutoSizeText;
+import 'package:business/app_state.dart' show AppState;
+import 'package:business/classes/event.dart' show Event;
+import 'package:business/classes/user.dart' show User;
+import 'package:flutter/material.dart'
+    show
+        BorderRadius,
+        BoxDecoration,
+        BuildContext,
+        Column,
+        Container,
+        Divider,
+        EdgeInsets,
+        Expanded,
+        Flexible,
+        FontWeight,
+        GestureDetector,
+        GridView,
+        Row,
+        SliverGridDelegateWithFixedCrossAxisCount,
+        State,
+        StatefulWidget,
+        TextAlign,
+        TextOverflow,
+        TextStyle,
+        Widget,
+        Wrap;
+import 'package:flutter_i18n/flutter_i18n.dart' show FlutterI18n;
+import 'package:outloud/profile/profile_screen.dart' show ProfileScreen;
+import 'package:outloud/theme.dart' show black, orange, orangeLight;
+import 'package:outloud/widgets/cached_image.dart' show CachedImage, ImageType;
+import 'package:outloud/widgets/view.dart' show View;
+import 'package:provider_for_redux/provider_for_redux.dart' show ReduxConsumer;
 
 class EventAttendingScreen extends StatefulWidget {
   const EventAttendingScreen(this.event);

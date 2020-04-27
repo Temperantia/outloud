@@ -20,22 +20,17 @@ Future<void> showLoaderAnimation(
       Tween<double>(begin: 0.0, end: 0.1).animate(_animationController);
 
   showDialog(
-    context: context,
-    barrierDismissible: false,
-    builder: (BuildContext context) {
-      return Dialog(
-        elevation: 0.0,
-        backgroundColor: Colors.transparent,
-        child: RotationTransition(
-          turns: _angleAnimation,
-          child: Container(
-              width: 100,
-              height: 100,
-              child: Image.asset('images/iconLoader.png')),
-        ),
-      );
-    },
-  );
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return Dialog(
+            elevation: 0.0,
+            backgroundColor: Colors.transparent,
+            child: RotationTransition(
+                turns: _angleAnimation,
+                child: Image.asset('images/iconLoader.png',
+                    width: 100.0, height: 100.0)));
+      });
 
   final void Function(AnimationStatus) _listener = (AnimationStatus status) {
     if (status == AnimationStatus.completed) {

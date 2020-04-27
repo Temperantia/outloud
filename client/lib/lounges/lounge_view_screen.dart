@@ -16,6 +16,7 @@ import 'package:outloud/widgets/button.dart';
 import 'package:outloud/widgets/cached_image.dart';
 import 'package:outloud/widgets/lounge_banner.dart';
 import 'package:outloud/widgets/lounge_member_range_bar.dart';
+import 'package:outloud/widgets/multiline_text_field.dart';
 import 'package:outloud/widgets/view.dart';
 import 'package:provider_for_redux/provider_for_redux.dart';
 
@@ -191,16 +192,13 @@ class _LoungeViewScreenState extends State<LoungeViewScreen> {
                 padding:
                     const EdgeInsets.only(left: 10.0, top: 1.0, right: 10.0),
                 color: orangeLight,
-                child: TextField(
+                child: MultilineTextField(
                     controller: _descriptionController,
-                    keyboardType: TextInputType.text,
-                    inputFormatters: <TextInputFormatter>[
-                      LengthLimitingTextInputFormatter(100),
+                    formatters: <TextInputFormatter>[
+                      LengthLimitingTextInputFormatter(100)
                     ],
-                    decoration: InputDecoration(
-                        border: InputBorder.none,
-                        hintText: FlutterI18n.translate(
-                            context, 'LOUNGE_EDIT.GROUP_DESCRIPTION'))))
+                    hint: FlutterI18n.translate(
+                        context, 'LOUNGE_EDIT.GROUP_DESCRIPTION')))
           else
             Container(
                 constraints: BoxConstraints.expand(

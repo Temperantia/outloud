@@ -109,11 +109,7 @@ class _EventScreenState extends State<EventScreen>
                         ]),
                     child: Column(mainAxisSize: MainAxisSize.min, children: <
                         Widget>[
-                      const Icon(
-                        MdiIcons.handRight,
-                        color: pink,
-                        size: 60,
-                      ),
+                      const Icon(MdiIcons.handRight, color: pink, size: 60),
                       AutoSizeText(
                           FlutterI18n.translate(context, 'EVENT.HOLD_UP'),
                           style: const TextStyle(
@@ -450,27 +446,7 @@ class _EventScreenState extends State<EventScreen>
           child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                Expanded(
-                    child: Container(
-                        margin: const EdgeInsets.only(right: 5.0),
-                        decoration:
-                            BoxDecoration(border: Border.all(color: pinkLight)),
-                        child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              AutoSizeText(
-                                  '${DateFormat('jm').format(widget.event.dateStart)} -',
-                                  style: const TextStyle(
-                                      color: pinkLight,
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.w900)),
-                              AutoSizeText(
-                                  DateFormat('jm').format(widget.event.dateEnd),
-                                  style: const TextStyle(
-                                      color: pinkLight,
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.w900))
-                            ]))),
+                _buildLikeButton(userId),
                 _buildLoungeButton(isUserAttending, lounges, eventLounges),
                 _buildAttendingButton(userId, isUserAttending, lounges)
               ])),
@@ -496,6 +472,35 @@ class _EventScreenState extends State<EventScreen>
     ]);
   }
 
+  Widget _buildLikeButton(String userId) {
+    final bool hasLiked = widget.event.likes.contains(userId);
+    return Expanded(
+        child: GestureDetector(
+            onTap: () => _dispatch(hasLiked
+                ? EventUnlikeAction(widget.event)
+                : EventLikeAction(widget.event)),
+            child: Container(
+                margin: const EdgeInsets.only(right: 5.0),
+                decoration: BoxDecoration(
+                    color: hasLiked ? pink : Colors.transparent,
+                    border: Border.all(color: pink)),
+                child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Padding(
+                                padding: const EdgeInsets.only(right: 5.0),
+                                child: Icon(MdiIcons.heartOutline,
+                                    color: hasLiked ? white : pink)),
+                            AutoSizeText(widget.event.likes.length.toString(),
+                                style:
+                                    TextStyle(color: hasLiked ? white : pink))
+                          ])
+                    ]))));
+  }
+
   Widget _buildLoungeButton(bool isUserAttending, List<Lounge> lounges,
       Map<String, List<Lounge>> eventLounges) {
     Widget w;
@@ -514,10 +519,8 @@ class _EventScreenState extends State<EventScreen>
               child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
-                    Container(
-                        width: 20.0,
-                        height: 20.0,
-                        child: Image.asset('images/iconLounge.png')),
+                    Image.asset('images/iconLounge.png',
+                        width: 20.0, height: 20.0),
                     Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
@@ -546,10 +549,8 @@ class _EventScreenState extends State<EventScreen>
                     Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: <Widget>[
-                          Container(
-                              width: 20.0,
-                              height: 20.0,
-                              child: Image.asset('images/iconLounge.png')),
+                          Image.asset('images/iconLounge.png',
+                              width: 20.0, height: 20.0),
                           AutoSizeText(
                               lounges == null ? '0' : lounges.length.toString(),
                               style: const TextStyle(
@@ -576,10 +577,8 @@ class _EventScreenState extends State<EventScreen>
                 Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[
-                      Container(
-                          width: 20.0,
-                          height: 20.0,
-                          child: Image.asset('images/iconLounge.png')),
+                      Image.asset('images/iconLounge.png',
+                          width: 20.0, height: 20.0),
                       AutoSizeText(
                           FlutterI18n.translate(context, 'EVENT.ATTEND'),
                           style: const TextStyle(

@@ -12,7 +12,6 @@ import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:outloud/functions/firebase.dart';
 import 'package:outloud/theme.dart';
-import 'package:outloud/widgets/button.dart';
 import 'package:outloud/widgets/cached_image.dart';
 import 'package:outloud/widgets/view.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
@@ -68,6 +67,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   void dispose() {
+    if (_isEdition) {
+      _save();
+    }
     for (final MapEntry<String, List<dynamic>> entry in _controllers.entries) {
       if (entry is List<TextEditingController>)
         for (final TextEditingController textEditingController
@@ -77,6 +79,31 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
     _interestController.dispose();
     super.dispose();
+  }
+
+  Future<void> _save() async {
+    _user.home =
+        (_controllers['LOCATION'][0] as TextEditingController).text.trim();
+    _user.gender = _controllers['GENDER'][0] as String;
+    _user.pronoun =
+        (_controllers['PRONOUNS'][0] as TextEditingController).text.trim();
+    _user.orientation = _controllers['SEXUAL ORIENTATION'][0] as String;
+    _user.school =
+        (_controllers['EDUCATION'][0] as TextEditingController).text.trim();
+    _user.degree =
+        (_controllers['EDUCATION'][1] as TextEditingController).text.trim();
+    _user.position =
+        (_controllers['OCCUPATION'][0] as TextEditingController).text.trim();
+    _user.employer =
+        (_controllers['OCCUPATION'][1] as TextEditingController).text.trim();
+    _user.pics =
+        await Future.wait<String>(_pictures.map((dynamic picture) async {
+      if (picture is Uint8List) {
+        return await saveImage(picture, 'images/users/${_user.id}');
+      }
+      return picture as String;
+    }).toList());
+    updateUser(_user);
   }
 
   Future<void> _addPicture(int index) async {
@@ -228,7 +255,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               placeholders: <String>[
                 FlutterI18n.translate(context, 'PROFILE.POSITION'),
                 FlutterI18n.translate(context, 'PROFILE.EMPLOYER')
-              ]),
+              ])
         ]));
   }
 
@@ -290,7 +317,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       GestureDetector(
                           onTap: () => setState(
                               () => textEditingController.value.clear()),
-                          child: Icon(Icons.close, color: orange)),
+                          child: Icon(Icons.close, color: orange))
                   ]))
       else if (controller is List<dynamic>)
         Container(
@@ -555,68 +582,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
           showNavBar: false,
           isEditing: _isEdition,
           user: _user,
-          child: Column(children: <Widget>[
-            Expanded(
-                child: ListView(children: <Widget>[
-              _buildPicture(state.userState.user.id),
-              _buildAbout(),
-              const Divider(color: orange),
-              _buildInterests(),
-            ])),
-            if (_isEdition)
-              Container(
-                  padding: const EdgeInsets.only(top: 5.0),
-                  decoration: const BoxDecoration(
-                      gradient:
-                          LinearGradient(colors: <Color>[pinkLight, pink])),
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Button(
-                            text:
-                                FlutterI18n.translate(context, 'PROFILE.SAVE'),
-                            onPressed: () async {
-                              _user.home = (_controllers['LOCATION'][0]
-                                      as TextEditingController)
-                                  .text
-                                  .trim();
-                              _user.gender =
-                                  _controllers['GENDER'][0] as String;
-                              _user.pronoun = (_controllers['PRONOUNS'][0]
-                                      as TextEditingController)
-                                  .text
-                                  .trim();
-                              _user.orientation =
-                                  _controllers['SEXUAL ORIENTATION'][0]
-                                      as String;
-                              _user.school = (_controllers['EDUCATION'][0]
-                                      as TextEditingController)
-                                  .text
-                                  .trim();
-                              _user.degree = (_controllers['EDUCATION'][1]
-                                      as TextEditingController)
-                                  .text
-                                  .trim();
-                              _user.position = (_controllers['OCCUPATION'][0]
-                                      as TextEditingController)
-                                  .text
-                                  .trim();
-                              _user.employer = (_controllers['OCCUPATION'][1]
-                                      as TextEditingController)
-                                  .text
-                                  .trim();
-                              _user.pics = await Future.wait<String>(
-                                  _pictures.map((dynamic picture) async {
-                                if (picture is Uint8List) {
-                                  return await saveImage(
-                                      picture, 'images/users/${_user.id}');
-                                }
-                                return picture as String;
-                              }).toList());
-                              updateUser(_user);
-                              dispatch(NavigateAction<AppState>.pop());
-                            })
-                      ]))
+          child: ListView(children: <Widget>[
+            _buildPicture(state.userState.user.id),
+            _buildAbout(),
+            const Divider(color: orange),
+            _buildInterests()
           ]));
     });
   }

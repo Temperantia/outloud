@@ -1,16 +1,16 @@
 import 'package:async_redux/async_redux.dart';
 import 'package:business/app.dart';
 import 'package:business/app_state.dart';
+import 'package:business/classes/user.dart';
 import 'package:business/login/actions/login_error_action.dart';
+import 'package:business/models/user.dart';
+import 'package:business/user/actions/user_listen_action.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
 
 class LoginPhoneAction extends ReduxAction<AppState> {
-  LoginPhoneAction(this._phone, this._context);
+  LoginPhoneAction(this._phone);
 
   final String _phone;
-  final BuildContext _context;
-  static String smsCode;
 
   @override
   Future<AppState> reduce() async {
@@ -18,7 +18,7 @@ class LoginPhoneAction extends ReduxAction<AppState> {
         phoneNumber: _phone,
         timeout: const Duration(seconds: 60),
         verificationCompleted: (AuthCredential authCredential) =>
-            _verificationComplete(authCredential, _context),
+            _verificationComplete(authCredential),
         verificationFailed: (AuthException authException) =>
             _verificationFailed(authException),
         codeSent: (String verificationId, [int code]) =>
@@ -27,16 +27,21 @@ class LoginPhoneAction extends ReduxAction<AppState> {
     return state.copy(loginState: state.loginState.copy());
   }
 
-  Future<void> _verificationComplete(
-      AuthCredential authCredential, BuildContext context) async {
-    //final AuthResult authResult =
-    //   await firebaseAuth.signInWithCredential(authCredential);
-    //register()
+  Future<void> _verificationComplete(AuthCredential authCredential) async {
+    final AuthResult result =
+        await firebaseAuth.signInWithCredential(authCredential);
+    final User user = User(id: result.user.uid);
+
+    if (getUser(user.id) != null) {
+      dispatch(UserListenAction(user.id));
+    }
+
+    return state.copy(
+        loginState: state.loginState.copy(user: user, id: user.id));
   }
 
   void _smsCodeSent(String verificationId, List<int> code) {
     // set the verification code so that we can use it to log the user in
-    smsCode = verificationId;
   }
 
   void _verificationFailed(AuthException authException) {
