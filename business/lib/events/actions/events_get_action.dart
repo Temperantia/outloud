@@ -52,7 +52,7 @@ class EventsGetAction extends ReduxAction<AppState> {
     } */
 
     for (final Event event in events) {
-      if (event.pic.contains('.mp4')) {
+      if (event.pic != null && event.pic.contains('.mp4')) {
         event.pic = null;
       }
     }

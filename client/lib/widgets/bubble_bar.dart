@@ -9,13 +9,12 @@ import 'package:outloud/theme.dart';
 final Widget Function(String image, {ThemeStyle themeStyle}) _buildIcon =
     (String image, {ThemeStyle themeStyle}) =>
         Stack(alignment: Alignment.bottomLeft, children: <Widget>[
-          Container(
+          Image.asset(image,
               width: 30.0,
               height: 30.0,
-              child: Image.asset(image,
-                  color: themeStyle == null
-                      ? white.withOpacity(0.4)
-                      : white.withOpacity(0.8))),
+              color: themeStyle == null
+                  ? white.withOpacity(0.4)
+                  : white.withOpacity(0.8))
         ]);
 
 final BottomNavigationBarItem Function(String, ThemeStyle) _buildItem =
@@ -62,6 +61,6 @@ final List<BottomNavigationBarItem> Function(BuildContext, int, int, ThemeStyle)
         <BottomNavigationBarItem>[
           //_buildItem('images/OL-draft1aWhite.png', themeStyle),
           _buildItem('images/iconEvent.png', themeStyle),
-          _buildItemWithPing('images/iconLounge.png', loungePings, themeStyle),
+          //_buildItemWithPing('images/iconLounge.png', loungePings, themeStyle),
           _buildItemWithPing('images/iconPeople.png', pings, themeStyle)
         ];

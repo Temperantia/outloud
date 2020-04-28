@@ -14,7 +14,6 @@ import 'package:outloud/routes.dart';
 import 'package:outloud/theme.dart';
 import 'package:outloud/widgets/error_widget.dart';
 import 'package:outloud/widgets/eula_widget.dart';
-//import 'package:outloud/widgets/eula_widget.dart';
 import 'package:outloud/widgets/loading.dart';
 import 'package:provider_for_redux/provider_for_redux.dart';
 

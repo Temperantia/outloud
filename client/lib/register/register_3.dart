@@ -231,10 +231,8 @@ class _Register3ScreenState extends State<Register3Screen> {
                       Row(children: <Widget>[
                         Expanded(child: Container(width: 0.0, height: 0.0)),
                         Expanded(
-                            child: Container(
-                                width: 50.0,
-                                height: 50.0,
-                                child: Image.asset('images/OL-draft2a.png'))),
+                            child: Image.asset('images/OL-draft2a.png',
+                                width: 50.0, height: 50.0)),
                         Expanded(
                             child: Align(
                                 alignment: Alignment.centerRight,

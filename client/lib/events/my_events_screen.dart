@@ -3,15 +3,11 @@ import 'package:async_redux/async_redux.dart'
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:business/app_state.dart';
 import 'package:business/classes/event.dart';
-import 'package:business/classes/lounge.dart';
 import 'package:business/classes/user_event_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:outloud/events/event_screen.dart';
-import 'package:outloud/lounges/lounge_chat_screen.dart';
-import 'package:outloud/lounges/lounges_screen.dart';
 import 'package:outloud/theme.dart';
-import 'package:outloud/widgets/button.dart';
 import 'package:intl/intl.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:outloud/widgets/content_list.dart';
@@ -30,8 +26,10 @@ class _MyEventsScreen extends State<MyEventsScreen>
   @override
   bool get wantKeepAlive => true;
 
-  Widget _buildUserEvent(Event event,
-      Map<String, UserEventState> userEventStates, List<Lounge> userLounges) {
+  Widget _buildUserEvent(
+      Event event,
+      Map<String, UserEventState>
+          userEventStates /* , List<Lounge> userLounges */) {
     String time = '';
     String timeEnd = '';
 
@@ -51,9 +49,9 @@ class _MyEventsScreen extends State<MyEventsScreen>
       stateMessage = FlutterI18n.translate(context, 'MY_EVENTS.LIKED');
     }
 
-    final Lounge lounge = userLounges.firstWhere(
+    /*   final Lounge lounge = userLounges.firstWhere(
         (Lounge lounge) => lounge.eventId == event.id,
-        orElse: () => null);
+        orElse: () => null); */
 
     if (event == null) {
       return Container(width: 0.0, height: 0.0);
@@ -79,7 +77,7 @@ class _MyEventsScreen extends State<MyEventsScreen>
                   AutoSizeText(stateMessage)
                 ])
           ]),
-      buttons: lounge == null
+      /*  buttons: lounge == null
           ? Button(
               text: FlutterI18n.translate(context, 'MY_EVENTS.FIND_LOUNGES'),
               height: 30.0,
@@ -95,16 +93,18 @@ class _MyEventsScreen extends State<MyEventsScreen>
               backgroundOpacity: 1.0,
               onPressed: () => _dispatch(NavigateAction<AppState>.pushNamed(
                   LoungeChatScreen.id,
-                  arguments: lounge))),
+                  arguments: lounge))), */
     );
   }
 
-  Widget _buildUserEvents(List<Event> userEvents,
-      Map<String, UserEventState> userEventStates, List<Lounge> userLounges) {
+  Widget _buildUserEvents(
+      List<Event> userEvents,
+      Map<String, UserEventState>
+          userEventStates /* , List<Lounge> userLounges */) {
     return ContentList<Event>(
         items: userEvents,
         builder: (Event event) =>
-            _buildUserEvent(event, userEventStates, userLounges),
+            _buildUserEvent(event, userEventStates /* , userLounges */),
         whenEmpty: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
@@ -137,7 +137,7 @@ class _MyEventsScreen extends State<MyEventsScreen>
         Widget child) {
       _dispatch = dispatch;
       return _buildUserEvents(state.userState.events,
-          state.userState.user.events, state.userState.lounges);
+          state.userState.user.events /* , state.userState.lounges */);
     });
   }
 }

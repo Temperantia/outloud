@@ -7,6 +7,7 @@ import 'package:business/classes/user.dart';
 import 'package:business/actions/app_disconnect_action.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gradient_bottom_navigation_bar/gradient_bottom_navigation_bar.dart';
 import 'package:outloud/profile/profile_screen.dart';
 
@@ -71,95 +72,99 @@ class _ViewState extends State<View> {
         decoration: const BoxDecoration(
             image: DecorationImage(
                 image: AssetImage('images/userMenuBG.png'), fit: BoxFit.cover)),
-        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: <
-            Widget>[
-          Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                if (user == null)
-                  const CircularProgressIndicator()
-                else
-                  Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: GestureDetector(
-                          onTap: () => setState(
-                              () => _showUserSettings = !_showUserSettings),
-                          child: CachedImage(
-                              user.pics.isEmpty ? null : user.pics[0],
-                              width: 40.0,
-                              height: 40.0,
-                              borderRadius: BorderRadius.circular(60.0),
-                              imageType: ImageType.User))),
-                Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: GestureDetector(
-                        onTap: () => setState(() => _showUserSettings = false),
-                        child: Icon(Icons.close, color: white)))
+        child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    if (user == null)
+                      const CircularProgressIndicator()
+                    else
+                      Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: GestureDetector(
+                              onTap: () => setState(
+                                  () => _showUserSettings = !_showUserSettings),
+                              child: CachedImage(
+                                  user.pics.isEmpty ? null : user.pics[0],
+                                  width: 40.0,
+                                  height: 40.0,
+                                  borderRadius: BorderRadius.circular(60.0),
+                                  imageType: ImageType.User))),
+                    Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: GestureDetector(
+                            onTap: () =>
+                                setState(() => _showUserSettings = false),
+                            child: Icon(Icons.close, color: white)))
+                  ]),
+              Row(children: <Widget>[
+                AutoSizeText(user.name, style: const TextStyle(color: white))
               ]),
-          Row(children: <Widget>[
-            AutoSizeText(user.name, style: const TextStyle(color: white))
-          ]),
-          GestureDetector(
-              onTap: () {
-                _dispatch(NavigateAction<AppState>.pushNamed(ProfileScreen.id,
-                    arguments: <String, dynamic>{'user': user}));
-                setState(() => _showUserSettings = false);
-              },
-              child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  child: Row(children: <Widget>[
-                    Image.asset('images/iconView.png',
-                        width: 20.0, height: 20.0, color: white),
-                    Padding(
-                        padding: const EdgeInsets.only(left: 8.0),
-                        child: AutoSizeText(
-                            FlutterI18n.translate(
-                                context, 'MENU_USER.OPTION_1'),
-                            style: const TextStyle(color: white)))
-                  ]))),
-          GestureDetector(
-              onTap: () {
-                _dispatch(NavigateAction<AppState>.pushNamed(ProfileScreen.id,
-                    arguments: <String, dynamic>{
-                      'user': user,
-                      'isEdition': true
-                    }));
-                setState(() => _showUserSettings = false);
-              },
-              child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  child: Row(children: <Widget>[
-                    Image.asset('images/iconEdit.png',
-                        width: 20.0, height: 20.0, color: white),
-                    Padding(
-                        padding: const EdgeInsets.only(left: 8.0),
-                        child: AutoSizeText(
-                            FlutterI18n.translate(
-                                context, 'MENU_USER.OPTION_2'),
-                            style: const TextStyle(color: white))),
-                  ]))),
-          const Divider(color: white),
-          GestureDetector(
-              onTap: () {
-                /*  if (Navigator.of(context).canPop())
+              GestureDetector(
+                  onTap: () {
+                    _dispatch(NavigateAction<AppState>.pushNamed(
+                        ProfileScreen.id,
+                        arguments: <String, dynamic>{'user': user}));
+                    setState(() => _showUserSettings = false);
+                  },
+                  child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8.0),
+                      child: Row(children: <Widget>[
+                        Image.asset('images/iconView.png',
+                            width: 20.0, height: 20.0, color: white),
+                        Padding(
+                            padding: const EdgeInsets.only(left: 8.0),
+                            child: AutoSizeText(
+                                FlutterI18n.translate(
+                                    context, 'MENU_USER.OPTION_1'),
+                                style: const TextStyle(color: white)))
+                      ]))),
+              GestureDetector(
+                  onTap: () {
+                    _dispatch(NavigateAction<AppState>.pushNamed(
+                        ProfileScreen.id,
+                        arguments: <String, dynamic>{
+                          'user': user,
+                          'isEdition': true
+                        }));
+                    setState(() => _showUserSettings = false);
+                  },
+                  child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8.0),
+                      child: Row(children: <Widget>[
+                        Image.asset('images/iconEdit.png',
+                            width: 20.0, height: 20.0, color: white),
+                        Padding(
+                            padding: const EdgeInsets.only(left: 8.0),
+                            child: AutoSizeText(
+                                FlutterI18n.translate(
+                                    context, 'MENU_USER.OPTION_2'),
+                                style: const TextStyle(color: white))),
+                      ]))),
+              const Divider(color: white),
+              GestureDetector(
+                  onTap: () {
+                    /*  if (Navigator.of(context).canPop())
                   Navigator.of(context).popUntil(
                       (Route<dynamic> route) => route.settings.name == 'Home'); */
-                _dispatch(AppDisconnectAction());
-                setState(() => _showUserSettings = false);
-              },
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8.0),
-                child: Row(children: <Widget>[
-                  Image.asset('images/iconLeave.png',
-                      width: 20.0, height: 20.0, color: white),
-                  Padding(
-                      padding: const EdgeInsets.only(left: 8.0),
-                      child: AutoSizeText(
-                          FlutterI18n.translate(context, 'MENU_USER.OPTION_3'),
-                          style: const TextStyle(color: white))),
-                ]),
-              ))
-        ]));
+                    _dispatch(AppDisconnectAction());
+                    setState(() => _showUserSettings = false);
+                  },
+                  child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8.0),
+                      child: Row(children: <Widget>[
+                        Image.asset('images/iconLeave.png',
+                            width: 20.0, height: 20.0, color: white),
+                        Padding(
+                            padding: const EdgeInsets.only(left: 8.0),
+                            child: AutoSizeText(
+                                FlutterI18n.translate(
+                                    context, 'MENU_USER.OPTION_3'),
+                                style: const TextStyle(color: white))),
+                      ])))
+            ]));
   }
 
   AppBar _buildAppBar(User user) {
@@ -179,8 +184,8 @@ class _ViewState extends State<View> {
             elevation: 0.0,
             leading: user == null
                 ? const CircularProgressIndicator()
-                : Padding(
-                    padding: const EdgeInsets.all(8.0),
+                : Container(
+                    margin: const EdgeInsets.only(bottom: 5.0),
                     child: GestureDetector(
                         onTap: () => setState(
                             () => _showUserSettings = !_showUserSettings),
@@ -194,7 +199,11 @@ class _ViewState extends State<View> {
             title: Stack(alignment: Alignment.center, children: <Widget>[
               if (widget.title is String)
                 AutoSizeText(widget.title as String,
-                    style: const TextStyle(color: white, fontSize: 14.0))
+                    style: TextStyle(
+                        color: white,
+                        fontSize: ScreenUtil()
+                            .setSp(30.0, allowFontScalingSelf: true)
+                            .toDouble()))
               else
                 widget.title is TabBar
                     ? widget.title as TabBar
@@ -211,13 +220,14 @@ class _ViewState extends State<View> {
             actions: <Widget>[
               Container(
                 padding: const EdgeInsets.all(8.0),
-                width: 40.0,
-                height: 40.0,
-                //child: Image.asset('images/hamburger.png')
+
+                //child: Image.asset('images/hamburger.png',     width: 40.0, height: 40.0)
               )
             ],
-            flexibleSpace:
-                Image.asset('images/screenTop.png', fit: BoxFit.cover),
+            flexibleSpace: Container(
+                padding: const EdgeInsets.only(bottom: 8.0),
+                child:
+                    Image.asset('images/screenTop.png', fit: BoxFit.fitHeight)),
             backgroundColor: Colors.transparent);
   }
 
@@ -259,6 +269,8 @@ class _ViewState extends State<View> {
 
   @override
   Widget build(BuildContext context) {
+    ScreenUtil.init(context, allowFontScaling: true);
+
     return ReduxSelector<AppState, dynamic>(
         selector: (BuildContext context, AppState state) =>
             <dynamic>[state.homePageIndex, state.userState.user],

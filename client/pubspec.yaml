@@ -52,6 +52,7 @@ dependencies:
   url_launcher: ^5.4.5
   carousel_slider: ^2.0.0
   keyboard_actions: ^3.2.1
+  flutter_screenutil: ^1.1.0
 
 flutter:
   uses-material-design: true

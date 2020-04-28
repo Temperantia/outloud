@@ -15,8 +15,11 @@ class EventLikeAction extends ReduxAction<AppState> {
   AppState reduce() {
     final User user = state.userState.user;
 
-    user.events[_event.id] = UserEventState.Liked;
-    updateUser(user);
+    // weird check to prevent removal of an attending event when liking it
+    if (user.events[_event.id] != UserEventState.Attending) {
+      user.events[_event.id] = UserEventState.Liked;
+      updateUser(user);
+    }
 
     updateEvent(_event..likes.add(state.userState.user.id));
     return null;

@@ -80,10 +80,8 @@ class EventImage extends StatelessWidget {
       else if (state == UserEventState.Liked)
         Icon(MdiIcons.heart, size: size - 20.0, color: white),
       if (isChat)
-        Container(
-            width: size - 20.0,
-            height: size - 20.0,
-            child: Image.asset('images/chatIcon.png')),
+        Image.asset('images/chatIcon.png',
+            width: size - 20.0, height: size - 20.0),
       if ((newMessageCount ?? 0) > 0)
         Positioned(
             top: 0.0,

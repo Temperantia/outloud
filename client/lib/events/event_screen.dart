@@ -1,26 +1,17 @@
-import 'dart:async';
-
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:business/app_state.dart';
 import 'package:async_redux/async_redux.dart'
     show ReduxAction, NavigateAction, Store;
 import 'package:business/classes/event.dart';
-import 'package:business/classes/lounge.dart';
 import 'package:business/events/actions/event_like_action.dart';
 import 'package:business/events/actions/event_unlike_action.dart';
 import 'package:business/events/actions/event_register_action.dart';
-import 'package:business/events/actions/event_unregister_action.dart';
-import 'package:business/lounges/actions/lounge_remove_action.dart';
-import 'package:business/lounges/actions/lounge_kick_user_action.dart';
-import 'package:business/lounges/actions/lounge_leave_action.dart';
 import 'package:date_utils/date_utils.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:outloud/events/event_attending_screen.dart';
-import 'package:outloud/lounges/lounge_chat_screen.dart';
-import 'package:outloud/lounges/lounges_screen.dart';
 import 'package:outloud/theme.dart';
 import 'package:expandable/expandable.dart';
 import 'package:outloud/widgets/cached_image.dart';
@@ -44,8 +35,8 @@ class EventScreen extends StatefulWidget {
 class _EventScreenState extends State<EventScreen>
     with TickerProviderStateMixin {
   void Function(ReduxAction<AppState>) _dispatch;
-  Future<void> Function(ReduxAction<AppState>) _dispatchFuture;
-  /*  final Completer<GoogleMapController> _controller =
+/*   Future<void> Function(ReduxAction<AppState>) _dispatchFuture;
+ */ /*  final Completer<GoogleMapController> _controller =
       Completer<GoogleMapController>(); */
   /* final Map<String, Marker> _markers = <String, Marker>{}; */
   final TextEditingController _messageController = TextEditingController();
@@ -56,7 +47,6 @@ class _EventScreenState extends State<EventScreen>
   String _adressEvent; */
 /*   double _latitude;
   double _longitude; */
-  bool _doubleClickingGuard;
 
   @override
   void initState() {
@@ -76,7 +66,6 @@ class _EventScreenState extends State<EventScreen>
         position: LatLng(_latitude, _longitude),
         infoWindow: InfoWindow(title: widget.event.name)); */
     // _resolveAdressEvent();
-    _doubleClickingGuard = false;
   }
 
   @override
@@ -87,7 +76,7 @@ class _EventScreenState extends State<EventScreen>
     super.dispose();
   }
 
-  void _showConfirmPopup(String userId, List<Lounge> lounges) {
+  /*  void _showConfirmPopup(String userId /* , List<Lounge> lounges */) {
     showDialog(
         context: context,
         barrierDismissible: false,
@@ -170,13 +159,10 @@ class _EventScreenState extends State<EventScreen>
                                         alignment: Alignment.bottomCenter,
                                         child: FlatButton(
                                             onPressed: () async {
-                                              /* await showLoaderAnimation(
-                                                  context, this,
-                                                  animationDuration: 600); */
                                               Navigator.pop(context);
                                               _dispatch(EventUnRegisterAction(
                                                   widget.event));
-                                              final Lounge _lounge =
+                                              /* final Lounge _lounge =
                                                   lounges.firstWhere(
                                                       (Lounge lounge) =>
                                                           lounge.eventId ==
@@ -196,7 +182,7 @@ class _EventScreenState extends State<EventScreen>
                                                   _dispatch(LoungeLeaveAction(
                                                       userId, _lounge));
                                                 }
-                                              }
+                                              } */
                                             },
                                             child: AutoSizeText(
                                                 FlutterI18n.translate(
@@ -210,7 +196,7 @@ class _EventScreenState extends State<EventScreen>
                     ]))
               ]));
         });
-  }
+  } */
 
   void _showInfoPopup() {
     showDialog(
@@ -304,8 +290,12 @@ class _EventScreenState extends State<EventScreen>
     return 0;
   } */
 
-  Widget _buildEventInfo(String userId, bool isUserAttending,
-      List<Lounge> lounges, Map<String, List<Lounge>> eventLounges) {
+  Widget _buildEventInfo(
+      String userId,
+      bool
+          isUserAttending /* ,
+      List<Lounge> lounges, Map<String, List<Lounge>> eventLounges */
+      ) {
     return Column(children: <Widget>[
       Container(
           height: 200.0,
@@ -447,8 +437,9 @@ class _EventScreenState extends State<EventScreen>
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 _buildLikeButton(userId),
-                _buildLoungeButton(isUserAttending, lounges, eventLounges),
-                _buildAttendingButton(userId, isUserAttending, lounges)
+                /*   _buildLoungeButton(
+                    isUserAttending , lounges, eventLounges), */
+                _buildAttendingButton(userId, isUserAttending /* , lounges */)
               ])),
       Padding(
           padding: const EdgeInsets.only(left: 5.0),
@@ -501,7 +492,7 @@ class _EventScreenState extends State<EventScreen>
                     ]))));
   }
 
-  Widget _buildLoungeButton(bool isUserAttending, List<Lounge> lounges,
+  /*  Widget _buildLoungeButton(bool isUserAttending, List<Lounge> lounges,
       Map<String, List<Lounge>> eventLounges) {
     Widget w;
     final Lounge userLounge = lounges.firstWhere(
@@ -591,10 +582,10 @@ class _EventScreenState extends State<EventScreen>
               ]));
     }
     return Expanded(child: w);
-  }
+  } */
 
   Widget _buildAttendingButton(
-      String userId, bool isUserAttending, List<Lounge> lounges) {
+      String userId, bool isUserAttending /* , List<Lounge> lounges */) {
     return Expanded(
         child: isUserAttending
             ? Row(children: <Widget>[
@@ -602,19 +593,22 @@ class _EventScreenState extends State<EventScreen>
                     child: Container(
                         color: orange,
                         padding: const EdgeInsets.all(5),
-                        child: GestureDetector(
-                            onTap: () => _showConfirmPopup(userId, lounges),
+                        child:
+                            /*GestureDetector(
+                            onTap: () =>
+                                _showConfirmPopup(userId /* , lounges */) ,
                             // TODO(alexandre): to unattend an event, you need not to have a lounge, so if that's the case, toast a msg about it and/or disable it,
-                            child: Column(
+                            child:*/
+                            Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: <Widget>[
-                                  Stack(
-                                      alignment: Alignment.center,
-                                      children: const <Widget>[
-                                        Icon(Icons.check, color: white),
-                                        Icon(Icons.not_interested, color: pink)
-                                      ])
-                                ])))),
+                              Stack(
+                                  alignment: Alignment.center,
+                                  children: const <Widget>[
+                                    Icon(Icons.check, color: white),
+                                    Icon(Icons.not_interested, color: pink)
+                                  ])
+                            ]))),
                 Expanded(
                     flex: 3,
                     child: GestureDetector(
@@ -649,55 +643,47 @@ class _EventScreenState extends State<EventScreen>
             : Container(
                 padding: const EdgeInsets.all(5),
                 color: orange,
-                child: IgnorePointer(
-                    ignoring: _doubleClickingGuard,
-                    child: InkWell(
-                        onTap: () {
-                          setState(() => _doubleClickingGuard = true);
-                          if (!widget.event.likes.contains(userId)) {
-                            _dispatch(EventLikeAction(widget.event));
-                          }
-                          _dispatch(EventRegisterAction(widget.event));
-                          _showInfoPopup();
-                        },
-                        child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
-                                  children: <Widget>[
-                                    const Icon(Icons.check,
-                                        color: white, size: 16),
-                                    AutoSizeText(
-                                        widget.event.memberIds.length
-                                            .toString(),
-                                        style: const TextStyle(
-                                            color: white,
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w400))
-                                  ]),
-                              AutoSizeText(
-                                  FlutterI18n.translate(
-                                      context, 'EVENT.ATTENDING'),
-                                  textAlign: TextAlign.center,
-                                  style: const TextStyle(
-                                      color: white,
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w400))
-                            ])))));
+                child: InkWell(
+                    onTap: () {
+                      if (!widget.event.likes.contains(userId)) {
+                        _dispatch(EventLikeAction(widget.event));
+                      }
+                      _dispatch(EventRegisterAction(widget.event));
+                      _showInfoPopup();
+                    },
+                    child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: <Widget>[
+                                const Icon(Icons.check, color: white, size: 16),
+                                AutoSizeText(
+                                    widget.event.memberIds.length.toString(),
+                                    style: const TextStyle(
+                                        color: white,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w400))
+                              ]),
+                          AutoSizeText(
+                              FlutterI18n.translate(context, 'EVENT.ATTENDING'),
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(
+                                  color: white,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w400))
+                        ]))));
   }
 
   Widget _buildDescription() {
     return ExpandablePanel(
         header: Container(
-          color: orange,
-          padding: const EdgeInsets.all(10),
-          child: AutoSizeText(
-              FlutterI18n.translate(context, 'EVENT.EVENT_DESCRIPTION'),
-              style: const TextStyle(
-                  color: white, fontSize: 16, fontWeight: FontWeight.w600)),
-        ),
+            color: orange,
+            padding: const EdgeInsets.all(10),
+            child: AutoSizeText(
+                FlutterI18n.translate(context, 'EVENT.EVENT_DESCRIPTION'),
+                style: const TextStyle(
+                    color: white, fontSize: 16, fontWeight: FontWeight.w600))),
         theme: const ExpandableThemeData(iconColor: orange),
         expanded: Container(
             padding: const EdgeInsets.all(20.0),
@@ -906,8 +892,10 @@ class _EventScreenState extends State<EventScreen>
           child: widget.event == null
               ? const CircularProgressIndicator()
               : ListView(controller: _scrollController, children: <Widget>[
-                  _buildEventInfo(userId, isUserAttending,
-                      state.userState.lounges, state.userState.eventLounges),
+                  _buildEventInfo(userId,
+                      isUserAttending /* ,
+                      state.userState.lounges, state.userState.eventLounges */
+                      ),
                   _buildDescription(),
                   //_buildBanner(),
                   //_buildLiveFeedSponsor(),

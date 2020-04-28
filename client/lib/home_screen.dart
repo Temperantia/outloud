@@ -3,9 +3,9 @@ import 'package:business/actions/app_navigate_action.dart';
 import 'package:business/app_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:outloud/events/events_widget.dart';
 //import 'package:outloud/home_widget.dart';
-import 'package:outloud/lounges/lounges_widget.dart';
 import 'package:outloud/people/people_widget.dart';
 import 'package:outloud/theme.dart';
 import 'package:outloud/widgets/view.dart';
@@ -25,7 +25,8 @@ class _HomeScreenState extends State<HomeScreen>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(vsync: this, length: 3 /*4*/)
+
+    _tabController = TabController(vsync: this, length: 2 /*3*/ /*4*/)
       ..addListener(() {
         if (!_tabController.indexIsChanging) {
           setState(() => _dispatch(AppNavigateAction(_tabController.index)));
@@ -80,7 +81,8 @@ class _HomeScreenState extends State<HomeScreen>
       //HomeWidget(),
       View(
           title: TabBar(
-              labelStyle: const TextStyle(fontSize: 14.0),
+              labelStyle:
+                  TextStyle(fontSize: ScreenUtil().setSp(30.0).toDouble()),
               labelPadding: const EdgeInsets.all(0.0),
               labelColor: white,
               indicator: const BoxDecoration(),
@@ -89,7 +91,7 @@ class _HomeScreenState extends State<HomeScreen>
                 Tab(text: FlutterI18n.translate(context, 'EVENTS.MY_EVENTS')),
               ]),
           child: EventsWidget()),
-      View(
+/*       View(
           title: TabBar(
               labelStyle: const TextStyle(fontSize: 14.0),
               labelPadding: const EdgeInsets.all(0.0),
@@ -103,7 +105,7 @@ class _HomeScreenState extends State<HomeScreen>
                     text: FlutterI18n.translate(
                         context, 'LOUNGES_TAB.MY_LOUNGES')),
               ]),
-          child: LoungesWidget()),
+          child: LoungesWidget()), */
       View(
           title: TabBar(
               labelStyle: const TextStyle(fontSize: 14.0),
@@ -120,6 +122,8 @@ class _HomeScreenState extends State<HomeScreen>
 
   @override
   Widget build(BuildContext context) {
+    ScreenUtil.init(context, allowFontScaling: true);
+
     return ReduxSelector<AppState, dynamic>(
         selector: (BuildContext context, AppState state) =>
             <dynamic>[state.userState.user, state.homePageIndex],

@@ -51,10 +51,8 @@ class _Register4ScreenState extends State<Register4Screen> {
                     child: Column(children: <Widget>[
                       Row(children: <Widget>[
                         Expanded(
-                            child: Container(
-                                width: 50.0,
-                                height: 50.0,
-                                child: Image.asset('images/OL-draft2a.png'))),
+                            child: Image.asset('images/OL-draft2a.png',
+                                width: 50.0, height: 50.0)),
                       ]),
                       Expanded(
                           flex: 7,
@@ -62,14 +60,12 @@ class _Register4ScreenState extends State<Register4Screen> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
-                                Container(
+                                Image.asset('images/illustrationEvents.png',
                                     width:
                                         MediaQuery.of(context).size.width * 0.9,
                                     height: MediaQuery.of(context).size.width *
                                         0.65,
-                                    child: Image.asset(
-                                        'images/illustrationEvents.png',
-                                        fit: BoxFit.fitWidth)),
+                                    fit: BoxFit.fitWidth),
                                 AutoSizeText(
                                     FlutterI18n.translate(
                                         context, 'REGISTER_4.TITLE'),

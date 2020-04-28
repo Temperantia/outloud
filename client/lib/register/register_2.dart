@@ -138,13 +138,11 @@ class _Register2ScreenState extends State<Register2Screen> {
                                 FlutterI18n.translate(
                                     context, 'REGISTER_2.SUBTITLE'),
                                 style: const TextStyle(color: grey)),
-                            Container(
+                            Image.asset('images/illustrationInterests.png',
                                 width: MediaQuery.of(context).size.width * 0.9,
                                 height:
                                     MediaQuery.of(context).size.width * 0.65,
-                                child: Image.asset(
-                                    'images/illustrationInterests.png',
-                                    fit: BoxFit.fitWidth)),
+                                fit: BoxFit.fitWidth),
                             Wrap(children: <Widget>[
                               for (final MapEntry<String, bool> interest
                                   in _selected.entries)

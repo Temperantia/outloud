@@ -1,16 +1,9 @@
 import 'package:business/classes/chat.dart';
 import 'package:business/classes/event.dart';
-import 'package:business/classes/lounge.dart';
 import 'package:business/classes/user.dart';
 import 'package:outloud/people/chat_screen.dart';
 import 'package:outloud/events/event_attending_screen.dart';
 import 'package:outloud/events/event_screen.dart';
-import 'package:outloud/lounges/lounge_chat_screen.dart';
-import 'package:outloud/lounges/lounge_create_detail_screen.dart';
-import 'package:outloud/lounges/lounge_create_meetup_screen.dart';
-import 'package:outloud/lounges/lounge_create_screen.dart';
-import 'package:outloud/lounges/lounge_view_screen.dart';
-import 'package:outloud/lounges/lounges_screen.dart';
 import 'package:outloud/people/people_search_screen.dart';
 import 'package:outloud/profile/profile_screen.dart';
 import 'package:outloud/register/login.dart';
@@ -34,13 +27,13 @@ final Map<String, Widget Function(Object)> routes =
   EventScreen.id: (dynamic event) => EventScreen(event as Event),
   EventAttendingScreen.id: (dynamic event) =>
       EventAttendingScreen(event as Event),
-  LoungesScreen.id: (dynamic event) => LoungesScreen(event as Event),
+  /*  LoungesScreen.id: (dynamic event) => LoungesScreen(event as Event),
   LoungeChatScreen.id: (dynamic lounge) => LoungeChatScreen(lounge as Lounge),
   LoungeCreateScreen.id: (_) => LoungeCreateScreen(),
   LoungeCreateDetailScreen.id: (_) => LoungeCreateDetailScreen(),
   LoungeCreateMeetupScreen.id: (_) => LoungeCreateMeetupScreen(),
   LoungeViewScreen.id: (dynamic settings) => LoungeViewScreen(
-      settings['lounge'] as Lounge, settings['isEdit'] as bool ?? false),
+      settings['lounge'] as Lounge, settings['isEdit'] as bool ?? false), */
   ProfileScreen.id: (dynamic settings) => ProfileScreen(
       settings['user'] as User, settings['isEdition'] as bool ?? false),
   ChatScreen.id: (dynamic chat) => ChatScreen(chat as Chat),
