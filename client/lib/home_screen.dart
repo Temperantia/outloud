@@ -19,19 +19,11 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen>
     with SingleTickerProviderStateMixin {
-  TabController _tabController;
-  void Function(ReduxAction<AppState>) _dispatch;
+  final PageController _tabController = PageController();
 
   @override
   void initState() {
     super.initState();
-
-    _tabController = TabController(vsync: this, length: 2 /*3*/ /*4*/)
-      ..addListener(() {
-        if (!_tabController.indexIsChanging) {
-          setState(() => _dispatch(AppNavigateAction(_tabController.index)));
-        }
-      });
 
     //_requestLocationPermission();
   }
@@ -77,20 +69,27 @@ class _HomeScreenState extends State<HomeScreen>
   }
 
   Widget _buildBody() {
-    return TabBarView(controller: _tabController, children: <Widget>[
-      //HomeWidget(),
-      View(
-          title: TabBar(
-              labelStyle:
-                  TextStyle(fontSize: ScreenUtil().setSp(30.0).toDouble()),
-              labelPadding: const EdgeInsets.all(0.0),
-              labelColor: white,
-              indicator: const BoxDecoration(),
-              tabs: <Widget>[
-                Tab(text: FlutterI18n.translate(context, 'EVENTS.FIND_EVENTS')),
-                Tab(text: FlutterI18n.translate(context, 'EVENTS.MY_EVENTS')),
-              ]),
-          child: EventsWidget()),
+    return PageView(
+        controller: _tabController,
+        physics: const NeverScrollableScrollPhysics(),
+        children: <Widget>[
+          //HomeWidget(),
+          View(
+              title: TabBar(
+                  labelStyle:
+                      TextStyle(fontSize: ScreenUtil().setSp(30.0).toDouble()),
+                  labelPadding: const EdgeInsets.all(0.0),
+                  labelColor: white,
+                  indicator: const BoxDecoration(),
+                  tabs: <Widget>[
+                    Tab(
+                        text: FlutterI18n.translate(
+                            context, 'EVENTS.FIND_EVENTS')),
+                    Tab(
+                        text:
+                            FlutterI18n.translate(context, 'EVENTS.MY_EVENTS')),
+                  ]),
+              child: EventsWidget()),
 /*       View(
           title: TabBar(
               labelStyle: const TextStyle(fontSize: 14.0),
@@ -106,18 +105,22 @@ class _HomeScreenState extends State<HomeScreen>
                         context, 'LOUNGES_TAB.MY_LOUNGES')),
               ]),
           child: LoungesWidget()), */
-      View(
-          title: TabBar(
-              labelStyle: const TextStyle(fontSize: 14.0),
-              labelPadding: const EdgeInsets.all(0.0),
-              labelColor: white,
-              indicator: const BoxDecoration(),
-              tabs: <Widget>[
-                Tab(text: FlutterI18n.translate(context, 'PEOPLE_TAB.CHATS')),
-                Tab(text: FlutterI18n.translate(context, 'PEOPLE_TAB.FRIENDS')),
-              ]),
-          child: PeopleWidget()),
-    ]);
+          View(
+              title: TabBar(
+                  labelStyle: const TextStyle(fontSize: 14.0),
+                  labelPadding: const EdgeInsets.all(0.0),
+                  labelColor: white,
+                  indicator: const BoxDecoration(),
+                  tabs: <Widget>[
+                    Tab(
+                        text:
+                            FlutterI18n.translate(context, 'PEOPLE_TAB.CHATS')),
+                    Tab(
+                        text: FlutterI18n.translate(
+                            context, 'PEOPLE_TAB.FRIENDS')),
+                  ]),
+              child: PeopleWidget())
+        ]);
   }
 
   @override
@@ -126,15 +129,15 @@ class _HomeScreenState extends State<HomeScreen>
 
     return ReduxSelector<AppState, dynamic>(
         selector: (BuildContext context, AppState state) =>
-            <dynamic>[state.userState.user, state.homePageIndex],
+            <dynamic>[state.homePageIndex, state.userState.user],
         builder: (BuildContext context,
             Store<AppState> store,
             AppState state,
             void Function(ReduxAction<AppState>) dispatch,
             dynamic model,
             Widget child) {
-          _dispatch = dispatch;
-          _tabController.animateTo(state.homePageIndex);
+          if (_tabController.hasClients)
+            _tabController.jumpToPage(state.homePageIndex);
 
           return _buildBody();
         });

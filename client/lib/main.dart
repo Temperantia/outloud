@@ -36,11 +36,9 @@ Future<void> main() async {
   }
 
   store = Store<AppState>(
-    persistor: persistor,
-    initialState: initialState,
-    errorObserver: DevelopmentErrorObserver<
-        AppState>(), // TODO(me): change this for release
-  );
+      persistor: persistor,
+      initialState: initialState,
+      errorObserver: SwallowErrorObserver<AppState>());
 
   store.dispatch(LoginAction());
 

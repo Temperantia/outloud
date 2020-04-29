@@ -581,7 +581,7 @@ class _LoungeCreateMeetupScreenState extends State<LoungeCreateMeetupScreen> {
           Expanded(
               child: Container(
                   padding: const EdgeInsets.all(15.0),
-                  color: whiteAlt,
+                  color: orange,
                   child: TextField(
                       controller: _notesTextController,
                       focusNode: _focusNodeNotes,

@@ -16,9 +16,6 @@ class LoginAction extends ReduxAction<AppState> {
       dispatch(UserListenAction(id));
     }
     dispatch(EventsGetAction());
-    //dispatch(
-    //   LoungesListenAction());
-    // TODO(me): this will likely evolve as a future as well when the home page offers lounges based on interests
     dispatch(PeopleGetAction());
 
     return state.copy(

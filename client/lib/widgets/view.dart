@@ -7,7 +7,6 @@ import 'package:business/classes/user.dart';
 import 'package:business/actions/app_disconnect_action.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gradient_bottom_navigation_bar/gradient_bottom_navigation_bar.dart';
 import 'package:outloud/profile/profile_screen.dart';
 
@@ -167,68 +166,62 @@ class _ViewState extends State<View> {
             ]));
   }
 
-  AppBar _buildAppBar(User user) {
-    return widget.isProfileScreen
-        ? AppBar(
-            elevation: 0.0,
-            leading: Align(
-                alignment: Alignment.centerLeft,
-                child: GestureDetector(
-                    onTap: widget.onBack ??
-                        () => _dispatch(NavigateAction<AppState>.pop()),
-                    child: Icon(widget.backIcon, color: white))),
-            flexibleSpace:
-                Image.asset('images/screenTop.png', fit: BoxFit.cover),
-            backgroundColor: Colors.transparent)
-        : AppBar(
-            elevation: 0.0,
-            leading: user == null
-                ? const CircularProgressIndicator()
-                : Container(
-                    margin: const EdgeInsets.only(bottom: 5.0),
-                    child: GestureDetector(
-                        onTap: () => setState(
-                            () => _showUserSettings = !_showUserSettings),
-                        child: CachedImage(
-                            user.pics.isEmpty ? null : user.pics[0],
-                            width: 40.0,
-                            height: 40.0,
-                            borderRadius: BorderRadius.circular(60.0),
-                            imageType: ImageType.User))),
-            centerTitle: true,
-            title: Stack(alignment: Alignment.center, children: <Widget>[
-              if (widget.title is String)
-                AutoSizeText(widget.title as String,
-                    style: TextStyle(
-                        color: white,
-                        fontSize: ScreenUtil()
-                            .setSp(30.0, allowFontScalingSelf: true)
-                            .toDouble()))
-              else
-                widget.title is TabBar
-                    ? widget.title as TabBar
-                    : Container(width: 0.0, height: 0.0),
-              if (Navigator.canPop(context))
-                Align(
+  PreferredSize _buildAppBar(User user) {
+    return PreferredSize(
+        preferredSize: const Size.fromHeight(50.0),
+        child: widget.isProfileScreen
+            ? AppBar(
+                elevation: 0.0,
+                leading: Align(
                     alignment: Alignment.centerLeft,
                     child: GestureDetector(
                         onTap: widget.onBack ??
                             () => _dispatch(NavigateAction<AppState>.pop()),
-                        child: Icon(widget.backIcon, color: white)))
-            ]),
-            titleSpacing: 0.0,
-            actions: <Widget>[
-              Container(
-                padding: const EdgeInsets.all(8.0),
+                        child: Icon(widget.backIcon, color: white))),
+                flexibleSpace:
+                    Image.asset('images/screenTop.png', fit: BoxFit.cover),
+                backgroundColor: Colors.transparent)
+            : AppBar(
+                backgroundColor: Colors.transparent,
+                elevation: 0.0,
+                leading: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: user == null
+                        ? const CircularProgressIndicator()
+                        : GestureDetector(
+                            onTap: () => setState(
+                                () => _showUserSettings = !_showUserSettings),
+                            child: CachedImage(
+                                user.pics.isEmpty ? null : user.pics[0],
+                                borderRadius: BorderRadius.circular(60.0),
+                                imageType: ImageType.User))),
+                centerTitle: true,
+                title: Stack(alignment: Alignment.center, children: <Widget>[
+                  if (widget.title is String)
+                    AutoSizeText(widget.title as String,
+                        style: const TextStyle(color: white, fontSize: 14.0))
+                  else
+                    widget.title is TabBar
+                        ? widget.title as TabBar
+                        : Container(width: 0.0, height: 0.0),
+                  if (Navigator.canPop(context))
+                    Align(
+                        alignment: Alignment.centerLeft,
+                        child: GestureDetector(
+                            onTap: widget.onBack ??
+                                () => _dispatch(NavigateAction<AppState>.pop()),
+                            child: Icon(widget.backIcon, color: white)))
+                ]),
+                titleSpacing: 0.0,
+                actions: <Widget>[
+                  Container(
+                    padding: const EdgeInsets.all(8.0),
 
-                //child: Image.asset('images/hamburger.png',     width: 40.0, height: 40.0)
-              )
-            ],
-            flexibleSpace: Container(
-                padding: const EdgeInsets.only(bottom: 8.0),
-                child:
-                    Image.asset('images/screenTop.png', fit: BoxFit.fitHeight)),
-            backgroundColor: Colors.transparent);
+                    //child: Image.asset('images/hamburger.png',     width: 40.0, height: 40.0)
+                  )
+                ],
+                flexibleSpace:
+                    Image.asset('images/screenTop.png', fit: BoxFit.cover)));
   }
 
   Widget _buildNavBar(
@@ -261,6 +254,7 @@ class _ViewState extends State<View> {
           if (index == homePageIndex) {
             return;
           }
+
           _dispatch(AppNavigateAction(index));
           Navigator.of(context)
               .popUntil((Route<dynamic> route) => route.isFirst);
@@ -269,8 +263,6 @@ class _ViewState extends State<View> {
 
   @override
   Widget build(BuildContext context) {
-    ScreenUtil.init(context, allowFontScaling: true);
-
     return ReduxSelector<AppState, dynamic>(
         selector: (BuildContext context, AppState state) =>
             <dynamic>[state.homePageIndex, state.userState.user],

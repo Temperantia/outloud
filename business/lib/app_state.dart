@@ -56,8 +56,7 @@ class AppState {
           theme: theme ?? this.theme,
           acceptedEula: acceptedEula ?? this.acceptedEula,
           supportsAppleSignIn: supportsAppleSignIn ?? this.supportsAppleSignIn,
-          deviceinfo: deviceinfo ?? this.deviceinfo
-          );
+          deviceinfo: deviceinfo ?? this.deviceinfo);
 
   final LoginState loginState;
   final UserState userState;
@@ -74,20 +73,21 @@ class AppState {
   final DeviceInfoPlugin deviceinfo;
 
   static AppState initialState(
-          {ChatsState chatsState, ThemeStyle theme, bool acceptedEula}) => 
+          {ChatsState chatsState, ThemeStyle theme, bool acceptedEula}) =>
       AppState(
-          loginState: LoginState.initialState(),
-          userState: UserState.initialState(),
-          eventsState: EventsState.initialState(),
-          loungesState: LoungesState.initialState(),
-          peopleState: PeopleState.initialState(),
-          chatsState: chatsState ?? ChatsState.initialState(),
-          loading: true,
-          homePageIndex: 0,
-          eventsTabIndex: 0,
-          theme: theme ?? ThemeStyle.Orange,
-          acceptedEula: acceptedEula ?? false,
-          supportsAppleSignIn: Platform.isIOS && DeviceInfoPlugin().iosInfo.toString().contains('13'),
-          deviceinfo: DeviceInfoPlugin(),
-          );
+        loginState: LoginState.initialState(),
+        userState: UserState.initialState(),
+        eventsState: EventsState.initialState(),
+        loungesState: LoungesState.initialState(),
+        peopleState: PeopleState.initialState(),
+        chatsState: chatsState ?? ChatsState.initialState(),
+        loading: true,
+        homePageIndex: 0,
+        eventsTabIndex: 0,
+        theme: theme ?? ThemeStyle.Orange,
+        acceptedEula: acceptedEula ?? false,
+        supportsAppleSignIn: Platform.isIOS &&
+            DeviceInfoPlugin().iosInfo.toString().contains('13'),
+        deviceinfo: DeviceInfoPlugin(),
+      );
 }

@@ -267,13 +267,10 @@ class _LoungeChatScreenState extends State<LoungeChatScreen>
                       ProfileScreen.id,
                       arguments: <String, dynamic>{'user': user})),
                   child: Container(
-                      padding: const EdgeInsets.all(5),
-                      child: CachedImage(
-                          user.pics.isEmpty ? null : user.pics[0],
-                          width: 35.0,
-                          height: 35.0,
-                          borderRadius: BorderRadius.circular(20.0),
-                          imageType: ImageType.User))),
+                    padding: const EdgeInsets.all(5),
+                    child: CachedImage(user.pics.isEmpty ? null : user.pics[0],
+                        width: 35.0, height: 35.0, imageType: ImageType.User),
+                  )),
               Expanded(
                   child: Container(
                       decoration: BoxDecoration(

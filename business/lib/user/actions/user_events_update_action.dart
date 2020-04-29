@@ -31,7 +31,6 @@ class UserEventsUpdateAction extends ReduxAction<AppState> {
     _streamUsers();
 
     _eventLoungesSub = streamLounges(eventIds: eventIds).listen(
-        // TODO(me): actually it's a future lol
         (List<Lounge> lounges) =>
             dispatch(UserEventLoungesUpdateAction(lounges, _events)));
     return state.copy(userState: state.userState.copy(events: _events));

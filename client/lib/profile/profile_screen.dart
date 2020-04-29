@@ -266,23 +266,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
         content.where((String element) => element != '').toList().join(' • ');
     return !_isEdition && display == ''
         ? Container(width: 0.0, height: 0.0)
-        : Row(children: <Widget>[
-            Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      AutoSizeText(title.toUpperCase(),
-                          style: const TextStyle(fontWeight: FontWeight.bold)),
-                      if (_isEdition)
-                        _buildAboutController(
-                            title, _controllers[controllerKey],
-                            placeholders: placeholders)
-                      else
-                        AutoSizeText(display,
-                            style: const TextStyle(color: orange)),
-                    ]))
-          ]);
+        : Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  AutoSizeText(title.toUpperCase(),
+                      style: const TextStyle(fontWeight: FontWeight.bold)),
+                  if (_isEdition)
+                    _buildAboutController(title, _controllers[controllerKey],
+                        placeholders: placeholders)
+                  else
+                    AutoSizeText(display,
+                        style: const TextStyle(color: orange)),
+                ]));
   }
 
   Widget _buildAboutController(String title, dynamic controller,
@@ -291,54 +288,61 @@ class _ProfileScreenState extends State<ProfileScreen> {
       if (controller is List<TextEditingController>)
         for (final MapEntry<int, TextEditingController> textEditingController
             in controller.asMap().entries)
-          Container(
-              margin: const EdgeInsets.symmetric(vertical: 5.0),
-              padding: const EdgeInsets.all(5.0),
-              decoration: BoxDecoration(border: Border.all(color: orange)),
-              width: 350.0, // TODO(robin): change this to expanded if you can
-              height: 40.0,
-              child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Container(
-                        width: 300.0,
-                        child: TextField(
-                            decoration: InputDecoration(
-                                contentPadding: const EdgeInsets.all(0.0),
-                                isDense: true,
-                                border: InputBorder.none,
-                                hintText: placeholders == null
-                                    ? null
-                                    : placeholders[textEditingController.key],
-                                hintStyle: const TextStyle(color: orange)),
-                            controller: textEditingController.value,
-                            style: const TextStyle(color: orange))),
-                    if (textEditingController.value.text.isNotEmpty)
-                      GestureDetector(
-                          onTap: () => setState(
-                              () => textEditingController.value.clear()),
-                          child: Icon(Icons.close, color: orange))
-                  ]))
+          Row(children: <Widget>[
+            Expanded(
+                child: Container(
+                    margin: const EdgeInsets.symmetric(vertical: 5.0),
+                    padding: const EdgeInsets.all(5.0),
+                    decoration:
+                        BoxDecoration(border: Border.all(color: orange)),
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Expanded(
+                            child: Container(
+                                child: TextField(
+                                    decoration: InputDecoration(
+                                        contentPadding:
+                                            const EdgeInsets.all(0.0),
+                                        isDense: true,
+                                        border: InputBorder.none,
+                                        hintText: placeholders == null
+                                            ? null
+                                            : placeholders[
+                                                textEditingController.key],
+                                        hintStyle:
+                                            const TextStyle(color: orange)),
+                                    controller: textEditingController.value,
+                                    style: const TextStyle(color: orange))),
+                          ),
+                          if (textEditingController.value.text.isNotEmpty)
+                            GestureDetector(
+                                onTap: () => setState(
+                                    () => textEditingController.value.clear()),
+                                child: Icon(Icons.close, color: orange))
+                        ])))
+          ])
       else if (controller is List<dynamic>)
-        Container(
-            margin: const EdgeInsets.symmetric(vertical: 5.0),
-            padding: const EdgeInsets.all(5.0),
-            decoration: BoxDecoration(border: Border.all(color: orange)),
-            width: 350.0, // TODO(robin): change this to expanded if you can
-            height: 40.0,
-            child: DropdownButton<String>(
-                isExpanded: true,
-                value: controller[0] as String,
-                icon: const Icon(Icons.arrow_drop_down, color: orange),
-                underline: Container(width: 0.0, height: 0.0),
-                style: const TextStyle(color: orange),
-                onChanged: (String newValue) =>
-                    setState(() => controller[0] = newValue),
-                items: (controller[1] as List<String>)
-                    .map<DropdownMenuItem<String>>((String value) =>
-                        DropdownMenuItem<String>(
-                            value: value, child: AutoSizeText(value)))
-                    .toList()))
+        Row(children: <Widget>[
+          Expanded(
+              child: Container(
+                  margin: const EdgeInsets.symmetric(vertical: 5.0),
+                  padding: const EdgeInsets.all(5.0),
+                  decoration: BoxDecoration(border: Border.all(color: orange)),
+                  child: DropdownButton<String>(
+                      isExpanded: true,
+                      value: controller[0] as String,
+                      icon: const Icon(Icons.arrow_drop_down, color: orange),
+                      underline: Container(width: 0.0, height: 0.0),
+                      style: const TextStyle(color: orange),
+                      onChanged: (String newValue) =>
+                          setState(() => controller[0] = newValue),
+                      items: (controller[1] as List<String>)
+                          .map<DropdownMenuItem<String>>((String value) =>
+                              DropdownMenuItem<String>(
+                                  value: value, child: AutoSizeText(value)))
+                          .toList())))
+        ])
     ]);
   }
 

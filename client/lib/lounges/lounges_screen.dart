@@ -51,18 +51,16 @@ class _LoungesScreenState extends State<LoungesScreen>
     setState(() => _owners[loungeId] = owner);
   }
 
-// TODO(robin): if lounge is full dont show it
   Widget _buildLounge(Lounge lounge, String userId) {
     resolveOwner(lounge.id, lounge.owner);
     final User owner = _owners[lounge.id];
-    if (owner == null) {
-      return Container(width: 0.0, height: 0.0);
-    }
-    if (owner.id == userId) {
-      return Container(width: 0.0, height: 0.0);
-    }
+
     final int availableSlots = lounge.memberLimit - lounge.memberIds.length;
     final String s = availableSlots <= 1 ? '' : 's';
+
+    if (owner == null || owner.id == userId || availableSlots == 0) {
+      return Container(width: 0.0, height: 0.0);
+    }
 
     return GestureDetector(
         onTap: () => _dispatch(NavigateAction<AppState>.pushNamed(
@@ -106,7 +104,7 @@ class _LoungesScreenState extends State<LoungesScreen>
                                   })
                           ])),
                           GestureDetector(
-                              onTap: () async {
+                              onTap: () {
                                 // TODO(robin): this shouldnt exist, the owner shouldnt see a join button on his own lounges and maybe not even see it here (ask @nadir)
                                 if (lounge.owner == userId) {
                                   return;
@@ -114,8 +112,6 @@ class _LoungesScreenState extends State<LoungesScreen>
                                 if (lounge.memberIds.contains(userId)) {
                                   _dispatch(LoungeLeaveAction(userId, lounge));
                                 } else {
-                                  /*  await showLoaderAnimation(context, this,
-                                      animationDuration: 600); */
                                   _dispatch(LoungeJoinAction(userId, lounge));
                                   _dispatch(NavigateAction<AppState>.pop());
                                   _dispatch(NavigateAction<AppState>.pushNamed(
@@ -131,8 +127,8 @@ class _LoungesScreenState extends State<LoungesScreen>
                                       lounge.memberIds.contains(userId)
                                           ? FlutterI18n.translate(
                                               context, 'LOUNGES.LEAVE')
-                                          : FlutterI18n.translate(context,
-                                              'LOUNGES.JOIN'), // TODO(me): add arrow icon
+                                          : FlutterI18n.translate(
+                                              context, 'LOUNGES.JOIN'),
                                       style: const TextStyle(
                                           color: white,
                                           fontSize: 15,

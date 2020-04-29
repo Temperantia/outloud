@@ -14,7 +14,6 @@ class LoungeLeaveAction extends ReduxAction<AppState> {
   @override
   Future<AppState> reduce() async {
     if (!lounge.memberIds.contains(userId)) {
-      // TODO(robin): this is good to check, still a lounge is displayed after the user joined it in browsing lounges = bug
       return null;
     }
 
@@ -24,10 +23,9 @@ class LoungeLeaveAction extends ReduxAction<AppState> {
     await updateUser(state.userState.user..lounges.remove(lounge.id));
 
     final Map<String, Map<String, ChatState>> loungesChatsStates =
-    state.chatsState.loungesChatsStates;
+        state.chatsState.loungesChatsStates;
 
-    loungesChatsStates[state.userState.user.id]
-        .remove(lounge.id);
+    loungesChatsStates[state.userState.user.id].remove(lounge.id);
 
     return state.copy(
         userState: state.userState.copy(

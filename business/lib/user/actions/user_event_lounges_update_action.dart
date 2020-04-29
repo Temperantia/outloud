@@ -21,7 +21,6 @@ class UserEventLoungesUpdateAction extends ReduxAction<AppState> {
   AppState reduce() {
     _reset();
 
-    // TODO(robin): do not add a lounge to the event lounges if there is no room left for new people
     final Map<String, List<Lounge>> eventLounges = <String, List<Lounge>>{};
     for (final Lounge lounge in _lounges) {
       lounge.event = _events.firstWhere(

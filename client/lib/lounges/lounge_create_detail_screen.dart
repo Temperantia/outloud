@@ -113,13 +113,12 @@ class _LoungeCreateDetailScreenState extends State<LoungeCreateDetailScreen> {
                       color: black, fontSize: 15, fontWeight: FontWeight.w700)),
               Container(
                   constraints: BoxConstraints.expand(
-                    height:
-                        Theme.of(context).textTheme.display1.fontSize * 1.1 +
-                            100,
-                  ),
+                      height:
+                          Theme.of(context).textTheme.display1.fontSize * 1.1 +
+                              100),
                   padding:
                       const EdgeInsets.only(left: 10.0, top: 1.0, right: 10.0),
-                  color: whiteAlt,
+                  color: orange,
                   child: MultilineTextField(
                       controller: _descriptionController,
                       formatters: <TextInputFormatter>[

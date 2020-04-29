@@ -15,7 +15,6 @@ class LoungeKickUserAction extends ReduxAction<AppState> {
   @override
   Future<AppState> reduce() async {
     if (!lounge.memberIds.contains(userId)) {
-      // TODO(robin): this is good to check, still a lounge is displayed after the user joined it in browsing lounges = bug
       return null;
     }
     final User _user = await getUser(userId);

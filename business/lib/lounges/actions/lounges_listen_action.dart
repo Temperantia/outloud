@@ -4,7 +4,6 @@ import 'package:business/classes/lounge.dart';
 import 'package:business/lounges/actions/lounges_update_action.dart';
 import 'package:business/models/lounges.dart';
 
-// TODO(me): to be replaced by future
 class LoungesListenAction extends ReduxAction<AppState> {
   @override
   AppState reduce() {

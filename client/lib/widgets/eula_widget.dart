@@ -63,6 +63,7 @@ This EULA agreement, and any dispute arising out of or in connection with this E
                         backgroundColor: Colors.transparent,
                         child: Stack(children: <Widget>[
                           Container(
+                              padding: const EdgeInsets.all(5.0),
                               decoration: BoxDecoration(
                                   color: Colors.white,
                                   shape: BoxShape.rectangle,

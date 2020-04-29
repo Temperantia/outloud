@@ -53,9 +53,9 @@ class _ChatScreenState extends State<ChatScreen> {
     final DateTime time = DateTime.fromMillisecondsSinceEpoch(timestamp);
     final int daysDifference = DateTime.now().difference(time).inDays;
     if (daysDifference < 7) {
-      return DateFormat(' E \'at\' kk:mm').format(time);
+      return DateFormat(' E kk:mm').format(time);
     }
-    return DateFormat('yyyy-MM-dd \'at\' kk:mm').format(time);
+    return DateFormat('yy-MM-dd kk:mm').format(time);
   }
 
   Widget _buildChat(User user, String userId, String picture) {

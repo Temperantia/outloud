@@ -34,30 +34,31 @@ class _CachedImageState extends State<CachedImage> {
     if (widget.url == null) {
       switch (widget.imageType) {
         case ImageType.User:
-          image = Image.asset('images/defaultUser.png', fit: widget.fit);
+          image = Image.asset('images/defaultUser.png',
+              width: widget.width, height: widget.height, fit: widget.fit);
           break;
         case ImageType.UserBig:
-          image = Image.asset('images/bigUser.png', fit: widget.fit);
+          image = Image.asset('images/bigUser.png',
+              width: widget.width, height: widget.height, fit: widget.fit);
           break;
         case ImageType.Event:
-          image = Image.asset('images/defaultEvent.png', fit: widget.fit);
+          image = Image.asset('images/defaultEvent.png',
+              width: widget.width, height: widget.height, fit: widget.fit);
           break;
       }
     } else {
       image = CachedNetworkImage(
-          fit: widget.fit,
+          width: widget.width,
+          height: widget.height,
           imageUrl: widget.url,
+          fit: widget.fit,
           placeholder: (BuildContext context, String url) =>
               const CircularProgressIndicator(),
           errorWidget: (BuildContext context, String url, Object error) =>
               Icon(Icons.error));
     }
 
-    return Container(
-        width: widget.width,
-        height: widget.height,
-        child: ClipRRect(
-            borderRadius: widget.borderRadius ?? BorderRadius.zero,
-            child: image));
+    return ClipRRect(
+        borderRadius: widget.borderRadius ?? BorderRadius.zero, child: image);
   }
 }

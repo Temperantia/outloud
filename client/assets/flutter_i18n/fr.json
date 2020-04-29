@@ -293,7 +293,7 @@
     "PERMANENT_DELETE": "Cela va définitivement supprimer le salon et enlever tous ses membres",
     "DELETE_CONFIRMATION": "Es-tu sûr?",
     "TAKE_ME_BACK": "Non, fais-moi revenir",
-    "DELETE_YES": "OUI, Supprimer ton salon",
+    "DELETE_YES": "Oui, supprimer ton salon",
     "YOUR_LOUNGE": "Ton Salon",
     "SOMEONES_LOUNGE": "Le Salon de {user}",
     "MEMBER": "membre",

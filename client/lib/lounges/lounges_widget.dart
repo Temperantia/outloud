@@ -126,14 +126,11 @@ class _LoungesWidgetState extends State<LoungesWidget>
                                     child: Align(
                                         alignment: Alignment.bottomCenter,
                                         child: FlatButton(
-                                            onPressed: () async {
-                                              /*  await showLoaderAnimation(
-                                                  context, this,
-                                                  animationDuration: 600); */
+                                            onPressed: () {
                                               Navigator.pop(context);
                                               dispatch(AppNavigateAction(0));
                                               dispatch(AppSwitchEventsTab(0));
-                                              // redux.NavigateAction<AppState>.pushNamed('0');
+                                              // NavigateAction<AppState>.pushNamed('0');
                                             },
                                             child: AutoSizeText(
                                                 FlutterI18n.translate(context,

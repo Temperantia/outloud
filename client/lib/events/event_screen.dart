@@ -6,6 +6,7 @@ import 'package:business/classes/event.dart';
 import 'package:business/events/actions/event_like_action.dart';
 import 'package:business/events/actions/event_unlike_action.dart';
 import 'package:business/events/actions/event_register_action.dart';
+import 'package:business/events/actions/event_unregister_action.dart';
 import 'package:date_utils/date_utils.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -42,6 +43,7 @@ class _EventScreenState extends State<EventScreen>
   final TextEditingController _messageController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
   final ScrollController _feedEventScrollController = ScrollController();
+  final ExpandableController _expandableController = ExpandableController();
 
 /*   CameraPosition _intialMapLocation;
   String _adressEvent; */
@@ -51,6 +53,7 @@ class _EventScreenState extends State<EventScreen>
   @override
   void initState() {
     super.initState();
+    _expandableController.toggle();
     /* _adressEvent = '';
     _latitude = widget.event.location != null
         ? widget.event.location.latitude
@@ -73,6 +76,7 @@ class _EventScreenState extends State<EventScreen>
     _messageController.dispose();
     _scrollController.dispose();
     _feedEventScrollController.dispose();
+    _expandableController.dispose();
     super.dispose();
   }
 
@@ -303,6 +307,7 @@ class _EventScreenState extends State<EventScreen>
             Row(children: <Widget>[
               Expanded(
                   child: CachedImage(widget.event.pic,
+                      height: 200.0,
                       borderRadius: const BorderRadius.only(
                           bottomRight: Radius.circular(5.0),
                           topRight: Radius.circular(5.0)),
@@ -593,22 +598,21 @@ class _EventScreenState extends State<EventScreen>
                     child: Container(
                         color: orange,
                         padding: const EdgeInsets.all(5),
-                        child:
-                            /*GestureDetector(
-                            onTap: () =>
-                                _showConfirmPopup(userId /* , lounges */) ,
+                        child: GestureDetector(
+                            onTap: () {
+                              _dispatch(EventUnRegisterAction(widget.event));
+                            },
                             // TODO(alexandre): to unattend an event, you need not to have a lounge, so if that's the case, toast a msg about it and/or disable it,
-                            child:*/
-                            Column(
+                            child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: <Widget>[
-                              Stack(
-                                  alignment: Alignment.center,
-                                  children: const <Widget>[
-                                    Icon(Icons.check, color: white),
-                                    Icon(Icons.not_interested, color: pink)
-                                  ])
-                            ]))),
+                                  Stack(
+                                      alignment: Alignment.center,
+                                      children: const <Widget>[
+                                        Icon(Icons.check, color: white),
+                                        Icon(Icons.not_interested, color: pink)
+                                      ])
+                                ])))),
                 Expanded(
                     flex: 3,
                     child: GestureDetector(
@@ -619,26 +623,29 @@ class _EventScreenState extends State<EventScreen>
                         child: Container(
                             color: pink,
                             padding: const EdgeInsets.all(5),
-                            child: Column(children: <Widget>[
-                              Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
-                                  children: <Widget>[
-                                    const Icon(Icons.person, color: white),
-                                    AutoSizeText(
-                                        widget.event.memberIds.length
-                                            .toString(),
-                                        style: const TextStyle(color: white))
-                                  ]),
-                              AutoSizeText(
-                                  FlutterI18n.translate(
-                                      context, 'EVENT.VIEW_LIST'),
-                                  textAlign: TextAlign.center,
-                                  style: const TextStyle(
-                                      color: white,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w400))
-                            ]))))
+                            child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                      children: <Widget>[
+                                        const Icon(Icons.person, color: white),
+                                        AutoSizeText(
+                                            widget.event.memberIds.length
+                                                .toString(),
+                                            style:
+                                                const TextStyle(color: white))
+                                      ]),
+                                  AutoSizeText(
+                                      FlutterI18n.translate(
+                                          context, 'EVENT.VIEW_LIST'),
+                                      textAlign: TextAlign.center,
+                                      style: const TextStyle(
+                                          color: white,
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w400))
+                                ]))))
               ])
             : Container(
                 padding: const EdgeInsets.all(5),
@@ -649,7 +656,7 @@ class _EventScreenState extends State<EventScreen>
                         _dispatch(EventLikeAction(widget.event));
                       }
                       _dispatch(EventRegisterAction(widget.event));
-                      _showInfoPopup();
+                      //_showInfoPopup();
                     },
                     child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -677,6 +684,7 @@ class _EventScreenState extends State<EventScreen>
 
   Widget _buildDescription() {
     return ExpandablePanel(
+        controller: _expandableController,
         header: Container(
             color: orange,
             padding: const EdgeInsets.all(10),
@@ -879,16 +887,15 @@ class _EventScreenState extends State<EventScreen>
                                 widget.event.likes.length.toString(),
                                 style: const TextStyle(color: white)))
                       ]))),
-          buttons: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 5.0),
-            child: MessageBar(
-                chatId: widget.event.id,
-                userId: userId,
-                messageController: _messageController,
-                scrollController: _scrollController,
-                hint: FlutterI18n.translate(context, 'EVENT.MESSAGE'),
-                isEvent: true),
-          ),
+          /*  buttons: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 5.0),
+              child: MessageBar(
+                  chatId: widget.event.id,
+                  userId: userId,
+                  messageController: _messageController,
+                  scrollController: _scrollController,
+                  hint: FlutterI18n.translate(context, 'EVENT.MESSAGE'),
+                  isEvent: true)), */
           child: widget.event == null
               ? const CircularProgressIndicator()
               : ListView(controller: _scrollController, children: <Widget>[
