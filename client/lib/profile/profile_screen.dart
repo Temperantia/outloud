@@ -277,8 +277,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     _buildAboutController(title, _controllers[controllerKey],
                         placeholders: placeholders)
                   else
-                    AutoSizeText(display,
-                        style: const TextStyle(color: orange)),
+                    Row(children: <Widget>[
+                      AutoSizeText(display,
+                          style: const TextStyle(color: orange))
+                    ])
                 ]));
   }
 

@@ -8,7 +8,6 @@ import 'package:business/events/actions/event_unlike_action.dart';
 import 'package:business/events/actions/event_register_action.dart';
 import 'package:business/events/actions/event_unregister_action.dart';
 import 'package:date_utils/date_utils.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
@@ -16,7 +15,6 @@ import 'package:outloud/events/event_attending_screen.dart';
 import 'package:outloud/theme.dart';
 import 'package:expandable/expandable.dart';
 import 'package:outloud/widgets/cached_image.dart';
-import 'package:outloud/widgets/message_bar.dart';
 import 'package:outloud/widgets/view.dart';
 import 'package:intl/intl.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -202,7 +200,7 @@ class _EventScreenState extends State<EventScreen>
         });
   } */
 
-  void _showInfoPopup() {
+/*   void _showInfoPopup() {
     showDialog(
         context: context,
         barrierDismissible: false,
@@ -274,7 +272,7 @@ class _EventScreenState extends State<EventScreen>
                         ]))
               ]));
         });
-  }
+  } */
 
 /*   Future<int> _resolveAdressEvent() async {
     final List<Placemark> placemark =
