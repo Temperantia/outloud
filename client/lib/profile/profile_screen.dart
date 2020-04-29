@@ -129,17 +129,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
 
     final double height = MediaQuery.of(context).size.height -
-        kToolbarHeight -
+        50.0 -
         MediaQuery.of(context).padding.top;
     return Container(
         height: height,
         child: Stack(alignment: Alignment.bottomCenter, children: <Widget>[
           CarouselSlider(
               items: _pictures
-                  .map<Widget>((dynamic picture) => picture is String
-                      ? CachedImage(picture,
-                          imageType: ImageType.UserBig, fit: BoxFit.fitHeight)
-                      : Image.memory(picture as Uint8List))
+                  .map<Widget>((dynamic picture) => CachedImage(
+                      picture as String,
+                      imageType: ImageType.UserBig,
+                      fit: BoxFit.fitHeight))
                   .toList(),
               options: CarouselOptions(
                   height: height,

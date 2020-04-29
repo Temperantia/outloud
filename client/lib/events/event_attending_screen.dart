@@ -81,10 +81,6 @@ class _EventAttendingScreenState extends State<EventAttendingScreen> {
     final int memberNumber = widget.event.memberIds.length;
     final List<User> members = widget.event.members;
 
-    if (widget.event.members == null) {
-      return Container(width: 0.0, height: 0.0);
-    }
-
     return Expanded(
         child: Container(
             padding:
@@ -100,11 +96,11 @@ class _EventAttendingScreenState extends State<EventAttendingScreen> {
                   child: GridView.builder(
                       gridDelegate:
                           const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 2,
+                              crossAxisCount: 1,
                               mainAxisSpacing: 5,
                               crossAxisSpacing: 10.0,
-                              childAspectRatio: 3.0),
-                      itemCount: members.length,
+                              childAspectRatio: 4.0),
+                      itemCount: members?.length,
                       itemBuilder: (BuildContext context, int index) =>
                           _buildMember(members[index], dispatch)))
             ])));
