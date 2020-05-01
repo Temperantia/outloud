@@ -33,9 +33,7 @@ class LoungeHeader extends StatelessWidget {
                           : 'LOUNGE_CHAT.SOMEONES_LOUNGE',
                       child: const Text('',
                           style: TextStyle(
-                              color: black,
-                              fontSize: 13,
-                              fontWeight: FontWeight.w500)),
+                              fontSize: 13, fontWeight: FontWeight.w500)),
                       translationParams: <String, String>{'user': owner.name}))
             ]),
           Padding(
@@ -46,9 +44,7 @@ class LoungeHeader extends StatelessWidget {
                         text:
                             '${lounge.members.length.toString()} ${FlutterI18n.translate(context, "LOUNGES_TAB.MEMBER")}${lounge.members.length > 1 ? 's ' : ' '}',
                         style: const TextStyle(
-                            color: black,
-                            fontSize: 13,
-                            fontWeight: FontWeight.w500),
+                            fontSize: 13, fontWeight: FontWeight.w500),
                         children: <TextSpan>[
                       TextSpan(
                           text: lounge.event.name,

@@ -48,7 +48,7 @@ class _PeopleFriendsScreenState extends State<PeopleFriendsScreen>
             child: Wrap(children: <Widget>[
               AutoSizeText(user.name,
                   style: const TextStyle(
-                      color: black, fontWeight: FontWeight.w600, fontSize: 15))
+                      fontWeight: FontWeight.w600, fontSize: 15))
             ])),
         trailing: GestureDetector(
             onTap: () => _dispatch(ChatsCreateAction(user.id)),
@@ -87,14 +87,11 @@ class _PeopleFriendsScreenState extends State<PeopleFriendsScreen>
           Container(
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child: GestureDetector(
-                  onTap: () async {
-                    /* await showLoaderAnimation(context, this,
-                          animationDuration: 600); */
-                    _dispatch(UserAcceptFriendRequestAction(user.id, userId));
-                  },
-                  child: Column(children: <Widget>[
-                    Icon(Icons.add_circle_outline, size: 30, color: white),
-                    const AutoSizeText('ACCEPTER',
+                  onTap: () =>
+                      _dispatch(UserAcceptFriendRequestAction(user.id, userId)),
+                  child: Column(children: const <Widget>[
+                    Icon(Icons.add_circle_outline, size: 30.0, color: white),
+                    AutoSizeText('ACCEPTER',
                         style: TextStyle(
                             color: white,
                             fontWeight: FontWeight.w300,
@@ -103,11 +100,8 @@ class _PeopleFriendsScreenState extends State<PeopleFriendsScreen>
           Container(
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child: GestureDetector(
-                  onTap: () async {
-                    /* await showLoaderAnimation(context, this,
-                          animationDuration: 600); */
-                    _dispatch(UserDenyFriendRequestAction(user.id, userId));
-                  },
+                  onTap: () =>
+                      _dispatch(UserDenyFriendRequestAction(user.id, userId)),
                   child: Column(children: const <Widget>[
                     Icon(Icons.remove_circle_outline, size: 30, color: white),
                     AutoSizeText('REFUSER',
@@ -157,27 +151,34 @@ class _PeopleFriendsScreenState extends State<PeopleFriendsScreen>
         Widget child) {
       _dispatch = dispatch;
 
+      final List<User> friends = state.userState.friends;
+      final List<User> pendingFriends = state.userState.pendingFriends;
+
       return Column(children: <Widget>[
-        if (state.userState.pendingFriends.isNotEmpty)
+        if (pendingFriends.isNotEmpty)
           Flexible(
-              flex: state.userState.pendingFriends.length > 1 ? 4 : 3,
+              flex: pendingFriends.length > 1 ? 4 : 3,
               child: _buildPendingFriends(
-                  state.userState.pendingFriends, state.userState.user.id)),
+                  pendingFriends, state.userState.user.id)),
         Expanded(
-            flex: state.userState.pendingFriends.length > 1 ? 6 : 7,
-            child: _buildFriends(state.userState.friends)),
-        Container(
-            padding: const EdgeInsets.only(top: 5.0),
-            decoration: const BoxDecoration(
-                gradient: LinearGradient(colors: <Color>[pinkLight, pink])),
-            child: Row(mainAxisAlignment: MainAxisAlignment.center, children: <
-                Widget>[
-              Button(
-                  text: FlutterI18n.translate(context, 'PEOPLE_TAB.FIND_MORE'),
-                  width: 250,
-                  onPressed: () => dispatch(NavigateAction<AppState>.pushNamed(
-                      PeopleSearchScreen.id)))
-            ]))
+            flex: pendingFriends.length > 1 ? 6 : 7,
+            child: _buildFriends(friends)),
+        if (friends.isNotEmpty)
+          Container(
+              padding: const EdgeInsets.only(top: 5.0),
+              decoration: const BoxDecoration(
+                  gradient: LinearGradient(colors: <Color>[pinkLight, pink])),
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Button(
+                        text: FlutterI18n.translate(
+                            context, 'PEOPLE_TAB.FIND_MORE'),
+                        width: 250,
+                        onPressed: () => dispatch(
+                            NavigateAction<AppState>.pushNamed(
+                                PeopleSearchScreen.id)))
+                  ]))
       ]);
     });
   }

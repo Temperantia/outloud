@@ -1,25 +1,65 @@
-import 'package:auto_size_text/auto_size_text.dart';
-import 'package:business/app_state.dart';
+import 'package:auto_size_text/auto_size_text.dart' show AutoSizeText;
+import 'package:business/app_state.dart' show AppState;
 import 'package:async_redux/async_redux.dart'
     show ReduxAction, NavigateAction, Store;
-import 'package:business/classes/event.dart';
-import 'package:business/events/actions/event_like_action.dart';
-import 'package:business/events/actions/event_unlike_action.dart';
-import 'package:business/events/actions/event_register_action.dart';
+import 'package:business/classes/event.dart' show Event;
+import 'package:business/events/actions/event_like_action.dart'
+    show EventLikeAction;
+import 'package:business/events/actions/event_unlike_action.dart'
+    show EventUnlikeAction;
+import 'package:business/events/actions/event_register_action.dart'
+    show EventRegisterAction;
 import 'package:business/events/actions/event_unregister_action.dart';
-import 'package:date_utils/date_utils.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_i18n/flutter_i18n.dart';
-import 'package:flutter_linkify/flutter_linkify.dart';
-import 'package:outloud/events/event_attending_screen.dart';
-import 'package:outloud/theme.dart';
-import 'package:expandable/expandable.dart';
-import 'package:outloud/widgets/cached_image.dart';
-import 'package:outloud/widgets/view.dart';
-import 'package:intl/intl.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:provider_for_redux/provider_for_redux.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:date_utils/date_utils.dart' show Utils;
+import 'package:flutter/material.dart'
+    show
+        Alignment,
+        Border,
+        BorderRadius,
+        BoxDecoration,
+        BuildContext,
+        CircularProgressIndicator,
+        Colors,
+        Column,
+        Container,
+        CrossAxisAlignment,
+        EdgeInsets,
+        Expanded,
+        FontWeight,
+        GestureDetector,
+        Icon,
+        Icons,
+        InkWell,
+        ListView,
+        MainAxisAlignment,
+        Padding,
+        Radius,
+        Row,
+        ScrollController,
+        Stack,
+        State,
+        StatefulWidget,
+        TextAlign,
+        TextEditingController,
+        TextStyle,
+        TickerProviderStateMixin,
+        Widget,
+        Wrap;
+import 'package:flutter_i18n/flutter_i18n.dart' show FlutterI18n;
+import 'package:flutter_linkify/flutter_linkify.dart'
+    show LinkableElement, Linkify;
+import 'package:outloud/events/event_attending_screen.dart'
+    show EventAttendingScreen;
+import 'package:outloud/theme.dart' show black, orange, pink, pinkLight, white;
+import 'package:expandable/expandable.dart'
+    show ExpandableController, ExpandablePanel, ExpandableThemeData;
+import 'package:outloud/widgets/cached_image.dart' show CachedImage, ImageType;
+import 'package:outloud/widgets/view.dart' show View;
+import 'package:intl/intl.dart' show DateFormat;
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart'
+    show MdiIcons;
+import 'package:provider_for_redux/provider_for_redux.dart' show ReduxConsumer;
+import 'package:url_launcher/url_launcher.dart' show launch;
 
 class EventScreen extends StatefulWidget {
   const EventScreen(this.event);

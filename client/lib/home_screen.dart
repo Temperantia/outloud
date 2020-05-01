@@ -76,7 +76,7 @@ class _HomeScreenState extends State<HomeScreen>
           View(
               title: TabBar(
                   labelStyle:
-                      TextStyle(fontSize: ScreenUtil().setSp(30.0).toDouble()),
+                      TextStyle(fontSize: ScreenUtil().setSp(37.0).toDouble()),
                   labelPadding: const EdgeInsets.all(0.0),
                   labelColor: white,
                   indicator: const BoxDecoration(),
@@ -86,7 +86,7 @@ class _HomeScreenState extends State<HomeScreen>
                             context, 'EVENTS.FIND_EVENTS')),
                     Tab(
                         text:
-                            FlutterI18n.translate(context, 'EVENTS.MY_EVENTS')),
+                            FlutterI18n.translate(context, 'EVENTS.MY_EVENTS'))
                   ]),
               child: EventsWidget()),
 /*       View(
@@ -124,7 +124,7 @@ class _HomeScreenState extends State<HomeScreen>
 
   @override
   Widget build(BuildContext context) {
-    ScreenUtil.init(context, allowFontScaling: true);
+    ScreenUtil.init(context);
 
     return ReduxSelector<AppState, dynamic>(
         selector: (BuildContext context, AppState state) =>

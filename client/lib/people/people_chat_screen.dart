@@ -45,10 +45,8 @@ class _PeopleChatScreenState extends State<PeopleChatScreen>
             imageType: ImageType.User),
         title: AutoSizeText(chat.entity.name,
             style: const TextStyle(fontWeight: FontWeight.bold)),
-        subtitle: lastMessage == null
-            ? null
-            : AutoSizeText(lastMessage.getTimeAgo(),
-                style: textStyleListItemSubtitle),
+        subtitle:
+            lastMessage == null ? null : AutoSizeText(lastMessage.getTimeAgo()),
         buttons: lastMessage == null
             ? null
             : Wrap(children: <Widget>[

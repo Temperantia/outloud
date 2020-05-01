@@ -7,6 +7,7 @@ import 'package:business/classes/user.dart';
 import 'package:business/actions/app_disconnect_action.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
+import 'package:flutter_screenutil/screenutil.dart';
 import 'package:gradient_bottom_navigation_bar/gradient_bottom_navigation_bar.dart';
 import 'package:outloud/profile/profile_screen.dart';
 

@@ -27,10 +27,9 @@ Stream<List<Event>> streamEvents(List<String> ids) {
 Future<List<Event>> getEvents() async {
   final Query query = _api.queryCollection();
 
-  return (await query.getDocuments()).documents.map((DocumentSnapshot doc) {
-    return Event.fromMap(doc.data, doc.documentID);
-  })
-      //.where((Event event) => !event.hasUser(userId))
+  return (await query.getDocuments())
+      .documents
+      .map((DocumentSnapshot doc) => Event.fromMap(doc.data, doc.documentID))
       .toList();
 }
 

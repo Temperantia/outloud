@@ -13,10 +13,10 @@ class LoginAction extends ReduxAction<AppState> {
     final String id = user?.uid;
 
     if (id != null) {
-      dispatch(UserListenAction(id));
+      await dispatchFuture(UserListenAction(id));
     }
-    dispatch(EventsGetAction());
-    dispatch(PeopleGetAction());
+    await dispatchFuture(EventsGetAction());
+    await dispatchFuture(PeopleGetAction());
 
     return state.copy(
         loginState: state.loginState.copy(id: id), loading: false);

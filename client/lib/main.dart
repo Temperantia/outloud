@@ -40,7 +40,7 @@ Future<void> main() async {
       initialState: initialState,
       errorObserver: SwallowErrorObserver<AppState>());
 
-  store.dispatch(LoginAction());
+  await store.dispatchFuture(LoginAction());
 
   navigatorKey = GlobalKey<NavigatorState>();
   NavigateAction.setNavigatorKey(navigatorKey);

@@ -29,7 +29,7 @@ import 'package:flutter/material.dart'
         Wrap;
 import 'package:flutter_i18n/flutter_i18n.dart' show FlutterI18n;
 import 'package:outloud/profile/profile_screen.dart' show ProfileScreen;
-import 'package:outloud/theme.dart' show black, orange, orangeLight;
+import 'package:outloud/theme.dart' show orange, orangeLight;
 import 'package:outloud/widgets/cached_image.dart' show CachedImage, ImageType;
 import 'package:outloud/widgets/view.dart' show View;
 import 'package:provider_for_redux/provider_for_redux.dart' show ReduxConsumer;
@@ -53,8 +53,8 @@ class _EventAttendingScreenState extends State<EventAttendingScreen> {
             AutoSizeText(
                 FlutterI18n.translate(
                     context, 'EVENTS_ATTENDING.FOR_THE_EVENT'),
-                style: const TextStyle(
-                    color: black, fontSize: 13, fontWeight: FontWeight.bold)),
+                style:
+                    const TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
           ]),
           Row(children: <Widget>[
             Flexible(
