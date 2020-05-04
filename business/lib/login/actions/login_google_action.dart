@@ -44,13 +44,16 @@ class LoginGoogleAction extends ReduxAction<AppState> {
       final AuthResult result =
           await firebaseAuth.signInWithCredential(credential);
 
-      final User user = User(
-          birthDate: birthdate,
-          name: result.user.displayName,
-          id: result.user.uid,
-          pics: <String>[result.user.photoUrl.replaceFirst('s96', 's1000')]);
-
-      if (getUser(user.id) != null) {
+      final String userId = result.user.uid;
+      final User user = await getUser(userId) ??
+          User(
+              birthDate: birthdate,
+              name: result.user.displayName ?? '',
+              id: userId,
+              pics: <String>[
+                result.user.photoUrl?.replaceFirst('s96', 's1000')
+              ]);
+      if (user != null) {
         dispatch(UserListenAction(user.id));
       }
 

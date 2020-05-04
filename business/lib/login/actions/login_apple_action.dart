@@ -10,7 +10,8 @@ import 'package:business/app_state.dart';
 class LoginAppleAction extends ReduxAction<AppState> {
   @override
   Future<AppState> reduce() async {
-    final AuthorizationResult authResult = await AppleSignIn.performRequests(<AuthorizationRequest>[
+    final AuthorizationResult authResult =
+        await AppleSignIn.performRequests(<AuthorizationRequest>[
       AppleIdRequest(requestedScopes: <Scope>[Scope.email, Scope.fullName])
     ]);
 
@@ -38,16 +39,20 @@ class LoginAppleAction extends ReduxAction<AppState> {
         await FirebaseAuth.instance.signInWithCredential(credential);
 
     String name;
-    if (appleIdCredential.fullName.givenName != null && appleIdCredential.fullName.familyName != null) {
-      name = appleIdCredential.fullName.givenName + ' ' + appleIdCredential.fullName.familyName;
+    if (appleIdCredential.fullName.givenName != null &&
+        appleIdCredential.fullName.familyName != null) {
+      name = appleIdCredential.fullName.givenName +
+          ' ' +
+          appleIdCredential.fullName.familyName;
     }
 
-    final User user = User(
-        name: name,
-        id: result.user.uid,
-        pics: <String>[result.user.photoUrl]);
-
-    if (getUser(user.id) != null) {
+    final String userId = result.user.uid;
+    final User user = await getUser(userId) ??
+        User(
+            name: name,
+            id: result.user.uid,
+            pics: <String>[result.user.photoUrl]);
+    if (user != null) {
       dispatch(UserListenAction(user.id));
     }
 

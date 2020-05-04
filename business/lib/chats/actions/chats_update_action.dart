@@ -42,10 +42,7 @@ class ChatsUpdateAction extends ReduxAction<AppState> {
       if (chat2.messages.isEmpty) {
         return -1;
       }
-      return chat1.messages[chat1.messages.length - 1].timestamp >
-              chat2.messages[chat2.messages.length - 1].timestamp
-          ? -1
-          : 1;
+      return chat1.messages[0].timestamp > chat2.messages[0].timestamp ? -1 : 1;
     });
 
     return state.copy(chatsState: state.chatsState.copy(chats: chats));

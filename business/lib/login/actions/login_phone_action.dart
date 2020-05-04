@@ -30,9 +30,9 @@ class LoginPhoneAction extends ReduxAction<AppState> {
   Future<void> _verificationComplete(AuthCredential authCredential) async {
     final AuthResult result =
         await firebaseAuth.signInWithCredential(authCredential);
-    final User user = User(id: result.user.uid);
-
-    if (getUser(user.id) != null) {
+    final String userId = result.user.uid;
+    final User user = await getUser(userId) ?? User(id: result.user.uid);
+    if (user != null) {
       dispatch(UserListenAction(user.id));
     }
 

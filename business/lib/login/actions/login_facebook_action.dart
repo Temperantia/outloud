@@ -36,13 +36,15 @@ class LoginFacebookAction extends ReduxAction<AppState> {
  */
         final AuthResult authResult =
             await firebaseAuth.signInWithCredential(credential);
-        final User user = User(
-            //birthDate: birthdate,
-            name: authResult.user.displayName,
-            id: authResult.user.uid,
-            pics: <String>[data['picture']['data']['url'] as String]);
 
-        if (getUser(user.id) != null) {
+        final String userId = authResult.user.uid;
+        final User user = await getUser(userId) ??
+            User(
+                //birthDate: birthdate,
+                name: authResult.user.displayName,
+                id: authResult.user.uid,
+                pics: <String>[data['picture']['data']['url'] as String]);
+        if (user != null) {
           dispatch(UserListenAction(user.id));
         }
         return state.copy(
