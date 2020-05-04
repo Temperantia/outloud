@@ -5,12 +5,13 @@ import 'package:business/classes/lounge.dart';
 import 'package:business/classes/user.dart';
 import 'package:business/lounges/actions/lounge_remove_action.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_i18n/flutter_i18n.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:outloud/theme.dart';
-import 'package:outloud/widgets/event_image.dart';
-import 'package:outloud/widgets/lounge_header.dart';
-import 'package:provider_for_redux/provider_for_redux.dart';
+import 'package:flutter_i18n/flutter_i18n.dart' show FlutterI18n;
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart'
+    show MdiIcons;
+import 'package:outloud/theme.dart' show orange, white;
+import 'package:outloud/widgets/event_image.dart' show EventImage;
+import 'package:outloud/widgets/lounge_header.dart' show LoungeHeader;
+import 'package:provider_for_redux/provider_for_redux.dart' show ReduxConsumer;
 
 class LoungeBanner extends StatefulWidget {
   const LoungeBanner({this.lounge, this.owner, this.userId});

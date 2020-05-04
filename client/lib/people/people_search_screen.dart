@@ -1,6 +1,7 @@
-import 'package:flutter/material.dart';
-import 'package:outloud/widgets/people_search.dart';
-import 'package:outloud/widgets/view.dart';
+import 'package:flutter/material.dart'
+    show BuildContext, State, StatefulWidget, TickerProviderStateMixin, Widget;
+import 'package:outloud/widgets/people_search.dart' show PeopleSearch;
+import 'package:outloud/widgets/view.dart' show View;
 
 class PeopleSearchScreen extends StatefulWidget {
   static const String id = 'PeopleSearch';

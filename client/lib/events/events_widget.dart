@@ -1,6 +1,15 @@
-import 'package:flutter/material.dart';
-import 'package:outloud/events/find_events_screen.dart';
-import 'package:outloud/events/my_events_screen.dart';
+import 'package:flutter/material.dart'
+    show
+        AutomaticKeepAliveClientMixin,
+        BuildContext,
+        NeverScrollableScrollPhysics,
+        SingleTickerProviderStateMixin,
+        State,
+        StatefulWidget,
+        TabBarView,
+        Widget;
+import 'package:outloud/events/find_events_screen.dart' show FindEventsScreen;
+import 'package:outloud/events/my_events_screen.dart' show MyEventsScreen;
 
 class EventsWidget extends StatefulWidget {
   @override

@@ -36,8 +36,11 @@ class ChatsUpdateAction extends ReduxAction<AppState> {
     }
 
     chats.sort((Chat chat1, Chat chat2) {
-      if (chat1.messages.isEmpty || chat2.messages.isEmpty) {
-        return 0;
+      if (chat1.messages.isEmpty) {
+        return 1;
+      }
+      if (chat2.messages.isEmpty) {
+        return -1;
       }
       return chat1.messages[chat1.messages.length - 1].timestamp >
               chat2.messages[chat2.messages.length - 1].timestamp

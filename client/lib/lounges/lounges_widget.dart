@@ -157,7 +157,7 @@ class _LoungesWidgetState extends State<LoungesWidget>
       if (state.userState.user.events == null ||
           state.userState.events == null ||
           state.userState.lounges == null) {
-        return Loading();
+        return const Loading();
       }
 
       return Column(children: <Widget>[

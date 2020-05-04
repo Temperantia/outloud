@@ -1,5 +1,7 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_cupertino_date_picker/flutter_cupertino_date_picker.dart';
+import 'package:flutter/material.dart'
+    show BuildContext, StatelessWidget, Widget;
+import 'package:flutter_cupertino_date_picker/flutter_cupertino_date_picker.dart'
+    show DatePickerWidget, DateTimePickerTheme;
 
 class BirthdatePicker extends StatelessWidget {
   BirthdatePicker({this.initial, this.onChange});

@@ -65,13 +65,10 @@ class _PeopleSearchState extends State<PeopleSearch> {
                       child: GestureDetector(
                           onTap: () => _dispatch(UserAcceptFriendRequestAction(
                               person.id, user.id)),
-                          child: Column(children: <Widget>[
-                            Icon(
-                              Icons.add_circle_outline,
-                              size: 20,
-                              color: blue,
-                            ),
-                            const AutoSizeText('Accepter',
+                          child: Column(children: const <Widget>[
+                            Icon(Icons.add_circle_outline,
+                                size: 20, color: blue),
+                            AutoSizeText('Accepter',
                                 style: TextStyle(
                                     color: blue,
                                     fontSize: 12,
@@ -145,7 +142,7 @@ class _PeopleSearchState extends State<PeopleSearch> {
       }).toList();
       // final Map<String, String> distances = state.peopleState.distances;
       if (people == null /*  || distances == null */) {
-        return Loading();
+        return const Loading();
       }
       return ContentList<User>(
           onRefresh: () => store.dispatchFuture(PeopleGetAction()),

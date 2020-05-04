@@ -1,24 +1,54 @@
 import 'package:async_redux/async_redux.dart'
     show ReduxAction, NavigateAction, Store;
-import 'package:async_redux/async_redux.dart';
-import 'package:auto_size_text/auto_size_text.dart';
-import 'package:business/app_state.dart';
-import 'package:business/classes/user.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_i18n/flutter_i18n.dart';
-import 'package:outloud/people/people_search_screen.dart';
-import 'package:business/user/actions/user_accept_friend_request_action.dart';
-import 'package:business/chats/actions/chats_create_action.dart';
-import 'package:business/user/actions/user_deny_friend_request_action.dart';
-import 'package:outloud/profile/profile_screen.dart';
-import 'package:outloud/widgets/button.dart';
-import 'package:outloud/widgets/cached_image.dart';
-import 'package:outloud/widgets/content_list.dart';
-import 'package:outloud/widgets/content_list_item.dart';
-import 'package:outloud/widgets/people_search.dart';
-import 'package:provider_for_redux/provider_for_redux.dart';
+import 'package:auto_size_text/auto_size_text.dart' show AutoSizeText;
+import 'package:business/app_state.dart' show AppState;
+import 'package:business/classes/user.dart' show User;
+import 'package:flutter/material.dart'
+    show
+        AutomaticKeepAliveClientMixin,
+        Border,
+        BorderRadius,
+        BoxDecoration,
+        BuildContext,
+        Color,
+        Column,
+        Container,
+        CrossAxisAlignment,
+        EdgeInsets,
+        Expanded,
+        Flexible,
+        FontWeight,
+        GestureDetector,
+        Icon,
+        Icons,
+        LinearGradient,
+        MainAxisAlignment,
+        MediaQuery,
+        Row,
+        State,
+        StatefulWidget,
+        TextStyle,
+        TickerProviderStateMixin,
+        Widget,
+        Wrap;
+import 'package:flutter_i18n/flutter_i18n.dart' show FlutterI18n;
+import 'package:outloud/people/people_search_screen.dart'
+    show PeopleSearchScreen;
+import 'package:business/user/actions/user_accept_friend_request_action.dart'
+    show UserAcceptFriendRequestAction;
+import 'package:business/chats/actions/chats_create_action.dart'
+    show ChatsCreateAction;
+import 'package:business/user/actions/user_deny_friend_request_action.dart'
+    show UserDenyFriendRequestAction;
+import 'package:outloud/profile/profile_screen.dart' show ProfileScreen;
+import 'package:outloud/widgets/button.dart' show Button;
+import 'package:outloud/widgets/cached_image.dart' show CachedImage, ImageType;
+import 'package:outloud/widgets/content_list.dart' show ContentList;
+import 'package:outloud/widgets/content_list_item.dart' show ContentListItem;
+import 'package:outloud/widgets/people_search.dart' show PeopleSearch;
+import 'package:provider_for_redux/provider_for_redux.dart' show ReduxConsumer;
 
-import 'package:outloud/theme.dart';
+import 'package:outloud/theme.dart' show blue, orange, pink, pinkLight, white;
 
 class PeopleFriendsScreen extends StatefulWidget {
   @override
@@ -134,13 +164,6 @@ class _PeopleFriendsScreenState extends State<PeopleFriendsScreen>
             ]));
   }
 
-  Widget _buildFriends(List<User> friends) {
-    return ContentList<User>(
-        items: friends,
-        builder: (User friend) => _buildPerson(friend),
-        whenEmpty: PeopleSearch());
-  }
-
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -157,12 +180,13 @@ class _PeopleFriendsScreenState extends State<PeopleFriendsScreen>
       return Column(children: <Widget>[
         if (pendingFriends.isNotEmpty)
           Flexible(
-              flex: pendingFriends.length > 1 ? 4 : 3,
               child: _buildPendingFriends(
                   pendingFriends, state.userState.user.id)),
         Expanded(
-            flex: pendingFriends.length > 1 ? 6 : 7,
-            child: _buildFriends(friends)),
+            child: ContentList<User>(
+                items: friends,
+                builder: (User friend) => _buildPerson(friend),
+                whenEmpty: PeopleSearch())),
         if (friends.isNotEmpty)
           Container(
               padding: const EdgeInsets.only(top: 5.0),
@@ -174,7 +198,7 @@ class _PeopleFriendsScreenState extends State<PeopleFriendsScreen>
                     Button(
                         text: FlutterI18n.translate(
                             context, 'PEOPLE_TAB.FIND_MORE'),
-                        width: 250,
+                        width: MediaQuery.of(context).size.width * 3 / 4,
                         onPressed: () => dispatch(
                             NavigateAction<AppState>.pushNamed(
                                 PeopleSearchScreen.id)))

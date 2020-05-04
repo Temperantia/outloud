@@ -1,21 +1,43 @@
-import 'package:async_redux/async_redux.dart';
-import 'package:auto_size_text/auto_size_text.dart';
-import 'package:business/app_state.dart';
-import 'package:business/chats/actions/chats_read_action.dart';
-import 'package:business/classes/chat.dart';
-import 'package:business/classes/chat_state.dart';
-import 'package:business/classes/message.dart';
-import 'package:business/classes/message_state.dart';
-import 'package:business/classes/user.dart';
-import 'package:flutter/material.dart';
-import 'package:outloud/profile/profile_screen.dart';
-import 'package:outloud/theme.dart';
-import 'package:outloud/widgets/cached_image.dart';
-import 'package:outloud/widgets/content_list.dart';
-import 'package:outloud/widgets/message_bar.dart';
-import 'package:outloud/widgets/view.dart';
-import 'package:intl/intl.dart';
-import 'package:provider_for_redux/provider_for_redux.dart';
+import 'package:async_redux/async_redux.dart'
+    show NavigateAction, ReduxAction, Store;
+import 'package:auto_size_text/auto_size_text.dart' show AutoSizeText;
+import 'package:business/app_state.dart' show AppState;
+import 'package:business/chats/actions/chats_read_action.dart'
+    show ChatsReadAction;
+import 'package:business/classes/chat.dart' show Chat;
+import 'package:business/classes/chat_state.dart' show ChatState;
+import 'package:business/classes/message.dart' show Message;
+import 'package:business/classes/message_state.dart' show MessageState;
+import 'package:business/classes/user.dart' show User;
+import 'package:flutter/material.dart'
+    show
+        BorderRadius,
+        BoxDecoration,
+        BuildContext,
+        Column,
+        Container,
+        CrossAxisAlignment,
+        EdgeInsets,
+        Expanded,
+        FontWeight,
+        GestureDetector,
+        MainAxisAlignment,
+        Padding,
+        Row,
+        ScrollController,
+        State,
+        StatefulWidget,
+        TextEditingController,
+        TextStyle,
+        Widget;
+import 'package:outloud/profile/profile_screen.dart' show ProfileScreen;
+import 'package:outloud/theme.dart' show pink, pinkLight;
+import 'package:outloud/widgets/cached_image.dart' show CachedImage, ImageType;
+import 'package:outloud/widgets/content_list.dart' show ContentList;
+import 'package:outloud/widgets/message_bar.dart' show MessageBar;
+import 'package:outloud/widgets/view.dart' show View;
+import 'package:intl/intl.dart' show DateFormat;
+import 'package:provider_for_redux/provider_for_redux.dart' show ReduxConsumer;
 
 class ChatScreen extends StatefulWidget {
   const ChatScreen(this.chat);

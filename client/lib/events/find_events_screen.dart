@@ -1,24 +1,45 @@
-import 'dart:async';
+import 'dart:async' show Future;
 
 import 'package:async_redux/async_redux.dart'
     show ReduxAction, NavigateAction, Store;
-import 'package:auto_size_text/auto_size_text.dart';
-import 'package:business/app_state.dart';
-import 'package:business/classes/event.dart';
-import 'package:business/classes/user_event_state.dart';
-import 'package:business/events/actions/events_get_action.dart';
-import 'package:date_utils/date_utils.dart';
-
-import 'package:flutter/material.dart';
-import 'package:flutter_i18n/flutter_i18n.dart';
-
-import 'package:outloud/events/event_screen.dart';
-import 'package:outloud/theme.dart';
-import 'package:intl/intl.dart';
-import 'package:outloud/widgets/content_list.dart';
-import 'package:outloud/widgets/content_list_item.dart';
-import 'package:outloud/widgets/event_image.dart';
-import 'package:provider_for_redux/provider_for_redux.dart';
+import 'package:auto_size_text/auto_size_text.dart' show AutoSizeText;
+import 'package:business/app_state.dart' show AppState;
+import 'package:business/classes/event.dart' show Event;
+import 'package:business/classes/user_event_state.dart' show UserEventState;
+import 'package:business/events/actions/events_get_action.dart'
+    show EventsGetAction;
+import 'package:date_utils/date_utils.dart' show Utils;
+import 'package:flutter/material.dart'
+    show
+        AutomaticKeepAliveClientMixin,
+        Border,
+        BorderRadius,
+        BoxDecoration,
+        BuildContext,
+        Column,
+        Container,
+        DropdownButton,
+        DropdownMenuItem,
+        EdgeInsets,
+        Expanded,
+        FontWeight,
+        MainAxisAlignment,
+        Row,
+        State,
+        StatefulWidget,
+        TextStyle,
+        TickerProviderStateMixin,
+        Widget,
+        Wrap;
+import 'package:flutter_i18n/flutter_i18n.dart' show FlutterI18n;
+import 'package:outloud/events/event_screen.dart' show EventScreen;
+import 'package:outloud/theme.dart' show black, orange, pink, white;
+import 'package:intl/intl.dart' show DateFormat;
+import 'package:outloud/widgets/content_list.dart' show ContentList;
+import 'package:outloud/widgets/content_list_item.dart' show ContentListItem;
+import 'package:outloud/widgets/event_image.dart' show EventImage;
+import 'package:outloud/widgets/loading.dart' show Loading;
+import 'package:provider_for_redux/provider_for_redux.dart' show ReduxConsumer;
 
 class FindEventsScreen extends StatefulWidget {
   @override
@@ -327,7 +348,7 @@ class _FindEventsScreen extends State<FindEventsScreen>
                                           style: const TextStyle(color: orange)) */
               ]),
           Wrap(children: <Widget>[
-            for (String interest in event.interests)
+            for (final String interest in event.interests)
               Container(
                   padding: const EdgeInsets.symmetric(horizontal: 5.0),
                   decoration: BoxDecoration(
@@ -409,7 +430,7 @@ class _FindEventsScreen extends State<FindEventsScreen>
       _dispatchFuture = store.dispatchFuture;
       _events = state.eventsState.events;
       if (_events == null) {
-        return const CircularProgressIndicator();
+        return const Loading();
       }
 
       /*   _distanceValue ??=

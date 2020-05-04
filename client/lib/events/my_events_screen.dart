@@ -1,19 +1,37 @@
 import 'package:async_redux/async_redux.dart'
     show ReduxAction, NavigateAction, Store;
-import 'package:auto_size_text/auto_size_text.dart';
-import 'package:business/app_state.dart';
-import 'package:business/classes/event.dart';
-import 'package:business/classes/user_event_state.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_i18n/flutter_i18n.dart';
-import 'package:outloud/events/event_screen.dart';
-import 'package:outloud/theme.dart';
-import 'package:intl/intl.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:outloud/widgets/content_list.dart';
-import 'package:outloud/widgets/content_list_item.dart';
-import 'package:outloud/widgets/event_image.dart';
-import 'package:provider_for_redux/provider_for_redux.dart';
+import 'package:auto_size_text/auto_size_text.dart' show AutoSizeText;
+import 'package:business/app_state.dart' show AppState;
+import 'package:business/classes/event.dart' show Event;
+import 'package:business/classes/user_event_state.dart' show UserEventState;
+import 'package:flutter/material.dart'
+    show
+        AutomaticKeepAliveClientMixin,
+        BuildContext,
+        Column,
+        Container,
+        CrossAxisAlignment,
+        EdgeInsets,
+        FontWeight,
+        Icon,
+        Icons,
+        Image,
+        MainAxisAlignment,
+        Row,
+        State,
+        StatefulWidget,
+        TextStyle,
+        Widget;
+import 'package:flutter_i18n/flutter_i18n.dart' show FlutterI18n;
+import 'package:outloud/events/event_screen.dart' show EventScreen;
+import 'package:outloud/theme.dart' show grey;
+import 'package:intl/intl.dart' show DateFormat;
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart'
+    show MdiIcons;
+import 'package:outloud/widgets/content_list.dart' show ContentList;
+import 'package:outloud/widgets/content_list_item.dart' show ContentListItem;
+import 'package:outloud/widgets/event_image.dart' show EventImage;
+import 'package:provider_for_redux/provider_for_redux.dart' show ReduxConsumer;
 
 class MyEventsScreen extends StatefulWidget {
   @override

@@ -18,7 +18,6 @@ import 'package:flutter/material.dart'
         BorderRadius,
         BoxDecoration,
         BuildContext,
-        CircularProgressIndicator,
         Colors,
         Column,
         Container,
@@ -54,6 +53,7 @@ import 'package:outloud/theme.dart' show black, orange, pink, pinkLight, white;
 import 'package:expandable/expandable.dart'
     show ExpandableController, ExpandablePanel, ExpandableThemeData;
 import 'package:outloud/widgets/cached_image.dart' show CachedImage, ImageType;
+import 'package:outloud/widgets/loading.dart';
 import 'package:outloud/widgets/view.dart' show View;
 import 'package:intl/intl.dart' show DateFormat;
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart'
@@ -935,7 +935,7 @@ class _EventScreenState extends State<EventScreen>
                   hint: FlutterI18n.translate(context, 'EVENT.MESSAGE'),
                   isEvent: true)), */
           child: widget.event == null
-              ? const CircularProgressIndicator()
+              ? const Loading()
               : ListView(controller: _scrollController, children: <Widget>[
                   _buildEventInfo(userId,
                       isUserAttending /* ,

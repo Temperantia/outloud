@@ -10,6 +10,7 @@ import 'package:outloud/register/register_2.dart';
 import 'package:outloud/theme.dart';
 import 'package:outloud/widgets/button.dart';
 import 'package:outloud/widgets/cached_image.dart';
+import 'package:outloud/widgets/loading.dart';
 import 'package:outloud/widgets/view.dart';
 import 'package:provider_for_redux/provider_for_redux.dart';
 
@@ -46,7 +47,7 @@ class _Register1ScreenState extends State<Register1Screen> {
                       bottomRight: Radius.circular(30.0))),
             ),
             if (user == null)
-              const Center(child: CircularProgressIndicator())
+              const Loading()
             else
               Container(
                   constraints: const BoxConstraints.expand(),

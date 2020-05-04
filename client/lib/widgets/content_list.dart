@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:outloud/theme.dart';
+import 'package:outloud/widgets/loading.dart';
 
 class ContentList<T> extends StatelessWidget {
   const ContentList(
@@ -22,7 +23,7 @@ class ContentList<T> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (items == null) {
-      return const CircularProgressIndicator();
+      return const Loading();
     }
 
     final Widget child = Scrollbar(

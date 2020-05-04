@@ -30,7 +30,7 @@ class _PeopleWidgetState extends State<PeopleWidget>
       final List<User> friends = state.userState.friends;
       final List<Chat> chats = state.chatsState.chats;
       if (user == null || friends == null || chats == null) {
-        return Loading();
+        return const Loading();
       }
       return TabBarView(
           physics: const NeverScrollableScrollPhysics(),

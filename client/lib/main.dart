@@ -88,7 +88,7 @@ class _AppState extends State<App> {
                       : state.loginState.loginError.isNotEmpty
                           ? MyErrorWidget(state.loginState.loginError)
                           : state.loading
-                              ? Loading()
+                              ? const Loading()
                               : state.userState.user == null
                                   ? LoginScreen()
                                   : HomeScreen(),

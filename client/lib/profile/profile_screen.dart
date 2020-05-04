@@ -1,21 +1,67 @@
-import 'dart:typed_data';
+import 'dart:typed_data' show Uint8List;
 
-import 'package:async_redux/async_redux.dart';
-import 'package:auto_size_text/auto_size_text.dart';
-import 'package:business/app_state.dart';
-import 'package:business/classes/user.dart';
-import 'package:business/models/user.dart';
-import 'package:carousel_slider/carousel_slider.dart';
-import 'package:dotted_border/dotted_border.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_i18n/flutter_i18n.dart';
-import 'package:flutter_typeahead/flutter_typeahead.dart';
-import 'package:outloud/functions/firebase.dart';
-import 'package:outloud/theme.dart';
-import 'package:outloud/widgets/cached_image.dart';
-import 'package:outloud/widgets/view.dart';
-import 'package:multi_image_picker/multi_image_picker.dart';
-import 'package:provider_for_redux/provider_for_redux.dart';
+import 'package:async_redux/async_redux.dart' show ReduxAction, Store;
+import 'package:auto_size_text/auto_size_text.dart' show AutoSizeText;
+import 'package:business/app_state.dart' show AppState;
+import 'package:business/classes/user.dart' show User;
+import 'package:business/models/user.dart' show updateUser;
+import 'package:carousel_slider/carousel_slider.dart'
+    show CarouselOptions, CarouselSlider;
+import 'package:dotted_border/dotted_border.dart' show DottedBorder;
+import 'package:flutter/material.dart'
+    show
+        Align,
+        Alignment,
+        Border,
+        BoxDecoration,
+        BoxFit,
+        BuildContext,
+        Center,
+        Column,
+        Container,
+        CrossAxisAlignment,
+        Divider,
+        DropdownButton,
+        DropdownMenuItem,
+        EdgeInsets,
+        Expanded,
+        FocusScope,
+        FontWeight,
+        GestureDetector,
+        Icon,
+        Icons,
+        Image,
+        InputBorder,
+        InputDecoration,
+        ListTile,
+        ListView,
+        MainAxisAlignment,
+        MainAxisSize,
+        MediaQuery,
+        Padding,
+        Row,
+        Stack,
+        State,
+        StatefulWidget,
+        TextEditingController,
+        TextField,
+        TextStyle,
+        Theme,
+        UnderlineInputBorder,
+        Widget,
+        Wrap,
+        WrapAlignment;
+import 'package:flutter_i18n/flutter_i18n.dart' show FlutterI18n;
+import 'package:flutter_typeahead/flutter_typeahead.dart'
+    show TextFieldConfiguration, TypeAheadField;
+import 'package:outloud/functions/firebase.dart' show saveImage;
+import 'package:outloud/theme.dart'
+    show black, orange, pinkBright, pinkLight, white;
+import 'package:outloud/widgets/cached_image.dart' show CachedImage, ImageType;
+import 'package:outloud/widgets/view.dart' show View;
+import 'package:multi_image_picker/multi_image_picker.dart'
+    show MultiImagePicker;
+import 'package:provider_for_redux/provider_for_redux.dart' show ReduxConsumer;
 
 // TODO(alexandre): deletion of pictures when removing
 // TODO(alexandre): popup to choose what to do with slots

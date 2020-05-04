@@ -1,18 +1,30 @@
 import 'package:async_redux/async_redux.dart'
     show ReduxAction, NavigateAction, Store;
-import 'package:auto_size_text/auto_size_text.dart';
-import 'package:business/app_state.dart';
-import 'package:business/classes/chat.dart';
-import 'package:business/classes/chat_state.dart';
-import 'package:business/classes/message.dart';
-import 'package:business/classes/user.dart';
-import 'package:flutter/material.dart';
-import 'package:outloud/people/chat_screen.dart';
-import 'package:outloud/theme.dart';
-import 'package:outloud/widgets/cached_image.dart';
-import 'package:outloud/widgets/content_list.dart';
-import 'package:outloud/widgets/content_list_item.dart';
-import 'package:provider_for_redux/provider_for_redux.dart';
+import 'package:auto_size_text/auto_size_text.dart' show AutoSizeText;
+import 'package:business/app_state.dart' show AppState;
+import 'package:business/classes/chat.dart' show Chat;
+import 'package:business/classes/chat_state.dart' show ChatState;
+import 'package:business/classes/message.dart' show Message;
+import 'package:business/classes/user.dart' show User;
+import 'package:flutter/material.dart'
+    show
+        AutomaticKeepAliveClientMixin,
+        BorderRadius,
+        BuildContext,
+        Container,
+        FontWeight,
+        State,
+        StatefulWidget,
+        TextOverflow,
+        TextStyle,
+        Widget,
+        Wrap;
+import 'package:outloud/people/chat_screen.dart' show ChatScreen;
+import 'package:outloud/theme.dart' show orange;
+import 'package:outloud/widgets/cached_image.dart' show CachedImage, ImageType;
+import 'package:outloud/widgets/content_list.dart' show ContentList;
+import 'package:outloud/widgets/content_list_item.dart' show ContentListItem;
+import 'package:provider_for_redux/provider_for_redux.dart' show ReduxConsumer;
 
 class PeopleChatScreen extends StatefulWidget {
   @override

@@ -7,13 +7,13 @@ import 'package:business/classes/user.dart';
 import 'package:business/actions/app_disconnect_action.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
-import 'package:flutter_screenutil/screenutil.dart';
 import 'package:gradient_bottom_navigation_bar/gradient_bottom_navigation_bar.dart';
 import 'package:outloud/profile/profile_screen.dart';
 
 import 'package:outloud/theme.dart';
 import 'package:outloud/widgets/bubble_bar.dart';
 import 'package:outloud/widgets/cached_image.dart';
+import 'package:outloud/widgets/loading.dart';
 import 'package:provider_for_redux/provider_for_redux.dart';
 
 class View extends StatefulWidget {
@@ -79,7 +79,7 @@ class _ViewState extends State<View> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     if (user == null)
-                      const CircularProgressIndicator()
+                      const Loading()
                     else
                       Padding(
                           padding: const EdgeInsets.all(8.0),
@@ -188,7 +188,7 @@ class _ViewState extends State<View> {
                 leading: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: user == null
-                        ? const CircularProgressIndicator()
+                        ? const Loading()
                         : GestureDetector(
                             onTap: () => setState(
                                 () => _showUserSettings = !_showUserSettings),
