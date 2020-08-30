@@ -124,11 +124,11 @@ class _EventScreenState extends State<EventScreen>
                         color: Colors.white,
                         shape: BoxShape.rectangle,
                         borderRadius: BorderRadius.circular(5),
-                        boxShadow: <BoxShadow>[
+                        boxShadow: const <BoxShadow>[
                           BoxShadow(
                             color: Colors.black26,
                             blurRadius: 10.0,
-                            offset: const Offset(0.0, 10.0),
+                            offset: Offset(0.0, 10.0),
                           )
                         ]),
                     child: Column(mainAxisSize: MainAxisSize.min, children: <
@@ -258,11 +258,11 @@ class _EventScreenState extends State<EventScreen>
                         color: Colors.green,
                         shape: BoxShape.rectangle,
                         borderRadius: BorderRadius.circular(5),
-                        boxShadow: <BoxShadow>[
+                        boxShadow: const <BoxShadow>[
                           BoxShadow(
                             color: Colors.black26,
                             blurRadius: 10.0,
-                            offset: const Offset(0.0, 10.0),
+                            offset: Offset(0.0, 10.0),
                           )
                         ]),
                     child: Column(
@@ -397,7 +397,7 @@ class _EventScreenState extends State<EventScreen>
               },
               child: Container(
                   child: Row(children: <Widget>[
-                Icon(Icons.location_on, color: pink),
+                const Icon(Icons.location_on, color: pink),
                 Padding(
                     padding: const EdgeInsets.all(5),
                     child: Text(_adressEvent,
@@ -588,7 +588,7 @@ class _EventScreenState extends State<EventScreen>
                                 children: <Widget>[
                                   Stack(
                                       alignment: Alignment.center,
-                                      children: <Widget>[
+                                      children: const <Widget>[
                                         Icon(Icons.check, color: white),
                                         Icon(Icons.not_interested, color: pink)
                                       ])
@@ -608,7 +608,7 @@ class _EventScreenState extends State<EventScreen>
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceEvenly,
                                   children: <Widget>[
-                                    Icon(Icons.person, color: white),
+                                    const Icon(Icons.person, color: white),
                                     Text(
                                         widget.event.memberIds.length
                                             .toString(),
@@ -641,7 +641,7 @@ class _EventScreenState extends State<EventScreen>
                           Row(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: <Widget>[
-                                Icon(Icons.check, color: white, size: 16),
+                                const Icon(Icons.check, color: white, size: 16),
                                 Text(widget.event.memberIds.length.toString(),
                                     style: const TextStyle(
                                         color: white,
@@ -750,12 +750,11 @@ class _EventScreenState extends State<EventScreen>
 
     return GestureDetector(
         onVerticalDragCancel: () {
-          if (_feedEventScrollController.offset == 0.0)  {
-         _scrollController
+          if (_feedEventScrollController.offset == 0.0) {
+            _scrollController
                 .jumpTo(_scrollController.position.minScrollExtent);
-
           } else {
-         _scrollController
+            _scrollController
                 .jumpTo(_scrollController.position.maxScrollExtent);
           }
         },
@@ -765,9 +764,8 @@ class _EventScreenState extends State<EventScreen>
                 controller: _feedEventScrollController,
                 reverse: false,
                 itemCount: widget.event.messages.length,
-                itemBuilder: (BuildContext context, int index) => _buildMessage(
-                    widget.event
-                        .messages[index]))));
+                itemBuilder: (BuildContext context, int index) =>
+                    _buildMessage(widget.event.messages[index]))));
   }
 
   Widget _buildMessage(Message message) {
@@ -859,9 +857,9 @@ class _EventScreenState extends State<EventScreen>
                       },
                       child: Row(children: <Widget>[
                         if (widget.event.likes.contains(state.loginState.id))
-                          Icon(MdiIcons.heart, color: white)
+                          const Icon(MdiIcons.heart, color: white)
                         else
-                          Icon(Icons.favorite_border, color: white),
+                          const Icon(Icons.favorite_border, color: white),
                         Padding(
                             padding: const EdgeInsets.only(left: 5.0),
                             child: Text(widget.event.likes.length.toString(),
@@ -881,9 +879,10 @@ class _EventScreenState extends State<EventScreen>
                           _scrollController.jumpTo(
                               _scrollController.position.maxScrollExtent);
                           _feedEventScrollController.jumpTo(
-                              _feedEventScrollController.position.maxScrollExtent);
+                              _feedEventScrollController
+                                  .position.maxScrollExtent);
                         },
-                        child: Icon(Icons.panorama, color: white))),
+                        child: const Icon(Icons.panorama, color: white))),
                 Expanded(
                     child: TextField(
                         controller: _messageController,
@@ -907,7 +906,7 @@ class _EventScreenState extends State<EventScreen>
                               _feedEventScrollController
                                   .position.maxScrollExtent);
                         },
-                        child: Icon(Icons.send, color: white)))
+                        child: const Icon(Icons.send, color: white)))
               ])),
           child: widget.event == null
               ? const CircularProgressIndicator()

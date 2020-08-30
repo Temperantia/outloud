@@ -101,9 +101,9 @@ class _PeopleFriendsScreenState extends State<PeopleFriendsScreen>
                     dispatch(UserAcceptFriendRequestAction(
                         user.id, state.userState.user.id));
                   },
-                  child: Column(children: <Widget>[
+                  child: Column(children: const <Widget>[
                     Icon(Icons.add_circle_outline, size: 30, color: white),
-                    const Text('ACCEPTER',
+                    Text('ACCEPTER',
                         style: TextStyle(
                             color: white,
                             fontWeight: FontWeight.w300,
@@ -118,9 +118,9 @@ class _PeopleFriendsScreenState extends State<PeopleFriendsScreen>
                     dispatch(UserDenyFriendRequestAction(
                         user.id, state.userState.user.id));
                   },
-                  child: Column(children: <Widget>[
+                  child: Column(children: const <Widget>[
                     Icon(Icons.remove_circle_outline, size: 30, color: white),
-                    const Text('REFUSER',
+                    Text('REFUSER',
                         style: TextStyle(
                             color: white,
                             fontWeight: FontWeight.w300,
@@ -202,7 +202,7 @@ class _PeopleFriendsScreenState extends State<PeopleFriendsScreen>
               Button(
                   text: FlutterI18n.translate(context, 'PEOPLE_TAB.FIND_MORE'),
                   width: 250,
-                  icon: Icon(Icons.arrow_forward_ios),
+                  icon: const Icon(Icons.arrow_forward_ios),
                   onPressed: () => dispatch(
                       redux.NavigateAction<AppState>.pushNamed(
                           PeopleSearchScreen.id)))

@@ -473,7 +473,7 @@ class _LoungeCreateMeetupScreenState extends State<LoungeCreateMeetupScreen> {
                     decoration: InputDecoration(
                         border: InputBorder.none,
                         focusColor: orange,
-                        prefixIcon: Icon(Icons.location_on),
+                        prefixIcon: const Icon(Icons.location_on),
                         hintStyle: const TextStyle(
                             color: orange, fontWeight: FontWeight.bold),
                         hintText: FlutterI18n.translate(
@@ -517,8 +517,7 @@ class _LoungeCreateMeetupScreenState extends State<LoungeCreateMeetupScreen> {
                                           height: 40,
                                           padding: const EdgeInsets.all(10.0),
                                           child: Text(
-                                              _timeEvent.hour
-                                                  .toString(),
+                                              _timeEvent.hour.toString(),
                                               style: const TextStyle(
                                                   color: orange,
                                                   fontWeight:

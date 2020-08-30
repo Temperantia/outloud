@@ -177,7 +177,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         if (_user.id == userId && !_isEdition)
                           GestureDetector(
                               onTap: () => setState(() => _isEdition = true),
-                              child: Icon(Icons.edit, color: white)),
+                              child: const Icon(Icons.edit, color: white)),
                       ]))))
         ]));
   }
@@ -192,7 +192,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 child: picture == null
                     ? DottedBorder(
                         color: white,
-                        child: Center(child: Icon(Icons.add, color: white)))
+                        child:
+                            const Center(child: Icon(Icons.add, color: white)))
                     : picture is String
                         ? CachedImage(picture, imageType: ImageType.User)
                         : Image.memory(picture as Uint8List,
@@ -291,7 +292,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       GestureDetector(
                           onTap: () => setState(
                               () => textEditingController.value.clear()),
-                          child: Icon(Icons.close, color: orange)),
+                          child: const Icon(Icons.close, color: orange)),
                   ]))
       else if (controller is List<dynamic>)
         Container(
@@ -345,7 +346,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             GestureDetector(
                                 onTap: () => setState(() =>
                                     _user.interests.removeAt(interest.key)),
-                                child: Icon(Icons.close, color: pinkBright))
+                                child:
+                                    const Icon(Icons.close, color: pinkBright))
                           ]))
                   : Container(
                       padding: const EdgeInsets.all(5.0),
@@ -371,7 +373,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         border: const UnderlineInputBorder(),
                         hintText: FlutterI18n.translate(
                             context, 'PROFILE.ADD_INTERESTS'),
-                        suffixIcon: Icon(Icons.search)),
+                        suffixIcon: const Icon(Icons.search)),
                     controller: _interestController),
                 suggestionsCallback: (String pattern) => pattern.isEmpty
                     ? null
@@ -387,7 +389,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 itemBuilder:
                     (BuildContext context, Map<String, String> suggestion) =>
                         ListTile(
-                            leading: Icon(Icons.category),
+                            leading: const Icon(Icons.category),
                             title: Text(suggestion['name'],
                                 style: const TextStyle(color: orange))),
                 onSuggestionSelected: (Map<String, String> suggestion) =>

@@ -368,9 +368,9 @@ class _FindEventsScreen extends State<FindEventsScreen>
                               topRight: Radius.circular(5.0)),
                           imageType: ImageType.Event)),
                   if (state == UserEventState.Attending)
-                    Icon(Icons.check, size: 40.0, color: white)
+                    const Icon(Icons.check, size: 40.0, color: white)
                   else if (state == UserEventState.Liked)
-                    Icon(MdiIcons.heart, size: 40.0, color: white),
+                    const Icon(MdiIcons.heart, size: 40.0, color: white),
                 ])
               ]))),
       const Divider(color: orange),

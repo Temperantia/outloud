@@ -69,11 +69,11 @@ class _LoungeEditScreenState extends State<LoungeEditScreen>
                       color: Colors.white,
                       shape: BoxShape.rectangle,
                       borderRadius: BorderRadius.circular(5),
-                      boxShadow: <BoxShadow>[
+                      boxShadow: const <BoxShadow>[
                         BoxShadow(
                             color: Colors.black26,
                             blurRadius: 10.0,
-                            offset: const Offset(0.0, 10.0))
+                            offset: Offset(0.0, 10.0))
                       ]),
                   child:
                       Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
@@ -229,7 +229,7 @@ class _LoungeEditScreenState extends State<LoungeEditScreen>
                               children: <TextSpan>[
                             TextSpan(
                                 text: widget.lounge.event.name,
-                                style: TextStyle(
+                                style: const TextStyle(
                                     color: orange,
                                     fontSize: 14,
                                     fontWeight: FontWeight.w800))

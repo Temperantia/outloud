@@ -107,9 +107,9 @@ class _MyEventsScreen extends State<MyEventsScreen>
                                           MainAxisAlignment.spaceBetween,
                                       children: <Widget>[
                                     if (state == UserEventState.Attending)
-                                      Icon(Icons.check)
+                                      const Icon(Icons.check)
                                     else if (state == UserEventState.Liked)
-                                      Icon(MdiIcons.heart),
+                                      const Icon(MdiIcons.heart),
                                     Text(stateMessage),
                                   ]))
                             ]),
@@ -146,27 +146,28 @@ class _MyEventsScreen extends State<MyEventsScreen>
       ThemeStyle themeStyle,
       void Function(redux.ReduxAction<AppState>) dispatch) {
     return userEvents.isEmpty
-        ? Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: <
-            Widget>[
-            Container(
-                padding: const EdgeInsets.symmetric(horizontal: 30.0),
-                child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Container(
-                          child: Text(
-                              FlutterI18n.translate(
-                                  context, 'MY_EVENTS.MY_EVENTS_EMPTY_TITLE'),
-                              style: const TextStyle(
-                                  fontSize: 20.0,
-                                  fontWeight: FontWeight.bold))),
-                      Text(
-                          FlutterI18n.translate(
-                              context, 'MY_EVENTS.MY_EVENTS_EMPTY_DESCRIPTION'),
-                          style: const TextStyle(color: grey))
-                    ])),
-            Image.asset('images/catsIllus4.png')
-          ])
+        ? Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
+                Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Container(
+                              child: Text(
+                                  FlutterI18n.translate(context,
+                                      'MY_EVENTS.MY_EVENTS_EMPTY_TITLE'),
+                                  style: const TextStyle(
+                                      fontSize: 20.0,
+                                      fontWeight: FontWeight.bold))),
+                          Text(
+                              FlutterI18n.translate(context,
+                                  'MY_EVENTS.MY_EVENTS_EMPTY_DESCRIPTION'),
+                              style: const TextStyle(color: grey))
+                        ])),
+                Image.asset('images/catsIllus4.png')
+              ])
         : Column(children: <Widget>[
             Expanded(
                 flex: 8,

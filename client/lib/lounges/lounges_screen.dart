@@ -251,7 +251,7 @@ class _LoungesScreenState extends State<LoungesScreen>
                       text: FlutterI18n.translate(
                           context, 'LOUNGES_TAB.CREATE_LOUNGE'),
                       width: 250,
-                      icon: Icon(Icons.add),
+                      icon: const Icon(Icons.add),
                       onPressed: () => dispatch(
                           redux.NavigateAction<AppState>.pushNamed(
                               LoungeCreateScreen.id)))

@@ -50,7 +50,7 @@ class _CachedImageState extends State<CachedImage> {
           placeholder: (BuildContext context, String url) =>
               const CircularProgressIndicator(),
           errorWidget: (BuildContext context, String url, Object error) =>
-              Icon(Icons.error));
+              const Icon(Icons.error));
     }
 
     return Container(

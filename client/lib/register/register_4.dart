@@ -82,7 +82,7 @@ class _Register4ScreenState extends State<Register4Screen> {
                                     FlutterI18n.translate(
                                         context, 'REGISTER_4.SUBTITLE'),
                                     style: const TextStyle(color: grey)),
-                                Row(children: <Widget>[
+                                Row(children: const <Widget>[
                                   Icon(Icons.lens, size: 10.0),
                                   Icon(Icons.radio_button_unchecked, size: 10.0)
                                 ])

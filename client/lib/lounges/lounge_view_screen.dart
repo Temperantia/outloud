@@ -105,7 +105,7 @@ class _LoungeViewScreenState extends State<LoungeViewScreen> {
                               children: <TextSpan>[
                             TextSpan(
                                 text: widget.lounge.event.name,
-                                style: TextStyle(
+                                style: const TextStyle(
                                     color: orange,
                                     fontSize: 14,
                                     fontWeight: FontWeight.w800))

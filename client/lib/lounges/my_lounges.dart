@@ -104,7 +104,7 @@ class _MyLoungesScreenState extends State<MyLoungesScreen>
                     children: <TextSpan>[
                   TextSpan(
                       text: lounge.event.name,
-                      style: TextStyle(
+                      style: const TextStyle(
                           color: orange,
                           fontSize: 14,
                           fontWeight: FontWeight.w800)),
@@ -170,8 +170,6 @@ class _MyLoungesScreenState extends State<MyLoungesScreen>
             ]));
   }
 
-  
-
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -180,8 +178,8 @@ class _MyLoungesScreenState extends State<MyLoungesScreen>
         AppState state,
         void Function(redux.ReduxAction<dynamic>) dispatch,
         Widget child) {
-      return _buildLounges(state, state.userState.lounges, state.userState.eventLounges,
-                          dispatch, state.theme);
+      return _buildLounges(state, state.userState.lounges,
+          state.userState.eventLounges, dispatch, state.theme);
     });
   }
 }

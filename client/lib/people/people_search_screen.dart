@@ -125,13 +125,13 @@ class _PeopleSearchScreenState extends State<PeopleSearchScreen>
                                   user.id, state.userState.user.id));
                             },
                             child: Column(
-                              children: <Widget>[
+                              children: const <Widget>[
                                 Icon(
                                   Icons.add_circle_outline,
                                   size: 20,
                                   color: blue,
                                 ),
-                                const Text('Accept',
+                                Text('Accept',
                                     style: TextStyle(
                                         color: blue,
                                         fontSize: 12,
@@ -148,13 +148,13 @@ class _PeopleSearchScreenState extends State<PeopleSearchScreen>
                                   user.id, state.userState.user.id));
                             },
                             child: Column(
-                              children: <Widget>[
+                              children: const <Widget>[
                                 Icon(
                                   Icons.remove_circle_outline,
                                   size: 20,
                                   color: blue,
                                 ),
-                                const Text('Deny',
+                                Text('Deny',
                                     style: TextStyle(
                                         color: blue,
                                         fontSize: 12,
@@ -174,7 +174,7 @@ class _PeopleSearchScreenState extends State<PeopleSearchScreen>
                         await dispatchFuture(UserSendFriendRequest(
                             state.userState.user.id, user.id));
                       },
-                      child: Icon(
+                      child: const Icon(
                         Icons.add,
                         size: 40,
                         color: blue,
@@ -209,7 +209,7 @@ class _PeopleSearchScreenState extends State<PeopleSearchScreen>
                                     fontWeight: FontWeight.w400)),
                             Container(
                                 margin: const EdgeInsets.only(left: 5),
-                                child: Icon(
+                                child: const Icon(
                                   Icons.remove_circle_outline,
                                   size: 20,
                                   color: blue,

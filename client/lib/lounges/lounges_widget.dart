@@ -20,7 +20,9 @@ class LoungesWidget extends StatefulWidget {
 }
 
 class _LoungesWidgetState extends State<LoungesWidget>
-    with AutomaticKeepAliveClientMixin<LoungesWidget>, TickerProviderStateMixin {
+    with
+        AutomaticKeepAliveClientMixin<LoungesWidget>,
+        TickerProviderStateMixin {
   @override
   bool get wantKeepAlive => true;
 
@@ -41,11 +43,11 @@ class _LoungesWidgetState extends State<LoungesWidget>
                         color: Colors.white,
                         shape: BoxShape.rectangle,
                         borderRadius: BorderRadius.circular(5),
-                        boxShadow: <BoxShadow>[
+                        boxShadow: const <BoxShadow>[
                           BoxShadow(
                             color: Colors.black26,
                             blurRadius: 10.0,
-                            offset: const Offset(0.0, 10.0),
+                            offset: Offset(0.0, 10.0),
                           )
                         ]),
                     child: Column(mainAxisSize: MainAxisSize.min, children: <
@@ -55,7 +57,8 @@ class _LoungesWidgetState extends State<LoungesWidget>
                         color: pink,
                         size: 60,
                       ),
-                      Text(FlutterI18n.translate(context, 'LOUNGE_CREATE.HELLO'),
+                      Text(
+                          FlutterI18n.translate(context, 'LOUNGE_CREATE.HELLO'),
                           style: const TextStyle(
                               color: pink,
                               fontSize: 28,
@@ -77,7 +80,8 @@ class _LoungesWidgetState extends State<LoungesWidget>
                         padding: const EdgeInsets.only(
                             left: 18, right: 18, bottom: 15),
                         child: Text(
-                            FlutterI18n.translate(context, 'LOUNGE_CREATE.CONTINUE'),
+                            FlutterI18n.translate(
+                                context, 'LOUNGE_CREATE.CONTINUE'),
                             textAlign: TextAlign.justify,
                             style: const TextStyle(
                                 color: pink,
@@ -125,8 +129,8 @@ class _LoungesWidgetState extends State<LoungesWidget>
                                               // redux.NavigateAction<AppState>.pushNamed('0');
                                             },
                                             child: Text(
-                                                FlutterI18n.translate(
-                                                    context, 'LOUNGE_CREATE.REDIRECT_TO_FIND_EVENTS'),
+                                                FlutterI18n.translate(context,
+                                                    'LOUNGE_CREATE.REDIRECT_TO_FIND_EVENTS'),
                                                 style: const TextStyle(
                                                     color: white,
                                                     fontSize: 16,
@@ -183,13 +187,14 @@ class _LoungesWidgetState extends State<LoungesWidget>
                       text: FlutterI18n.translate(
                           context, 'LOUNGES_TAB.CREATE_LOUNGE'),
                       width: 250,
-                      icon: Icon(Icons.add),
+                      icon: const Icon(Icons.add),
                       onPressed: () {
-                        if(state.userState.events.isNotEmpty)
+                        if (state.userState.events.isNotEmpty)
                           dispatch(redux.NavigateAction<AppState>.pushNamed(
-                            LoungeCreateScreen.id));
+                              LoungeCreateScreen.id));
                         else
-                          _showNoEventPopup(dispatch, store.dispatchFuture, state);
+                          _showNoEventPopup(
+                              dispatch, store.dispatchFuture, state);
                       }),
                 ]))
           ]));

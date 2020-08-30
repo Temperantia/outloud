@@ -35,7 +35,7 @@ class _PeopleChatScreenState extends State<PeopleChatScreen>
               ChatScreen.id,
               arguments: chat)),
           child: Container(
-              decoration: BoxDecoration(color: Colors.transparent),
+              decoration: const BoxDecoration(color: Colors.transparent),
               padding: const EdgeInsets.all(20.0),
               child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,

@@ -190,7 +190,7 @@ class _ChatScreenState extends State<ChatScreen> {
                     child: GestureDetector(
                         onTap: () => _onSendMessage(
                             _messageController.text, state.userState.user.id),
-                        child: Icon(Icons.send, color: white)))
+                        child: const Icon(Icons.send, color: white)))
               ])),
           child: _buildChat(user, userId, picture));
     });

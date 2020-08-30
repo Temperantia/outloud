@@ -29,10 +29,11 @@ class LoginGoogleAction extends ReduxAction<AppState> {
         '?personFields=birthdays,names',
         headers: await account.authHeaders,
       );
-      final Map<String, dynamic> data =
-          json.decode(response.body) as Map<String, dynamic>;
+      final List<Map<String, dynamic>> data =
+          (json.decode(response.body)['birthdays'] as List<dynamic>)
+              .cast<Map<String, dynamic>>();
       Map<String, dynamic> birthday;
-      for (final Map<String, dynamic> info in data['birthdays']) {
+      for (final Map<String, dynamic> info in data) {
         if (info['metadata']['source']['type'] == 'ACCOUNT') {
           birthday = info['date'] as Map<String, dynamic>;
         }
@@ -43,7 +44,7 @@ class LoginGoogleAction extends ReduxAction<AppState> {
           accessToken: auth.accessToken, idToken: auth.idToken);
       final AuthResult result =
           await firebaseAuth.signInWithCredential(credential);
-
+      print(result.user);
       final User user = User(
           birthDate: birthdate,
           name: result.user.displayName,
