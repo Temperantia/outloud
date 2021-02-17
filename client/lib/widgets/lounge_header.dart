@@ -48,7 +48,7 @@ class LoungeHeader extends StatelessWidget {
                         children: <TextSpan>[
                       TextSpan(
                           text: lounge.event.name,
-                          style: TextStyle(
+                          style: const TextStyle(
                               color: orange,
                               fontSize: 14,
                               fontWeight: FontWeight.w800))

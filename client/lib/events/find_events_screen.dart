@@ -24,6 +24,7 @@ import 'package:flutter/material.dart'
         Expanded,
         FontWeight,
         MainAxisAlignment,
+        Padding,
         Row,
         State,
         StatefulWidget,
@@ -191,82 +192,86 @@ class _FindEventsScreen extends State<FindEventsScreen>
   }
  */
   Widget _buildFilters() {
-    return Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: <Widget>[
-          /*  CompositedTransformTarget(
-                  link: _interestLink,
-                  child: Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(color: black, width: 1),
-                      ),
-                      key: _interestFilterKey,
-                      child: FlatButton(
-                          child: Row(
-                            children: const <Widget>[
-                              AutoSizeText('Interests'),
-                              Icon(Icons.arrow_drop_down)
-                            ],
-                          ),
-                          onPressed: () {
-                            if (_checkBoxDisplayed) {
-                              _interestsCheckBox.remove();
-                              setState(() {
-                                _checkBoxDisplayed = false;
-                              });
-                            } else {
-                              _shrinkMap();
-                              setState(() {
-                                _interestsCheckBox = _createInterestsCheckBox();
-                                _checkBoxDisplayed = true;
-                              });
-                              Overlay.of(context).insert(_interestsCheckBox);
-                            }
-                          }))), */
-          /*  Container(
-              padding: const EdgeInsets.symmetric(horizontal: 5.0),
-              decoration: BoxDecoration(border: Border.all(color: black)),
-              child: DropdownButton<String>(
-                  underline: Container(width: 0.0, height: 0.0),
-                  value: _distanceValue,
-                  items: <String>[
-                    FlutterI18n.translate(context, 'FIND_EVENTS.ANY_DISTANCE'),
-                    FlutterI18n.translate(context, 'FIND_EVENTS.5KM'),
-                    FlutterI18n.translate(context, 'FIND_EVENTS.10KM'),
-                    FlutterI18n.translate(context, 'FIND_EVENTS.50KM'),
-                    FlutterI18n.translate(context, 'FIND_EVENTS.100KM'),
-                  ]
-                      .map<DropdownMenuItem<String>>((String value) =>
-                          DropdownMenuItem<String>(
-                              value: value, child: AutoSizeText(value)))
-                      .toList(),
-                  onChanged: (String newValue) => setState(() {
-                        _distanceValue = newValue;
-                        _refreshEvents();
-                      }))), */
-          Container(
-              padding: const EdgeInsets.symmetric(horizontal: 5.0),
-              decoration: BoxDecoration(border: Border.all(color: black)),
-              child: DropdownButton<String>(
-                  underline: Container(width: 0.0, height: 0.0),
-                  value: _timeValue,
-                  items: <String>[
-                    FlutterI18n.translate(context, 'FIND_EVENTS.ANY_TIME'),
-                    FlutterI18n.translate(context, 'FIND_EVENTS.THIS_WEEK'),
-                    FlutterI18n.translate(context, 'FIND_EVENTS.THIS_WEEKEND'),
-                    FlutterI18n.translate(context, 'FIND_EVENTS.NEXT_WEEK'),
-                    FlutterI18n.translate(context, 'FIND_EVENTS.THIS_MONTH'),
-                    FlutterI18n.translate(context, 'FIND_EVENTS.NEXT_MONTH'),
-                  ]
-                      .map<DropdownMenuItem<String>>((String value) =>
-                          DropdownMenuItem<String>(
-                              value: value, child: AutoSizeText(value)))
-                      .toList(),
-                  onChanged: (String newValue) => setState(() {
-                        _timeValue = newValue;
-                        _refreshEvents();
-                      })))
-        ]);
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
+            /*  CompositedTransformTarget(
+                    link: _interestLink,
+                    child: Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(color: black, width: 1),
+                        ),
+                        key: _interestFilterKey,
+                        child: FlatButton(
+                            child: Row(
+                              children: const <Widget>[
+                                AutoSizeText('Interests'),
+                                Icon(Icons.arrow_drop_down)
+                              ],
+                            ),
+                            onPressed: () {
+                              if (_checkBoxDisplayed) {
+                                _interestsCheckBox.remove();
+                                setState(() {
+                                  _checkBoxDisplayed = false;
+                                });
+                              } else {
+                                _shrinkMap();
+                                setState(() {
+                                  _interestsCheckBox = _createInterestsCheckBox();
+                                  _checkBoxDisplayed = true;
+                                });
+                                Overlay.of(context).insert(_interestsCheckBox);
+                              }
+                            }))), */
+            /*  Container(
+                padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                decoration: BoxDecoration(border: Border.all(color: black)),
+                child: DropdownButton<String>(
+                    underline: Container(width: 0.0, height: 0.0),
+                    value: _distanceValue,
+                    items: <String>[
+                      FlutterI18n.translate(context, 'FIND_EVENTS.ANY_DISTANCE'),
+                      FlutterI18n.translate(context, 'FIND_EVENTS.5KM'),
+                      FlutterI18n.translate(context, 'FIND_EVENTS.10KM'),
+                      FlutterI18n.translate(context, 'FIND_EVENTS.50KM'),
+                      FlutterI18n.translate(context, 'FIND_EVENTS.100KM'),
+                    ]
+                        .map<DropdownMenuItem<String>>((String value) =>
+                            DropdownMenuItem<String>(
+                                value: value, child: AutoSizeText(value)))
+                        .toList(),
+                    onChanged: (String newValue) => setState(() {
+                          _distanceValue = newValue;
+                          _refreshEvents();
+                        }))), */
+            Container(
+                padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                decoration: BoxDecoration(border: Border.all(color: black)),
+                child: DropdownButton<String>(
+                    underline: Container(width: 0.0, height: 0.0),
+                    value: _timeValue,
+                    items: <String>[
+                      FlutterI18n.translate(context, 'FIND_EVENTS.ANY_TIME'),
+                      FlutterI18n.translate(context, 'FIND_EVENTS.THIS_WEEK'),
+                      FlutterI18n.translate(
+                          context, 'FIND_EVENTS.THIS_WEEKEND'),
+                      FlutterI18n.translate(context, 'FIND_EVENTS.NEXT_WEEK'),
+                      FlutterI18n.translate(context, 'FIND_EVENTS.THIS_MONTH'),
+                      FlutterI18n.translate(context, 'FIND_EVENTS.NEXT_MONTH'),
+                    ]
+                        .map<DropdownMenuItem<String>>((String value) =>
+                            DropdownMenuItem<String>(
+                                value: value, child: AutoSizeText(value)))
+                        .toList(),
+                    onChanged: (String newValue) => setState(() {
+                          _timeValue = newValue;
+                          _refreshEvents();
+                        })))
+          ]),
+    );
   }
 
 /*   OverlayEntry _createInterestsCheckBox() {

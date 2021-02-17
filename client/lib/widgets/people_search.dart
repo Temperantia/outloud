@@ -99,7 +99,7 @@ class _PeopleSearchState extends State<PeopleSearch> {
                     child: GestureDetector(
                         onTap: () => _dispatch(
                             UserSendFriendRequest(user.id, person.id)),
-                        child: Icon(Icons.add, size: 40, color: blue)))
+                        child: const Icon(Icons.add, size: 40, color: blue)))
                 : Column(children: <Widget>[
                     Container(
                         padding: const EdgeInsets.only(left: 2.0, right: 2.0),

@@ -106,7 +106,7 @@ class _Register3ScreenState extends State<Register3Screen> {
                             GestureDetector(
                                 onTap: () => setState(
                                     () => textEditingController.value.clear()),
-                                child: Icon(Icons.close, color: orange))
+                                child: const Icon(Icons.close, color: orange))
                         ])))
           ])
       else if (controller is List<dynamic>)

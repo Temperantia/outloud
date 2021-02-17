@@ -1,17 +1,17 @@
 import 'package:async_redux/async_redux.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:business/app_state.dart';
-import 'package:business/actions/app_navigate_action.dart';
-import 'package:business/classes/chat_state.dart';
+//import 'package:business/actions/app_navigate_action.dart';
+//import 'package:business/classes/chat_state.dart';
 import 'package:business/classes/user.dart';
 import 'package:business/actions/app_disconnect_action.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
-import 'package:gradient_bottom_navigation_bar/gradient_bottom_navigation_bar.dart';
+//import 'package:gradient_bottom_navigation_bar/gradient_bottom_navigation_bar.dart';
 import 'package:outloud/profile/profile_screen.dart';
 
 import 'package:outloud/theme.dart';
-import 'package:outloud/widgets/bubble_bar.dart';
+//import 'package:outloud/widgets/bubble_bar.dart';
 import 'package:outloud/widgets/cached_image.dart';
 import 'package:outloud/widgets/loading.dart';
 import 'package:provider_for_redux/provider_for_redux.dart';
@@ -97,7 +97,7 @@ class _ViewState extends State<View> {
                         child: GestureDetector(
                             onTap: () =>
                                 setState(() => _showUserSettings = false),
-                            child: Icon(Icons.close, color: white)))
+                            child: const Icon(Icons.close, color: white)))
                   ]),
               Row(children: <Widget>[
                 AutoSizeText(user.name, style: const TextStyle(color: white))
@@ -225,7 +225,7 @@ class _ViewState extends State<View> {
                     Image.asset('images/screenTop.png', fit: BoxFit.cover)));
   }
 
-  Widget _buildNavBar(
+  /* Widget _buildNavBar(
       Map<String, ChatState> userChatStates,
       Map<String, ChatState> loungeChatStates,
       int homePageIndex,
@@ -260,7 +260,7 @@ class _ViewState extends State<View> {
           Navigator.of(context)
               .popUntil((Route<dynamic> route) => route.isFirst);
         });
-  }
+  } */
 
   @override
   Widget build(BuildContext context) {
@@ -275,19 +275,19 @@ class _ViewState extends State<View> {
             Widget w) {
           _dispatch = dispatch;
           final User user = state.userState.user;
-          Map<String, ChatState> userChatStates;
+          /*  Map<String, ChatState> userChatStates;
           Map<String, ChatState> loungeChatStates;
           if (user != null) {
             final String userId = user.id;
             userChatStates = state.chatsState.usersChatsStates[userId];
             loungeChatStates = state.chatsState.loungesChatsStates[userId];
-          }
+          } */
           return DefaultTabController(
               length: 2,
               child: Stack(children: <Widget>[
                 Scaffold(
                     appBar: widget.showAppBar ? _buildAppBar(user) : null,
-                    bottomNavigationBar: widget.showNavBar
+                    /* bottomNavigationBar: widget.showNavBar
                         ? _buildNavBar(userChatStates, loungeChatStates,
                             state.homePageIndex, state.theme)
                         : Container(
@@ -295,7 +295,7 @@ class _ViewState extends State<View> {
                             height: 0.0,
                             decoration: const BoxDecoration(
                                 gradient: LinearGradient(
-                                    colors: <Color>[pinkLight, pink]))),
+                                    colors: <Color>[pinkLight, pink]))), */
                     body: SafeArea(child: _buildBody())),
                 if (_showUserSettings)
                   SafeArea(child: Material(child: _buildUserSettings(user)))

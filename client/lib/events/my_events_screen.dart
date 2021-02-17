@@ -17,6 +17,7 @@ import 'package:flutter/material.dart'
         Icons,
         Image,
         MainAxisAlignment,
+        Navigator,
         Row,
         State,
         StatefulWidget,

@@ -9,7 +9,7 @@ class ChatState {
     lastRead = data['lastRead'] as int;
     messageStates = <String, MessageState>{};
     for (final MapEntry<String, dynamic> element
-        in data['messageStates'].entries) {
+        in (data['messageStates'] as Map<String, dynamic>).entries) {
       messageStates[element.key] =
           EnumToString.fromString(MessageState.values, element.value as String);
     }

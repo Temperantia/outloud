@@ -384,8 +384,10 @@ class _EventScreenState extends State<EventScreen>
                                             fontSize: 14,
                                             fontWeight: FontWeight.w700)))
                               ])),
-                          if (!Utils.isSameDay(
-                              widget.event.dateStart, widget.event.dateEnd))
+                          if (widget.event.dateStart != null &&
+                              widget.event.dateEnd != null &&
+                              !Utils.isSameDay(
+                                  widget.event.dateStart, widget.event.dateEnd))
                             Row(children: <Widget>[
                               const Padding(
                                 padding: EdgeInsets.all(5.0),
@@ -428,23 +430,29 @@ class _EventScreenState extends State<EventScreen>
                                       color: white,
                                       fontSize: 15,
                                       fontWeight: FontWeight.w900))),
-                          const Padding(
-                            padding: EdgeInsets.all(5.0),
-                            child: AutoSizeText('-',
-                                style: TextStyle(
-                                    color: white,
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.w900)),
-                          ),
-                          Container(
-                              padding: const EdgeInsets.all(5),
-                              color: pink,
-                              child: AutoSizeText(
-                                  DateFormat('jm').format(widget.event.dateEnd),
-                                  style: const TextStyle(
-                                      color: white,
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.w900)))
+                          if (widget.event.dateEnd != null)
+                            Row(
+                              children: <Widget>[
+                                const Padding(
+                                  padding: EdgeInsets.all(5.0),
+                                  child: AutoSizeText('-',
+                                      style: TextStyle(
+                                          color: white,
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.w900)),
+                                ),
+                                Container(
+                                    padding: const EdgeInsets.all(5),
+                                    color: pink,
+                                    child: AutoSizeText(
+                                        DateFormat('jm')
+                                            .format(widget.event.dateEnd),
+                                        style: const TextStyle(
+                                            color: white,
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.w900)))
+                              ],
+                            ),
                         ])
                       ]),
                   Row(children: <Widget>[

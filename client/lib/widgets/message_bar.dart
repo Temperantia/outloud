@@ -73,7 +73,7 @@ class _MessageBarState extends State<MessageBar> {
                 padding: const EdgeInsets.all(8.0),
                 child: GestureDetector(
                     onTap: () => _onImage(),
-                    child: Icon(Icons.panorama, color: white))),
+                    child: const Icon(Icons.panorama, color: white))),
           /*   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: GestureDetector(
@@ -94,7 +94,7 @@ class _MessageBarState extends State<MessageBar> {
               padding: const EdgeInsets.all(8.0),
               child: GestureDetector(
                   onTap: () => _onMessage(),
-                  child: Icon(Icons.send, color: white)))
+                  child: const Icon(Icons.send, color: white)))
         ]));
   }
 }

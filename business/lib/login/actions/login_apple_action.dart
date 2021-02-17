@@ -12,7 +12,8 @@ class LoginAppleAction extends ReduxAction<AppState> {
   Future<AppState> reduce() async {
     final AuthorizationResult authResult =
         await AppleSignIn.performRequests(<AuthorizationRequest>[
-      AppleIdRequest(requestedScopes: <Scope>[Scope.email, Scope.fullName])
+      const AppleIdRequest(
+          requestedScopes: <Scope>[Scope.email, Scope.fullName])
     ]);
 
     switch (authResult.status) {

@@ -32,7 +32,9 @@ class LoginGoogleAction extends ReduxAction<AppState> {
       final Map<String, dynamic> data =
           json.decode(response.body) as Map<String, dynamic>;
       Map<String, dynamic> birthday;
-      for (final Map<String, dynamic> info in data['birthdays']) {
+      for (final Map<String, dynamic> info
+          in (data['birthdays'] as List<dynamic>)
+              .cast<Map<String, dynamic>>()) {
         if (info['metadata']['source']['type'] == 'ACCOUNT') {
           birthday = info['date'] as Map<String, dynamic>;
         }

@@ -487,7 +487,7 @@ class LoungeMeetupWidgetState extends State<LoungeMeetupWidget> {
                     controller: _searchTextController,
                     decoration: InputDecoration(
                         border: InputBorder.none,
-                        prefixIcon: Icon(Icons.location_on),
+                        prefixIcon: const Icon(Icons.location_on),
                         hintText: FlutterI18n.translate(
                             context, 'LOUNGE_CREATE_MEETUP.SELECT_PLACE')))),
             link: _layerLink));

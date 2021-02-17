@@ -55,7 +55,8 @@ class _CachedImageState extends State<CachedImage> {
           placeholder: (BuildContext context, String url) =>
               const CircularProgressIndicator(),
           errorWidget: (BuildContext context, String url, Object error) =>
-              Icon(Icons.error));
+              Image.asset('images/defaultEvent.png',
+                  width: widget.width, height: widget.height, fit: widget.fit));
     }
 
     return ClipRRect(

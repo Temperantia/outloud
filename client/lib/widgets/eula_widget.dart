@@ -68,11 +68,11 @@ This EULA agreement, and any dispute arising out of or in connection with this E
                                   color: Colors.white,
                                   shape: BoxShape.rectangle,
                                   borderRadius: BorderRadius.circular(5),
-                                  boxShadow: <BoxShadow>[
+                                  boxShadow: const <BoxShadow>[
                                     BoxShadow(
                                         color: Colors.black26,
                                         blurRadius: 10.0,
-                                        offset: const Offset(0.0, 10.0))
+                                        offset: Offset(0.0, 10.0))
                                   ]),
                               child: SingleChildScrollView(
                                   child: Column(children: <Widget>[

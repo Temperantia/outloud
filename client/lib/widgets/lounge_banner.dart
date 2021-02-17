@@ -41,11 +41,11 @@ class _LoungeBannerState extends State<LoungeBanner>
                       color: Colors.white,
                       shape: BoxShape.rectangle,
                       borderRadius: BorderRadius.circular(5),
-                      boxShadow: <BoxShadow>[
+                      boxShadow: const <BoxShadow>[
                         BoxShadow(
                             color: Colors.black26,
                             blurRadius: 10.0,
-                            offset: const Offset(0.0, 10.0))
+                            offset: Offset(0.0, 10.0))
                       ]),
                   child:
                       Column(mainAxisSize: MainAxisSize.min, children: <Widget>[

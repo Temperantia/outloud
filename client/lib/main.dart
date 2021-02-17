@@ -72,7 +72,6 @@ class _AppState extends State<App> {
                 void Function(ReduxAction<AppState>) dispatch,
                 dynamic model,
                 Widget child) {
-              print(state.userState.user?.name);
               return MaterialApp(
                   localizationsDelegates: <LocalizationsDelegate<dynamic>>[
                     FlutterI18nDelegate(
