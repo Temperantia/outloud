@@ -1,7 +1,6 @@
 import 'package:business/classes/event.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:business/models/api.dart';
-import 'package:async/async.dart';
 
 final Api _api = Api('events');
 

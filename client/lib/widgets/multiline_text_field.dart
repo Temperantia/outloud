@@ -20,9 +20,7 @@ class _MultilineTextFieldState extends State<MultilineTextField> {
   @override
   Widget build(BuildContext context) {
     return KeyboardActions(
-        config: KeyboardActionsConfig(actions: <KeyboardAction>[
-          KeyboardAction(focusNode: focusNode, displayArrows: false)
-        ]),
+        config: KeyboardActionsConfig(),
         child: TextField(
             focusNode: focusNode,
             controller: widget.controller,
